@@ -1212,6 +1212,7 @@ class Component extends DCLogic {
     this.setupTilt();
     this.setupGallery();
     this.setupBooking();
+    this.setupMapControls();
     this.blinkTimer = setTimeout(() => this.blink(), 2600);
   }
 
@@ -1363,6 +1364,32 @@ class Component extends DCLogic {
           e.style.animation = 'mewEar .62s ease-in-out ' + i * 0.07 + 's 2';
         });
       });
+    });
+  }
+
+  setupMapControls() {
+    document.querySelectorAll('iframe[src*="openstreetmap.org/export/embed"]').forEach(frame => {
+      const host = frame.parentElement;
+      if (!host || host.querySelector('[data-map-controls]')) return;
+      let zoom = 0;
+      const controls = document.createElement('div');
+      controls.setAttribute('data-map-controls', '1');
+      controls.style.cssText = 'position:absolute;right:10px;top:10px;z-index:4;display:flex;flex-direction:column;border:1px solid rgba(43,36,64,.18);border-radius:8px;overflow:hidden;box-shadow:0 4px 12px rgba(43,36,64,.16)';
+      const update = () => {
+        const scale = Math.pow(2, -zoom), lon = 106.824314, lat = 10.7308045;
+        const bbox = [lon - .004 * scale, lat - .0025 * scale, lon + .004 * scale, lat + .0025 * scale].join(',');
+        frame.src = 'https://www.openstreetmap.org/export/embed.html?bbox=' + encodeURIComponent(bbox) + '&layer=mapnik&marker=' + lat + '%2C' + lon;
+      };
+      const make = (label, delta, aria) => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.textContent = label; b.setAttribute('aria-label', aria); b.setAttribute('data-cursor', 'link');
+        b.style.cssText = 'width:34px;height:34px;border:0;background:#FFFFFF;color:#2B2440;font:700 22px/1 Quicksand,sans-serif;cursor:pointer';
+        b.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); zoom = Math.max(-3, Math.min(5, zoom + delta)); update(); });
+        return b;
+      };
+      controls.appendChild(make('+', 1, 'Phóng to bản đồ'));
+      const minus = make('−', -1, 'Thu nhỏ bản đồ'); minus.style.borderTop = '1px solid rgba(43,36,64,.14)'; controls.appendChild(minus);
+      host.appendChild(controls);
     });
   }
 
