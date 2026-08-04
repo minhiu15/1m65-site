@@ -122,7 +122,7 @@ Xem thư viện móng
 <div style="width:34px;height:34px;border-radius:50%;margin-left:-11px;background:#FDE3D2;border:2.5px solid #FFFCF9;background-image:repeating-linear-gradient(135deg,rgba(224,136,95,.18) 0 4px,rgba(0,0,0,0) 4px 8px)"></div>
 <div style="width:34px;height:34px;border-radius:50%;margin-left:-11px;background:#E2EEFB;border:2.5px solid #FFFCF9;background-image:repeating-linear-gradient(135deg,rgba(80,120,190,.16) 0 4px,rgba(0,0,0,0) 4px 8px)"></div>
 </div>
-<div style="font-family:Quicksand,sans-serif;font-size:13.5px;line-height:1.35;color:#6B6580"><b style="color:#2B2440">4,9/5</b> · 230+ đánh giá<br>trên Google</div>
+<div id="mewGoogleRating" style="font-family:Quicksand,sans-serif;font-size:13.5px;line-height:1.35;color:#6B6580"><b style="color:#2B2440">4,9/5</b> · <span data-review-count>230+ đánh giá</span><br>trên Google</div>
 </div>
 <div style="width:1px;height:36px;background:rgba(122,90,208,.14)"></div>
 <div style="font-family:Quicksand,sans-serif;font-size:13.5px;line-height:1.35;color:#6B6580"><b style="color:#2B2440">8 năm</b> làm nail<br>ở một chỗ duy nhất</div>
@@ -937,6 +937,50 @@ class Component extends DCLogic {
     { text: 'Đi nhiều tiệm rồi mới thấy: ở đây người ta hỏi mình muốn gì trước khi cầm cọ lên. Nhỏ thôi mà quý.', name: 'Ngọc Ánh', svc: 'French tip', av: '#FDEBF2', avl: 'rgba(196,88,156,.16)' }
   ];
 
+  loadGoogleReviews() {
+    fetch('./google-reviews.json', { cache: 'no-store' })
+      .then(response => response.ok ? response.json() : null)
+      .then(data => {
+        if (!data || !Array.isArray(data.reviews)) return;
+        const palette = [
+          ['#F1ECFE', 'rgba(122,90,208,.16)'],
+          ['#FFFFFF', 'rgba(196,88,156,.18)'],
+          ['#FDF4E8', 'rgba(224,136,95,.2)'],
+          ['#E2EEFB', 'rgba(80,120,190,.18)'],
+          ['#FDEBF2', 'rgba(196,88,156,.16)']
+        ];
+        const live = data.reviews
+          .filter(review => Number(review.rating) === 5 && String(review.text || '').trim())
+          .map((review, index) => ({
+            text: String(review.text).trim(),
+            name: String(review.name || 'Khách hàng Google'),
+            svc: 'Google · 5 sao',
+            av: palette[index % palette.length][0],
+            avl: palette[index % palette.length][1]
+          }));
+        if (!live.length) return;
+
+        this.reviews = live;
+        clearTimeout(this.rWrap);
+        this.setState({ rIdx: 0, rSnap: true }, () => {
+          requestAnimationFrame(() => this.setState({ rSnap: false }));
+        });
+
+        const summary = document.getElementById('mewGoogleRating');
+        const average = data.averageRating == null ? NaN : Number(data.averageRating);
+        const total = data.totalReviewCount == null ? NaN : Number(data.totalReviewCount);
+        if (summary && Number.isFinite(average)) {
+          const score = summary.querySelector('b');
+          if (score) score.textContent = average.toLocaleString('vi-VN', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '/5';
+        }
+        if (summary && Number.isFinite(total)) {
+          const count = summary.querySelector('[data-review-count]');
+          if (count) count.textContent = total.toLocaleString('vi-VN') + ' đánh giá';
+        }
+      })
+      .catch(() => {});
+  }
+
   reviewTints = [
     { bg: '#F1EAFE', star: '#8A66D8', glow: 'rgba(122,90,208,.5)' },
     { bg: '#FDE9DB', star: '#E0885F', glow: 'rgba(224,136,95,.45)' },
@@ -1125,6 +1169,7 @@ class Component extends DCLogic {
   }
 
   componentDidMount() {
+    this.loadGoogleReviews();
     this.on(document, 'click', e => {
       if (this.state.bookOpen || this.state.moreOpen) return;
       const t = e.target;
