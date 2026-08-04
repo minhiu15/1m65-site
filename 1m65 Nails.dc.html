@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:#FFFCF9;color:#222222;font-family:Nunito,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:#7A5AD0;text-decoration:none}
+a:hover{color:#C4589C}
+::selection{background:#E4DAFB;color:#222222}
+@keyframes mewFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes mewFloatSm{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes mewBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+@keyframes mewTail{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(13deg)}}
+@keyframes mewEar{0%,100%{transform:rotate(0)}30%{transform:rotate(-10deg)}65%{transform:rotate(7deg)}}
+@keyframes mewBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(28px,-20px) scale(1.07)}66%{transform:translate(-20px,16px) scale(.95)}}
+@keyframes mewSpark{0%{opacity:1;transform:translate(0,0) scale(1) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.15) rotate(150deg)}}
+@keyframes mewPrint{0%{opacity:0;transform:rotate(var(--r)) scale(.4)}20%{opacity:.8;transform:rotate(var(--r)) scale(1)}100%{opacity:0;transform:rotate(var(--r)) scale(1.06)}}
+@keyframes mewMarch{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes mewZ{0%{opacity:0;transform:translate(0,0) scale(.7)}25%{opacity:.85}100%{opacity:0;transform:translate(18px,-38px) scale(1.15)}}
+@keyframes mewPetal{0%{opacity:0;transform:translateY(-20px) rotate(0)}12%{opacity:.65}100%{opacity:0;transform:translateY(150px) rotate(240deg)}}
+@keyframes mewSweep{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+@keyframes mewShine{0%{transform:translateX(-130%) skewX(-14deg)}100%{transform:translateX(260%) skewX(-14deg)}}
+@keyframes mewStretch{0%,100%{transform:scale(1,1)}40%{transform:scale(1.09,.92)}70%{transform:scale(.97,1.04)}}
+@keyframes mewSpin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+@keyframes mewCross{0%{left:-10%}100%{left:106%}}
+@keyframes mewBob{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-6px) rotate(1.5deg)}}
+@keyframes mewPeek{0%,100%{transform:translateY(6px)}50%{transform:translateY(-4px)}}
+@keyframes mewWink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.12)}}
+@keyframes mewPrintDrift{0%{opacity:0;transform:translateX(0) scale(.82)}10%{opacity:.6;transform:translateX(24px) scale(1)}75%{opacity:.32}100%{opacity:0;transform:translateX(300px) scale(1)}}
+@keyframes mewPawTap{0%,100%{transform:rotate(0)}40%{transform:rotate(-13deg)}70%{transform:rotate(8deg)}}
+[data-modal-tile]:hover{transform:scale(1.03) !important}
+[data-scroll="mew"]{scrollbar-width:thin;scrollbar-color:#CBB9F2 rgba(122,90,208,.07)}
+[data-scroll="mew"]::-webkit-scrollbar{width:10px}
+[data-scroll="mew"]::-webkit-scrollbar-track{background:rgba(122,90,208,.07);border-radius:999px;margin:12px 0}
+[data-scroll="mew"]::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#CBB9F2,#E2A9CB);border-radius:999px;border:2px solid transparent;background-clip:padding-box}
+[data-scroll="mew"]::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#B49CE9,#D894BC)}
+@keyframes mewFadeIn{0%{opacity:0}100%{opacity:1}}
+@keyframes mewFadeUp{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:none}}
+@keyframes mewPopIn{0%{opacity:0;transform:translateY(22px) scale(.96)}100%{opacity:1;transform:none}}
+@keyframes mewTileIn{0%{opacity:0;transform:translateY(16px) scale(.97)}100%{opacity:1;transform:none}}
+</style>
+</helmet>
+
+<div style="position:relative;overflow:hidden;background:#FFFCF9">
+
+<div style="position:absolute;top:-160px;left:-140px;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#EFE7FE,rgba(239,231,254,0) 70%);filter:blur(6px);animation:mewBlob 22s ease-in-out infinite;pointer-events:none"></div>
+<div style="position:absolute;top:120px;right:-200px;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#FDEBF2,rgba(253,235,242,0) 70%);filter:blur(6px);animation:mewBlob 27s ease-in-out infinite reverse;pointer-events:none"></div>
+<div style="position:absolute;top:760px;left:-120px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#E2EEFB,rgba(226,238,251,0) 72%);filter:blur(6px);animation:mewBlob 31s ease-in-out infinite;pointer-events:none"></div>
+
+<header style="position:sticky;top:0;z-index:60;display:flex;justify-content:center;padding:18px 24px 0">
+<nav style="width:100%;max-width:1240px;display:flex;align-items:center;gap:12px;padding:12px 14px 12px 18px;border-radius:999px;background:rgba(255,255,255,.72);backdrop-filter:blur(18px) saturate(1.3);border:1px solid rgba(122,90,208,.10);box-shadow:0 10px 34px -18px rgba(122,90,208,.38)">
+<a href="#top" data-cursor="link" style="display:flex;align-items:center;gap:9px;flex:none">
+<svg width="30" height="30" viewBox="0 0 40 40" aria-hidden="true"><g><path d="M8.4 11.6l1.4 3.4M31.6 11.6l-1.4 3.4" stroke="#3B3350" stroke-width="1.7" stroke-linecap="round" fill="none"></path><path d="M20 10.4c8.9 0 15 5.6 15 12.9 0 6.6-6 10.7-15 10.7S5 30 5 23.3C5 16 11.1 10.4 20 10.4z" fill="#8A66D8" stroke="#3B3350" stroke-width="2.4" stroke-linejoin="round"></path><ellipse cx="10.9" cy="19.4" rx="2.7" ry="3.4" fill="#F9CFE0" transform="rotate(-16 10.9 19.4)"></ellipse><ellipse cx="16.7" cy="16.8" rx="2.7" ry="3.5" fill="#F9CFE0"></ellipse><ellipse cx="23.3" cy="16.8" rx="2.7" ry="3.5" fill="#F9CFE0"></ellipse><ellipse cx="29.1" cy="19.4" rx="2.7" ry="3.4" fill="#F9CFE0" transform="rotate(16 29.1 19.4)"></ellipse><path d="M20 22.4c4.3 0 7.3 2.3 7.3 5.1 0 2.7-3.2 4.2-7.3 4.2s-7.3-1.5-7.3-4.2c0-2.8 3-5.1 7.3-5.1z" fill="#F9CFE0"></path></g></svg>
+<span style="display:flex;flex-direction:column;line-height:1"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:21px;letter-spacing:-.02em;color:#2B2440">1M65</span><span style="font-family:Quicksand,sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.075em;color:#7A5AD0;margin-top:5px">NAILS · LASHES · SHAMPOO</span></span>
+</a>
+<div style="display:flex;align-items:center;gap:2px;margin-left:auto;font-family:Quicksand,sans-serif;font-weight:600;font-size:14.5px;white-space:nowrap">
+<a href="#dichvu" data-cursor="link" style="padding:9px 9px;border-radius:999px;color:#4A4360;white-space:nowrap" style-hover="background:#F1ECFE;color:#7A5AD0">Dịch vụ</a>
+<a href="#thuvien" data-cursor="link" style="padding:9px 9px;border-radius:999px;color:#4A4360;white-space:nowrap" style-hover="background:#F1ECFE;color:#7A5AD0">Thư viện</a>
+<a href="#vechungminh" data-cursor="link" style="padding:9px 9px;border-radius:999px;color:#4A4360;white-space:nowrap" style-hover="background:#F1ECFE;color:#7A5AD0">Về chúng mình</a>
+<a href="#danhgia" data-cursor="link" style="padding:9px 9px;border-radius:999px;color:#4A4360;white-space:nowrap" style-hover="background:#F1ECFE;color:#7A5AD0">Đánh giá</a>
+<a href="#lienhe" data-cursor="link" style="padding:9px 9px;border-radius:999px;color:#4A4360;white-space:nowrap" style-hover="background:#F1ECFE;color:#7A5AD0">Liên hệ</a>
+</div>
+<a href="#datlich" data-cursor="link" data-magnet="1" data-bounce="1" style="flex:none;display:flex;align-items:center;gap:8px;padding:13px 20px;border-radius:999px;background:#7A5AD0;white-space:nowrap;color:#FFFFFF;font-family:Quicksand,sans-serif;font-weight:700;font-size:14.5px;box-shadow:0 12px 26px -12px rgba(122,90,208,.75);transition:transform .34s cubic-bezier(.34,1.56,.64,1),box-shadow .34s ease" style-hover="transform:translateY(-3px) scale(1.04);box-shadow:0 18px 34px -12px rgba(122,90,208,.85)">
+Đặt hẹn
+<svg width="15" height="15" viewBox="0 0 40 40" aria-hidden="true"><g opacity=".95"><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#FFFFFF" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#FFFFFF"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#FFFFFF"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#FFFFFF" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#FFFFFF"></path></g></svg>
+</a>
+</nav>
+</header>
+
+<section id="top" style="position:relative;max-width:1240px;margin:0 auto;padding:64px 24px 40px;display:grid;grid-template-columns:1.02fr .98fr;gap:56px;align-items:center">
+
+<div style="position:relative;z-index:2">
+<div data-reveal="1" style="display:inline-flex;align-items:center;gap:9px;padding:8px 16px 8px 10px;border-radius:999px;background:#FFFFFF;border:1px solid rgba(122,90,208,.14);box-shadow:0 8px 22px -14px rgba(122,90,208,.5);font-family:Quicksand,sans-serif;font-weight:600;font-size:13px;color:#6B5A96">
+<span style="display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#F9CFE0">
+<svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.3-7-9a4 4 0 017-2.6A4 4 0 0119 11c0 4.7-7 9-7 9z" fill="#C4589C"></path></svg>
+</span>
+Tiệm nail nhỏ · Thủ Đức, Sài Gòn
+</div>
+
+<h1 data-reveal="1" style="font-family:Quicksand,sans-serif;font-weight:700;font-size:clamp(46px,5.2vw,74px);line-height:1.04;letter-spacing:-.035em;color:#2B2440;margin:22px 0 0;text-wrap:balance">
+Mềm như chân mèo,<br>
+<span style="position:relative;display:inline-block">
+<span style="position:relative;z-index:2;padding-right:6px;background:linear-gradient(96deg,#8E6ADE 0%,#C4589C 62%,#E0885F 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;-webkit-box-decoration-break:clone;box-decoration-break:clone;text-decoration:underline;text-decoration-color:rgba(196,88,156,.3);text-decoration-thickness:5px;text-underline-offset:13px">xinh như chính bạn.</span>
+</span>
+</h1>
+
+<p data-reveal="1" style="max-width:432px;margin:26px 0 0;font-size:17.5px;line-height:1.65;color:#6B6580;text-wrap:pretty">
+Nơi từng đầu ngón tay được chăm chút thật chậm, thật êm. Bạn ngồi xuống, nhắm mắt một chút — Nhu Nhi sẽ trông chừng giúp bạn.
+</p>
+
+<div data-reveal="1" style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:34px">
+<a href="#datlich" data-cursor="link" data-magnet="1" style="display:flex;align-items:center;gap:10px;padding:18px 30px;border-radius:999px;background:#7A5AD0;color:#FFFFFF;font-family:Quicksand,sans-serif;font-weight:700;font-size:16.5px;box-shadow:0 18px 38px -16px rgba(122,90,208,.85);transition:transform .34s cubic-bezier(.34,1.56,.64,1),box-shadow .34s ease" style-hover="transform:translateY(-4px) scale(1.035);box-shadow:0 26px 46px -16px rgba(122,90,208,.9)">
+Đặt hẹn ngay
+<svg width="17" height="17" viewBox="0 0 40 40" aria-hidden="true"><g opacity=".72"><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#FFFFFF" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#FFFFFF"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#FFFFFF"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#FFFFFF" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#FFFFFF"></path></g></svg>
+</a>
+<a href="#thuvien" data-cursor="link" style="display:flex;align-items:center;gap:12px;padding:17px 26px 17px 18px;border-radius:999px;background:#FFFFFF;border:1px solid rgba(122,90,208,.18);color:#4A3A80;font-family:Quicksand,sans-serif;font-weight:700;font-size:16.5px;transition:transform .3s ease,background .3s ease" style-hover="transform:translateY(-3px);background:#F6F2FF">
+<span style="display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#F1ECFE">
+<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.6l7 4.4-7 4.4z" fill="#7A5AD0"></path></svg>
+</span>
+Xem thư viện móng
+</a>
+</div>
+
+<div data-reveal="1" style="display:flex;align-items:center;gap:22px;margin-top:38px;flex-wrap:wrap">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="display:flex">
+<div style="width:34px;height:34px;border-radius:50%;background:#E4DAFB;border:2.5px solid #FFFCF9;background-image:repeating-linear-gradient(135deg,rgba(122,90,208,.16) 0 4px,rgba(0,0,0,0) 4px 8px)"></div>
+<div style="width:34px;height:34px;border-radius:50%;margin-left:-11px;background:#FDEBF2;border:2.5px solid #FFFCF9;background-image:repeating-linear-gradient(135deg,rgba(196,88,156,.16) 0 4px,rgba(0,0,0,0) 4px 8px)"></div>
+<div style="width:34px;height:34px;border-radius:50%;margin-left:-11px;background:#FDE3D2;border:2.5px solid #FFFCF9;background-image:repeating-linear-gradient(135deg,rgba(224,136,95,.18) 0 4px,rgba(0,0,0,0) 4px 8px)"></div>
+<div style="width:34px;height:34px;border-radius:50%;margin-left:-11px;background:#E2EEFB;border:2.5px solid #FFFCF9;background-image:repeating-linear-gradient(135deg,rgba(80,120,190,.16) 0 4px,rgba(0,0,0,0) 4px 8px)"></div>
+</div>
+<div style="font-family:Quicksand,sans-serif;font-size:13.5px;line-height:1.35;color:#6B6580"><b style="color:#2B2440">4,9/5</b> · 230+ đánh giá<br>trên Google</div>
+</div>
+<div style="width:1px;height:36px;background:rgba(122,90,208,.14)"></div>
+<div style="font-family:Quicksand,sans-serif;font-size:13.5px;line-height:1.35;color:#6B6580"><b style="color:#2B2440">8 năm</b> làm nail<br>ở một chỗ duy nhất</div>
+</div>
+</div>
+
+<div style="position:relative">
+<div style="position:relative;display:grid;grid-template-columns:1.35fr 1fr;grid-template-rows:auto auto;gap:16px">
+
+<div style="grid-row:span 2;aspect-ratio:3/4.05;animation:mewFloatSm 7s ease-in-out infinite">
+<div data-cursor="link" style="position:relative;width:100%;height:100%;border-radius:32px;overflow:hidden;background:#F1ECFE;background-image:repeating-linear-gradient(135deg,rgba(122,90,208,.11) 0 11px,rgba(122,90,208,0) 11px 22px);display:flex;align-items:flex-end;justify-content:center;padding:16px;box-shadow:0 30px 60px -34px rgba(122,90,208,.55);transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease" style-hover="transform:scale(1.03) rotate(-1.5deg);box-shadow:0 34px 64px -30px rgba(122,90,208,.55)">
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,0) 45%)"></div>
+<span style="position:relative;font:500 10.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.09em;color:#7A5AD0;background:rgba(255,255,255,.86);padding:7px 12px;border-radius:999px">ẢNH MÓNG CHÍNH · 3:4</span>
+</div>
+</div>
+
+<div style="aspect-ratio:1/1;animation:mewFloatSm 8.5s ease-in-out .6s infinite">
+<div data-cursor="link" style="position:relative;width:100%;height:100%;border-radius:28px;overflow:hidden;background:#FDEBF2;background-image:repeating-linear-gradient(135deg,rgba(196,88,156,.12) 0 10px,rgba(196,88,156,0) 10px 20px);display:flex;align-items:flex-end;justify-content:center;padding:13px;box-shadow:0 22px 44px -30px rgba(196,88,156,.6);transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease" style-hover="transform:scale(1.03) rotate(1.5deg);box-shadow:0 28px 52px -28px rgba(196,88,156,.6)">
+<span style="font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.09em;color:#C4589C;background:rgba(255,255,255,.86);padding:6px 10px;border-radius:999px">CẬN MÓNG · 1:1</span>
+</div>
+</div>
+
+<div style="position:relative;border-radius:28px;background:#FFFFFF;border:1px solid rgba(122,90,208,.1);box-shadow:0 22px 44px -30px rgba(122,90,208,.5);padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;animation:mewFloatSm 9.5s ease-in-out .3s infinite">
+<div style="display:flex;align-items:center;gap:7px">
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;color:#2B2440">Hôm nay còn trống</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px">
+<span data-cursor="link" style="padding:7px 11px;border-radius:12px;background:#F1ECFE;color:#6B5A96;font-family:Quicksand,sans-serif;font-weight:600;font-size:12px;transition:background .25s ease,transform .25s ease" style-hover="background:#E4DAFB;transform:translateY(-2px)">10:30</span>
+<span data-cursor="link" style="padding:7px 11px;border-radius:12px;background:#F1ECFE;color:#6B5A96;font-family:Quicksand,sans-serif;font-weight:600;font-size:12px;transition:background .25s ease,transform .25s ease" style-hover="background:#E4DAFB;transform:translateY(-2px)">13:00</span>
+<span data-cursor="link" style="padding:7px 11px;border-radius:12px;background:#7A5AD0;color:#FFFFFF;font-family:Quicksand,sans-serif;font-weight:600;font-size:12px;transition:transform .25s ease" style-hover="transform:translateY(-2px)">16:15</span>
+<span data-cursor="link" style="padding:7px 11px;border-radius:12px;background:#F1ECFE;color:#6B5A96;font-family:Quicksand,sans-serif;font-weight:600;font-size:12px;transition:background .25s ease,transform .25s ease" style-hover="background:#E4DAFB;transform:translateY(-2px)">19:00</span>
+</div>
+</div>
+</div>
+
+<div data-cat="hero" style="position:absolute;left:-72px;bottom:56px;z-index:5;width:210px;animation:mewFloat 6.5s ease-in-out infinite">
+<svg viewBox="0 0 210 200" style="width:100%;height:auto;overflow:visible;filter:drop-shadow(0 18px 26px rgba(122,90,208,.28))" aria-hidden="true">
+<g data-tailwrap style="transform-box:fill-box;transform-origin:92% 84%;animation:mewTail 3.6s ease-in-out infinite">
+<path d="M162 158c26 8 36-14 24-30" stroke="#3B3350" stroke-width="9" stroke-linecap="round" fill="none"></path>
+<path d="M162 158c26 8 36-14 24-30" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" fill="none"></path>
+</g>
+<path d="M105 82c40 0 62 30 62 62 0 26-26 38-62 38s-62-12-62-38c0-32 22-62 62-62z" fill="#FFFFFF" stroke="#3B3350" stroke-width="5" stroke-linejoin="round"></path>
+<path d="M148 120c9 6 13 16 13 26 0 9-4 15-9 18" stroke="#E8E4F2" stroke-width="5" stroke-linecap="round" fill="none"></path>
+<g data-ear style="transform-box:fill-box;transform-origin:70% 100%">
+<path d="M60 62c-8-24-5-38 3-39 9-1 24 15 32 27z" fill="#FFFFFF" stroke="#3B3350" stroke-width="5" stroke-linejoin="round"></path>
+<path d="M68 54c-4-15-2-23 2-24 5 0 13 10 17 17z" fill="#F9CFE0"></path>
+</g>
+<g data-ear style="transform-box:fill-box;transform-origin:30% 100%">
+<path d="M150 62c8-24 5-38-3-39-9-1-24 15-32 27z" fill="#FFFFFF" stroke="#3B3350" stroke-width="5" stroke-linejoin="round"></path>
+<path d="M142 54c4-15 2-23-2-24-5 0-13 10-17 17z" fill="#F9CFE0"></path>
+</g>
+<ellipse cx="105" cy="94" rx="63" ry="52" fill="#FFFFFF" stroke="#3B3350" stroke-width="5"></ellipse>
+<path d="M105 46c-8 10-9 22-6 30" stroke="#C9C3D8" stroke-width="7" stroke-linecap="round" fill="none"></path>
+<path d="M58 78c8-10 16-14 24-15" stroke="#C9C3D8" stroke-width="7" stroke-linecap="round" fill="none"></path>
+<ellipse cx="66" cy="110" rx="12" ry="7" fill="#F9CFE0"></ellipse>
+<ellipse cx="144" cy="110" rx="12" ry="7" fill="#F9CFE0"></ellipse>
+<g data-blink style="transform-box:fill-box;transform-origin:center">
+<g data-pupil="4"><ellipse cx="84" cy="93" rx="11" ry="13" fill="#231E33"></ellipse><ellipse cx="88" cy="87" rx="4.2" ry="3.4" fill="#FFFFFF" transform="rotate(-20 88 87)"></ellipse><circle cx="80" cy="99" r="2.2" fill="#FFFFFF" opacity=".8"></circle></g>
+<g data-pupil="4"><ellipse cx="126" cy="93" rx="11" ry="13" fill="#231E33"></ellipse><ellipse cx="130" cy="87" rx="4.2" ry="3.4" fill="#FFFFFF" transform="rotate(-20 130 87)"></ellipse><circle cx="122" cy="99" r="2.2" fill="#FFFFFF" opacity=".8"></circle></g>
+</g>
+<path d="M101 110c0-2.4 1.8-3.6 4-3.6s4 1.2 4 3.6-1.8 4.4-4 4.4-4-2-4-4.4z" fill="#F2A8C6" stroke="#3B3350" stroke-width="1.6"></path>
+<path d="M105 115v3M98 121c3.4 4 6 3 7-3M112 121c-3.4 4-6 3-7-3" stroke="#3B3350" stroke-width="3.2" stroke-linecap="round" fill="none"></path>
+<ellipse cx="76" cy="176" rx="19" ry="12" fill="#FFFFFF" stroke="#3B3350" stroke-width="5"></ellipse>
+<ellipse cx="134" cy="176" rx="19" ry="12" fill="#FFFFFF" stroke="#3B3350" stroke-width="5"></ellipse>
+<g fill="#F9CFE0"><ellipse cx="70" cy="173" rx="2.6" ry="3.2"></ellipse><ellipse cx="77" cy="172" rx="2.6" ry="3.2"></ellipse><ellipse cx="84" cy="174" rx="2.4" ry="3"></ellipse><ellipse cx="76" cy="180" rx="5.4" ry="3.6"></ellipse>
+<ellipse cx="128" cy="173" rx="2.6" ry="3.2"></ellipse><ellipse cx="135" cy="172" rx="2.6" ry="3.2"></ellipse><ellipse cx="142" cy="174" rx="2.4" ry="3"></ellipse><ellipse cx="134" cy="180" rx="5.4" ry="3.6"></ellipse></g>
+<path d="M28 92h20M30 106l19-4M182 92h-20M180 106l-19-4" stroke="#3B3350" stroke-width="3" stroke-linecap="round" opacity=".45"></path>
+<g data-zzz style="opacity:0;transition:opacity .5s ease">
+<text x="150" y="34" font-family="Quicksand,sans-serif" font-weight="700" font-size="20" fill="#8A66D8" style="animation:mewZ 2.6s ease-out infinite">z</text>
+<text x="168" y="20" font-family="Quicksand,sans-serif" font-weight="700" font-size="15" fill="#CBB9F2" style="animation:mewZ 2.6s ease-out .8s infinite">z</text>
+</g>
+</svg>
+</div>
+
+<div style="position:absolute;right:-18px;bottom:-58px;z-index:6;display:flex;align-items:center;gap:12px;padding:12px 18px 12px 12px;border-radius:22px;background:rgba(255,255,255,.82);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.9);box-shadow:0 20px 44px -22px rgba(122,90,208,.55);animation:mewFloatSm 6s ease-in-out 1.2s infinite">
+<div style="width:40px;height:40px;border-radius:14px;background:#FDE3D2;background-image:repeating-linear-gradient(135deg,rgba(224,136,95,.2) 0 4px,rgba(0,0,0,0) 4px 8px);flex:none"></div>
+<div>
+<div style="display:flex;gap:2px;margin-bottom:3px">
+<svg width="11" height="11" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.3 6.8L12 17.8 5.7 21l1.3-6.8-5-4.8 7-.9z" fill="#F2A8C6"></path></svg>
+<svg width="11" height="11" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.3 6.8L12 17.8 5.7 21l1.3-6.8-5-4.8 7-.9z" fill="#F2A8C6"></path></svg>
+<svg width="11" height="11" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.3 6.8L12 17.8 5.7 21l1.3-6.8-5-4.8 7-.9z" fill="#F2A8C6"></path></svg>
+<svg width="11" height="11" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.3 6.8L12 17.8 5.7 21l1.3-6.8-5-4.8 7-.9z" fill="#F2A8C6"></path></svg>
+<svg width="11" height="11" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.3 6.8L12 17.8 5.7 21l1.3-6.8-5-4.8 7-.9z" fill="#F2A8C6"></path></svg>
+</div>
+<div style="font-family:Quicksand,sans-serif;font-weight:600;font-size:12.5px;color:#2B2440;line-height:1.3">“Êm tay, về nhà vẫn ngắm.”</div>
+<div style="font-size:11px;color:#767089;margin-top:1px">Ngọc Anh · khách quen</div>
+</div>
+</div>
+
+<svg width="26" height="26" viewBox="0 0 24 24" style="position:absolute;top:-6px;left:34%;animation:mewFloatSm 5s ease-in-out infinite" aria-hidden="true"><path d="M12 2l1.6 7.2L21 12l-7.4 2.8L12 22l-1.6-7.2L3 12l7.4-2.8z" fill="#CBB9F2" opacity=".8"></path></svg>
+<svg width="16" height="16" viewBox="0 0 24 24" style="position:absolute;top:38%;right:-26px;animation:mewFloatSm 6.4s ease-in-out .5s infinite" aria-hidden="true"><path d="M12 2l1.6 7.2L21 12l-7.4 2.8L12 22l-1.6-7.2L3 12l7.4-2.8z" fill="#F9CFE0"></path></svg>
+</div>
+</section>
+
+<div style="position:relative;max-width:1240px;margin:26px auto 0;padding:0 24px">
+<div style="position:relative;height:34px;overflow:hidden">
+<div style="position:absolute;top:17px;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,rgba(122,90,208,.18) 0 8px,rgba(0,0,0,0) 8px 16px)"></div>
+<div style="position:absolute;top:0;left:0;display:flex;width:200%;animation:mewMarch 34s linear infinite">
+<div style="display:flex;align-items:center;gap:74px;width:50%;padding-left:20px">
+<svg width="20" height="20" viewBox="0 0 40 40" style="transform:rotate(-12deg)" aria-hidden="true"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#CBB9F2" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#CBB9F2"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#CBB9F2"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#CBB9F2" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#CBB9F2"></path></g></svg>
+<svg width="16" height="16" viewBox="0 0 40 40" style="transform:rotate(14deg)" aria-hidden="true"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#F9CFE0" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#F9CFE0"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#F9CFE0"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#F9CFE0" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#F9CFE0"></path></g></svg>
+<svg width="20" height="20" viewBox="0 0 40 40" style="transform:rotate(-6deg)" aria-hidden="true"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#CBB9F2" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#CBB9F2"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#CBB9F2"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#CBB9F2" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#CBB9F2"></path></g></svg>
+<svg width="17" height="17" viewBox="0 0 40 40" style="transform:rotate(9deg)" aria-hidden="true"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#FDE3D2" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#FDE3D2"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#FDE3D2"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#FDE3D2" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#FDE3D2"></path></g></svg>
+</div>
+<div style="display:flex;align-items:center;gap:74px;width:50%;padding-left:20px">
+<svg width="20" height="20" viewBox="0 0 40 40" style="transform:rotate(-12deg)" aria-hidden="true"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#CBB9F2" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#CBB9F2"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#CBB9F2"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#CBB9F2" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#CBB9F2"></path></g></svg>
+<svg width="16" height="16" viewBox="0 0 40 40" style="transform:rotate(14deg)" aria-hidden="true"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#F9CFE0" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#F9CFE0"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#F9CFE0"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#F9CFE0" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#F9CFE0"></path></g></svg>
+<svg width="20" height="20" viewBox="0 0 40 40" style="transform:rotate(-6deg)" aria-hidden="true"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#CBB9F2" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#CBB9F2"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#CBB9F2"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#CBB9F2" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#CBB9F2"></path></g></svg>
+<svg width="17" height="17" viewBox="0 0 40 40" style="transform:rotate(9deg)" aria-hidden="true"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#FDE3D2" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#FDE3D2"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#FDE3D2"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#FDE3D2" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#FDE3D2"></path></g></svg>
+</div>
+</div>
+</div>
+</div>
+
+<section id="dichvu" style="position:relative;max-width:1240px;margin:0 auto;padding:68px 24px 0">
+<div data-reveal="1" style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:34px">
+<div>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><svg width="19" height="19" viewBox="0 0 40 40" aria-hidden="true" style="flex:none;transform-box:fill-box;transform-origin:50% 80%;animation:mewPawTap 4.5s ease-in-out infinite"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#8A66D8" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#8A66D8"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#8A66D8"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#8A66D8" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#8A66D8"></path></g></svg><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:#8A66D8">Dịch vụ</span></div>
+<h2 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:clamp(32px,3.4vw,46px);line-height:1.1;letter-spacing:-.03em;color:#2B2440;margin:0">Chọn một buổi chiều<br>dành riêng cho bàn tay bạn</h2>
+</div>
+<p style="max-width:330px;margin:0;font-size:15.5px;line-height:1.6;color:#6B6580">Giá đã gồm tháo móng cũ, dưỡng da tay và một ly trà. Không phụ phí ẩn.</p>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+
+<div data-tilt="1" data-reveal="1" data-cursor="link" style="position:relative;grid-column:span 2;display:flex;gap:22px;align-items:center;padding:26px;border-radius:32px;background:linear-gradient(120deg,#F1ECFE,#FDEBF2 88%);border:1px solid rgba(122,90,208,.08);overflow:hidden;transition:transform .4s cubic-bezier(.2,.9,.3,1),box-shadow .4s ease" style-hover="box-shadow:0 30px 54px -30px rgba(122,90,208,.55)">
+<div style="position:absolute;top:-46px;right:-30px;width:210px;height:210px;border-radius:50%;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.72),rgba(255,255,255,.34) 45%,rgba(255,255,255,0) 72%);filter:blur(14px)"></div>
+<div style="position:relative;flex:none;width:112px;height:112px;border-radius:26px;background:#FFFFFF;display:grid;place-items:center;box-shadow:0 16px 30px -20px rgba(122,90,208,.6)">
+<svg width="82" height="82" viewBox="0 0 100 100" style="overflow:visible" aria-hidden="true">
+<g data-ear style="transform-box:fill-box;transform-origin:60% 100%"><path d="M28 40L31 18l20 14z" fill="#FFFFFF" stroke="#3B3350" stroke-width="3.6" stroke-linejoin="round"></path></g>
+<g data-ear style="transform-box:fill-box;transform-origin:40% 100%"><path d="M72 40l-3-22-20 14z" fill="#FFFFFF" stroke="#3B3350" stroke-width="3.6" stroke-linejoin="round"></path></g>
+<ellipse cx="50" cy="58" rx="32" ry="28" fill="#FFFFFF" stroke="#3B3350" stroke-width="3.6"></ellipse>
+<g data-blink style="transform-box:fill-box;transform-origin:center"><g data-pupil="2.5"><circle cx="39" cy="56" r="4.6" fill="#3B3350"></circle><circle cx="41" cy="54" r="1.6" fill="#FFFFFF"></circle></g><g data-pupil="2.5"><circle cx="61" cy="56" r="4.6" fill="#3B3350"></circle><circle cx="63" cy="54" r="1.6" fill="#FFFFFF"></circle></g></g>
+<ellipse cx="31" cy="66" rx="6" ry="3.6" fill="#F9CFE0"></ellipse><ellipse cx="69" cy="66" rx="6" ry="3.6" fill="#F9CFE0"></ellipse>
+<path d="M46 66c2 3 5 3 6 0M58 66c-2 3-5 3-6 0" stroke="#3B3350" stroke-width="2.4" stroke-linecap="round" fill="none"></path>
+<rect x="76" y="30" width="13" height="34" rx="6.5" fill="#F2A8C6" stroke="#3B3350" stroke-width="3" style="transform-box:fill-box;transform-origin:50% 100%;animation:mewTail 4s ease-in-out infinite"></rect>
+<rect x="78.5" y="22" width="8" height="9" rx="3" fill="#E4DAFB" stroke="#3B3350" stroke-width="3"></rect>
+</svg>
+</div>
+<div style="position:relative;flex:1">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+<span style="padding:5px 11px;border-radius:999px;background:#7A5AD0;color:#FFFFFF;font-family:Quicksand,sans-serif;font-weight:700;font-size:11px;letter-spacing:.04em">ĐƯỢC CHỌN NHIỀU NHẤT</span>
+</div>
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:26px;letter-spacing:-.02em;color:#2B2440;margin:0 0 6px">Nail mèo — vẽ tay</h3>
+<p style="margin:0 0 14px;font-size:15px;line-height:1.55;color:#6B6580;max-width:380px">Mỗi ngón một biểu cảm mèo khác nhau. Bạn kể về mèo nhà bạn, tụi mình vẽ lại.</p>
+<div style="display:flex;align-items:baseline;gap:12px">
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:24px;color:#7A5AD0">390.000₫</span>
+<span style="font-size:13.5px;color:#767089">· 90 phút</span>
+</div>
+</div>
+</div>
+
+<div data-tilt="1" data-reveal="1" data-cursor="link" style="position:relative;padding:26px;border-radius:32px;background:#FFFFFF;border:1px solid rgba(122,90,208,.1);overflow:hidden;transition:transform .4s cubic-bezier(.2,.9,.3,1),box-shadow .4s ease" style-hover="box-shadow:0 30px 54px -30px rgba(122,90,208,.45)">
+<div style="width:64px;height:64px;border-radius:20px;background:#FDF4E8;display:grid;place-items:center;margin-bottom:16px;animation:mewFloatSm 5.4s ease-in-out 0s infinite">
+<svg width="40" height="40" viewBox="0 0 60 60" aria-hidden="true"><rect x="22" y="14" width="16" height="30" rx="8" fill="#F2A8C6" stroke="#3B3350" stroke-width="3"></rect><rect x="25" y="6" width="10" height="10" rx="4" fill="#CDBBF4" stroke="#3B3350" stroke-width="3"></rect><ellipse cx="30" cy="50" rx="14" ry="4" fill="#F1ECFE"></ellipse></svg>
+</div>
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">Sơn gel cơ bản</h3>
+<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Một màu, bóng đẹp, giữ 3 tuần.</p>
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#7A5AD0">180.000₫</span><span style="font-size:13px;color:#767089">· 45 phút</span></div>
+</div>
+
+<div data-tilt="1" data-reveal="1" data-cursor="link" style="position:relative;padding:26px;border-radius:32px;background:#FFFFFF;border:1px solid rgba(122,90,208,.1);transition:transform .4s cubic-bezier(.2,.9,.3,1),box-shadow .4s ease" style-hover="box-shadow:0 30px 54px -30px rgba(122,90,208,.45)">
+<div style="width:64px;height:64px;border-radius:20px;background:#FDEBF2;display:grid;place-items:center;margin-bottom:16px;animation:mewFloatSm 6.1s ease-in-out .5s infinite">
+<svg width="40" height="40" viewBox="0 0 60 60" aria-hidden="true"><path d="M18 46V22a12 12 0 0124 0v24z" fill="#FFFFFF" stroke="#3B3350" stroke-width="3"></path><path d="M18 30h24" stroke="#3B3350" stroke-width="3"></path><path d="M18 22a12 12 0 0124 0v8H18z" fill="#FDE3D2"></path></svg>
+</div>
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">French tip</h3>
+<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Viền mảnh, sạch, không bao giờ cũ.</p>
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#7A5AD0">250.000₫</span><span style="font-size:13px;color:#767089">· 60 phút</span></div>
+</div>
+
+<div data-tilt="1" data-reveal="1" data-cursor="link" style="position:relative;padding:26px;border-radius:32px;background:#FFFFFF;border:1px solid rgba(122,90,208,.1);transition:transform .4s cubic-bezier(.2,.9,.3,1),box-shadow .4s ease" style-hover="box-shadow:0 30px 54px -30px rgba(122,90,208,.45)">
+<div style="width:64px;height:64px;border-radius:20px;background:#E2EEFB;display:grid;place-items:center;margin-bottom:16px;animation:mewFloatSm 5.7s ease-in-out 1.1s infinite">
+<svg width="40" height="40" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="15" fill="#FFFFFF" stroke="#3B3350" stroke-width="3"></circle><circle cx="30" cy="30" r="6" fill="#F9CFE0"></circle><path d="M30 8v6M30 46v6M8 30h6M46 30h6" stroke="#3B3350" stroke-width="3" stroke-linecap="round"></path></svg>
+</div>
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">Nail Nhật vẽ tay</h3>
+<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Hoa nhỏ, lá mảnh, chi tiết tới từng nét.</p>
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#7A5AD0">520.000₫</span><span style="font-size:13px;color:#767089">· 120 phút</span></div>
+</div>
+
+<div data-tilt="1" data-reveal="1" data-cursor="link" style="position:relative;padding:26px;border-radius:32px;background:#FFFFFF;border:1px solid rgba(122,90,208,.1);transition:transform .4s cubic-bezier(.2,.9,.3,1),box-shadow .4s ease" style-hover="box-shadow:0 30px 54px -30px rgba(122,90,208,.45)">
+<div style="width:64px;height:64px;border-radius:20px;background:#F1ECFE;display:grid;place-items:center;margin-bottom:16px;animation:mewFloatSm 6.4s ease-in-out .8s infinite">
+<svg width="40" height="40" viewBox="0 0 60 60" aria-hidden="true"><ellipse cx="30" cy="34" rx="17" ry="14" fill="#FFFFFF" stroke="#3B3350" stroke-width="3"></ellipse><path d="M20 22l-2-9 10 5zM40 22l2-9-10 5z" fill="#FFFFFF" stroke="#3B3350" stroke-width="3" stroke-linejoin="round"></path><path d="M24 34c2 2 4 2 5 0M36 34c-2 2-4 2-5 0" stroke="#3B3350" stroke-width="2.6" stroke-linecap="round"></path></svg>
+</div>
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">Nail Hàn trong veo</h3>
+<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Lớp sữa mờ, ánh nhẹ như da tay bạn.</p>
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#7A5AD0">320.000₫</span><span style="font-size:13px;color:#767089">· 75 phút</span></div>
+</div>
+
+<div data-tilt="1" data-reveal="1" data-cursor="link" style="position:relative;padding:26px;border-radius:32px;background:linear-gradient(150deg,#FDF4E8,#FDE3D2);border:1px solid rgba(224,136,95,.14);transition:transform .4s cubic-bezier(.2,.9,.3,1),box-shadow .4s ease" style-hover="box-shadow:0 30px 54px -30px rgba(224,136,95,.5)">
+<div style="width:64px;height:64px;border-radius:20px;background:rgba(255,255,255,.75);display:grid;place-items:center;margin-bottom:16px;animation:mewFloatSm 5.9s ease-in-out 1.5s infinite">
+<svg width="40" height="40" viewBox="0 0 60 60" aria-hidden="true"><path d="M14 34h32a16 16 0 01-32 0z" fill="#FFFFFF" stroke="#3B3350" stroke-width="3"></path><ellipse cx="30" cy="34" rx="16" ry="4" fill="#E2EEFB"></ellipse><circle cx="24" cy="20" r="3" fill="#F9CFE0"></circle><circle cx="33" cy="15" r="2.4" fill="#CBB9F2"></circle></svg>
+</div>
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">Spa tay &amp; móng</h3>
+<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Ngâm ấm, tẩy da chết, massage 15 phút.</p>
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#C4589C">150.000₫</span><span style="font-size:13px;color:#767089">· 40 phút</span></div>
+</div>
+
+<div data-tilt="1" data-reveal="1" data-cursor="link" style="position:relative;grid-column:span 2;display:flex;gap:22px;align-items:center;padding:26px;border-radius:32px;background:linear-gradient(120deg,#E2EEFB,#F1ECFE 92%);border:1px solid rgba(122,90,208,.1);overflow:hidden;transition:transform .4s cubic-bezier(.2,.9,.3,1),box-shadow .4s ease" style-hover="box-shadow:0 30px 54px -30px rgba(122,90,208,.5)">
+<div style="position:absolute;top:-54px;right:-34px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.68),rgba(255,255,255,.3) 45%,rgba(255,255,255,0) 72%);filter:blur(14px)"></div>
+<div style="position:relative;flex:none;width:112px;height:112px;border-radius:26px;background:#FFFFFF;display:grid;place-items:center;box-shadow:0 16px 30px -20px rgba(122,90,208,.5);animation:mewFloatSm 6.2s ease-in-out .3s infinite">
+<svg width="76" height="76" viewBox="0 0 100 100" style="overflow:visible" aria-hidden="true">
+<path d="M26 60c0-16 10-28 24-28s24 12 24 28" fill="#FFFFFF" stroke="#3B3350" stroke-width="3.6"></path>
+<path d="M22 62h56a6 6 0 01-6 6H28a6 6 0 01-6-6z" fill="#CBB9F2" stroke="#3B3350" stroke-width="3.6" stroke-linejoin="round"></path>
+<path d="M34 76c3 5 9 5 12 0M54 76c3 5 9 5 12 0" stroke="#3B3350" stroke-width="3" stroke-linecap="round" fill="none"></path>
+<path d="M38 30c-2-6 2-11 6-12M50 26c-2-7 2-12 6-13M62 30c-2-6 2-11 6-12" stroke="#3B3350" stroke-width="3" stroke-linecap="round" fill="none"></path>
+<circle cx="40" cy="50" r="3.2" fill="#F9CFE0"></circle><circle cx="60" cy="50" r="3.2" fill="#F9CFE0"></circle>
+</svg>
+</div>
+<div style="position:relative;flex:1">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+<span style="padding:5px 11px;border-radius:999px;background:#4A8FB8;color:#FFFFFF;font-family:Quicksand,sans-serif;font-weight:700;font-size:11px;letter-spacing:.04em">MỚI Ở 1M65</span>
+</div>
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:26px;letter-spacing:-.02em;color:#2B2440;margin:0 0 6px">Gội đầu dưỡng sinh</h3>
+<p style="margin:0 0 14px;font-size:15px;line-height:1.55;color:#6B6580;max-width:400px">Gội thảo mộc ấm, massage đầu — vai — cổ, ấn huyệt nhẹ. Nhiều khách ngủ quên luôn.</p>
+<div style="display:flex;align-items:baseline;gap:12px">
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:24px;color:#7A5AD0">220.000₫</span>
+<span style="font-size:13.5px;color:#767089">· 60 phút</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section style="position:relative;max-width:1240px;margin:0 auto;padding:56px 24px 0">
+<div data-reveal="1" style="position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:center;padding:40px 44px;border-radius:40px;background:linear-gradient(112deg,#E9E1FD 0%,#F3ECFE 44%,#FDEBF2 100%);overflow:hidden">
+<div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.55) 1.4px,rgba(0,0,0,0) 1.5px);background-size:26px 26px;opacity:.65"></div>
+<div style="position:relative;display:flex;gap:26px;align-items:center">
+<div data-cat="wave" style="flex:none;width:132px">
+<svg viewBox="0 0 130 155" style="width:100%;height:auto;overflow:visible;filter:drop-shadow(0 14px 20px rgba(122,90,208,.22))" aria-hidden="true">
+<g data-ear style="transform-box:fill-box;transform-origin:70% 100%"><path d="M32 54c-6-17-4-27 2-28 6 0 17 11 23 19z" fill="#FFFFFF" stroke="#3B3350" stroke-width="4.4" stroke-linejoin="round"></path><path d="M38 47c-3-10-2-16 1-17 4 0 10 7 12 12z" fill="#F9CFE0"></path></g>
+<g data-ear style="transform-box:fill-box;transform-origin:30% 100%"><path d="M90 54c6-17 4-27-2-28-6 0-17 11-23 19z" fill="#FFFFFF" stroke="#3B3350" stroke-width="4.4" stroke-linejoin="round"></path><path d="M84 47c3-10 2-16-1-17-4 0-10 7-12 12z" fill="#F9CFE0"></path></g>
+<path d="M61 76c26 0 41 20 41 40 0 17-17 25-41 25s-41-8-41-25c0-20 15-40 41-40z" fill="#FFFFFF" stroke="#3B3350" stroke-width="4.4" stroke-linejoin="round"></path>
+<g data-wavearm style="transform-box:fill-box;transform-origin:16% 92%;animation:mewTail 1.9s ease-in-out infinite">
+<path d="M26 112c-14-6-20-22-12-32" stroke="#3B3350" stroke-width="4.4" stroke-linecap="round" fill="none"></path>
+<path d="M12 68c6.4 0 10.6 4.4 10.6 10.6 0 5.2-4 8.6-10.6 8.6S1.4 83.8 1.4 78.6C1.4 72.4 5.6 68 12 68z" fill="#FFFFFF" stroke="#3B3350" stroke-width="3.4" stroke-linejoin="round"></path>
+<g fill="#F9CFE0"><ellipse cx="6.6" cy="75.6" rx="2.1" ry="2.6"></ellipse><ellipse cx="11.2" cy="73.4" rx="2.1" ry="2.6"></ellipse><ellipse cx="16.4" cy="75.4" rx="2" ry="2.5"></ellipse><path d="M12 79.4c2.8 0 4.8 1.6 4.8 3.6 0 1.9-2.1 3-4.8 3s-4.8-1.1-4.8-3c0-2 2-3.6 4.8-3.6z"></path></g>
+</g>
+<ellipse cx="61" cy="80" rx="43" ry="36" fill="#FFFFFF" stroke="#3B3350" stroke-width="4.4"></ellipse>
+<path d="M31 66c6-8 12-11 18-11" stroke="#C9C3D8" stroke-width="5" stroke-linecap="round" fill="none"></path>
+<ellipse cx="32" cy="92" rx="8.4" ry="5" fill="#F9CFE0"></ellipse><ellipse cx="90" cy="92" rx="8.4" ry="5" fill="#F9CFE0"></ellipse>
+<g data-blink style="transform-box:fill-box;transform-origin:center">
+<path d="M40 76c3.4-5 9-5 12.4 0" stroke="#231E33" stroke-width="4.2" stroke-linecap="round" fill="none"></path>
+<g data-pupil="3"><ellipse cx="78" cy="78" rx="8" ry="9.6" fill="#231E33"></ellipse><ellipse cx="81" cy="74" rx="3" ry="2.4" fill="#FFFFFF" transform="rotate(-20 81 74)"></ellipse></g>
+</g>
+<path d="M58 92c0-1.8 1.4-2.7 3-2.7s3 .9 3 2.7-1.4 3.3-3 3.3-3-1.5-3-3.3z" fill="#F2A8C6" stroke="#3B3350" stroke-width="1.4"></path>
+<path d="M61 96v2.4M55 101c2.6 3 4.6 2.2 5.4-2.2M67 101c-2.6 3-4.6 2.2-5.4-2.2" stroke="#3B3350" stroke-width="2.8" stroke-linecap="round" fill="none"></path>
+<ellipse cx="48" cy="139" rx="12" ry="7.4" fill="#FFFFFF" stroke="#3B3350" stroke-width="4"></ellipse>
+<ellipse cx="76" cy="139" rx="12" ry="7.4" fill="#FFFFFF" stroke="#3B3350" stroke-width="4"></ellipse>
+<g fill="#F9CFE0"><ellipse cx="44" cy="137" rx="1.7" ry="2.1"></ellipse><ellipse cx="48.6" cy="136.4" rx="1.7" ry="2.1"></ellipse><ellipse cx="53" cy="137.6" rx="1.6" ry="2"></ellipse><ellipse cx="48" cy="141.4" rx="3.6" ry="2.3"></ellipse>
+<ellipse cx="72" cy="137" rx="1.7" ry="2.1"></ellipse><ellipse cx="76.6" cy="136.4" rx="1.7" ry="2.1"></ellipse><ellipse cx="81" cy="137.6" rx="1.6" ry="2"></ellipse><ellipse cx="76" cy="141.4" rx="3.6" ry="2.3"></ellipse></g>
+</svg>
+</div>
+<div style="position:relative">
+<div style="display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:999px;background:#FFFFFF;font-family:Quicksand,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.1em;color:#C4589C;margin-bottom:12px">LẦN ĐẦU GHÉ 1M65</div>
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:clamp(28px,3vw,40px);line-height:1.08;letter-spacing:-.03em;color:#2B2440;margin:0 0 10px">Giảm 10% cho<br>bộ móng đầu tiên</h3>
+<p style="margin:0;font-size:15.5px;line-height:1.6;color:#5C566F;max-width:320px">Nhắn “Nhu Nhi ơi” khi đặt hẹn là tụi mình hiểu. Áp dụng cho mọi dịch vụ, kể cả nail vẽ tay.</p>
+</div>
+</div>
+<div style="position:relative;display:flex;flex-direction:column;gap:10px;padding:22px;border-radius:28px;background:rgba(255,255,255,.78);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.9)">
+<div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:15px;color:#2B2440;margin-bottom:2px">Vì sao khách quay lại</div>
+<div style="display:flex;align-items:center;gap:11px;font-size:14.5px;color:#5C566F"><span style="display:grid;place-items:center;width:26px;height:26px;border-radius:9px;background:#F1ECFE;flex:none"><svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4 10-10" stroke="#7A5AD0" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg></span>Dụng cụ tiệt trùng riêng từng khách</div>
+<div style="display:flex;align-items:center;gap:11px;font-size:14.5px;color:#5C566F"><span style="display:grid;place-items:center;width:26px;height:26px;border-radius:9px;background:#FDEBF2;flex:none"><svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4 10-10" stroke="#C4589C" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg></span>Sơn gel không mùi, an toàn cho bà bầu</div>
+<div style="display:flex;align-items:center;gap:11px;font-size:14.5px;color:#5C566F"><span style="display:grid;place-items:center;width:26px;height:26px;border-radius:9px;background:#FDF4E8;flex:none"><svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4 10-10" stroke="#E0885F" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg></span>Chỉ 4 ghế — không bao giờ đông</div>
+<div style="display:flex;align-items:center;gap:11px;font-size:14.5px;color:#5C566F"><span style="display:grid;place-items:center;width:26px;height:26px;border-radius:9px;background:#E2EEFB;flex:none"><svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4 10-10" stroke="#5078BE" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg></span>Sửa lại miễn phí trong 7 ngày</div>
+</div>
+</div>
+</section>
+
+<section id="thuvien" style="position:relative;max-width:1240px;margin:0 auto;padding:78px 24px 0">
+<div data-reveal="1" style="text-align:center;margin-bottom:26px">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><svg width="19" height="19" viewBox="0 0 40 40" aria-hidden="true" style="flex:none;animation:mewFloatSm 4.4s ease-in-out infinite"><path d="M9 16l1-9 9 6zM31 16l-1-9-9 6z" fill="#CBB9F2"></path><circle cx="20" cy="24" r="12" fill="#8A66D8"></circle><g style="transform-box:fill-box;transform-origin:center;animation:mewWink 5.5s ease-in-out infinite"><circle cx="15.5" cy="23" r="2" fill="#FFFFFF"></circle><circle cx="24.5" cy="23" r="2" fill="#FFFFFF"></circle></g><path d="M17.5 28.5c1.5 1.6 3.5 1.6 5 0" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" fill="none"></path></svg><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:#8A66D8">Thư viện</span></div>
+<h2 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:clamp(32px,3.4vw,46px);line-height:1.1;letter-spacing:-.03em;color:#2B2440;margin:0 auto;max-width:620px">Chọn kiểu bạn thích, rồi mang ảnh tới</h2>
+</div>
+
+<div data-reveal="1" style="position:relative;z-index:1;display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-bottom:26px">
+<button data-filter="all" data-cursor="link" style="padding:11px 20px;border:1px solid rgba(122,90,208,.14);border-radius:999px;background:#7A5AD0;color:#FFFFFF;font-family:Quicksand,sans-serif;font-weight:700;font-size:14px;cursor:none;transition:transform .3s ease">Tất cả</button>
+<button data-filter="nhe" data-cursor="link" style="padding:11px 20px;border:1px solid rgba(122,90,208,.14);border-radius:999px;background:#FFFFFF;color:#5C566F;font-family:Quicksand,sans-serif;font-weight:700;font-size:14px;cursor:none;transition:transform .3s ease">Nhẹ nhàng</button>
+<button data-filter="pastel" data-cursor="link" style="padding:11px 20px;border:1px solid rgba(122,90,208,.14);border-radius:999px;background:#FFFFFF;color:#5C566F;font-family:Quicksand,sans-serif;font-weight:700;font-size:14px;cursor:none;transition:transform .3s ease">Pastel</button>
+<button data-filter="meo" data-cursor="link" style="padding:11px 20px;border:1px solid rgba(122,90,208,.14);border-radius:999px;background:#FFFFFF;color:#5C566F;font-family:Quicksand,sans-serif;font-weight:700;font-size:14px;cursor:none;transition:transform .3s ease">Nail mèo</button>
+<button data-filter="lap" data-cursor="link" style="padding:11px 20px;border:1px solid rgba(122,90,208,.14);border-radius:999px;background:#FFFFFF;color:#5C566F;font-family:Quicksand,sans-serif;font-weight:700;font-size:14px;cursor:none;transition:transform .3s ease">Lấp lánh</button>
+</div>
+
+<div id="mewGalleryGlow" aria-hidden="true" style="position:absolute;left:-220px;right:-220px;top:60px;bottom:-80px;z-index:0;pointer-events:none">
+<div style="position:absolute;left:-120px;top:-60px;width:900px;height:820px;border-radius:50%;background:radial-gradient(closest-side,rgba(122,90,208,.20) 0%,rgba(122,90,208,.13) 32%,rgba(122,90,208,.06) 56%,rgba(122,90,208,.02) 76%,rgba(122,90,208,0) 100%);filter:blur(70px);animation:mewBlob 30s ease-in-out infinite"></div>
+<div style="position:absolute;right:-140px;top:120px;width:960px;height:880px;border-radius:50%;background:radial-gradient(closest-side,rgba(226,120,170,.17) 0%,rgba(226,120,170,.11) 32%,rgba(226,120,170,.05) 56%,rgba(226,120,170,.015) 76%,rgba(226,120,170,0) 100%);filter:blur(80px);animation:mewBlob 36s ease-in-out 3s infinite"></div>
+<div style="position:absolute;left:26%;bottom:-220px;width:820px;height:760px;border-radius:50%;background:radial-gradient(closest-side,rgba(224,136,95,.13) 0%,rgba(224,136,95,.08) 34%,rgba(224,136,95,.035) 58%,rgba(224,136,95,0) 100%);filter:blur(80px);animation:mewBlob 33s ease-in-out 1.5s infinite"></div>
+</div>
+<div id="mewGrid" style="position:relative;z-index:1;columns:4;column-gap:16px">
+<div data-tile="meo" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#F1ECFE;background-image:repeating-linear-gradient(135deg,rgba(122,90,208,.12) 0 10px,rgba(122,90,208,0) 10px 20px);aspect-ratio:3/4;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(122,90,208,.55)" style-hover="transform:scale(1.03) rotate(-1.5deg);box-shadow:0 26px 48px -28px rgba(122,90,208,.6)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#7A5AD0;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#7A5AD0;flex:none"></span>NAIL MÈO · 3:4</span></div>
+<div data-tile="pastel" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#FDEBF2;background-image:repeating-linear-gradient(135deg,rgba(196,88,156,.12) 0 10px,rgba(196,88,156,0) 10px 20px);aspect-ratio:1/1;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(196,88,156,.55)" style-hover="transform:scale(1.03) rotate(1.5deg);box-shadow:0 26px 48px -28px rgba(196,88,156,.55)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#C4589C;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#C4589C;flex:none"></span>PASTEL · 1:1</span></div>
+<div data-tile="nhe" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#FDF4E8;background-image:repeating-linear-gradient(135deg,rgba(224,136,95,.13) 0 10px,rgba(224,136,95,0) 10px 20px);aspect-ratio:4/5;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(224,136,95,.55)" style-hover="transform:scale(1.03) rotate(-1.5deg);box-shadow:0 26px 48px -28px rgba(224,136,95,.5)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#B96B42;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#B96B42;flex:none"></span>NUDE · 4:5</span></div>
+<div data-tile="lap" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#E2EEFB;background-image:repeating-linear-gradient(135deg,rgba(80,120,190,.12) 0 10px,rgba(80,120,190,0) 10px 20px);aspect-ratio:3/4;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(80,120,190,.55)" style-hover="transform:scale(1.03) rotate(1.5deg);box-shadow:0 26px 48px -28px rgba(80,120,190,.5)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#4A6FA8;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#4A6FA8;flex:none"></span>GLITTER · 3:4</span></div>
+<div data-tile="nhe" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#F3F2F6;background-image:repeating-linear-gradient(135deg,rgba(90,86,110,.1) 0 10px,rgba(90,86,110,0) 10px 20px);aspect-ratio:1/1;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(90,86,110,.55)" style-hover="transform:scale(1.03) rotate(-1.5deg);box-shadow:0 26px 48px -28px rgba(90,86,110,.4)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#5C566F;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#5C566F;flex:none"></span>FRENCH · 1:1</span></div>
+<div data-tile="meo" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#E9E1FD;background-image:repeating-linear-gradient(135deg,rgba(122,90,208,.14) 0 10px,rgba(122,90,208,0) 10px 20px);aspect-ratio:4/5;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(122,90,208,.55)" style-hover="transform:scale(1.03) rotate(1.5deg);box-shadow:0 26px 48px -28px rgba(122,90,208,.6)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#7A5AD0;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#7A5AD0;flex:none"></span>MÈO TAM THỂ · 4:5</span></div>
+<div data-tile="pastel" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#FDE3D2;background-image:repeating-linear-gradient(135deg,rgba(224,136,95,.14) 0 10px,rgba(224,136,95,0) 10px 20px);aspect-ratio:3/4;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(224,136,95,.55)" style-hover="transform:scale(1.03) rotate(-1.5deg);box-shadow:0 26px 48px -28px rgba(224,136,95,.5)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#B96B42;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#B96B42;flex:none"></span>PEACH · 3:4</span></div>
+<div data-tile="lap" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#F1ECFE;background-image:repeating-linear-gradient(135deg,rgba(122,90,208,.1) 0 10px,rgba(122,90,208,0) 10px 20px);aspect-ratio:1/1;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(122,90,208,.55)" style-hover="transform:scale(1.03) rotate(1.5deg);box-shadow:0 26px 48px -28px rgba(122,90,208,.5)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#7A5AD0;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#7A5AD0;flex:none"></span>CHROME · 1:1</span></div>
+<div data-tile="nhe" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#FDF4E8;background-image:repeating-linear-gradient(135deg,rgba(224,136,95,.12) 0 10px,rgba(224,136,95,0) 10px 20px);aspect-ratio:3/4;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(224,136,95,.55)" style-hover="transform:scale(1.03) rotate(-1.5deg);box-shadow:0 26px 48px -28px rgba(224,136,95,.5)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#B96B42;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#B96B42;flex:none"></span>SỮA ẤM · 3:4</span></div>
+<div data-tile="meo" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#E9E1FD;background-image:repeating-linear-gradient(135deg,rgba(122,90,208,.13) 0 10px,rgba(122,90,208,0) 10px 20px);aspect-ratio:1/1;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(122,90,208,.55)" style-hover="transform:scale(1.03) rotate(1.5deg);box-shadow:0 26px 48px -28px rgba(122,90,208,.55)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#7A5AD0;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#7A5AD0;flex:none"></span>MÈO NGỦ · 1:1</span></div>
+<div data-tile="pastel" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#FDEBF2;background-image:repeating-linear-gradient(135deg,rgba(196,88,156,.13) 0 10px,rgba(196,88,156,0) 10px 20px);aspect-ratio:4/5;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(196,88,156,.55)" style-hover="transform:scale(1.03) rotate(-1.5deg);box-shadow:0 26px 48px -28px rgba(196,88,156,.55)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#C4589C;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#C4589C;flex:none"></span>HOA NHÍ · 4:5</span></div>
+<div data-tile="lap" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#E2EEFB;background-image:repeating-linear-gradient(135deg,rgba(80,120,190,.13) 0 10px,rgba(80,120,190,0) 10px 20px);aspect-ratio:1/1;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(80,120,190,.55)" style-hover="transform:scale(1.03) rotate(1.5deg);box-shadow:0 26px 48px -28px rgba(80,120,190,.5)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#4A6FA8;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#4A6FA8;flex:none"></span>ÁNH SAO · 1:1</span></div>
+<div data-tile="nhe" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#F3F2F6;background-image:repeating-linear-gradient(135deg,rgba(90,86,110,.1) 0 10px,rgba(90,86,110,0) 10px 20px);aspect-ratio:4/5;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(90,86,110,.55)" style-hover="transform:scale(1.03) rotate(-1.5deg);box-shadow:0 26px 48px -28px rgba(90,86,110,.4)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#5C566F;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#5C566F;flex:none"></span>MỜ SƯƠNG · 4:5</span></div>
+<div data-tile="meo" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#F1ECFE;background-image:repeating-linear-gradient(135deg,rgba(122,90,208,.11) 0 10px,rgba(122,90,208,0) 10px 20px);aspect-ratio:3/4;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(122,90,208,.55)" style-hover="transform:scale(1.03) rotate(1.5deg);box-shadow:0 26px 48px -28px rgba(122,90,208,.55)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#7A5AD0;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#7A5AD0;flex:none"></span>MÈO VÀ CÁ · 3:4</span></div>
+<div data-tile="pastel" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#FDE3D2;background-image:repeating-linear-gradient(135deg,rgba(224,136,95,.13) 0 10px,rgba(224,136,95,0) 10px 20px);aspect-ratio:1/1;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(224,136,95,.55)" style-hover="transform:scale(1.03) rotate(-1.5deg);box-shadow:0 26px 48px -28px rgba(224,136,95,.5)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#B96B42;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#B96B42;flex:none"></span>NẮNG CHIỀU · 1:1</span></div>
+<div data-tile="lap" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#E9E1FD;background-image:repeating-linear-gradient(135deg,rgba(122,90,208,.14) 0 10px,rgba(122,90,208,0) 10px 20px);aspect-ratio:4/5;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(122,90,208,.55)" style-hover="transform:scale(1.03) rotate(1.5deg);box-shadow:0 26px 48px -28px rgba(122,90,208,.55)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#7A5AD0;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#7A5AD0;flex:none"></span>KIM TUYẾN TÍM · 4:5</span></div>
+</div>
+
+<div id="mewMoreWrap" style="position:relative;z-index:1;display:flex;justify-content:center;margin-top:10px">
+<button onClick="{{ openMore }}" data-cursor="link" data-magnet="1" style="display:flex;align-items:center;gap:10px;padding:15px 26px;border-radius:999px;background:#FFFFFF;border:1px solid rgba(122,90,208,.18);color:#4A3A80;font-family:Quicksand,sans-serif;font-weight:700;font-size:15px;cursor:none;transition:transform .3s ease,background .3s ease" style-hover="transform:translateY(-3px);background:#F6F2FF">
+Xem thêm
+<svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.6" y="1.6" width="12.8" height="12.8" rx="3.4" stroke="#7A5AD0" stroke-width="2" fill="none"></rect><path d="M5 8h6M8 5v6" stroke="#7A5AD0" stroke-width="2" stroke-linecap="round"></path></svg>
+</button>
+</div>
+</section>
+
+<div aria-hidden="true" style="position:relative;max-width:1240px;margin:74px auto 0;padding:0 24px">
+<div style="position:relative;height:78px;border-radius:999px;background:linear-gradient(90deg,rgba(233,225,253,0) 0%,rgba(233,225,253,.6) 20%,rgba(243,236,254,.6) 50%,rgba(253,235,242,.6) 80%,rgba(253,235,242,0) 100%)">
+<div style="position:absolute;left:calc(50% + 44px);bottom:21px;animation:mewPrintDrift 4.4s linear 0.00s infinite backwards"><svg width="15" height="15" viewBox="0 0 40 40" style="display:block;transform:rotate(-14deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#C3ACF0" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#C3ACF0"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#C3ACF0"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#C3ACF0" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#C3ACF0"></path></g></svg></div>
+<div style="position:absolute;left:calc(50% + 44px);bottom:13px;animation:mewPrintDrift 4.4s linear 0.55s infinite backwards"><svg width="15" height="15" viewBox="0 0 40 40" style="display:block;transform:rotate(12deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#F0AECB" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#F0AECB"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#F0AECB"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#F0AECB" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#F0AECB"></path></g></svg></div>
+<div style="position:absolute;left:calc(50% + 44px);bottom:21px;animation:mewPrintDrift 4.4s linear 1.10s infinite backwards"><svg width="15" height="15" viewBox="0 0 40 40" style="display:block;transform:rotate(-14deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#C3ACF0" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#C3ACF0"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#C3ACF0"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#C3ACF0" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#C3ACF0"></path></g></svg></div>
+<div style="position:absolute;left:calc(50% + 44px);bottom:13px;animation:mewPrintDrift 4.4s linear 1.65s infinite backwards"><svg width="15" height="15" viewBox="0 0 40 40" style="display:block;transform:rotate(12deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#F0AECB" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#F0AECB"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#F0AECB"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#F0AECB" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#F0AECB"></path></g></svg></div>
+<div style="position:absolute;left:calc(50% + 44px);bottom:21px;animation:mewPrintDrift 4.4s linear 2.20s infinite backwards"><svg width="15" height="15" viewBox="0 0 40 40" style="display:block;transform:rotate(-14deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#C3ACF0" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#C3ACF0"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#C3ACF0"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#C3ACF0" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#C3ACF0"></path></g></svg></div>
+<div style="position:absolute;left:calc(50% + 44px);bottom:13px;animation:mewPrintDrift 4.4s linear 2.75s infinite backwards"><svg width="15" height="15" viewBox="0 0 40 40" style="display:block;transform:rotate(12deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#F0AECB" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#F0AECB"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#F0AECB"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#F0AECB" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#F0AECB"></path></g></svg></div>
+<div style="position:absolute;left:calc(50% + 44px);bottom:21px;animation:mewPrintDrift 4.4s linear 3.30s infinite backwards"><svg width="15" height="15" viewBox="0 0 40 40" style="display:block;transform:rotate(-14deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#C3ACF0" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#C3ACF0"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#C3ACF0"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#C3ACF0" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#C3ACF0"></path></g></svg></div>
+<div style="position:absolute;left:calc(50% + 44px);bottom:13px;animation:mewPrintDrift 4.4s linear 3.85s infinite backwards"><svg width="15" height="15" viewBox="0 0 40 40" style="display:block;transform:rotate(12deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#F0AECB" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#F0AECB"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#F0AECB"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#F0AECB" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#F0AECB"></path></g></svg></div>
+
+<div style="position:absolute;bottom:10px;left:50%;width:96px;margin-left:-48px">
+<div style="animation:mewBob 1.1s ease-in-out infinite">
+<svg viewBox="0 0 96 64" style="width:100%;height:auto;overflow:visible">
+<ellipse cx="48" cy="60" rx="30" ry="4" fill="#8A66D8" opacity=".13"></ellipse>
+<g style="transform-box:fill-box;transform-origin:96% 60%;animation:mewTail 1.6s ease-in-out infinite">
+<path d="M76 38c14 2 18-10 10-19" stroke="#3B3350" stroke-width="6.4" stroke-linecap="round" fill="none"></path>
+<path d="M76 38c14 2 18-10 10-19" stroke="#F2A8C6" stroke-width="2.8" stroke-linecap="round" fill="none"></path>
+</g>
+<path d="M40 20c22 0 38 8 38 20 0 10-14 14-38 14S12 50 12 40c0-12 6-20 28-20z" fill="#FFFFFF" stroke="#3B3350" stroke-width="4.2" stroke-linejoin="round"></path>
+<g data-ear><path d="M18 16c-4-11-2-17 2-17 4 0 11 6 15 12z" fill="#FFFFFF" stroke="#3B3350" stroke-width="4.2" stroke-linejoin="round"></path><path d="M22 12c-2-6-1-10 1-10 2 0 6 4 8 7z" fill="#F9CFE0"></path>
+<path d="M44 16c4-11 2-17-2-17-4 0-11 6-15 12z" fill="#FFFFFF" stroke="#3B3350" stroke-width="4.2" stroke-linejoin="round"></path><path d="M40 12c2-6 1-10-1-10-2 0-6 4-8 7z" fill="#F9CFE0"></path></g>
+<ellipse cx="31" cy="27" rx="21" ry="18" fill="#FFFFFF" stroke="#3B3350" stroke-width="4.2"></ellipse>
+<ellipse cx="17" cy="33" rx="4.6" ry="2.8" fill="#F9CFE0"></ellipse><ellipse cx="45" cy="33" rx="4.6" ry="2.8" fill="#F9CFE0"></ellipse>
+<g><ellipse cx="24" cy="26" rx="4.2" ry="5.2" fill="#231E33"></ellipse><ellipse cx="25.5" cy="23.8" rx="1.6" ry="1.3" fill="#FFFFFF" transform="rotate(-20 25.5 23.8)"></ellipse>
+<ellipse cx="38" cy="26" rx="4.2" ry="5.2" fill="#231E33"></ellipse><ellipse cx="39.5" cy="23.8" rx="1.6" ry="1.3" fill="#FFFFFF" transform="rotate(-20 39.5 23.8)"></ellipse></g>
+<path d="M29.4 33.4c0-1.3 1-2 2.1-2s2.1.7 2.1 2-1 2.4-2.1 2.4-2.1-1.1-2.1-2.4z" fill="#F2A8C6" stroke="#3B3350" stroke-width="1.2"></path>
+<path d="M31.5 36v1.6M27.6 39.4c1.8 2 3.2 1.4 3.7-1.6M35.4 39.4c-1.8 2-3.2 1.4-3.7-1.6" stroke="#3B3350" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
+<g style="transform-box:fill-box;transform-origin:50% 0;animation:mewTail 1.1s ease-in-out infinite">
+<ellipse cx="30" cy="53" rx="8" ry="5" fill="#FFFFFF" stroke="#3B3350" stroke-width="4"></ellipse>
+<g fill="#F9CFE0"><ellipse cx="27.4" cy="51.6" rx="1.2" ry="1.5"></ellipse><ellipse cx="30.4" cy="51.2" rx="1.2" ry="1.5"></ellipse><ellipse cx="33.2" cy="52" rx="1.1" ry="1.4"></ellipse><ellipse cx="30" cy="54.6" rx="2.5" ry="1.6"></ellipse></g>
+</g>
+<g style="transform-box:fill-box;transform-origin:50% 0;animation:mewTail 1.1s ease-in-out .55s infinite">
+<ellipse cx="58" cy="53" rx="8" ry="5" fill="#FFFFFF" stroke="#3B3350" stroke-width="4"></ellipse>
+<g fill="#F9CFE0"><ellipse cx="55.4" cy="51.6" rx="1.2" ry="1.5"></ellipse><ellipse cx="58.4" cy="51.2" rx="1.2" ry="1.5"></ellipse><ellipse cx="61.2" cy="52" rx="1.1" ry="1.4"></ellipse><ellipse cx="58" cy="54.6" rx="2.5" ry="1.6"></ellipse></g>
+</g>
+</svg>
+</div>
+</div>
+</div>
+</div>
+
+<section id="vechungminh" style="position:relative;max-width:1240px;margin:0 auto;padding:80px 24px 0">
+<div style="display:grid;grid-template-columns:.95fr 1.05fr;gap:44px;align-items:center">
+<div data-reveal="1" style="position:relative;display:grid;grid-template-columns:1fr 1fr;gap:14px">
+<div data-cursor="link" style="border-radius:30px;overflow:hidden;background:#E9E1FD;background-image:repeating-linear-gradient(135deg,rgba(122,90,208,.13) 0 10px,rgba(122,90,208,0) 10px 20px);aspect-ratio:4/5;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease" style-hover="transform:scale(1.03) rotate(-1.5deg);box-shadow:0 26px 48px -28px rgba(122,90,208,.55)"><span style="font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#7A5AD0;background:rgba(255,255,255,.88);padding:6px 10px;border-radius:999px">GÓC TIỆM · 4:5</span></div>
+<div data-cursor="link" style="border-radius:30px;overflow:hidden;background:#FDEBF2;background-image:repeating-linear-gradient(135deg,rgba(196,88,156,.13) 0 10px,rgba(196,88,156,0) 10px 20px);aspect-ratio:4/5;margin-top:34px;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease" style-hover="transform:scale(1.03) rotate(1.5deg);box-shadow:0 26px 48px -28px rgba(196,88,156,.55)"><span style="font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#C4589C;background:rgba(255,255,255,.88);padding:6px 10px;border-radius:999px">THỢ NAIL · 4:5</span></div>
+<div data-cat="sit" style="position:absolute;right:-26px;top:-40px;width:96px;animation:mewFloatSm 7.5s ease-in-out infinite">
+<svg viewBox="0 0 100 120" style="width:100%;height:auto;overflow:visible" aria-hidden="true">
+<g style="transform-box:fill-box;transform-origin:88% 90%;animation:mewTail 4.4s ease-in-out infinite"><path d="M76 96c18 2 22-16 12-26" stroke="#8A66D8" stroke-width="7" stroke-linecap="round" fill="none"></path></g>
+<path d="M26 44c-4-14-2-22 3-22 5 0 12 8 16 14zM74 44c4-14 2-22-3-22-5 0-12 8-16 14z" fill="#CBB9F2" stroke="#8A66D8" stroke-width="3.4" stroke-linejoin="round"></path>
+<path d="M50 32c19 0 30 22 30 42 0 16-13 24-30 24s-30-8-30-24c0-20 11-42 30-42z" fill="#CBB9F2" stroke="#8A66D8" stroke-width="3.4" stroke-linejoin="round"></path>
+<ellipse cx="39" cy="64" rx="4.6" ry="5.6" fill="#FFFFFF"></ellipse><ellipse cx="61" cy="64" rx="4.6" ry="5.6" fill="#FFFFFF"></ellipse><ellipse cx="41" cy="62" rx="1.6" ry="1.3" fill="#CBB9F2"></ellipse><ellipse cx="63" cy="62" rx="1.6" ry="1.3" fill="#CBB9F2"></ellipse>
+<ellipse cx="28" cy="74" rx="5" ry="3" fill="#F9CFE0" opacity=".8"></ellipse><ellipse cx="72" cy="74" rx="5" ry="3" fill="#F9CFE0" opacity=".8"></ellipse>
+<ellipse cx="36" cy="94" rx="9" ry="6" fill="#E4DAFB"></ellipse><ellipse cx="64" cy="94" rx="9" ry="6" fill="#E4DAFB"></ellipse>
+<g fill="#F9CFE0"><ellipse cx="33" cy="93" rx="1.5" ry="1.9"></ellipse><ellipse cx="37" cy="92.4" rx="1.5" ry="1.9"></ellipse><ellipse cx="40.6" cy="93.4" rx="1.4" ry="1.8"></ellipse><ellipse cx="36" cy="96.4" rx="3" ry="2"></ellipse>
+<ellipse cx="61" cy="93" rx="1.5" ry="1.9"></ellipse><ellipse cx="65" cy="92.4" rx="1.5" ry="1.9"></ellipse><ellipse cx="68.6" cy="93.4" rx="1.4" ry="1.8"></ellipse><ellipse cx="64" cy="96.4" rx="3" ry="2"></ellipse></g>
+</svg>
+</div>
+</div>
+<div data-reveal="1">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><svg width="19" height="19" viewBox="0 0 40 40" aria-hidden="true" style="flex:none"><rect x="7" y="8" width="26" height="24" rx="6" fill="#EFE7FE" stroke="#8A66D8" stroke-width="2.6"></rect><path d="M20 8v24M7 20h26" stroke="#8A66D8" stroke-width="2.2"></path><g style="transform-box:fill-box;transform-origin:20% 100%;animation:mewTail 4.6s ease-in-out infinite"><path d="M24 30c5 1 6-4 4-7" stroke="#C4589C" stroke-width="2.6" stroke-linecap="round" fill="none"></path></g></svg><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:#8A66D8">Về chúng mình</span></div>
+<h2 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:clamp(30px,3.2vw,44px);line-height:1.1;letter-spacing:-.03em;color:#2B2440;margin:0 0 18px">Bốn cái ghế, hai người thợ,<br>một con mèo tên Nhu Nhi</h2>
+<p style="margin:0 0 16px;font-size:16px;line-height:1.7;color:#6B6580;max-width:470px;text-wrap:pretty">Tụi mình mở tiệm năm 2018 với ý nghĩ đơn giản: làm nail nên là hai tiếng yên tĩnh nhất trong tuần của bạn. Nên tiệm nhỏ, nhạc nhỏ, và không ai giục bạn chọn màu nhanh hơn.</p>
+<p style="margin:0 0 26px;font-size:16px;line-height:1.7;color:#6B6580;max-width:470px;text-wrap:pretty">Nhu Nhi là mèo tam thể ngủ ở cửa sổ hướng nam. Cô ấy không giúp gì cả, nhưng khách vẫn quay lại vì cô ấy.</p>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:470px">
+<div style="padding:18px;border-radius:24px;background:#FFFFFF;border:1px solid rgba(122,90,208,.1)"><div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:26px;color:#7A5AD0;line-height:1">8</div><div style="font-size:13px;color:#767089;margin-top:4px">năm mở tiệm</div></div>
+<div style="padding:18px;border-radius:24px;background:#FFFFFF;border:1px solid rgba(122,90,208,.1)"><div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:26px;color:#C4589C;line-height:1">4</div><div style="font-size:13px;color:#767089;margin-top:4px">ghế duy nhất</div></div>
+<div style="padding:18px;border-radius:24px;background:#FFFFFF;border:1px solid rgba(122,90,208,.1)"><div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:26px;color:#E0885F;line-height:1">1</div><div style="font-size:13px;color:#767089;margin-top:4px">mèo quản lý</div></div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="danhgia" style="position:relative;max-width:1240px;margin:0 auto;padding:84px 24px 0">
+<div data-reveal="1" style="text-align:center;margin-bottom:52px">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><svg width="19" height="19" viewBox="0 0 40 40" aria-hidden="true" style="flex:none;transform-box:fill-box;transform-origin:center;animation:mewBreathe 2.6s ease-in-out infinite"><path d="M20 32S7 24 7 16.5A6.5 6.5 0 0120 13a6.5 6.5 0 0113 3.5C33 24 20 32 20 32z" fill="#F2A8C6"></path><circle cx="15" cy="17" r="1.7" fill="#FFFFFF"></circle><circle cx="25" cy="17" r="1.7" fill="#FFFFFF"></circle></svg><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:#8A66D8">Đánh giá</span></div>
+<h2 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:clamp(32px,3.4vw,46px);line-height:1.1;letter-spacing:-.03em;color:#2B2440;margin:0">Khách kể gì về 1M65</h2>
+</div>
+<div onMouseEnter="{{ pauseReviews }}" onMouseLeave="{{ resumeReviews }}" style="position:relative;padding-top:34px">
+<div data-cat="review" aria-hidden="true" style="position:absolute;top:-14px;left:50%;margin-left:-42px;width:84px;z-index:2">
+<svg viewBox="0 0 100 72" style="width:100%;height:auto;overflow:visible" aria-hidden="true">
+<g data-ear style="transform-box:fill-box;transform-origin:70% 100%"><path d="M28 36c-5-14-3-22 2-22 5 0 14 9 19 16z" fill="#FFFFFF" stroke="#3B3350" stroke-width="4" stroke-linejoin="round"></path><path d="M33 30c-2-8-1-13 1-13 3 0 8 6 10 10z" fill="#F9CFE0"></path></g>
+<g data-ear style="transform-box:fill-box;transform-origin:30% 100%"><path d="M72 36c5-14 3-22-2-22-5 0-14 9-19 16z" fill="#FFFFFF" stroke="#3B3350" stroke-width="4" stroke-linejoin="round"></path><path d="M67 30c2-8 1-13-1-13-3 0-8 6-10 10z" fill="#F9CFE0"></path></g>
+<path d="M50 24c20 0 34 14 34 32v16H16V56c0-18 14-32 34-32z" fill="#FFFFFF" stroke="#3B3350" stroke-width="4"></path>
+<path d="M26 44c4-6 9-9 14-10" stroke="#C9C3D8" stroke-width="4.4" stroke-linecap="round" fill="none"></path>
+<ellipse cx="26" cy="58" rx="7" ry="4.2" fill="#F9CFE0"></ellipse><ellipse cx="74" cy="58" rx="7" ry="4.2" fill="#F9CFE0"></ellipse>
+<g data-blink style="transform-box:fill-box;transform-origin:center"><g data-pupil="2.6"><ellipse cx="38" cy="50" rx="6.6" ry="8" fill="#231E33"></ellipse><ellipse cx="40.4" cy="46.6" rx="2.5" ry="2" fill="#FFFFFF" transform="rotate(-20 40.4 46.6)"></ellipse></g><g data-pupil="2.6"><ellipse cx="62" cy="50" rx="6.6" ry="8" fill="#231E33"></ellipse><ellipse cx="64.4" cy="46.6" rx="2.5" ry="2" fill="#FFFFFF" transform="rotate(-20 64.4 46.6)"></ellipse></g></g>
+<path d="M47.4 60c0-1.6 1.2-2.4 2.6-2.4s2.6.8 2.6 2.4-1.2 2.9-2.6 2.9-2.6-1.3-2.6-2.9z" fill="#F2A8C6" stroke="#3B3350" stroke-width="1.3"></path>
+<path d="M50 63v2M45 67c2.2 2.6 4 1.9 4.6-1.9M55 67c-2.2 2.6-4 1.9-4.6-1.9" stroke="#3B3350" stroke-width="2.5" stroke-linecap="round" fill="none"></path>
+</svg>
+</div>
+<div style="position:relative;overflow-x:clip;overflow-y:visible;padding:18px 0 24px">
+<div style="{{ trackStyle }}">
+<sc-for list="{{ reviewCards }}" as="r" hint-placeholder-count="10">
+<div style="{{ r.style }}">
+<div style="display:flex;gap:2px;margin-bottom:12px"><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.3 6.8L12 17.8 5.7 21l1.3-6.8-5-4.8 7-.9z" fill="{{ r.star }}"></path></svg><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.3 6.8L12 17.8 5.7 21l1.3-6.8-5-4.8 7-.9z" fill="{{ r.star }}"></path></svg><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.3 6.8L12 17.8 5.7 21l1.3-6.8-5-4.8 7-.9z" fill="{{ r.star }}"></path></svg><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.3 6.8L12 17.8 5.7 21l1.3-6.8-5-4.8 7-.9z" fill="{{ r.star }}"></path></svg><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .9-5 4.8 1.3 6.8L12 17.8 5.7 21l1.3-6.8-5-4.8 7-.9z" fill="{{ r.star }}"></path></svg></div>
+<p style="margin:0 0 20px;font-size:16px;line-height:1.65;color:#3A3550;text-wrap:pretty">{{ r.text }}</p>
+<div style="display:flex;align-items:center;gap:11px">
+<div style="{{ r.avatar }}"></div>
+<div><div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:14.5px;color:#2B2440">{{ r.name }}</div><div style="font-size:12.5px;color:#767089">{{ r.svc }}</div></div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin-top:28px">
+<sc-for list="{{ reviewDots }}" as="d" hint-placeholder-count="5">
+<button onClick="{{ d.pick }}" data-cursor="link" aria-label="Đánh giá" style="{{ d.style }}"></button>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section id="datlich" style="position:relative;max-width:1240px;margin:0 auto;padding:88px 24px 0">
+<div aria-hidden="true" style="position:absolute;top:28px;left:118px;width:118px;z-index:0;animation:mewPeek 4.8s ease-in-out infinite">
+<svg viewBox="0 0 120 90" style="width:100%;height:auto;overflow:visible"><path d="M28 34L31 10l22 15zM92 34L89 10 67 25z" fill="#FFFFFF" stroke="#3B3350" stroke-width="3.4" stroke-linejoin="round"></path><path d="M33 30l2-13 12 8zM87 30l-2-13-12 8z" fill="#F9CFE0"></path><ellipse cx="60" cy="52" rx="34" ry="30" fill="#FFFFFF" stroke="#3B3350" stroke-width="3.4"></ellipse><g style="transform-box:fill-box;transform-origin:center;animation:mewWink 6s ease-in-out infinite"><circle cx="48" cy="48" r="4.4" fill="#3B3350"></circle><circle cx="72" cy="48" r="4.4" fill="#3B3350"></circle></g><circle cx="49.6" cy="46.4" r="1.5" fill="#FFFFFF"></circle><circle cx="73.6" cy="46.4" r="1.5" fill="#FFFFFF"></circle><ellipse cx="40" cy="58" rx="6" ry="3.6" fill="#F9CFE0"></ellipse><ellipse cx="80" cy="58" rx="6" ry="3.6" fill="#F9CFE0"></ellipse><path d="M60 55l-3.4 3.4M60 55l3.4 3.4" stroke="#3B3350" stroke-width="2.4" stroke-linecap="round"></path><path d="M56 62c2 2.6 5 2.6 7 0" stroke="#3B3350" stroke-width="2.4" stroke-linecap="round" fill="none"></path><ellipse cx="26" cy="80" rx="10" ry="7" fill="#FFFFFF" stroke="#3B3350" stroke-width="3.2"></ellipse><ellipse cx="94" cy="80" rx="10" ry="7" fill="#FFFFFF" stroke="#3B3350" stroke-width="3.2"></ellipse></svg>
+</div>
+<div data-reveal="1" style="position:relative;padding:58px 56px;border-radius:44px;background:linear-gradient(122deg,#EFE7FE 0%,#F6F0FE 40%,#FDEBF2 100%);overflow:hidden;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center">
+<div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.6) 1.5px,rgba(0,0,0,0) 1.6px);background-size:30px 30px;opacity:.7"></div>
+<div style="position:absolute;top:-90px;left:-70px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.7),rgba(255,255,255,.3) 45%,rgba(255,255,255,0) 72%);filter:blur(18px);animation:mewBlob 24s ease-in-out infinite"></div>
+<div style="position:relative">
+<h2 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:clamp(34px,3.8vw,52px);line-height:1.06;letter-spacing:-.035em;color:#2B2440;margin:0 0 16px;max-width:520px">Bàn tay bạn xứng đáng<br>một buổi chiều tử tế</h2>
+<p style="margin:0 0 30px;font-size:17px;line-height:1.6;color:#5C566F;max-width:420px">Đặt hẹn trong 30 giây. Không cần đặt cọc — chỉ cần bạn tới.</p>
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px">
+<a href="#" id="mewBookBtn" data-cursor="link" data-magnet="1" style="position:relative;overflow:hidden;display:flex;align-items:center;gap:11px;padding:20px 34px;border-radius:999px;background:#7A5AD0;color:#FFFFFF;font-family:Quicksand,sans-serif;font-weight:700;font-size:17.5px;box-shadow:0 20px 40px -16px rgba(122,90,208,.85);transition:transform .34s cubic-bezier(.34,1.56,.64,1),box-shadow .34s ease" style-hover="transform:translateY(-4px) scale(1.035);box-shadow:0 30px 54px -14px rgba(122,90,208,.95)">
+<span style="position:absolute;top:0;bottom:0;left:0;width:100%;background:linear-gradient(105deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.42) 50%,rgba(255,255,255,0) 62%);animation:mewSweep 3.6s ease-in-out infinite"></span>
+<span style="position:relative">Đặt hẹn ngay</span>
+<svg width="18" height="18" viewBox="0 0 40 40" style="position:relative" aria-hidden="true"><g opacity=".72"><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#FFFFFF" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#FFFFFF"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#FFFFFF"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#FFFFFF" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#FFFFFF"></path></g></svg>
+</a>
+<a href="tel:+842838220100" data-cursor="link" style="padding:19px 26px;border-radius:999px;background:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.9);color:#4A3A80;font-family:Quicksand,sans-serif;font-weight:700;font-size:16px;transition:transform .3s ease" style-hover="transform:translateY(-3px)">Hoặc gọi 028 3822 0100</a>
+</div>
+</div>
+<div data-cat="sleep" style="position:relative;width:250px;flex:none">
+<svg viewBox="0 0 300 200" style="width:100%;height:auto;overflow:visible;filter:drop-shadow(0 20px 26px rgba(122,90,208,.2))" aria-hidden="true">
+<ellipse cx="168" cy="168" rx="120" ry="10" fill="#8A66D8" opacity=".14"></ellipse>
+<g data-tailwrap style="transform-box:fill-box;transform-origin:4% 24%"><path d="M238 150c34 4 44-22 22-34" stroke="#3B3350" stroke-width="7" stroke-linecap="round" fill="none"></path></g>
+<g style="transform-box:fill-box;transform-origin:50% 100%;animation:mewBreathe 4.8s ease-in-out infinite"><path d="M120 152c-16 0-26-9-26-22 0-29 30-47 82-47 52 0 70 20 70 45 0 14-9 24-22 24z" fill="#FFFFFF" stroke="#3B3350" stroke-width="5" stroke-linejoin="round"></path></g>
+<g data-ear style="transform-box:fill-box;transform-origin:76% 100%"><path d="M86 66c-6-19-3-30 3-30 7 0 20 12 27 22z" fill="#FFFFFF" stroke="#3B3350" stroke-width="5" stroke-linejoin="round"></path><path d="M93 58c-3-11-2-17 1-17 4 0 11 8 14 13z" fill="#F9CFE0"></path></g>
+<g data-ear style="transform-box:fill-box;transform-origin:24% 100%"><path d="M151 64c6-19 3-30-3-30-7 0-20 12-27 22z" fill="#FFFFFF" stroke="#3B3350" stroke-width="5" stroke-linejoin="round"></path><path d="M144 56c3-11 2-17-1-17-4 0-11 8-14 13z" fill="#F9CFE0"></path></g>
+<circle cx="118" cy="106" r="48" fill="#FFFFFF" stroke="#3B3350" stroke-width="5"></circle>
+<ellipse cx="176" cy="149" rx="24" ry="10" fill="#FFFFFF" stroke="#3B3350" stroke-width="5"></ellipse>
+<g fill="#F9CFE0"><ellipse cx="168" cy="147" rx="2.4" ry="3"></ellipse><ellipse cx="176" cy="146" rx="2.4" ry="3"></ellipse><ellipse cx="184" cy="147" rx="2.3" ry="2.9"></ellipse><ellipse cx="176" cy="153" rx="5" ry="3.4"></ellipse></g>
+<ellipse cx="216" cy="151" rx="16" ry="8" fill="#FFFFFF" stroke="#3B3350" stroke-width="5"></ellipse>
+<ellipse cx="84" cy="119" rx="10" ry="6" fill="#F9CFE0"></ellipse><ellipse cx="152" cy="119" rx="10" ry="6" fill="#F9CFE0"></ellipse>
+<g data-sleepeye><path d="M96 103c4.5-8 12.5-8 17 0M124 103c4.5-8 12.5-8 17 0" stroke="#3B3350" stroke-width="4.4" stroke-linecap="round" fill="none"></path></g>
+<g data-openeye style="opacity:0;transition:opacity .3s ease"><g data-pupil="3"><ellipse cx="105" cy="102" rx="8.4" ry="10.2" fill="#231E33"></ellipse><ellipse cx="108" cy="97.6" rx="3.2" ry="2.6" fill="#FFFFFF" transform="rotate(-20 108 97.6)"></ellipse></g><g data-pupil="3"><ellipse cx="132" cy="102" rx="8.4" ry="10.2" fill="#231E33"></ellipse><ellipse cx="135" cy="97.6" rx="3.2" ry="2.6" fill="#FFFFFF" transform="rotate(-20 135 97.6)"></ellipse></g></g>
+<path d="M118 111.5c2.6 0 4.6 1.5 4.6 4.2s-2 5.1-4.6 5.1-4.6-2.4-4.6-5.1 2-4.2 4.6-4.2z" fill="#F2A8C6" stroke="#3B3350" stroke-width="1.6"></path>
+<path d="M108 123c3.4 4.4 7 4.4 9 0M128 123c-3.4 4.4-7 4.4-9 0" stroke="#3B3350" stroke-width="3.4" stroke-linecap="round" fill="none"></path>
+<path d="M48 86l23 8M46 101h25M48 117l23-9" stroke="#3B3350" stroke-width="3" stroke-linecap="round" opacity=".38"></path>
+<g data-zzz style="opacity:1;transition:opacity .4s ease"><text x="176" y="56" font-family="Quicksand,sans-serif" font-weight="700" font-size="25" fill="#8A66D8" style="animation:mewZ 3s ease-out infinite">z</text><text x="201" y="39" font-family="Quicksand,sans-serif" font-weight="700" font-size="18" fill="#CBB9F2" style="animation:mewZ 3s ease-out 1s infinite">z</text><text x="221" y="25" font-family="Quicksand,sans-serif" font-weight="700" font-size="13" fill="#CDBBF4" style="animation:mewZ 3s ease-out 2s infinite">z</text></g>
+</svg>
+<div style="text-align:center;margin-top:6px;font-family:Quicksand,sans-serif;font-weight:600;font-size:12.5px;color:#767089">chạm vào nút để đánh thức Nhu Nhi</div>
+</div>
+</div>
+</section>
+
+<section style="position:relative;max-width:1240px;margin:0 auto;padding:76px 24px 0">
+<div data-reveal="1" style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:20px">
+<div>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><svg width="19" height="19" viewBox="0 0 40 40" aria-hidden="true" style="flex:none;transform-box:fill-box;transform-origin:50% 80%;animation:mewPawTap 4.5s ease-in-out infinite"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#8A66D8" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#8A66D8"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#8A66D8"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#8A66D8" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#8A66D8"></path></g></svg><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:#8A66D8">Instagram</span></div>
+<h2 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:clamp(26px,2.6vw,34px);letter-spacing:-.025em;color:#2B2440;margin:0">@1m65.nails</h2>
+</div>
+<a href="#" data-cursor="link" style="padding:13px 22px;border-radius:999px;background:#FFFFFF;border:1px solid rgba(122,90,208,.18);color:#4A3A80;font-family:Quicksand,sans-serif;font-weight:700;font-size:14.5px;transition:transform .3s ease" style-hover="transform:translateY(-3px)">Theo dõi tụi mình</a>
+</div>
+<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px">
+<div data-cursor="link" style="border-radius:24px;overflow:hidden;background:#F1ECFE;background-image:repeating-linear-gradient(135deg,rgba(122,90,208,.12) 0 9px,rgba(122,90,208,0) 9px 18px);aspect-ratio:1;transition:transform .5s cubic-bezier(.2,.9,.3,1)" style-hover="transform:scale(1.05) rotate(-1.5deg)"></div>
+<div data-cursor="link" style="border-radius:24px;overflow:hidden;background:#FDEBF2;background-image:repeating-linear-gradient(135deg,rgba(196,88,156,.12) 0 9px,rgba(196,88,156,0) 9px 18px);aspect-ratio:1;transition:transform .5s cubic-bezier(.2,.9,.3,1)" style-hover="transform:scale(1.05) rotate(1.5deg)"></div>
+<div data-cursor="link" style="border-radius:24px;overflow:hidden;background:#FDF4E8;background-image:repeating-linear-gradient(135deg,rgba(224,136,95,.13) 0 9px,rgba(224,136,95,0) 9px 18px);aspect-ratio:1;transition:transform .5s cubic-bezier(.2,.9,.3,1)" style-hover="transform:scale(1.05) rotate(-1.5deg)"></div>
+<div data-cursor="link" style="border-radius:24px;overflow:hidden;background:#E2EEFB;background-image:repeating-linear-gradient(135deg,rgba(80,120,190,.12) 0 9px,rgba(80,120,190,0) 9px 18px);aspect-ratio:1;transition:transform .5s cubic-bezier(.2,.9,.3,1)" style-hover="transform:scale(1.05) rotate(1.5deg)"></div>
+<div data-cursor="link" style="border-radius:24px;overflow:hidden;background:#E9E1FD;background-image:repeating-linear-gradient(135deg,rgba(122,90,208,.14) 0 9px,rgba(122,90,208,0) 9px 18px);aspect-ratio:1;transition:transform .5s cubic-bezier(.2,.9,.3,1)" style-hover="transform:scale(1.05) rotate(-1.5deg)"></div>
+<div data-cursor="link" style="border-radius:24px;overflow:hidden;background:#FDE3D2;background-image:repeating-linear-gradient(135deg,rgba(224,136,95,.14) 0 9px,rgba(224,136,95,0) 9px 18px);aspect-ratio:1;transition:transform .5s cubic-bezier(.2,.9,.3,1)" style-hover="transform:scale(1.05) rotate(1.5deg)"></div>
+</div>
+</section>
+
+<footer id="lienhe" style="position:relative;margin-top:80px;padding:0 24px 40px">
+<div style="max-width:1240px;margin:0 auto 26px;padding:0 34px;height:34px;display:flex;align-items:center">
+<div style="flex:none;width:34px;height:34px;border-radius:50%;background:#FFFFFF;display:grid;place-items:center;box-shadow:0 6px 16px -8px rgba(122,90,208,.55)"><svg width="18" height="18" viewBox="0 0 40 40" aria-hidden="true" style="display:block;transform:rotate(0deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#F0AECB" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#F0AECB"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#F0AECB"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#F0AECB" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#F0AECB"></path></g></svg></div>
+<div style="position:relative;flex:1;margin-left:14px;height:34px">
+<div style="position:absolute;left:0;right:0;top:50%;border-top:2px dashed rgba(122,90,208,.22)"></div>
+<div style="position:absolute;left:15%;top:50%;margin-top:-9.5px"><svg width="15" height="15" viewBox="0 0 40 40" aria-hidden="true" style="display:block;transform:rotate(-16deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#B9A2EC" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#B9A2EC"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#B9A2EC"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#B9A2EC" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#B9A2EC"></path></g></svg></div>
+<div style="position:absolute;left:27%;top:50%;margin-top:-8.5px"><svg width="13" height="13" viewBox="0 0 40 40" aria-hidden="true" style="display:block;transform:rotate(11deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#F0AECB" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#F0AECB"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#F0AECB"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#F0AECB" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#F0AECB"></path></g></svg></div>
+<div style="position:absolute;left:38%;top:50%;margin-top:-10px"><svg width="16" height="16" viewBox="0 0 40 40" aria-hidden="true" style="display:block;transform:rotate(-7deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#C9B6F2" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#C9B6F2"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#C9B6F2"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#C9B6F2" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#C9B6F2"></path></g></svg></div>
+<div style="position:absolute;left:49%;top:50%;margin-top:-8.5px"><svg width="13" height="13" viewBox="0 0 40 40" aria-hidden="true" style="display:block;transform:rotate(14deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#F2C4A2" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#F2C4A2"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#F2C4A2"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#F2C4A2" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#F2C4A2"></path></g></svg></div>
+<div style="position:absolute;left:61%;top:50%;margin-top:-9.5px"><svg width="15" height="15" viewBox="0 0 40 40" aria-hidden="true" style="display:block;transform:rotate(-12deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#BFA9EE" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#BFA9EE"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#BFA9EE"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#BFA9EE" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#BFA9EE"></path></g></svg></div>
+<div style="position:absolute;left:73%;top:50%;margin-top:-8.5px"><svg width="13" height="13" viewBox="0 0 40 40" aria-hidden="true" style="display:block;transform:rotate(8deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#F3B7D2" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#F3B7D2"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#F3B7D2"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#F3B7D2" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#F3B7D2"></path></g></svg></div>
+<div style="position:absolute;left:85%;top:50%;margin-top:-9.5px"><svg width="15" height="15" viewBox="0 0 40 40" aria-hidden="true" style="display:block;transform:rotate(-15deg)"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#CDBBF4" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#CDBBF4"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#CDBBF4"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#CDBBF4" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#CDBBF4"></path></g></svg></div>
+</div>
+
+</div>
+
+<div style="max-width:1240px;margin:0 auto;position:relative;padding:56px 52px 40px;border-radius:44px 44px 32px 32px;background:linear-gradient(180deg,#F6F2FE,#FFFFFF)">
+
+<div style="display:grid;grid-template-columns:1.25fr .8fr .8fr 1.15fr;gap:36px">
+<div>
+<div style="display:flex;align-items:center;gap:9px;margin-bottom:14px">
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true"><g><path d="M8.4 11.6l1.4 3.4M31.6 11.6l-1.4 3.4" stroke="#3B3350" stroke-width="1.7" stroke-linecap="round" fill="none"></path><path d="M20 10.4c8.9 0 15 5.6 15 12.9 0 6.6-6 10.7-15 10.7S5 30 5 23.3C5 16 11.1 10.4 20 10.4z" fill="#8A66D8" stroke="#3B3350" stroke-width="2.4" stroke-linejoin="round"></path><ellipse cx="10.9" cy="19.4" rx="2.7" ry="3.4" fill="#F9CFE0" transform="rotate(-16 10.9 19.4)"></ellipse><ellipse cx="16.7" cy="16.8" rx="2.7" ry="3.5" fill="#F9CFE0"></ellipse><ellipse cx="23.3" cy="16.8" rx="2.7" ry="3.5" fill="#F9CFE0"></ellipse><ellipse cx="29.1" cy="19.4" rx="2.7" ry="3.4" fill="#F9CFE0" transform="rotate(16 29.1 19.4)"></ellipse><path d="M20 22.4c4.3 0 7.3 2.3 7.3 5.1 0 2.7-3.2 4.2-7.3 4.2s-7.3-1.5-7.3-4.2c0-2.8 3-5.1 7.3-5.1z" fill="#F9CFE0"></path></g></svg>
+<span style="display:flex;flex-direction:column;line-height:1"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440">1M65</span><span style="font-family:Quicksand,sans-serif;font-weight:600;font-size:10.5px;letter-spacing:.085em;color:#7A5AD0;margin-top:4px">NAILS · LASHES · SHAMPOO</span></span>
+</div>
+<p style="margin:0 0 18px;font-size:14.5px;line-height:1.65;color:#7C7791;max-width:250px">Móng xinh, ngày dịu êm.<br>Tiệm nhỏ ở Thủ Đức từ 2018.</p>
+<div style="display:flex;gap:8px">
+<a href="#" data-cursor="link" aria-label="Instagram" style="display:grid;place-items:center;width:38px;height:38px;border-radius:13px;background:#FFFFFF;border:1px solid rgba(122,90,208,.12);transition:transform .3s ease,background .3s ease" style-hover="transform:translateY(-3px);background:#F1ECFE"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5.5" stroke="#7A5AD0" stroke-width="2" fill="none"></rect><circle cx="12" cy="12" r="4" stroke="#7A5AD0" stroke-width="2" fill="none"></circle><circle cx="17" cy="7" r="1.4" fill="#7A5AD0"></circle></svg></a>
+<a href="#" data-cursor="link" aria-label="Facebook" style="display:grid;place-items:center;width:38px;height:38px;border-radius:13px;background:#FFFFFF;border:1px solid rgba(122,90,208,.12);transition:transform .3s ease,background .3s ease" style-hover="transform:translateY(-3px);background:#F1ECFE"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3a5 5 0 00-5 5v2H6v4h3v6h4v-6h3l1-4h-4V9a1 1 0 011-1z" fill="#7A5AD0"></path></svg></a>
+<a href="#" data-cursor="link" aria-label="TikTok" style="display:grid;place-items:center;width:38px;height:38px;border-radius:13px;background:#FFFFFF;border:1px solid rgba(122,90,208,.12);transition:transform .3s ease,background .3s ease" style-hover="transform:translateY(-3px);background:#F1ECFE"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3v11a3 3 0 11-3-3v-3a7 7 0 107 7V8a5 5 0 003 1V5a4 4 0 01-4-4z" fill="#7A5AD0"></path></svg></a>
+</div>
+</div>
+<div>
+<div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:14px;color:#2B2440;margin-bottom:14px">Dịch vụ</div>
+<div style="display:flex;flex-direction:column;gap:9px;font-size:14.5px">
+<a href="#dichvu" data-cursor="link" style="color:#7C7791" style-hover="color:#7A5AD0">Sơn gel cơ bản</a>
+<a href="#dichvu" data-cursor="link" style="color:#7C7791" style-hover="color:#7A5AD0">French tip</a>
+<a href="#dichvu" data-cursor="link" style="color:#7C7791" style-hover="color:#7A5AD0">Nail mèo vẽ tay</a>
+<a href="#dichvu" data-cursor="link" style="color:#7C7791" style-hover="color:#7A5AD0">Nail Nhật · Nail Hàn</a>
+<a href="#dichvu" data-cursor="link" style="color:#7C7791" style-hover="color:#7A5AD0">Spa tay &amp; móng</a>
+<a href="#dichvu" data-cursor="link" style="color:#7C7791" style-hover="color:#7A5AD0">Gội đầu dưỡng sinh</a>
+</div>
+</div>
+<div>
+<div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:14px;color:#2B2440;margin-bottom:14px">Giờ mở cửa</div>
+<div style="display:flex;flex-direction:column;gap:9px;font-size:14.5px;color:#7C7791">
+<div style="display:flex;justify-content:space-between;gap:10px"><span>Thứ 2 – Thứ 6</span><span style="color:#2B2440;font-weight:600">9:00 – 20:00</span></div>
+<div style="display:flex;justify-content:space-between;gap:10px"><span>Thứ 7 – CN</span><span style="color:#2B2440;font-weight:600">9:00 – 18:00</span></div>
+<div style="display:flex;justify-content:space-between;gap:10px"><span>Nhu Nhi</span><span style="color:#8A66D8;font-weight:600">ngủ cả ngày</span></div>
+<div style="margin-top:6px;font-size:13.5px;line-height:1.6"><a href="https://www.google.com/maps/place/1M65+Nails,+Eyelashes,+Shampoo/@10.7308045,106.824314,17z/data=!4m6!3m5!1s0x31752300363cc559:0x53972471338c54b6!8m2!3d10.7308045!4d106.824314!16s%2Fg%2F11m5z4_2r7" target="_blank" rel="noopener" data-cursor="link" style="color:#7C7791" style-hover="color:#7A5AD0">1M65 Nails, Eyelashes, Shampoo<br>TP. Thủ Đức, TP.HCM</a><br>028 3822 0100</div>
+</div>
+</div>
+<div>
+<div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:14px;color:#2B2440;margin-bottom:14px">Tìm đường</div>
+<div style="position:relative;border-radius:24px;overflow:hidden;border:1px solid rgba(122,90,208,.14);aspect-ratio:16/11;background:#E2EEFB">
+<iframe title="Bản đồ 1m65 Nail" src="https://www.openstreetmap.org/export/embed.html?bbox=106.8203%2C10.7283%2C106.8283%2C10.7333&amp;layer=mapnik&amp;marker=10.7308045%2C106.824314" style="position:absolute;inset:0;width:100%;height:100%;border:0;filter:saturate(.82) hue-rotate(-8deg)" loading="lazy"></iframe>
+<a href="https://www.google.com/maps/place/1M65+Nails,+Eyelashes,+Shampoo/@10.7308045,106.824314,17z/data=!4m6!3m5!1s0x31752300363cc559:0x53972471338c54b6!8m2!3d10.7308045!4d106.824314!16s%2Fg%2F11m5z4_2r7" target="_blank" rel="noopener" data-cursor="link" style="position:absolute;left:10px;bottom:10px;display:flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);font-family:Quicksand,sans-serif;font-weight:700;font-size:12px;color:#4A3A80;box-shadow:0 8px 18px -10px rgba(43,36,64,.5);transition:transform .3s ease" style-hover="transform:translateY(-2px)">
+<svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.6-7-9.6A7 7 0 0119 11.4c0 5-7 9.6-7 9.6z" fill="#C4589C"></path><circle cx="12" cy="11" r="2.6" fill="#FFFFFF"></circle></svg>
+Chỉ đường
+</a>
+</div>
+</div>
+</div>
+
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-top:40px;padding-top:22px;border-top:1px solid rgba(122,90,208,.1);flex-wrap:wrap">
+<div style="font-size:13px;color:#7C7791">© 2026 1M65 Nails, Eyelashes, Shampoo · Made with soft paws</div>
+<div style="position:relative;width:150px">
+<svg viewBox="0 0 160 70" style="width:100%;height:auto;overflow:visible" aria-hidden="true">
+<ellipse cx="82" cy="62" rx="60" ry="6" fill="#8A66D8" opacity=".12"></ellipse>
+<g style="transform-box:fill-box;transform-origin:96% 80%;animation:mewTail 5s ease-in-out infinite"><path d="M128 52c18 3 20-12 12-20" stroke="#CBB9F2" stroke-width="5" stroke-linecap="round" fill="none"></path></g>
+<ellipse cx="86" cy="46" rx="52" ry="15" fill="#EFE7FE" style="transform-box:fill-box;transform-origin:center;animation:mewBreathe 5s ease-in-out infinite"></ellipse>
+<path d="M28 26l2-14 14 10zM60 26l-2-14-14 10z" fill="#EFE7FE"></path>
+<circle cx="44" cy="38" r="20" fill="#F6F2FE"></circle>
+<path d="M34 36c2-3 6-3 8 0M48 36c2-3 6-3 8 0" stroke="#8A66D8" stroke-width="2.6" stroke-linecap="round" fill="none"></path>
+<ellipse cx="28" cy="42" rx="4" ry="2.4" fill="#F9CFE0"></ellipse><ellipse cx="60" cy="42" rx="4" ry="2.4" fill="#F9CFE0"></ellipse>
+<text x="66" y="16" font-family="Quicksand,sans-serif" font-weight="700" font-size="13" fill="#CBB9F2" style="animation:mewZ 3.4s ease-out infinite">z</text>
+<text x="80" y="8" font-family="Quicksand,sans-serif" font-weight="700" font-size="10" fill="#E4DAFB" style="animation:mewZ 3.4s ease-out 1.2s infinite">z</text>
+</svg>
+</div>
+</div>
+</div>
+</footer>
+
+<div id="mewTrail" style="position:fixed;inset:0;z-index:9998;pointer-events:none"></div>
+<div id="mewPaw" style="position:fixed;left:0;top:0;width:32px;height:32px;margin-left:-16px;margin-top:-16px;z-index:9999;pointer-events:none;opacity:0;will-change:transform">
+<svg viewBox="0 0 44 44" style="width:100%;height:100%;filter:drop-shadow(0 4px 8px rgba(122,90,208,.4))" aria-hidden="true">
+<ellipse cx="22" cy="28" rx="12.5" ry="10.5" fill="#F9CFE0" stroke="#FFFFFF" stroke-width="2.4"></ellipse>
+<circle cx="10" cy="16" r="4.6" fill="#F9CFE0" stroke="#FFFFFF" stroke-width="2.2"></circle>
+<circle cx="18" cy="11" r="5" fill="#F9CFE0" stroke="#FFFFFF" stroke-width="2.2"></circle>
+<circle cx="27" cy="11" r="5" fill="#F9CFE0" stroke="#FFFFFF" stroke-width="2.2"></circle>
+<circle cx="35" cy="16.5" r="4.4" fill="#F9CFE0" stroke="#FFFFFF" stroke-width="2.2"></circle>
+<ellipse cx="19" cy="25" rx="4" ry="3" fill="#FFFFFF" opacity=".55"></ellipse>
+</svg>
+</div>
+
+</div>
+
+<sc-if value="{{ moreOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeMoreBackdrop }}" style="position:fixed;inset:0;z-index:280;display:flex;align-items:center;justify-content:center;padding:32px 24px;background:rgba(43,36,64,.42);backdrop-filter:blur(9px);animation:mewFadeIn .3s ease both">
+<div style="position:relative;width:min(1080px,100%);max-height:88vh;display:flex;flex-direction:column;border-radius:36px;background:#FFFFFF;box-shadow:0 50px 100px -40px rgba(43,36,64,.6);overflow:hidden;animation:mewPopIn .42s cubic-bezier(.2,.9,.3,1) both">
+<div style="display:flex;align-items:center;gap:16px;padding:24px 28px 18px;border-bottom:1px solid rgba(122,90,208,.1)">
+<div style="flex:1">
+<div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:#8A66D8;margin-bottom:5px">Thư viện đầy đủ</div>
+<h3 id="mewModalCount" style="font-family:Quicksand,sans-serif;font-weight:700;font-size:26px;letter-spacing:-.02em;color:#2B2440;margin:0">Tất cả bộ móng</h3>
+</div>
+<a href="#datlich" onClick="{{ closeMore }}" data-cursor="link" style="flex:none;padding:12px 20px;border-radius:999px;background:#7A5AD0;color:#FFFFFF;font-family:Quicksand,sans-serif;font-weight:700;font-size:14px;transition:transform .3s ease" style-hover="transform:translateY(-2px)">Đặt hẹn</a>
+<button onClick="{{ closeMore }}" data-cursor="link" aria-label="Đóng" style="flex:none;width:40px;height:40px;display:grid;place-items:center;border:1px solid rgba(122,90,208,.16);border-radius:50%;background:#FFFFFF;cursor:none;transition:background .3s ease" style-hover="background:#F1ECFE">
+<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 3l8 8M11 3l-8 8" stroke="#4A3A80" stroke-width="2.2" stroke-linecap="round"></path></svg>
+</button>
+</div>
+<div data-scroll="mew" style="flex:1;overflow-y:auto;padding:22px 28px 28px">
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px">
+<button data-mfilter="all" data-cursor="link" style="padding:9px 17px;border:1px solid rgba(122,90,208,.14);border-radius:999px;background:#7A5AD0;color:#FFFFFF;font-family:Quicksand,sans-serif;font-weight:700;font-size:13.5px;cursor:none;transition:background .3s ease,color .3s ease">Tất cả</button>
+<button data-mfilter="nhe" data-cursor="link" style="padding:9px 17px;border:1px solid rgba(122,90,208,.14);border-radius:999px;background:#FFFFFF;color:#5C566F;font-family:Quicksand,sans-serif;font-weight:700;font-size:13.5px;cursor:none;transition:background .3s ease,color .3s ease">Nhẹ nhàng</button>
+<button data-mfilter="pastel" data-cursor="link" style="padding:9px 17px;border:1px solid rgba(122,90,208,.14);border-radius:999px;background:#FFFFFF;color:#5C566F;font-family:Quicksand,sans-serif;font-weight:700;font-size:13.5px;cursor:none;transition:background .3s ease,color .3s ease">Pastel</button>
+<button data-mfilter="meo" data-cursor="link" style="padding:9px 17px;border:1px solid rgba(122,90,208,.14);border-radius:999px;background:#FFFFFF;color:#5C566F;font-family:Quicksand,sans-serif;font-weight:700;font-size:13.5px;cursor:none;transition:background .3s ease,color .3s ease">Nail mèo</button>
+<button data-mfilter="lap" data-cursor="link" style="padding:9px 17px;border:1px solid rgba(122,90,208,.14);border-radius:999px;background:#FFFFFF;color:#5C566F;font-family:Quicksand,sans-serif;font-weight:700;font-size:13.5px;cursor:none;transition:background .3s ease,color .3s ease">Lấp lánh</button>
+</div>
+<div id="mewModalGrid" style="columns:3;column-gap:17px"></div>
+<p style="margin:22px 0 0;text-align:center;font-size:14px;color:#767089">Thích bộ nào thì chụp lại mang tới tiệm nhé — hoặc nhắn cho tụi mình.</p>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ bookOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeBookBackdrop }}" style="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(43,36,64,.3);backdrop-filter:blur(7px)">
+<div data-scroll="mew" style="position:relative;width:100%;max-width:620px;max-height:88vh;overflow:auto;border-radius:36px;background:#FFFCF9;box-shadow:0 44px 94px -32px rgba(43,36,64,.5);padding:28px 32px 30px">
+
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:22px">
+<div>
+<div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:#8A66D8;margin-bottom:7px">{{ stepEyebrow }}</div>
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:27px;letter-spacing:-.03em;color:#2B2440;margin:0">{{ stepTitle }}</h3>
+</div>
+<button onClick="{{ closeBook }}" data-cursor="link" aria-label="Đóng" style="flex:none;display:grid;place-items:center;width:40px;height:40px;border:1px solid rgba(122,90,208,.14);border-radius:14px;background:#FFFFFF;cursor:none;transition:background .25s ease" style-hover="background:#F1ECFE">
+<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="#4A3A80" stroke-width="2.4" stroke-linecap="round"></path></svg>
+</button>
+</div>
+
+<sc-if value="{{ isStep1 }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:9px">
+<sc-for list="{{ serviceList }}" as="s" hint-placeholder-count="6">
+<button onClick="{{ s.pick }}" data-cursor="link" style="{{ s.style }}">
+<span style="display:flex;flex-direction:column;gap:3px;text-align:left">
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:16.5px;color:#2B2440">{{ s.name }}</span>
+<span style="font-size:13px;color:#767089">{{ s.dur }}</span>
+</span>
+<span style="display:flex;align-items:center;gap:12px">
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:16px;color:#7A5AD0">{{ s.price }}</span>
+<span style="{{ s.dotStyle }}"></span>
+</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isStep2 }}" hint-placeholder-val="{{ false }}">
+<div>
+<div style="display:grid;grid-template-columns:repeat(8,1fr);gap:7px;margin-bottom:16px">
+<sc-for list="{{ dateList }}" as="d" hint-placeholder-count="7">
+<button onClick="{{ d.pick }}" data-cursor="link" style="{{ d.style }}">
+<span style="font-size:12px;font-weight:600;opacity:.9">{{ d.dow }}</span>
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:19px;line-height:1.1">{{ d.day }}</span>
+<span style="font-size:12px;font-weight:600;opacity:.95">{{ d.mon }}</span>
+</button>
+</sc-for>
+<div style="position:relative;display:flex;min-width:0">
+<button onClick="{{ pickCustom }}" data-cursor="link" title="Chọn ngày khác" style="{{ customStyle }}">
+<sc-if value="{{ customEmpty }}" hint-placeholder-val="{{ true }}">
+<span style="display:flex;flex-direction:column;align-items:center;gap:3px">
+<svg width="17" height="17" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.2" y="3" width="13.6" height="12" rx="3" stroke="currentColor" stroke-width="1.7" fill="none"></rect><path d="M1.2 7h13.6M5 1.4v3M11 1.4v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg>
+<span style="font-size:10.5px;line-height:1.2;opacity:.85">Ngày<br>khác</span>
+</span>
+</sc-if>
+<sc-if value="{{ customPicked }}" hint-placeholder-val="{{ false }}">
+<span style="display:flex;flex-direction:column;align-items:center;gap:2px">
+<span style="font-size:12px;font-weight:600;opacity:.9">{{ customDow }}</span>
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:19px;line-height:1.1">{{ customDay }}</span>
+<span style="font-size:12px;font-weight:600;opacity:.95">{{ customMon }}</span>
+</span>
+</sc-if>
+</button>
+</div>
+</div>
+<sc-if value="{{ calOpen }}" hint-placeholder-val="{{ false }}">
+<div style="margin:-6px 0 16px;padding:16px 16px 14px;border:1.5px solid rgba(122,90,208,.18);border-radius:24px;background:#FFFFFF;box-shadow:0 18px 40px -22px rgba(43,36,64,.4)">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px">
+<button onClick="{{ calPrev }}" data-cursor="link" aria-label="Tháng trước" style="{{ calPrevStyle }}">
+<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M7.6 1.6L3.2 6l4.4 4.4" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>
+</button>
+<div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:15px;color:#2B2440">{{ calTitle }}</div>
+<button onClick="{{ calNext }}" data-cursor="link" aria-label="Tháng sau" style="display:grid;place-items:center;width:32px;height:32px;border:1px solid rgba(122,90,208,.18);border-radius:11px;background:#FFFFFF;color:#4A3A80;cursor:none;transition:background .25s ease" style-hover="background:#F1ECFE">
+<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M4.4 1.6L8.8 6l-4.4 4.4" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>
+</button>
+</div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px">
+<sc-for list="{{ calDows }}" as="w" hint-placeholder-count="7">
+<div style="text-align:center;font-size:11px;font-weight:600;letter-spacing:.04em;color:#8B85A0">{{ w.label }}</div>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px">
+<sc-for list="{{ calCells }}" as="c" hint-placeholder-count="35">
+<button onClick="{{ c.pick }}" data-cursor="link" disabled="{{ c.off }}" style="{{ c.style }}">{{ c.label }}</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px">
+<div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:14px;color:#2B2440">Giờ trống {{ dateLabel }}</div>
+<div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#767089"><span style="width:9px;height:9px;border-radius:3px;background:#F3F2F6;border:1px solid rgba(90,86,110,.18)"></span>đã có người đặt</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px">
+<sc-for list="{{ slotList }}" as="t" hint-placeholder-count="9">
+<button onClick="{{ t.pick }}" data-cursor="link" style="{{ t.style }}">
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:15.5px">{{ t.label }}</span>
+<span style="font-size:10px;line-height:1.2;opacity:.8">{{ t.sub }}</span>
+</button>
+</sc-for>
+</div>
+<p style="margin:16px 0 0;font-size:13px;line-height:1.55;color:#767089">Chọn giờ xong tụi mình <b style="color:#4A3A80">giữ chỗ 5 phút</b> để không ai đặt trùng trong lúc bạn điền thông tin.</p>
+</div>
+</sc-if>
+
+<sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
+<div>
+<div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:22px;background:#F1ECFE;margin-bottom:18px">
+<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" stroke="#7A5AD0" stroke-width="2" fill="none"></circle><path d="M12 7.5V12l3.5 2" stroke="#7A5AD0" stroke-width="2" stroke-linecap="round" fill="none"></path></svg>
+<div style="flex:1;font-size:13.5px;line-height:1.4;color:#4A3A80">Đang giữ <b>{{ holdSlot }}</b> cho bạn · còn <b>{{ holdLeft }}</b></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:11px">
+<label style="display:flex;flex-direction:column;gap:7px">
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;color:#4A4360">Tên bạn</span>
+<input value="{{ name }}" onChange="{{ setName }}" placeholder="Nguyễn Thu Hà" style="padding:15px 18px;border:1px solid rgba(122,90,208,.18);border-radius:18px;background:#FFFFFF;font-family:Nunito,sans-serif;font-size:15.5px;color:#222222;outline:none;cursor:none" style-focus="border-color:#7A5AD0"></input>
+</label>
+<label style="display:flex;flex-direction:column;gap:7px">
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;color:#4A4360">Số điện thoại</span>
+<input type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="10" value="{{ phone }}" onChange="{{ setPhone }}" placeholder="0912345678" style="padding:15px 18px;border:1px solid rgba(122,90,208,.18);border-radius:18px;background:#FFFFFF;font-family:Nunito,sans-serif;font-size:15.5px;color:#222222;outline:none;cursor:none" style-focus="border-color:#7A5AD0"></input>
+</label>
+<label style="display:flex;flex-direction:column;gap:7px">
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;color:#4A4360">Ghi chú cho thợ <span style="font-weight:500;color:#767089">· không bắt buộc</span></span>
+<input value="{{ note }}" onChange="{{ setNote }}" placeholder="Mình muốn màu lavender nhạt, móng ngắn" style="padding:15px 18px;border:1px solid rgba(122,90,208,.18);border-radius:18px;background:#FFFFFF;font-family:Nunito,sans-serif;font-size:15.5px;color:#222222;outline:none;cursor:none" style-focus="border-color:#7A5AD0"></input>
+</label>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:20px;padding:16px 20px;border-radius:22px;background:linear-gradient(120deg,#F6F2FE,#FDEBF2)">
+<div style="font-size:13.5px;line-height:1.5;color:#4A4360">{{ summaryService }}<br><b style="color:#2B2440">{{ summaryWhen }}</b></div>
+<div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:19px;color:#7A5AD0">{{ summaryPrice }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isConflict }}" hint-placeholder-val="{{ false }}">
+<div>
+<div style="display:flex;gap:14px;padding:20px;border-radius:26px;background:#FDEBF2;border:1px solid rgba(196,88,156,.16);margin-bottom:20px">
+<svg width="26" height="26" viewBox="0 0 24 24" style="flex:none;margin-top:2px" aria-hidden="true"><circle cx="12" cy="12" r="9.5" stroke="#C4589C" stroke-width="2" fill="none"></circle><path d="M12 7.5v5.5" stroke="#C4589C" stroke-width="2.2" stroke-linecap="round"></path><circle cx="12" cy="16.6" r="1.3" fill="#C4589C"></circle></svg>
+<div>
+<div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:17px;color:#2B2440;margin-bottom:6px">{{ conflictTitle }}</div>
+<p style="margin:0;font-size:14px;line-height:1.6;color:#5C566F">Bạn không mất chỗ đâu — tụi mình đã giữ sẵn ba giờ gần nhất trong cùng ngày. Chọn một giờ là xong, thông tin của bạn vẫn được giữ nguyên.</p>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+<sc-for list="{{ altList }}" as="a" hint-placeholder-count="3">
+<button onClick="{{ a.pick }}" data-cursor="link" style="{{ a.style }}">
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:18px">{{ a.label }}</span>
+<span style="font-size:11px;opacity:.8">{{ a.sub }}</span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+<div style="text-align:center;padding:4px 0 0">
+<div style="width:200px;margin:0 auto 6px">
+<svg viewBox="0 0 200 140" style="width:100%;height:auto;overflow:visible" aria-hidden="true">
+<ellipse cx="100" cy="128" rx="76" ry="8" fill="#8A66D8" opacity=".14"></ellipse>
+<g style="transform-box:fill-box;transform-origin:6% 84%;animation:mewTail 1.6s ease-in-out infinite"><path d="M152 112c26 3 30-18 14-28" stroke="#3B3350" stroke-width="6" stroke-linecap="round" fill="none"></path></g>
+<path d="M74 118c-13 0-21-7-21-18 0-24 24-38 47-38 23 0 42 14 42 36 0 12-8 20-19 20z" fill="#FFFFFF" stroke="#3B3350" stroke-width="5" stroke-linejoin="round"></path>
+<path d="M50 56L57 30l24 17z" fill="#FFFFFF" stroke="#3B3350" stroke-width="5" stroke-linejoin="round"></path><path d="M58 50l3-13 12 9z" fill="#F9CFE0"></path>
+<path d="M114 54l-5-24-24 17z" fill="#FFFFFF" stroke="#3B3350" stroke-width="5" stroke-linejoin="round"></path><path d="M106 48l-3-13-12 9z" fill="#F9CFE0"></path>
+<circle cx="82" cy="82" r="36" fill="#FFFFFF" stroke="#3B3350" stroke-width="5"></circle>
+<ellipse cx="56" cy="92" rx="8" ry="5" fill="#F9CFE0"></ellipse><ellipse cx="108" cy="92" rx="8" ry="5" fill="#F9CFE0"></ellipse>
+<ellipse cx="70" cy="79" rx="5.4" ry="6.8" fill="#3B3350"></ellipse><circle cx="72" cy="76" r="2" fill="#FFFFFF"></circle>
+<ellipse cx="94" cy="79" rx="5.4" ry="6.8" fill="#3B3350"></ellipse><circle cx="96" cy="76" r="2" fill="#FFFFFF"></circle>
+<path d="M77 89h10l-5 5z" fill="#F2A8C6"></path>
+<path d="M74 96c2.8 3.8 6 3.8 7.6 0M90 96c-2.8 3.8-6 3.8-7.6 0" stroke="#3B3350" stroke-width="3.2" stroke-linecap="round" fill="none"></path>
+<path d="M20 92l16 5M18 78h18" stroke="#3B3350" stroke-width="2.8" stroke-linecap="round" opacity=".38"></path>
+</svg>
+</div>
+<h4 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:24px;letter-spacing:-.02em;color:#2B2440;margin:0 0 8px">Xong rồi, hẹn gặp bạn!</h4>
+<p style="margin:0 auto 20px;max-width:400px;font-size:15px;line-height:1.6;color:#6B6580">Tụi mình vừa gửi tin nhắn xác nhận tới <b style="color:#2B2440">{{ phoneOrHint }}</b>. Nhu Nhi sẽ chờ bạn ở cửa sổ hướng nam.</p>
+<div style="display:flex;flex-direction:column;gap:8px;text-align:left;padding:18px 20px;border-radius:24px;background:#F6F2FE;margin-bottom:20px">
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:14px;color:#5C566F"><span>Dịch vụ</span><b style="color:#2B2440">{{ summaryService }}</b></div>
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:14px;color:#5C566F"><span>Thời gian</span><b style="color:#2B2440">{{ summaryWhen }}</b></div>
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:14px;color:#5C566F"><span>Thợ nail</span><b style="color:#2B2440">Chị Hạnh · ghế số 2</b></div>
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:14px;color:#5C566F"><span>Tạm tính</span><b style="color:#7A5AD0">{{ summaryPrice }}</b></div>
+</div>
+</div>
+</sc-if>
+
+<div style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:24px;padding-top:20px;border-top:1px solid rgba(122,90,208,.12)">
+<button onClick="{{ back }}" data-cursor="link" style="{{ backStyle }}">{{ backLabel }}</button>
+<button onClick="{{ next }}" data-cursor="link" data-magnet="1" style="{{ nextStyle }}">{{ nextLabel }}</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;left:50%;bottom:34px;transform:translateX(-50%);z-index:400;display:flex;align-items:center;gap:11px;padding:14px 22px 14px 16px;border-radius:999px;background:rgba(43,36,64,.94);box-shadow:0 20px 44px -18px rgba(43,36,64,.6)">
+<svg width="18" height="18" viewBox="0 0 40 40" aria-hidden="true"><g opacity=".8"><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#F9CFE0" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#F9CFE0"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#F9CFE0"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#F9CFE0" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#F9CFE0"></path></g></svg>
+<span style="font-family:Quicksand,sans-serif;font-weight:600;font-size:14px;color:#FFFFFF">{{ toast }}</span>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;pawCursor&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Tương tác mèo&quot;},&quot;pawTrail&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Tương tác mèo&quot;},&quot;catsWatch&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Tương tác mèo&quot;},&quot;idleSleep&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Tương tác mèo&quot;},&quot;clickSparkles&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Tương tác mèo&quot;},&quot;galleryTone&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;glow&quot;,&quot;border&quot;],&quot;default&quot;:&quot;glow&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Thư viện&quot;}}">
+class Component extends DCLogic {
+  state = { rIdx: 0, rSnap: false, moreOpen: false, bookOpen: false, step: 1, svc: 'meo', dateIdx: 0, customDate: '', calOpen: false, calY: null, calM: null, slot: null, name: '', phone: '', note: '', status: '', extraTaken: [], holdLeft: 300, toast: '' };
+
+  reviews = [
+    { text: 'Mình sợ nhất là thợ nói nhiều. Ở đây chị ấy chỉ hỏi một câu rồi im lặng làm suốt hai tiếng. Tuyệt vời.', name: 'Thu Hà', svc: 'Nail Hàn trong veo', av: '#F1ECFE', avl: 'rgba(122,90,208,.16)' },
+    { text: 'Đặt nail mèo cho ngày cưới. Mẹ mình khóc — không rõ vì cảm động hay vì mười ngón tay mười con mèo.', name: 'Minh Châu', svc: 'Nail mèo — vẽ tay', av: '#FFFFFF', avl: 'rgba(196,88,156,.18)' },
+    { text: 'Ba tuần rồi vẫn chưa bong một góc nào. Và Nhu Nhi ngủ trên chân mình cả buổi, tính thêm phí được không?', name: 'Lan Vy', svc: 'Sơn gel cơ bản', av: '#FDF4E8', avl: 'rgba(224,136,95,.2)' },
+    { text: 'Gội đầu dưỡng sinh xong mình ngủ quên mất hai mươi phút. Chị Hạnh để yên cho mình ngủ, không đánh thức.', name: 'Bảo Trâm', svc: 'Gội đầu dưỡng sinh', av: '#E2EEFB', avl: 'rgba(80,120,190,.18)' },
+    { text: 'Đi nhiều tiệm rồi mới thấy: ở đây người ta hỏi mình muốn gì trước khi cầm cọ lên. Nhỏ thôi mà quý.', name: 'Ngọc Ánh', svc: 'French tip', av: '#FDEBF2', avl: 'rgba(196,88,156,.16)' }
+  ];
+
+  reviewTints = [
+    { bg: '#F1EAFE', star: '#8A66D8', glow: 'rgba(122,90,208,.5)' },
+    { bg: '#FDE9DB', star: '#E0885F', glow: 'rgba(224,136,95,.45)' },
+    { bg: '#E4EFFB', star: '#4A8FB8', glow: 'rgba(80,120,190,.42)' },
+    { bg: '#FCE7F0', star: '#C4589C', glow: 'rgba(196,88,156,.45)' },
+    { bg: '#E7F1E9', star: '#5A8F6B', glow: 'rgba(90,143,107,.42)' }
+  ];
+
+  svcs = [
+    { id: 'gel', name: 'Sơn gel cơ bản', price: '180.000₫', dur: '45 phút' },
+    { id: 'french', name: 'French tip', price: '250.000₫', dur: '60 phút' },
+    { id: 'meo', name: 'Nail mèo — vẽ tay', price: '390.000₫', dur: '90 phút' },
+    { id: 'nhat', name: 'Nail Nhật vẽ tay', price: '520.000₫', dur: '120 phút' },
+    { id: 'han', name: 'Nail Hàn trong veo', price: '320.000₫', dur: '75 phút' },
+    { id: 'spa', name: 'Spa tay & móng', price: '150.000₫', dur: '40 phút' },
+    { id: 'goi', name: 'Gội đầu dưỡng sinh', price: '220.000₫', dur: '60 phút' }
+  ];
+  slots = ['9:30', '10:30', '11:30', '13:00', '14:00', '15:00', '16:15', '17:30', '18:30'];
+
+  activeDi() {
+    const s = this.state;
+    if (s.dateIdx >= 0) return s.dateIdx;
+    if (!s.customDate) return 0;
+    const t = new Date(); t.setHours(0, 0, 0, 0);
+    const d = new Date(s.customDate + 'T00:00:00');
+    return Math.max(0, Math.round((d - t) / 86400000));
+  }
+
+  isTaken(di, i) {
+    return (di * 3 + i * 4) % 5 === 0 || this.state.extraTaken.indexOf(di + '|' + this.slots[i]) > -1;
+  }
+
+  dates() {
+    const dow = ['CN', 'Th 2', 'Th 3', 'Th 4', 'Th 5', 'Th 6', 'Th 7'];
+    const out = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() + i);
+      out.push({ dow: i === 0 ? 'Hôm nay' : dow[d.getDay()], day: String(d.getDate()), mon: 'th' + (d.getMonth() + 1) });
+    }
+    return out;
+  }
+
+  toast(msg) {
+    this.setState({ toast: msg });
+    clearTimeout(this.toastT);
+    this.toastT = setTimeout(() => this.setState({ toast: '' }), 2800);
+  }
+
+  openBook(o) {
+    o = o || {};
+    clearInterval(this.holdT);
+    clearTimeout(this.flipT);
+    this.setState({
+      bookOpen: true, status: '',
+      step: o.step || 1,
+      svc: o.svc || this.state.svc,
+      slot: o.slot || null,
+      holdLeft: 300
+    });
+    if (o.slot) this.startHold();
+    this.flipT = setTimeout(() => this.flipOne(), 9000);
+  }
+
+  closeBook() {
+    clearInterval(this.holdT);
+    clearTimeout(this.flipT);
+    this.setState({ bookOpen: false, status: '', step: 1, slot: null });
+  }
+
+  flipOne() {
+    const di = this.activeDi();
+    const free = this.slots.filter((s, i) => !this.isTaken(di, i) && s !== this.state.slot);
+    if (!free.length) return;
+    const pick = free[Math.floor(Math.random() * free.length)];
+    this.setState(s => ({ extraTaken: s.extraTaken.concat(di + '|' + pick) }));
+    this.toast(pick + ' vừa có người khác đặt — chỗ bạn giữ vẫn còn');
+  }
+
+  startHold() {
+    clearInterval(this.holdT);
+    this.setState({ holdLeft: 300 });
+    this.holdT = setInterval(() => {
+      this.setState(s => {
+        if (s.holdLeft <= 1) {
+          clearInterval(this.holdT);
+          return { holdLeft: 0, status: 'conflict' };
+        }
+        return { holdLeft: s.holdLeft - 1 };
+      });
+    }, 1000);
+  }
+
+  confirm() {
+    clearInterval(this.holdT);
+    if (this.state.slot === '16:15' && !this.conflictSeen) {
+      this.conflictSeen = true;
+      const di = this.activeDi();
+      this.setState(s => ({ status: 'conflict', extraTaken: s.extraTaken.concat(di + '|16:15') }));
+      return;
+    }
+    this.setState({ status: 'done' });
+  }
+
+  lockScroll(on) {
+    const b = document.body, h = document.documentElement;
+    if (!b) return;
+    if (on) {
+      if (this._scrollLocked) return;
+      this._scrollLocked = true;
+      this._scrollY = window.scrollY || h.scrollTop || 0;
+      this._prevBody = b.getAttribute('style') || '';
+      b.style.position = 'fixed';
+      b.style.top = (-this._scrollY) + 'px';
+      b.style.left = '0';
+      b.style.right = '0';
+      b.style.width = '100%';
+      b.style.overflow = 'hidden';
+    } else {
+      if (!this._scrollLocked) return;
+      this._scrollLocked = false;
+      b.setAttribute('style', this._prevBody || '');
+      window.scrollTo(0, this._scrollY || 0);
+    }
+  }
+
+  advanceReview(next) {
+    clearTimeout(this.rWrap);
+    this.setState({ rSnap: false, rIdx: next });
+    if (next >= this.reviews.length) {
+      this.rWrap = setTimeout(() => {
+        this.setState({ rSnap: true, rIdx: next - this.reviews.length }, () => {
+          requestAnimationFrame(() => this.setState({ rSnap: false }));
+        });
+      }, 660);
+    }
+  }
+
+  componentDidUpdate() {
+    this.componentDidUpdate2();
+  }
+
+  componentDidUpdate2() {
+    this.lockScroll(this.state.bookOpen || this.state.moreOpen);
+    this.applyGalleryTone();
+    if (this.state.moreOpen) {
+      this.syncModalChips();
+      if (!this._modalFilled) { this._modalFilled = true; this.fillModalGrid(); }
+    } else this._modalFilled = false;
+  }
+
+  syncModalChips() {
+    const sel = this.modalFilter || 'all';
+    const host = document.getElementById('mewModalGrid');
+    const head = document.getElementById('mewModalCount');
+    if (head && host) head.textContent = host.children.length + ' bộ móng' + (sel === 'all' ? '' : ' · ' + ({ nhe: 'Nhẹ nhàng', pastel: 'Pastel', meo: 'Nail mèo', lap: 'Lấp lánh' }[sel] || ''));
+    document.querySelectorAll('[data-mfilter]').forEach(o => {
+      const on = o.dataset.mfilter === sel;
+      o.style.background = on ? '#7A5AD0' : '#FFFFFF';
+      o.style.color = on ? '#FFFFFF' : '#5C566F';
+    });
+  }
+
+  applyGalleryTone() {
+    const mode = this.props.galleryTone || 'glow';
+    if (mode === this._toneApplied) return;
+    this._toneApplied = mode;
+    const glow = document.getElementById('mewGalleryGlow');
+    if (glow) glow.style.opacity = mode === 'border' ? '.25' : '1';
+    document.querySelectorAll('#mewGrid [data-tile]').forEach(t => {
+      const chip = t.querySelector('span span');
+      const tone = chip ? getComputedStyle(chip).backgroundColor : '#7A5AD0';
+      if (mode === 'border') {
+        t.style.border = '3px solid ' + tone;
+        t.style.padding = '11px';
+      } else {
+        t.style.border = '';
+        t.style.padding = '14px';
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.lockScroll(false);
+    if (super.componentWillUnmount) super.componentWillUnmount();
+  }
+
+  componentDidMount() {
+    this.on(document, 'click', e => {
+      if (this.state.bookOpen || this.state.moreOpen) return;
+      const t = e.target;
+      if (!t || !t.closest) return;
+      const chip = t.closest('[data-cursor="link"]');
+      if (chip && /^\d{1,2}:\d{2}$/.test((chip.textContent || '').trim())) {
+        e.preventDefault();
+        const v = chip.textContent.trim();
+        if (this.slots.indexOf(v) < 0) return this.toast('Giờ này đã có người đặt rồi');
+        return this.openBook({ step: 2, slot: v });
+      }
+      const cta = t.closest('a[href="#datlich"], #mewBookBtn');
+      if (cta) { e.preventDefault(); return this.openBook({}); }
+      const card = t.closest('[data-tilt]');
+      const h3 = card && card.querySelector('h3');
+      if (h3) {
+        const m = this.svcs.filter(s => s.name.split(' —')[0].toLowerCase() === h3.textContent.trim().split(' —')[0].toLowerCase())[0];
+        if (m) { e.preventDefault(); return this.openBook({ svc: m.id, step: 2 }); }
+      }
+      const dead = t.closest('a[href="#"]');
+      if (dead) { e.preventDefault(); return this.toast('Bản mockup — trang này chưa nối'); }
+    });
+    this.lastMove = performance.now();
+    this.sleeping = false;
+    this.pupils = Array.from(document.querySelectorAll('[data-pupil]'));
+    this.applyGalleryTone();
+    this.reviewTimer = setInterval(() => {
+      if (this.pauseR || document.hidden) return;
+      this.advanceReview(this.state.rIdx + 1);
+    }, 4200);
+    this.applyGridFilter();
+    this.setupModalGallery();
+    this.setupCursor();
+    this.setupCats();
+    this.setupReveal();
+    this.setupTilt();
+    this.setupGallery();
+    this.setupBooking();
+    this.blinkTimer = setTimeout(() => this.blink(), 2600);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.reviewTimer);
+    clearTimeout(this.rWrap);
+    cancelAnimationFrame(this.raf);
+    clearTimeout(this.blinkTimer);
+    clearTimeout(this.revealFallback);
+    clearTimeout(this.toastT);
+    clearTimeout(this.flipT);
+    clearInterval(this.holdT);
+    if (this.off) this.off.forEach(f => f());
+    document.body.style.cursor = '';
+  }
+
+  on(t, ev, fn, opt) {
+    t.addEventListener(ev, fn, opt);
+    (this.off = this.off || []).push(() => t.removeEventListener(ev, fn, opt));
+  }
+
+  flag(name) { const v = this.props[name]; return v === undefined ? true : !!v; }
+
+  setupCursor() {
+    const paw = document.getElementById('mewPaw');
+    const trail = document.getElementById('mewTrail');
+    if (!paw) return;
+    const st = { x: innerWidth / 2, y: innerHeight / 2, tx: innerWidth / 2, ty: innerHeight / 2, rot: 0, sc: 1, hover: 0, press: 0, magnet: null };
+    let print = { x: -999, y: -999 }, left = true, seen = false;
+
+    this.on(window, 'mousemove', e => {
+      st.tx = e.clientX; st.ty = e.clientY;
+      this.lastMove = performance.now();
+      if (!seen) { seen = true; st.x = e.clientX; st.y = e.clientY; }
+      const t = e.target;
+      st.hover = t && t.closest && t.closest('[data-cursor]') ? 1 : 0;
+      st.magnet = t && t.closest ? t.closest('[data-magnet]') : null;
+      if (this.flag('pawTrail') && Math.hypot(e.clientX - print.x, e.clientY - print.y) > 105) {
+        print = { x: e.clientX, y: e.clientY };
+        left = !left;
+        this.dropPrint(trail, e.clientX, e.clientY, left);
+      }
+      if (this.sleeping) this.wake();
+    }, { passive: true });
+
+    this.on(window, 'mousedown', e => {
+      st.press = 1;
+      if (this.flag('clickSparkles')) this.sparkle(trail, e.clientX, e.clientY);
+    });
+    this.on(window, 'mouseup', () => { st.press = 0; });
+    this.on(document, 'mouseleave', () => { paw.style.opacity = '0'; });
+
+    const tick = () => {
+      const on = this.flag('pawCursor');
+      document.body.style.cursor = on ? 'none' : '';
+      paw.style.opacity = on && seen ? '1' : '0';
+
+      let tx = st.tx, ty = st.ty;
+      if (st.magnet) {
+        const r = st.magnet.getBoundingClientRect();
+        tx += (r.left + r.width / 2 - tx) * 0.26;
+        ty += (r.top + r.height / 2 - ty) * 0.26;
+      }
+      const nx = st.x + (tx - st.x) * 0.58, ny = st.y + (ty - st.y) * 0.58;
+      const vx = nx - st.x;
+      st.x = nx; st.y = ny;
+      st.rot += (Math.max(-15, Math.min(15, vx * 0.6)) - st.rot) * 0.14;
+      st.sc += ((st.hover ? 1.3 : 1) * (st.press ? 0.8 : 1) - st.sc) * 0.2;
+      const sy = st.press ? st.sc * 0.86 : st.sc;
+      paw.style.transform = 'translate3d(' + nx + 'px,' + ny + 'px,0) rotate(' + st.rot + 'deg) scale(' + st.sc + ',' + sy + ')';
+
+      if (this.flag('catsWatch')) {
+        for (let i = 0; i < this.pupils.length; i++) {
+          const p = this.pupils[i], r = p.getBoundingClientRect();
+          if (!r.width || r.bottom < -80 || r.top > innerHeight + 80) continue;
+          const dx = st.x - (r.left + r.width / 2), dy = st.y - (r.top + r.height / 2);
+          const d = Math.hypot(dx, dy) || 1, m = Math.min(1, d / 280) * parseFloat(p.dataset.pupil || 3);
+          p.style.transform = 'translate(' + (dx / d * m) + 'px,' + (dy / d * m) + 'px)';
+        }
+      }
+
+      if (!this.sleeping && this.flag('idleSleep') && performance.now() - this.lastMove > 5200) this.sleep();
+      this.raf = requestAnimationFrame(tick);
+    };
+    this.raf = requestAnimationFrame(tick);
+  }
+
+  dropPrint(layer, x, y, left) {
+    if (!layer) return;
+    const d = document.createElement('div');
+    const rot = (left ? -24 : 22) + (Math.random() * 14 - 7);
+    d.style.cssText = 'position:fixed;left:' + (x - 11) + 'px;top:' + (y - 11) + 'px;width:22px;height:22px;opacity:0;animation:mewPrint 1.5s ease-out forwards;--r:' + rot + 'deg';
+    d.innerHTML = '<svg viewBox="0 0 40 40" width="22" height="22"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="#E4DAFB" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="#E4DAFB"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="#E4DAFB"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="#E4DAFB" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="#E4DAFB"></path></g></svg>';
+    layer.appendChild(d);
+    setTimeout(() => d.remove(), 1600);
+  }
+
+  sparkle(layer, x, y) {
+    if (!layer) return;
+    const cols = ['#F2A8C6', '#CBB9F2', '#FDE3D2', '#8A66D8', '#F9CFE0'];
+    for (let i = 0; i < 7; i++) {
+      const a = (Math.PI * 2 * i) / 7 + Math.random(), dist = 30 + Math.random() * 42, s = 5 + Math.random() * 6;
+      const d = document.createElement('div');
+      d.style.cssText = 'position:fixed;left:' + (x - s / 2) + 'px;top:' + (y - s / 2) + 'px;width:' + s + 'px;height:' + s + 'px;border-radius:50%;background:' + cols[i % cols.length] + ';animation:mewSpark .74s cubic-bezier(.2,.7,.3,1) forwards;--dx:' + (Math.cos(a) * dist) + 'px;--dy:' + (Math.sin(a) * dist - 16) + 'px';
+      layer.appendChild(d);
+      setTimeout(() => d.remove(), 820);
+    }
+  }
+
+  blink() {
+    document.querySelectorAll('[data-blink]').forEach(g => {
+      if (Math.random() > 0.35) {
+        g.style.transform = 'scaleY(.08)';
+        setTimeout(() => { g.style.transform = ''; }, 125);
+      }
+    });
+    this.blinkTimer = setTimeout(() => this.blink(), 2400 + Math.random() * 3800);
+  }
+
+  sleep() {
+    this.sleeping = true;
+    document.querySelectorAll('[data-cat="hero"] [data-zzz]').forEach(z => { z.style.opacity = '1'; });
+    document.querySelectorAll('[data-cat="hero"] [data-blink],[data-cat="review"] [data-blink]').forEach(g => { g.style.transition = 'transform .5s ease'; g.style.transform = 'scaleY(.08)'; });
+  }
+
+  wake() {
+    this.sleeping = false;
+    document.querySelectorAll('[data-cat="hero"] [data-zzz]').forEach(z => { z.style.opacity = '0'; });
+    document.querySelectorAll('[data-cat="hero"] [data-blink],[data-cat="review"] [data-blink]').forEach(g => { g.style.transform = ''; });
+    const h = document.querySelector('[data-cat="hero"] svg');
+    if (h) { h.style.animation = 'mewStretch .9s cubic-bezier(.3,1.4,.4,1)'; setTimeout(() => { h.style.animation = ''; }, 950); }
+  }
+
+  setupCats() {
+    document.querySelectorAll('[data-cat],[data-tilt],#mewBookBtn,[data-cursor="link"]').forEach(el => {
+      this.on(el, 'mouseenter', () => {
+        const host = el.closest('[data-cat]') || el;
+        host.querySelectorAll('[data-ear]').forEach((e, i) => {
+          e.style.animation = 'none';
+          void e.offsetWidth;
+          e.style.animation = 'mewEar .62s ease-in-out ' + i * 0.07 + 's 2';
+        });
+      });
+    });
+  }
+
+  setupBooking() {
+    const btn = document.getElementById('mewBookBtn');
+    const cat = document.querySelector('[data-cat="sleep"]');
+    if (!btn || !cat) return;
+    const zzz = cat.querySelector('[data-zzz]');
+    const closed = cat.querySelector('[data-sleepeye]');
+    const open = cat.querySelector('[data-openeye]');
+    const tail = cat.querySelector('[data-tailwrap]');
+    const set = up => {
+      if (zzz) zzz.style.opacity = up ? '0' : '1';
+      if (closed) closed.style.opacity = up ? '0' : '1';
+      if (open) open.style.opacity = up ? '1' : '0';
+      if (tail) tail.style.animation = up ? 'mewTail 1.1s ease-in-out infinite' : '';
+    };
+    this.on(btn, 'mouseenter', () => set(true));
+    this.on(btn, 'mouseleave', () => set(false));
+  }
+
+  setupReveal() {
+    const items = Array.from(document.querySelectorAll('[data-reveal]')).filter(el => el.getBoundingClientRect().top > innerHeight * 0.9);
+    if (!items.length || !('IntersectionObserver' in window)) return;
+    const showAll = () => items.forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
+    this.revealFallback = setTimeout(showAll, 1400);
+    this.on(document, 'visibilitychange', () => { if (document.visibilityState === 'visible') setTimeout(showAll, 900); });
+    items.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(26px)';
+      el.style.transition = 'opacity .8s cubic-bezier(.2,.8,.3,1),transform .8s cubic-bezier(.2,.8,.3,1)';
+    });
+    const io = new IntersectionObserver(es => {
+      es.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'none';
+          io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+    items.forEach(el => io.observe(el));
+    this.io = io;
+  }
+
+  setupTilt() {
+    document.querySelectorAll('[data-tilt]').forEach(card => {
+      let raf = 0;
+      const move = e => {
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+          card.style.transform = 'perspective(900px) rotateY(' + px * 5 + 'deg) rotateX(' + -py * 5 + 'deg) translateY(-6px)';
+        });
+      };
+      this.on(card, 'mousemove', move);
+      this.on(card, 'mouseleave', () => { card.style.transform = ''; });
+    });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const st = s.status;
+    const sv = this.svcs.filter(x => x.id === s.svc)[0] || this.svcs[0];
+    const ds = this.dates();
+    const di = this.activeDi();
+    const dowVi = ['CN', 'Th 2', 'Th 3', 'Th 4', 'Th 5', 'Th 6', 'Th 7'];
+    let dateLabel;
+    if (s.dateIdx === 0) dateLabel = 'hôm nay';
+    else if (s.dateIdx > 0) { const d = ds[s.dateIdx]; dateLabel = d.dow + ', ' + d.day + '/' + d.mon.slice(2); }
+    else { const cd = s.customDate ? new Date(s.customDate + 'T00:00:00') : new Date(); dateLabel = dowVi[cd.getDay()] + ', ' + cd.getDate() + '/' + (cd.getMonth() + 1); }
+    const isoToday = (() => { const t = new Date(); return t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0'); })();
+    const customOn = s.dateIdx < 0 && !!s.customDate;
+    const tRef = new Date(); tRef.setHours(0, 0, 0, 0);
+    const anchor = s.customDate ? new Date(s.customDate + 'T00:00:00') : tRef;
+    const calY = s.calY == null ? anchor.getFullYear() : s.calY;
+    const calM = s.calM == null ? anchor.getMonth() : s.calM;
+    const calAtFloor = calY === tRef.getFullYear() && calM === tRef.getMonth();
+    const first = new Date(calY, calM, 1);
+    const lead = (first.getDay() + 6) % 7;
+    const nDays = new Date(calY, calM + 1, 0).getDate();
+    const calBase = 'display:grid;place-items:center;height:36px;border-radius:12px;font-family:Quicksand,sans-serif;font-weight:700;font-size:14px;cursor:none;transition:background .2s ease,color .2s ease;';
+    const calCells = [];
+    for (let i = 0; i < lead; i++) calCells.push({ label: '', off: true, style: calBase + 'border:none;background:transparent;color:transparent;pointer-events:none' });
+    for (let d = 1; d <= nDays; d++) {
+      const cur = new Date(calY, calM, d);
+      const iso = calY + '-' + String(calM + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+      const past = cur < tRef;
+      const isToday = cur.getTime() === tRef.getTime();
+      const sel = s.customDate === iso && s.dateIdx < 0;
+      calCells.push({
+        label: String(d), off: past,
+        style: calBase + (past
+          ? 'border:1px solid transparent;background:transparent;color:#C9C4D6'
+          : sel
+            ? 'border:1px solid #7A5AD0;background:#7A5AD0;color:#FFFFFF'
+            : isToday
+              ? 'border:1.5px solid rgba(122,90,208,.45);background:#FFFFFF;color:#4A3A80'
+              : 'border:1px solid rgba(122,90,208,.12);background:#FFFFFF;color:#2B2440'),
+        pick: () => { if (past) return; this.setState({ customDate: iso, dateIdx: -1, slot: null, calOpen: false, calY: calY, calM: calM }); }
+      });
+    }
+    const mm = Math.floor(s.holdLeft / 60), ss = s.holdLeft % 60;
+    const pillBase = 'display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;padding:16px 20px;border-radius:22px;cursor:none;text-align:left;transition:transform .25s ease,background .25s ease;';
+    const chipBase = 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:100%;min-width:0;min-height:70px;padding:9px 2px;border-radius:18px;cursor:none;font-family:Nunito,sans-serif;transition:transform .25s ease;';
+    const slotBase = 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:56px;padding:10px 4px;border-radius:18px;cursor:none;transition:transform .25s ease;';
+    const step2Ready = !!s.slot;
+    const nameOk = s.name.trim().length >= 2;
+    const digits = s.phone.replace(/\D/g, '');
+    const phoneOk = /^0\d{9}$/.test(digits);
+    const step3Ready = nameOk && phoneOk;
+    const nextOn = st === 'done' || st === 'conflict' || (s.step === 2 ? step2Ready : s.step === 3 ? step3Ready : true);
+    const alts = this.slots.filter((x, i) => !this.isTaken(this.activeDi(), i)).slice(0, 3);
+
+    return {
+      pauseReviews: () => { this.pauseR = true; },
+      resumeReviews: () => { this.pauseR = false; },
+      trackStyle: 'display:flex;gap:20px;width:100%;align-items:center;will-change:transform;transform:translateX(calc(-1 * ' + s.rIdx + ' * ((100% - 40px)/3 + 20px)));'
+        + (s.rSnap ? 'transition:none' : 'transition:transform .62s cubic-bezier(.45,.05,.2,1)'),
+      reviewCards: this.reviews.concat(this.reviews, this.reviews).slice(0, this.reviews.length * 2 + 3).map((r, i) => {
+        const mid = i === s.rIdx + 1;
+        const tint = this.reviewTints[(i % this.reviews.length) % this.reviewTints.length];
+        return {
+          text: r.text,
+          name: r.name,
+          svc: r.svc,
+          star: mid ? tint.star : '#F2A8C6',
+          avatar: 'width:40px;height:40px;border-radius:50%;flex:none;background:' + r.av + ';background-image:repeating-linear-gradient(135deg,' + r.avl + ' 0 4px,rgba(0,0,0,0) 4px 8px)',
+          style: 'flex:0 0 calc((100% - 40px)/3);box-sizing:border-box;position:relative;padding:30px 28px;border-radius:32px;background:' + (mid ? tint.bg : '#FFFFFF')
+            + ';border:1px solid rgba(122,90,208,.1);box-shadow:0 26px 50px -32px ' + (mid ? tint.glow : 'rgba(122,90,208,.4)')
+            + ';opacity:' + (mid ? '1' : '.66') + ';transform:scale(' + (mid ? '1.045' : '.95') + ');'
+            + 'transition:background 1.1s ease,box-shadow 1.1s ease,transform .62s cubic-bezier(.45,.05,.2,1),opacity .7s ease'
+        };
+      }),
+      reviewDots: this.reviews.map((r, i) => ({
+        pick: () => this.advanceReview((i - 1 + this.reviews.length) % this.reviews.length),
+        style: 'width:' + (((s.rIdx + 1) % this.reviews.length) === i ? '22px' : '8px') + ';height:8px;border:none;border-radius:999px;padding:0;cursor:none;background:'
+          + (((s.rIdx + 1) % this.reviews.length) === i ? '#7A5AD0' : 'rgba(122,90,208,.22)') + ';transition:width .5s cubic-bezier(.2,.9,.3,1),background .5s ease'
+      })),
+      moreOpen: s.moreOpen,
+      openMore: () => { this.modalFilter = this.galleryFilter || 'all'; this.setState({ moreOpen: true }); },
+      closeMore: () => this.setState({ moreOpen: false }),
+      closeMoreBackdrop: e => { if (e.target === e.currentTarget) this.setState({ moreOpen: false }); },
+      bookOpen: s.bookOpen,
+      toast: s.toast,
+      closeBook: () => this.closeBook(),
+      closeBookBackdrop: e => { if (e.target === e.currentTarget) this.closeBook(); },
+      isStep1: s.bookOpen && !st && s.step === 1,
+      isStep2: s.bookOpen && !st && s.step === 2,
+      isStep3: s.bookOpen && !st && s.step === 3,
+      isConflict: st === 'conflict',
+      isDone: st === 'done',
+      stepEyebrow: st === 'done' ? 'Đã xác nhận' : st === 'conflict' ? 'Trùng lịch' : 'Đặt hẹn · bước ' + s.step + '/3',
+      stepTitle: st === 'done' ? 'Hẹn gặp bạn ở 1M65' : st === 'conflict' ? 'Ơ, giờ đó vừa kín' : s.step === 1 ? 'Bạn muốn làm gì hôm nay?' : s.step === 2 ? 'Chọn ngày và giờ' : 'Vài thông tin cuối',
+      serviceList: this.svcs.map(x => ({
+        name: x.name, price: x.price, dur: x.dur,
+        style: pillBase + 'border:1.5px solid ' + (x.id === s.svc ? '#7A5AD0' : 'rgba(122,90,208,.14)') + ';background:' + (x.id === s.svc ? '#F6F2FF' : '#FFFFFF'),
+        dotStyle: 'flex:none;width:20px;height:20px;border-radius:50%;border:2px solid ' + (x.id === s.svc ? '#7A5AD0' : 'rgba(122,90,208,.25)') + ';background:' + (x.id === s.svc ? 'radial-gradient(circle,#7A5AD0 0 4.5px,#FFFFFF 4.6px)' : '#FFFFFF'),
+        pick: () => this.setState({ svc: x.id })
+      })),
+      dateList: ds.map((x, i) => ({
+        dow: x.dow, day: x.day, mon: x.mon,
+        style: chipBase + 'border:1.5px solid ' + (i === s.dateIdx ? '#7A5AD0' : 'rgba(122,90,208,.14)') + ';background:' + (i === s.dateIdx ? '#7A5AD0' : '#FFFFFF') + ';color:' + (i === s.dateIdx ? '#FFFFFF' : '#4A4360'),
+        pick: () => this.setState({ dateIdx: i, slot: null, calOpen: false })
+      })),
+      slotList: this.slots.map((x, i) => {
+        const taken = this.isTaken(di, i);
+        const sel = x === s.slot;
+        return {
+          label: x,
+          sub: taken ? 'đã kín' : x === '16:15' ? '1 người đang xem' : '',
+          style: slotBase + (taken
+            ? 'border:1.5px solid rgba(90,86,110,.1);background:#F3F2F6;color:#8E8AA0;text-decoration:line-through'
+            : 'border:1.5px solid ' + (sel ? '#7A5AD0' : 'rgba(122,90,208,.16)') + ';background:' + (sel ? '#7A5AD0' : '#FFFFFF') + ';color:' + (sel ? '#FFFFFF' : '#2B2440')),
+          pick: () => {
+            if (taken) return this.toast(x + ' đã có người đặt — chọn giờ khác nha');
+            this.setState({ slot: x });
+            this.startHold();
+          }
+        };
+      }),
+      altList: alts.map(x => ({
+        label: x, sub: 'còn trống',
+        style: slotBase + 'border:1.5px solid rgba(122,90,208,.2);background:#FFFFFF;color:#2B2440',
+        pick: () => { this.setState({ slot: x, status: '', step: 3 }); this.startHold(); }
+      })),
+      todayISO: isoToday,
+      customDate: s.customDate,
+      calOpen: !!s.calOpen,
+      calTitle: 'Tháng ' + (calM + 1) + ' · ' + calY,
+      calDows: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map(w => ({ label: w })),
+      calPrevStyle: 'display:grid;place-items:center;width:32px;height:32px;border:1px solid rgba(122,90,208,.18);border-radius:11px;background:#FFFFFF;color:' + (calAtFloor ? '#C9C4D6' : '#4A3A80') + ';cursor:none;opacity:' + (calAtFloor ? '.5' : '1') + ';transition:background .25s ease',
+      calPrev: () => { if (calAtFloor) return; const d = new Date(calY, calM - 1, 1); this.setState({ calY: d.getFullYear(), calM: d.getMonth() }); },
+      calNext: () => { const d = new Date(calY, calM + 1, 1); this.setState({ calY: d.getFullYear(), calM: d.getMonth() }); },
+      calCells: calCells,
+      customStyle: chipBase + 'border:1.5px dashed ' + (customOn ? '#7A5AD0' : 'rgba(122,90,208,.3)') + ';background:' + (customOn ? '#7A5AD0' : '#FFFFFF') + ';color:' + (customOn ? '#FFFFFF' : '#7A5AD0'),
+      customEmpty: !customOn,
+      customPicked: customOn,
+      customDow: customOn ? dowVi[new Date(s.customDate + 'T00:00:00').getDay()] : '',
+      customDay: customOn ? String(new Date(s.customDate + 'T00:00:00').getDate()) : '',
+      customMon: customOn ? 'th' + (new Date(s.customDate + 'T00:00:00').getMonth() + 1) : '',
+      pickCustom: () => this.setState({ calOpen: !s.calOpen }),
+      dateLabel: dateLabel,
+      holdSlot: s.slot || '—',
+      holdLeft: mm + ':' + (ss < 10 ? '0' + ss : ss),
+      name: s.name, phone: s.phone, note: s.note,
+      phoneOrHint: s.phone || 'số bạn vừa nhập',
+      setName: e => this.setState({ name: e.target.value }),
+      setPhone: e => this.setState({ phone: e.target.value.replace(/\D/g, '').slice(0, 10) }),
+      setNote: e => this.setState({ note: e.target.value }),
+      summaryService: sv.name + ' · ' + sv.dur,
+      summaryWhen: dateLabel + ' lúc ' + (s.slot || '—'),
+      summaryPrice: sv.price,
+      conflictTitle: s.holdLeft === 0 ? 'Hết 5 phút giữ chỗ, ' + (s.slot || '') + ' đã có người đặt' : (s.slot || '') + ' vừa có người đặt trước bạn 40 giây',
+      backLabel: st === 'done' ? '' : st === 'conflict' ? 'Huỷ' : s.step === 1 ? 'Để sau' : 'Quay lại',
+      backStyle: (st === 'done' ? 'display:none;' : 'display:block;') + 'padding:15px 22px;border:1px solid rgba(122,90,208,.16);border-radius:999px;background:#FFFFFF;color:#4A3A80;font-family:Quicksand,sans-serif;font-weight:700;font-size:14.5px;cursor:none',
+      nextLabel: st === 'done' ? 'Xong' : st === 'conflict' ? 'Chọn giờ khác' : s.step === 3 ? 'Xác nhận đặt hẹn' : s.step === 2 ? (step2Ready ? 'Tiếp tục' : 'Chọn một giờ trống') : 'Chọn ngày & giờ',
+      nextStyle: 'margin-left:auto;padding:16px 28px;border:none;border-radius:999px;font-family:Quicksand,sans-serif;font-weight:700;font-size:15.5px;cursor:none;transition:transform .3s cubic-bezier(.34,1.56,.64,1);' + (nextOn ? 'background:#7A5AD0;color:#FFFFFF;box-shadow:0 14px 28px -14px rgba(122,90,208,.8)' : 'background:#E9E1FD;color:#8E8AA0'),
+      back: () => {
+        if (st === 'conflict') return this.closeBook();
+        if (s.step === 1) return this.closeBook();
+        this.setState({ step: s.step - 1 });
+      },
+      next: () => {
+        if (st === 'done') return this.closeBook();
+        if (st === 'conflict') return this.setState({ status: '', step: 2, slot: null });
+        if (s.step === 3) {
+          if (!nameOk) return this.toast('Cho tụi mình xin tên bạn với nha');
+          if (!phoneOk) return this.toast('Số điện thoại phải có đúng 10 số và bắt đầu bằng 0 nha');
+          return this.confirm();
+        }
+        if (s.step === 2 && !step2Ready) return this.toast('Chọn một giờ còn trống trước nha');
+        this.setState({ step: s.step + 1 });
+      }
+    };
+  }
+
+  fillModalGrid() {
+    const host = document.getElementById('mewModalGrid');
+    if (!host) return;
+    host.innerHTML = '';
+    const sel = this.modalFilter || 'all';
+    let shown = 0;
+    this.gridTiles().forEach((t, i) => {
+      if (sel !== 'all' && t.dataset.tile !== sel) return;
+      const c = t.cloneNode(true);
+      c.style.display = 'flex';
+      c.style.marginBottom = '17px';
+      c.style.animation = 'mewTileIn .46s cubic-bezier(.2,.9,.3,1) backwards';
+      c.dataset.modalTile = '1';
+      c.style.animationDelay = Math.min(shown * 35, 350) + 'ms';
+      host.appendChild(c);
+      shown++;
+    });
+    this.syncModalChips();
+  }
+
+  setupModalGallery() {
+    this.on(document, 'click', e => {
+      const b = e.target && e.target.closest && e.target.closest('[data-mfilter]');
+      if (!b) return;
+      e.preventDefault();
+      this.modalFilter = b.dataset.mfilter;
+      document.querySelectorAll('[data-mfilter]').forEach(o => {
+        const on = o === b;
+        o.style.background = on ? '#7A5AD0' : '#FFFFFF';
+        o.style.color = on ? '#FFFFFF' : '#5C566F';
+      });
+      this.fillModalGrid();
+    });
+  }
+
+  gridTiles() {
+    return Array.from(document.querySelectorAll('#mewGrid [data-tile]'));
+  }
+
+  applyGridFilter(animate) {
+    if (!this.galleryFilter) this.galleryFilter = 'all';
+    let n = 0;
+    this.gridTiles().forEach(t => {
+      const match = this.galleryFilter === 'all' || t.dataset.tile === this.galleryFilter;
+      const show = match && n < 8;
+      t.style.display = show ? 'flex' : 'none';
+      if (show && animate) {
+        t.style.animation = 'none';
+        const d = n * 40;
+        requestAnimationFrame(() => { t.style.animation = 'mewTileIn .46s cubic-bezier(.2,.9,.3,1) ' + d + 'ms backwards'; });
+      }
+      if (show) n++;
+    });
+  }
+
+  setupGallery() {
+    const btns = Array.from(document.querySelectorAll('[data-filter]'));
+    this.galleryFilter = 'all';
+
+    btns.forEach(b => {
+      this.on(b, 'click', e => {
+        e.preventDefault();
+        btns.forEach(o => {
+          const on = o === b;
+          o.style.background = on ? '#7A5AD0' : '#FFFFFF';
+          o.style.color = on ? '#FFFFFF' : '#5C566F';
+        });
+        this.galleryFilter = b.dataset.filter;
+        this.applyGridFilter(true);
+      });
+    });
+  }
+}
+</script>
+</body>
+</html>
