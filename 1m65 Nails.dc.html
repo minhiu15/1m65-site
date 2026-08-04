@@ -15,6 +15,7 @@
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{background:#FFFCF9;color:#222222;font-family:Nunito,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html.mew-paw-active,html.mew-paw-active *{cursor:none !important}
 a{color:#7A5AD0;text-decoration:none}
 a:hover{color:#C4589C}
 ::selection{background:#E4DAFB;color:#222222}
@@ -1222,6 +1223,7 @@ class Component extends DCLogic {
     clearInterval(this.holdT);
     if (this.off) this.off.forEach(f => f());
     document.body.style.cursor = '';
+    document.documentElement.classList.remove('mew-paw-active');
   }
 
   on(t, ev, fn, opt) {
@@ -1234,6 +1236,7 @@ class Component extends DCLogic {
   setupCursor() {
     const paw = document.getElementById('mewPaw');
     const trail = document.getElementById('mewTrail');
+    const page = document.querySelector('.mew-page');
     if (!paw) return;
     const st = { x: innerWidth / 2, y: innerHeight / 2, tx: innerWidth / 2, ty: innerHeight / 2, rot: 0, sc: 1, hover: 0, press: 0, magnet: null };
     let print = { x: -999, y: -999 }, left = true, seen = false;
@@ -1263,6 +1266,7 @@ class Component extends DCLogic {
     const tick = () => {
       const on = this.flag('pawCursor');
       document.body.style.cursor = on ? 'none' : '';
+      document.documentElement.classList.toggle('mew-paw-active', on);
       paw.style.opacity = on && seen ? '1' : '0';
 
       let tx = st.tx, ty = st.ty;
@@ -1277,7 +1281,8 @@ class Component extends DCLogic {
       st.rot += (Math.max(-15, Math.min(15, vx * 0.6)) - st.rot) * 0.14;
       st.sc += ((st.hover ? 1.3 : 1) * (st.press ? 0.8 : 1) - st.sc) * 0.2;
       const sy = st.press ? st.sc * 0.86 : st.sc;
-      paw.style.transform = 'translate3d(' + nx + 'px,' + ny + 'px,0) rotate(' + st.rot + 'deg) scale(' + st.sc + ',' + sy + ')';
+      const z = Math.max(0.01, parseFloat(page && getComputedStyle(page).zoom) || 1);
+      paw.style.transform = 'translate3d(' + (nx / z) + 'px,' + (ny / z) + 'px,0) rotate(' + st.rot + 'deg) scale(' + st.sc + ',' + sy + ')';
 
       if (this.flag('catsWatch')) {
         for (let i = 0; i < this.pupils.length; i++) {
