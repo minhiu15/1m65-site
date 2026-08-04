@@ -216,7 +216,7 @@ a[href*="google.com/maps/place/1M65"][style*="position:absolute"],a[href*="googl
 </button>
 </sc-for>
 </div>
-<p style="margin:16px 0 0;font-size:13px;line-height:1.55;color:#767089">Chọn giờ xong tụi mình <b style="color:#4A3A80">giữ chỗ 5 phút</b> để không ai đặt trùng trong lúc bạn điền thông tin.</p>
+<p style="margin:16px 0 0;font-size:13px;line-height:1.55;color:#767089">Giờ trống được lấy trực tiếp từ lịch của tiệm và sẽ được <b style="color:#4A3A80">kiểm tra lại khi xác nhận</b>.</p>
 </div>
 </sc-if>
 
@@ -224,7 +224,7 @@ a[href*="google.com/maps/place/1M65"][style*="position:absolute"],a[href*="googl
 <div>
 <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:22px;background:#F1ECFE;margin-bottom:18px">
 <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" stroke="#7A5AD0" stroke-width="2" fill="none"></circle><path d="M12 7.5V12l3.5 2" stroke="#7A5AD0" stroke-width="2" stroke-linecap="round" fill="none"></path></svg>
-<div style="flex:1;font-size:13.5px;line-height:1.4;color:#4A3A80">Đang giữ <b>{{ holdSlot }}</b> cho bạn · còn <b>{{ holdLeft }}</b></div>
+<div style="flex:1;font-size:13.5px;line-height:1.4;color:#4A3A80">Bạn đã chọn <b>{{ holdSlot }}</b> · lịch sẽ được chốt ngay khi bấm xác nhận</div>
 </div>
 <div style="display:flex;flex-direction:column;gap:11px">
 <label style="display:flex;flex-direction:column;gap:7px">
@@ -286,11 +286,11 @@ a[href*="google.com/maps/place/1M65"][style*="position:absolute"],a[href*="googl
 </svg>
 </div>
 <h4 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:24px;letter-spacing:-.02em;color:#2B2440;margin:0 0 8px">Xong rồi, hẹn gặp bạn!</h4>
-<p style="margin:0 auto 20px;max-width:400px;font-size:15px;line-height:1.6;color:#6B6580">Tụi mình vừa gửi tin nhắn xác nhận tới <b style="color:#2B2440">{{ phoneOrHint }}</b>. Nhu Nhi sẽ chờ bạn ở cửa sổ hướng nam.</p>
+<p style="margin:0 auto 20px;max-width:400px;font-size:15px;line-height:1.6;color:#6B6580">Lịch hẹn đã được xác nhận. Mã lịch của bạn là <b style="color:#2B2440">{{ bookingReference }}</b>. Hãy chụp lại màn hình này để tiện tra cứu.</p>
 <div style="display:flex;flex-direction:column;gap:8px;text-align:left;padding:18px 20px;border-radius:24px;background:#F6F2FE;margin-bottom:20px">
 <div style="display:flex;justify-content:space-between;gap:12px;font-size:14px;color:#5C566F"><span>Dịch vụ</span><b style="color:#2B2440">{{ summaryService }}</b></div>
 <div style="display:flex;justify-content:space-between;gap:12px;font-size:14px;color:#5C566F"><span>Thời gian</span><b style="color:#2B2440">{{ summaryWhen }}</b></div>
-<div style="display:flex;justify-content:space-between;gap:12px;font-size:14px;color:#5C566F"><span>Thợ nail</span><b style="color:#2B2440">Chị Hạnh · ghế số 2</b></div>
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:14px;color:#5C566F"><span>Thợ nail</span><b style="color:#2B2440">Thợ chính · 1M65</b></div>
 <div style="display:flex;justify-content:space-between;gap:12px;font-size:14px;color:#5C566F"><span>Tạm tính</span><b style="color:#7A5AD0">{{ summaryPrice }}</b></div>
 </div>
 </div>
@@ -707,8 +707,7 @@ Xem thư viện móng
 <span style="display:flex;flex-direction:column;line-height:1"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:18px;color:#2B2440">1M65</span><span style="font-family:Quicksand,sans-serif;font-weight:600;font-size:11px;letter-spacing:.085em;color:#7A5AD0;margin-top:4px">NAILS · LASHES · SHAMPOO</span></span>
 </div>
 <div style="display:flex;flex-direction:column;gap:8px;font-size:14px;color:#7C7791;margin-bottom:18px">
-<div style="display:flex;justify-content:space-between"><span>Thứ 2 – Thứ 6</span><span style="color:#2B2440;font-weight:600">9:00 – 20:00</span></div>
-<div style="display:flex;justify-content:space-between"><span>Thứ 7 – CN</span><span style="color:#2B2440;font-weight:600">9:00 – 18:00</span></div>
+<div style="display:flex;justify-content:space-between"><span>Mỗi ngày</span><span style="color:#2B2440;font-weight:600">9:00 – 18:00</span></div>
 <div style="display:flex;justify-content:space-between"><span>Nhu Nhi</span><span style="color:#8A66D8;font-weight:600">ngủ cả ngày</span></div>
 </div>
 <div style="position:relative;border-radius:22px;overflow:hidden;border:1px solid rgba(122,90,208,.14);aspect-ratio:16/8;margin-bottom:16px;background:#E2EEFB">
@@ -745,7 +744,7 @@ Xem thư viện móng
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:460,&quot;height&quot;:940},&quot;pawCursor&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Tương tác mèo&quot;},&quot;pawTrail&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Tương tác mèo&quot;},&quot;catsWatch&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Tương tác mèo&quot;},&quot;idleSleep&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Tương tác mèo&quot;},&quot;clickSparkles&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Tương tác mèo&quot;},&quot;galleryTone&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;glow&quot;,&quot;border&quot;],&quot;default&quot;:&quot;glow&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Thư viện&quot;}}">
 class Component extends DCLogic {
-  state = { rIdx: 5, rSnap: false, moreOpen: false, mobileOpen: false, bookOpen: false, step: 1, svc: 'meo', dateIdx: 0, customDate: '', calOpen: false, calY: null, calM: null, slot: null, name: '', phone: '', note: '', status: '', extraTaken: [], holdLeft: 300, toast: '' };
+  state = { rIdx: 5, rSnap: false, moreOpen: false, mobileOpen: false, bookOpen: false, step: 1, svc: 'meo', dateIdx: 0, customDate: '', calOpen: false, calY: null, calM: null, slot: null, name: '', phone: '', note: '', status: '', extraTaken: [], holdLeft: 300, toast: '', availableSlots: [], slotsLoading: false, bookingPending: false, bookingReference: '' };
 
   reviews = [
     { text: 'Mình sợ nhất là thợ nói nhiều. Ở đây chị ấy chỉ hỏi một câu rồi im lặng làm suốt hai tiếng. Tuyệt vời.', name: 'Thu Hà', svc: 'Nail Hàn trong veo', av: '#F1ECFE', avl: 'rgba(122,90,208,.16)' },
@@ -819,6 +818,60 @@ class Component extends DCLogic {
     { id: 'goi', name: 'Gội đầu dưỡng sinh', price: '220.000₫', dur: '60 phút' }
   ];
   slots = ['9:30', '10:30', '11:30', '13:00', '14:00', '15:00', '16:15', '17:30', '18:30'];
+  bookingApiEndpoint = 'https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api';
+
+  activeDateISO() {
+    if (this.state.dateIdx < 0 && this.state.customDate) return this.state.customDate;
+    const date = new Date();
+    date.setHours(12, 0, 0, 0);
+    date.setDate(date.getDate() + Math.max(0, this.state.dateIdx));
+    return date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
+  }
+
+  slotLabel(startAt) {
+    return new Intl.DateTimeFormat('vi-VN', {
+      timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+    }).format(new Date(startAt));
+  }
+
+  async bookingRequest(action, payload) {
+    const response = await fetch(this.bookingApiEndpoint, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(Object.assign({ action: action }, payload || {}))
+    });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      const error = new Error(body.error || 'request_failed');
+      error.code = body.error || 'request_failed';
+      throw error;
+    }
+    return body;
+  }
+
+  async loadAvailability(preferredSlot) {
+    const requestId = (this.availabilityRequestId || 0) + 1;
+    this.availabilityRequestId = requestId;
+    const date = this.activeDateISO();
+    const serviceId = this.state.svc;
+    this.setState({ slotsLoading: true, availableSlots: [], slot: null });
+    try {
+      const body = await this.bookingRequest('availability', { date: date, serviceId: serviceId });
+      if (requestId !== this.availabilityRequestId) return;
+      const seen = new Set();
+      const availableSlots = (Array.isArray(body.slots) ? body.slots : []).map(item => {
+        const startAt = item.start_at || item.startAt;
+        return { startAt: startAt, label: this.slotLabel(startAt) };
+      }).filter(item => item.startAt && !seen.has(item.label) && seen.add(item.label));
+      const selected = preferredSlot && availableSlots.some(item => item.label === preferredSlot) ? preferredSlot : null;
+      this.setState({ slotsLoading: false, availableSlots: availableSlots, slot: selected });
+      if (preferredSlot && !selected) this.toast(preferredSlot + ' không còn trống — chọn giờ khác nha');
+    } catch (error) {
+      if (requestId !== this.availabilityRequestId) return;
+      this.setState({ slotsLoading: false, availableSlots: [], slot: null });
+      this.toast('Chưa tải được lịch trống. Bạn thử lại giúp tụi mình nha');
+    }
+  }
 
   activeDi() {
     const s = this.state;
@@ -854,15 +907,18 @@ class Component extends DCLogic {
     o = o || {};
     clearInterval(this.holdT);
     clearTimeout(this.flipT);
+    const nextStep = o.step || 1;
     this.setState({
       bookOpen: true, status: '',
-      step: o.step || 1,
+      step: nextStep,
       svc: o.svc || this.state.svc,
-      slot: o.slot || null,
-      holdLeft: 300
+      slot: null,
+      holdLeft: 300,
+      availableSlots: [],
+      bookingReference: ''
+    }, () => {
+      if (nextStep >= 2) this.loadAvailability(o.slot || null);
     });
-    if (o.slot) this.startHold();
-    this.flipT = setTimeout(() => this.flipOne(), 9000);
   }
 
   closeBook() {
@@ -894,15 +950,34 @@ class Component extends DCLogic {
     }, 1000);
   }
 
-  confirm() {
-    clearInterval(this.holdT);
-    if (this.state.slot === '16:15' && !this.conflictSeen) {
-      this.conflictSeen = true;
-      const di = this.activeDi();
-      this.setState(s => ({ status: 'conflict', extraTaken: s.extraTaken.concat(di + '|16:15') }));
-      return;
+  async confirm() {
+    if (this.state.bookingPending) return;
+    const selected = (this.state.availableSlots || []).find(item => item.label === this.state.slot);
+    if (!selected) {
+      this.setState({ status: 'conflict' });
+      return this.loadAvailability();
     }
-    this.setState({ status: 'done' });
+    this.setState({ bookingPending: true });
+    try {
+      const body = await this.bookingRequest('create', {
+        serviceId: this.state.svc,
+        startAt: selected.startAt,
+        customerName: this.state.name.trim(),
+        customerPhone: this.state.phone.replace(/\D/g, ''),
+        customerNote: this.state.note.trim(),
+        website: ''
+      });
+      clearInterval(this.holdT);
+      const appointment = body.appointment || {};
+      this.setState({ status: 'done', bookingPending: false, bookingReference: appointment.reference || 'Đã xác nhận' });
+    } catch (error) {
+      if (error.code === 'slot_unavailable') {
+        this.setState({ status: 'conflict', bookingPending: false, slot: null });
+        return this.loadAvailability();
+      }
+      this.setState({ bookingPending: false });
+      this.toast('Chưa thể xác nhận lịch. Bạn thử lại giúp tụi mình nha');
+    }
   }
 
   lockScroll(on) {
@@ -1358,6 +1433,7 @@ class Component extends DCLogic {
     const isoToday = (() => { const t = new Date(); return t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0'); })();
     const customOn = s.dateIdx < 0 && !!s.customDate;
     const tRef = new Date(); tRef.setHours(0, 0, 0, 0);
+    const maxBookDate = new Date(tRef); maxBookDate.setDate(maxBookDate.getDate() + 30);
     const anchor = s.customDate ? new Date(s.customDate + 'T00:00:00') : tRef;
     const calY = s.calY == null ? anchor.getFullYear() : s.calY;
     const calM = s.calM == null ? anchor.getMonth() : s.calM;
@@ -1371,7 +1447,7 @@ class Component extends DCLogic {
     for (let d = 1; d <= nDays; d++) {
       const cur = new Date(calY, calM, d);
       const iso = calY + '-' + String(calM + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
-      const past = cur < tRef;
+      const past = cur < tRef || cur > maxBookDate;
       const isToday = cur.getTime() === tRef.getTime();
       const sel = s.customDate === iso && s.dateIdx < 0;
       calCells.push({
@@ -1383,7 +1459,7 @@ class Component extends DCLogic {
             : isToday
               ? 'border:1.5px solid rgba(122,90,208,.45);background:#FFFFFF;color:#4A3A80'
               : 'border:1px solid rgba(122,90,208,.12);background:#FFFFFF;color:#2B2440'),
-        pick: () => { if (past) return; this.setState({ customDate: iso, dateIdx: -1, slot: null, calOpen: false, calY: calY, calM: calM }); }
+        pick: () => { if (past) return; this.setState({ customDate: iso, dateIdx: -1, slot: null, calOpen: false, calY: calY, calM: calM }, () => this.loadAvailability()); }
       });
     }
     const mm = Math.floor(s.holdLeft / 60), ss = s.holdLeft % 60;
@@ -1395,8 +1471,8 @@ class Component extends DCLogic {
     const digits = s.phone.replace(/\D/g, '');
     const phoneOk = /^0\d{9}$/.test(digits);
     const step3Ready = nameOk && phoneOk;
-    const nextOn = st === 'done' || st === 'conflict' || (s.step === 2 ? step2Ready : s.step === 3 ? step3Ready : true);
-    const alts = this.slots.filter((x, i) => !this.isTaken(this.activeDi(), i)).slice(0, 3);
+    const nextOn = !s.bookingPending && (st === 'done' || st === 'conflict' || (s.step === 2 ? step2Ready : s.step === 3 ? step3Ready : true));
+    const alts = (s.availableSlots || []).filter(item => item.label !== s.slot).slice(0, 3);
 
     return {
       pauseReviews: () => { this.pauseR = true; },
@@ -1451,28 +1527,29 @@ class Component extends DCLogic {
       dateList: ds.map((x, i) => ({
         dow: x.dow, day: x.day, mon: x.mon,
         style: chipBase + 'border:1.5px solid ' + (i === s.dateIdx ? '#7A5AD0' : 'rgba(122,90,208,.14)') + ';background:' + (i === s.dateIdx ? '#7A5AD0' : '#FFFFFF') + ';color:' + (i === s.dateIdx ? '#FFFFFF' : '#4A4360'),
-        pick: () => this.setState({ dateIdx: i, slot: null, calOpen: false })
+        pick: () => this.setState({ dateIdx: i, customDate: '', slot: null, calOpen: false }, () => this.loadAvailability())
       })),
-      slotList: this.slots.map((x, i) => {
-        const taken = this.isTaken(di, i);
-        const sel = x === s.slot;
+      slotList: s.slotsLoading ? [0, 1, 2, 3].map(() => ({
+        label: '· · ·', sub: 'đang tải',
+        style: slotBase + 'border:1.5px solid rgba(122,90,208,.08);background:#F7F5FB;color:#AAA5B8',
+        pick: () => {}
+      })) : (s.availableSlots || []).length ? (s.availableSlots || []).map(x => {
+        const sel = x.label === s.slot;
         return {
-          label: x,
-          sub: taken ? 'đã kín' : x === '16:15' ? '1 người đang xem' : '',
-          style: slotBase + (taken
-            ? 'border:1.5px solid rgba(90,86,110,.1);background:#F3F2F6;color:#8E8AA0;text-decoration:line-through'
-            : 'border:1.5px solid ' + (sel ? '#7A5AD0' : 'rgba(122,90,208,.16)') + ';background:' + (sel ? '#7A5AD0' : '#FFFFFF') + ';color:' + (sel ? '#FFFFFF' : '#2B2440')),
-          pick: () => {
-            if (taken) return this.toast(x + ' đã có người đặt — chọn giờ khác nha');
-            this.setState({ slot: x });
-            this.startHold();
-          }
+          label: x.label,
+          sub: 'còn trống',
+          style: slotBase + 'border:1.5px solid ' + (sel ? '#7A5AD0' : 'rgba(122,90,208,.16)') + ';background:' + (sel ? '#7A5AD0' : '#FFFFFF') + ';color:' + (sel ? '#FFFFFF' : '#2B2440'),
+          pick: () => this.setState({ slot: x.label })
         };
-      }),
+      }) : [{
+        label: '—', sub: 'hết chỗ',
+        style: slotBase + 'border:1.5px solid rgba(90,86,110,.1);background:#F3F2F6;color:#8E8AA0',
+        pick: () => this.toast('Ngày này chưa còn giờ phù hợp — bạn chọn ngày khác nha')
+      }],
       altList: alts.map(x => ({
-        label: x, sub: 'còn trống',
+        label: x.label, sub: 'còn trống',
         style: slotBase + 'border:1.5px solid rgba(122,90,208,.2);background:#FFFFFF;color:#2B2440',
-        pick: () => { this.setState({ slot: x, status: '', step: 3 }); this.startHold(); }
+        pick: () => this.setState({ slot: x.label, status: '', step: 3 })
       })),
       todayISO: isoToday,
       customDate: s.customDate,
@@ -1495,6 +1572,7 @@ class Component extends DCLogic {
       holdLeft: mm + ':' + (ss < 10 ? '0' + ss : ss),
       name: s.name, phone: s.phone, note: s.note,
       phoneOrHint: s.phone || 'số bạn vừa nhập',
+      bookingReference: s.bookingReference || '—',
       setName: e => this.setState({ name: e.target.value }),
       setPhone: e => this.setState({ phone: e.target.value.replace(/\D/g, '').slice(0, 10) }),
       setNote: e => this.setState({ note: e.target.value }),
@@ -1504,7 +1582,7 @@ class Component extends DCLogic {
       conflictTitle: s.holdLeft === 0 ? 'Hết 5 phút giữ chỗ, ' + (s.slot || '') + ' đã có người đặt' : (s.slot || '') + ' vừa có người đặt trước bạn 40 giây',
       backLabel: st === 'done' ? '' : st === 'conflict' ? 'Huỷ' : s.step === 1 ? 'Để sau' : 'Quay lại',
       backStyle: (st === 'done' ? 'display:none;' : 'display:block;') + 'padding:15px 22px;border:1px solid rgba(122,90,208,.16);border-radius:999px;background:#FFFFFF;color:#4A3A80;font-family:Quicksand,sans-serif;font-weight:700;font-size:14.5px;cursor:pointer',
-      nextLabel: st === 'done' ? 'Xong' : st === 'conflict' ? 'Chọn giờ khác' : s.step === 3 ? 'Xác nhận đặt hẹn' : s.step === 2 ? (step2Ready ? 'Tiếp tục' : 'Chọn một giờ trống') : 'Chọn ngày & giờ',
+      nextLabel: s.bookingPending ? 'Đang xác nhận...' : st === 'done' ? 'Xong' : st === 'conflict' ? 'Chọn giờ khác' : s.step === 3 ? 'Xác nhận đặt hẹn' : s.step === 2 ? (s.slotsLoading ? 'Đang tải giờ trống...' : step2Ready ? 'Tiếp tục' : 'Chọn một giờ trống') : 'Chọn ngày & giờ',
       nextStyle: 'margin-left:auto;padding:16px 28px;border:none;border-radius:999px;font-family:Quicksand,sans-serif;font-weight:700;font-size:15.5px;cursor:pointer;transition:transform .3s cubic-bezier(.34,1.56,.64,1);' + (nextOn ? 'background:#7A5AD0;color:#FFFFFF;box-shadow:0 14px 28px -14px rgba(122,90,208,.8)' : 'background:#E9E1FD;color:#8E8AA0'),
       back: () => {
         if (st === 'conflict') return this.closeBook();
@@ -1520,7 +1598,7 @@ class Component extends DCLogic {
           return this.confirm();
         }
         if (s.step === 2 && !step2Ready) return this.toast('Chọn một giờ còn trống trước nha');
-        this.setState({ step: s.step + 1 });
+        this.setState({ step: s.step + 1 }, () => { if (s.step === 1) this.loadAvailability(); });
       }
     };
   }
