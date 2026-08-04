@@ -1238,7 +1238,7 @@ class Component extends DCLogic {
     const trail = document.getElementById('mewTrail');
     const page = document.querySelector('.mew-page');
     if (!paw) return;
-    const st = { x: innerWidth / 2, y: innerHeight / 2, tx: innerWidth / 2, ty: innerHeight / 2, rot: 0, sc: 1, hover: 0, press: 0, magnet: null };
+    const st = { x: innerWidth / 2, y: innerHeight / 2, tx: innerWidth / 2, ty: innerHeight / 2, rot: 0, sc: 1, hover: 0, press: 0 };
     let print = { x: -999, y: -999 }, left = true, seen = false;
 
     this.on(window, 'mousemove', e => {
@@ -1247,7 +1247,6 @@ class Component extends DCLogic {
       if (!seen) { seen = true; st.x = e.clientX; st.y = e.clientY; }
       const t = e.target;
       st.hover = t && t.closest && t.closest('[data-cursor]') ? 1 : 0;
-      st.magnet = t && t.closest ? t.closest('[data-magnet]') : null;
       if (this.flag('pawTrail') && Math.hypot(e.clientX - print.x, e.clientY - print.y) > 105) {
         print = { x: e.clientX, y: e.clientY };
         left = !left;
@@ -1270,12 +1269,7 @@ class Component extends DCLogic {
       paw.style.opacity = on && seen ? '1' : '0';
 
       let tx = st.tx, ty = st.ty;
-      if (st.magnet) {
-        const r = st.magnet.getBoundingClientRect();
-        tx += (r.left + r.width / 2 - tx) * 0.26;
-        ty += (r.top + r.height / 2 - ty) * 0.26;
-      }
-      const nx = st.x + (tx - st.x) * 0.58, ny = st.y + (ty - st.y) * 0.58;
+      const nx = tx, ny = ty;
       const vx = nx - st.x;
       st.x = nx; st.y = ny;
       st.rot += (Math.max(-15, Math.min(15, vx * 0.6)) - st.rot) * 0.14;
