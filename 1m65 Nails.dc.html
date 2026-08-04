@@ -1237,6 +1237,7 @@ class Component extends DCLogic {
     const paw = document.getElementById('mewPaw');
     const trail = document.getElementById('mewTrail');
     const page = document.querySelector('.mew-page');
+    const getZoom = () => Math.max(0.01, parseFloat(page && getComputedStyle(page).zoom) || 1);
     if (!paw) return;
     const st = { x: innerWidth / 2, y: innerHeight / 2, tx: innerWidth / 2, ty: innerHeight / 2, rot: 0, sc: 1, hover: 0, press: 0 };
     let print = { x: -999, y: -999 }, left = true, seen = false;
@@ -1250,14 +1251,18 @@ class Component extends DCLogic {
       if (this.flag('pawTrail') && Math.hypot(e.clientX - print.x, e.clientY - print.y) > 105) {
         print = { x: e.clientX, y: e.clientY };
         left = !left;
-        this.dropPrint(trail, e.clientX, e.clientY, left);
+        const z = getZoom();
+        this.dropPrint(trail, e.clientX / z, e.clientY / z, left);
       }
       if (this.sleeping) this.wake();
     }, { passive: true });
 
     this.on(window, 'mousedown', e => {
       st.press = 1;
-      if (this.flag('clickSparkles')) this.sparkle(trail, e.clientX, e.clientY);
+      if (this.flag('clickSparkles')) {
+        const z = getZoom();
+        this.sparkle(trail, e.clientX / z, e.clientY / z);
+      }
     });
     this.on(window, 'mouseup', () => { st.press = 0; });
     this.on(document, 'mouseleave', () => { paw.style.opacity = '0'; });
@@ -1275,7 +1280,7 @@ class Component extends DCLogic {
       st.rot += (Math.max(-15, Math.min(15, vx * 0.6)) - st.rot) * 0.14;
       st.sc += ((st.hover ? 1.3 : 1) * (st.press ? 0.8 : 1) - st.sc) * 0.2;
       const sy = st.press ? st.sc * 0.86 : st.sc;
-      const z = Math.max(0.01, parseFloat(page && getComputedStyle(page).zoom) || 1);
+      const z = getZoom();
       paw.style.transform = 'translate3d(' + (nx / z) + 'px,' + (ny / z) + 'px,0) rotate(' + st.rot + 'deg) scale(' + st.sc + ',' + sy + ')';
 
       if (this.flag('catsWatch')) {
