@@ -45,6 +45,8 @@ a:hover{color:#C4589C}
 [data-scroll="mew"]::-webkit-scrollbar-track{background:rgba(122,90,208,.07);border-radius:999px;margin:12px 0}
 [data-scroll="mew"]::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#CBB9F2,#E2A9CB);border-radius:999px;border:2px solid transparent;background-clip:padding-box}
 [data-scroll="mew"]::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#B49CE9,#D894BC)}
+.mew-page [style*="max-width:1240px"]{max-width:1680px !important}
+@media (min-width:1280px){.mew-page{width:92.5926%;margin:0 auto;zoom:1.08}}
 @keyframes mewFadeIn{0%{opacity:0}100%{opacity:1}}
 @keyframes mewFadeUp{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:none}}
 @keyframes mewPopIn{0%{opacity:0;transform:translateY(22px) scale(.96)}100%{opacity:1;transform:none}}
@@ -52,13 +54,13 @@ a:hover{color:#C4589C}
 </style>
 </helmet>
 
-<div style="position:relative;overflow:hidden;background:#FFFCF9">
+<div class="mew-page" style="position:relative;overflow:hidden;background:#FFFCF9">
 
 <div style="position:absolute;top:-160px;left:-140px;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#EFE7FE,rgba(239,231,254,0) 70%);filter:blur(6px);animation:mewBlob 22s ease-in-out infinite;pointer-events:none"></div>
 <div style="position:absolute;top:120px;right:-200px;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#FDEBF2,rgba(253,235,242,0) 70%);filter:blur(6px);animation:mewBlob 27s ease-in-out infinite reverse;pointer-events:none"></div>
 <div style="position:absolute;top:760px;left:-120px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#E2EEFB,rgba(226,238,251,0) 72%);filter:blur(6px);animation:mewBlob 31s ease-in-out infinite;pointer-events:none"></div>
 
-<header style="position:sticky;top:0;z-index:60;display:flex;justify-content:center;padding:18px 24px 0">
+<header style="position:sticky;top:0;z-index:60;display:flex;justify-content:center;padding:28px 24px 0">
 <nav style="width:100%;max-width:1240px;display:flex;align-items:center;gap:12px;padding:12px 14px 12px 18px;border-radius:999px;background:rgba(255,255,255,.72);backdrop-filter:blur(18px) saturate(1.3);border:1px solid rgba(122,90,208,.10);box-shadow:0 10px 34px -18px rgba(122,90,208,.38)">
 <a href="#top" data-cursor="link" style="display:flex;align-items:center;gap:9px;flex:none">
 <svg width="30" height="30" viewBox="0 0 40 40" aria-hidden="true"><g><path d="M8.4 11.6l1.4 3.4M31.6 11.6l-1.4 3.4" stroke="#3B3350" stroke-width="1.7" stroke-linecap="round" fill="none"></path><path d="M20 10.4c8.9 0 15 5.6 15 12.9 0 6.6-6 10.7-15 10.7S5 30 5 23.3C5 16 11.1 10.4 20 10.4z" fill="#8A66D8" stroke="#3B3350" stroke-width="2.4" stroke-linejoin="round"></path><ellipse cx="10.9" cy="19.4" rx="2.7" ry="3.4" fill="#F9CFE0" transform="rotate(-16 10.9 19.4)"></ellipse><ellipse cx="16.7" cy="16.8" rx="2.7" ry="3.5" fill="#F9CFE0"></ellipse><ellipse cx="23.3" cy="16.8" rx="2.7" ry="3.5" fill="#F9CFE0"></ellipse><ellipse cx="29.1" cy="19.4" rx="2.7" ry="3.4" fill="#F9CFE0" transform="rotate(16 29.1 19.4)"></ellipse><path d="M20 22.4c4.3 0 7.3 2.3 7.3 5.1 0 2.7-3.2 4.2-7.3 4.2s-7.3-1.5-7.3-4.2c0-2.8 3-5.1 7.3-5.1z" fill="#F9CFE0"></path></g></svg>
