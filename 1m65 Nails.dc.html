@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
-<link rel="stylesheet" href="./visual-system.css?v=20260805f">
+<link rel="stylesheet" href="./visual-system.css?v=20260805h">
 </head>
 <body>
 <x-dc>
@@ -411,9 +411,9 @@ Xem thư viện móng
 </div>
 
 <div id="mewGalleryGlow" aria-hidden="true" style="position:absolute;left:-220px;right:-220px;top:60px;bottom:-80px;z-index:0;pointer-events:none">
-<div style="position:absolute;left:-120px;top:-60px;width:900px;height:820px;border-radius:50%;background:radial-gradient(closest-side,rgba(122,90,208,.20) 0%,rgba(122,90,208,.13) 32%,rgba(122,90,208,.06) 56%,rgba(122,90,208,.02) 76%,rgba(122,90,208,0) 100%);filter:blur(70px);animation:mewBlob 30s ease-in-out infinite"></div>
-<div style="position:absolute;right:-140px;top:120px;width:960px;height:880px;border-radius:50%;background:radial-gradient(closest-side,rgba(226,120,170,.17) 0%,rgba(226,120,170,.11) 32%,rgba(226,120,170,.05) 56%,rgba(226,120,170,.015) 76%,rgba(226,120,170,0) 100%);filter:blur(80px);animation:mewBlob 36s ease-in-out 3s infinite"></div>
-<div style="position:absolute;left:26%;bottom:-220px;width:820px;height:760px;border-radius:50%;background:radial-gradient(closest-side,rgba(224,136,95,.13) 0%,rgba(224,136,95,.08) 34%,rgba(224,136,95,.035) 58%,rgba(224,136,95,0) 100%);filter:blur(80px);animation:mewBlob 33s ease-in-out 1.5s infinite"></div>
+<div style="position:absolute;left:-120px;top:-60px;width:900px;height:820px;border-radius:50%;background:radial-gradient(closest-side,rgba(203,185,243,.14) 0%,rgba(203,185,243,.08) 32%,rgba(203,185,243,.035) 56%,rgba(203,185,243,.01) 76%,rgba(203,185,243,0) 100%);filter:blur(70px);animation:mewBlob 30s ease-in-out infinite"></div>
+<div style="position:absolute;right:-140px;top:120px;width:960px;height:880px;border-radius:50%;background:radial-gradient(closest-side,rgba(244,184,207,.08) 0%,rgba(244,184,207,.05) 32%,rgba(244,184,207,.02) 56%,rgba(244,184,207,.006) 76%,rgba(244,184,207,0) 100%);filter:blur(80px);animation:mewBlob 36s ease-in-out 3s infinite"></div>
+<div style="position:absolute;left:26%;bottom:-220px;width:820px;height:760px;border-radius:50%;background:radial-gradient(closest-side,rgba(242,179,143,.08) 0%,rgba(242,179,143,.045) 34%,rgba(242,179,143,.018) 58%,rgba(242,179,143,0) 100%);filter:blur(80px);animation:mewBlob 33s ease-in-out 1.5s infinite"></div>
 </div>
 <div id="mewGrid" style="position:relative;z-index:1;columns:4;column-gap:16px">
 <div data-tile="meo" data-cursor="link" style="break-inside:avoid;margin-bottom:16px;position:relative;border-radius:28px;overflow:hidden;background:#F1ECFE;background-image:repeating-linear-gradient(135deg,rgba(122,90,208,.12) 0 10px,rgba(122,90,208,0) 10px 20px);aspect-ratio:3/4;display:flex;align-items:flex-end;padding:14px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .45s ease;box-shadow:0 18px 34px -26px rgba(122,90,208,.55)" style-hover="transform:scale(1.03) rotate(-1.5deg);box-shadow:0 26px 48px -28px rgba(122,90,208,.6)"><span style="display:flex;align-items:center;gap:6px;font:500 9.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#7A5AD0;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)"><span style="width:7px;height:7px;border-radius:50%;background:#7A5AD0;flex:none"></span>NAIL MÈO · 3:4</span></div>
@@ -1277,7 +1277,7 @@ class Component extends DCLogic {
   loadVisualSystem() {
     if (window.__nhuBundleLoaded || document.querySelector('script[data-nhu-visual-loader]')) return;
     const script = document.createElement('script');
-    script.src = './visual-system.js?v=20260805f';
+    script.src = './visual-system.js?v=20260805h';
     script.dataset.nhuVisualLoader = '1';
     document.head.appendChild(script);
   }
