@@ -92,34 +92,65 @@
 .nhu-paw-step.is-visible { opacity: .12; transform: translateY(0) rotate(var(--nhu-rotate, 0deg)); }
 .nhu-paw-step svg { width: 100%; height: 100%; display: block; }
 
-.nhu-cat {
-  width: 100%;
-  height: auto;
+.nhu-mascot {
+  position: relative;
   display: block;
-  overflow: visible;
-  filter: drop-shadow(0 18px 20px rgba(75,57,110,.14));
+  width: 100%;
+  line-height: 0;
+  filter: drop-shadow(0 16px 16px rgba(57,50,68,.12));
+  transform-origin: 50% 90%;
 }
-.nhu-cat * { vector-effect: non-scaling-stroke; }
-.nhu-cat__tail { transform-box: fill-box; transform-origin: 16% 80%; animation: nhu-tail 4.2s ease-in-out infinite; }
-.nhu-cat__ear { transform-box: fill-box; transform-origin: 50% 100%; animation: nhu-ear 6s ease-in-out infinite; }
-.nhu-cat__ear--right { animation-delay: -2.8s; }
-.nhu-cat__body { transform-box: fill-box; transform-origin: 50% 100%; animation: nhu-breathe 4.8s ease-in-out infinite; }
-.nhu-cat__eyes { transform-box: fill-box; transform-origin: center; animation: nhu-blink 5.4s linear infinite; }
-.nhu-cat__paw--wave { transform-box: fill-box; transform-origin: 50% 90%; }
-.nhu-cat--wave .nhu-cat__paw--wave { animation: nhu-wave 2.8s ease-in-out infinite; }
-.nhu-cat--walk { animation: nhu-walk-body 1.1s ease-in-out infinite; }
-.nhu-cat--walk .nhu-cat__tail { animation-duration: 1.5s; }
-.nhu-cat--review { transform: rotate(-2deg); }
-.nhu-cat--sleep .nhu-cat__eyes { animation: none; }
-.nhu-cat--sleep .nhu-cat__tail { animation-duration: 5.6s; }
-.nhu-cat--footer .nhu-cat__body { animation-duration: 5.8s; }
+.nhu-mascot__image,
+.nhu-mascot__sprite { display:block; width:100%; }
+.nhu-mascot__image { height:auto; }
+.nhu-mascot__sprite {
+  aspect-ratio: 1;
+  background-image: var(--nhu-mascot-image);
+  background-repeat: no-repeat;
+}
+.nhu-mascot--hero .nhu-mascot__sprite { background-size:300% 200%; background-position:0 0; }
+.nhu-mascot--hero[data-gaze="left"] .nhu-mascot__sprite { background-position:50% 0; }
+.nhu-mascot--hero[data-gaze="right"] .nhu-mascot__sprite { background-position:100% 0; }
+.nhu-mascot--hero[data-gaze="up"] .nhu-mascot__sprite { background-position:0 100%; }
+.nhu-mascot--hero[data-gaze="down"] .nhu-mascot__sprite { background-position:50% 100%; }
+.nhu-mascot--hero[data-gaze="blink"] .nhu-mascot__sprite { background-position:100% 100%; }
+.nhu-mascot--walk .nhu-mascot__sprite { background-size:200% 200%; animation:nhu-walk-frames .72s linear infinite; }
+.nhu-mascot--walk { animation:nhu-walk-bob .36s ease-in-out infinite alternate; }
+.nhu-mascot--sit { animation:nhu-sit-rest 5.2s ease-in-out infinite; }
+.nhu-mascot--review .nhu-mascot__sprite { aspect-ratio:.93; background-size:200% 100%; animation:nhu-review-blink 5.4s steps(1,end) infinite; }
+.nhu-mascot--booking .nhu-mascot__sprite { aspect-ratio:1.05; background-size:300% 100%; background-position:0 0; transition:background-position .01s linear; }
+.nhu-mascot--booking[data-booking="awake"] .nhu-mascot__sprite { background-position:50% 0; }
+.nhu-mascot--booking[data-booking="reach"] .nhu-mascot__sprite { background-position:100% 0; }
+.nhu-mascot.is-paused,
+.nhu-mascot.is-paused .nhu-mascot__sprite { animation-play-state:paused !important; }
 
 .nhu-mobile-cat-accent { display: none; }
 
-[data-cat].nhu-replaced > :not(.nhu-cat) { display: none !important; }
+[data-cat].nhu-replaced > :not(.nhu-mascot) { display: none !important; }
 [data-cat].nhu-replaced { overflow: visible !important; }
-[data-cat="review"].nhu-replaced { width: 96px !important; top: -30px !important; }
+[data-cat="hero"].nhu-replaced > .nhu-mascot { animation:nhu-hero-float 5.8s ease-in-out infinite; }
+[data-cat="review"].nhu-replaced { width:104px !important; top:-60px !important; margin-left:-52px !important; }
 [data-cat="sleep"].nhu-replaced { width: 270px !important; }
+
+.nhu-legacy-mascot { display:block; width:100%; line-height:0; }
+.nhu-legacy-mascot--walk { width:112px; margin:-26px auto -20px; }
+.nhu-legacy-mascot--promo { width:82px; margin:0 auto; }
+.nhu-legacy-mascot--mobile-review { width:74px; }
+.nhu-legacy-mascot--peek { width:118px; }
+.nhu-legacy-mascot--head { width:82px; height:82px; overflow:hidden; border-radius:24px; }
+.nhu-legacy-mascot--icon { width:46px; height:46px; overflow:hidden; border-radius:14px; }
+.nhu-legacy-mascot--success { width:190px; margin:0 auto; }
+.nhu-legacy-mascot--head .nhu-mascot__sprite,
+.nhu-legacy-mascot--icon .nhu-mascot__sprite { background-position:0 0; animation:none; }
+.nhu-review-avatar {
+  background-color:#FFF8EE !important;
+  background-image:url('./mascot/nhu-nhi-review.png') !important;
+  background-repeat:no-repeat !important;
+  background-size:200% 100% !important;
+  background-position:0 0 !important;
+  border:2px solid rgba(255,255,255,.9);
+  box-shadow:0 6px 14px -9px rgba(57,50,68,.55);
+}
 
 .nhu-card-detail {
   position: absolute;
@@ -140,12 +171,12 @@
   width: 24px;
   height: 28px;
   border-radius: 86% 18% 54% 24%;
-  background: var(--nhu-cream);
+  background: #665047;
   border: 3px solid var(--nhu-ink);
-  box-shadow: inset 0 0 0 6px rgba(244,184,207,.24);
+  box-shadow: inset 0 0 0 6px rgba(255,248,238,.3);
 }
 .nhu-card-detail--ears::before { left: 2px; transform: rotate(-17deg); }
-.nhu-card-detail--ears::after { right: 2px; transform: scaleX(-1) rotate(-17deg); background: #fbe4ec; }
+.nhu-card-detail--ears::after { right: 2px; transform: scaleX(-1) rotate(-17deg); background: #D88A5F; }
 .nhu-card-detail--tail {
   width: 56px;
   height: 34px;
@@ -165,8 +196,8 @@
   bottom: -13px;
   border: 3px solid var(--nhu-ink);
   border-radius: 50% 50% 45% 45%;
-  background: var(--nhu-white);
-  box-shadow: inset 0 -8px 0 #f9d3e1;
+  background: #FFF8EE;
+  box-shadow: inset 0 -8px 0 #f2a8c6;
 }
 
 [data-tilt] {
@@ -253,7 +284,7 @@
   z-index: 3;
   pointer-events: none;
 }
-.nhu-footer-cat { display:block; width:100%; height:auto; animation:nhu-footer-rest 6.8s ease-in-out infinite; transform-origin:50% 100%; }
+.nhu-footer-cat { display:block; width:100%; height:auto; animation:nhu-footer-rest 6.8s ease-in-out infinite; transform-origin:50% 100%; filter:drop-shadow(0 12px 14px rgba(57,50,68,.1)); }
 .nhu-legacy-footer-cat { display: none !important; }
 .nhu-footer-yarn { position:absolute; right:-22px; bottom:4px; width:35px; height:35px; border-radius:50%; background:repeating-linear-gradient(35deg,#f4b8cf 0 4px,#f9d6e3 4px 8px); box-shadow:var(--nhu-shadow); }
 .nhu-footer-yarn::after { content:""; position:absolute; width:85px; height:38px; right:23px; top:25px; border-bottom:2px solid rgba(196,88,156,.48); border-radius:50%; transform:rotate(8deg); }
@@ -277,12 +308,11 @@ a[data-cursor="link"]:active, button:active { transform: translateY(1px) scale(.
 a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid rgba(122,90,208,.28); outline-offset: 4px; }
 
 @keyframes nhu-drift { to { transform: translate3d(26px,-22px,0) rotate(5deg); } }
-@keyframes nhu-tail { 0%,100% { transform: rotate(-7deg); } 50% { transform: rotate(12deg); } }
-@keyframes nhu-ear { 0%,88%,100% { transform: rotate(0); } 92% { transform: rotate(-8deg); } 96% { transform: rotate(5deg); } }
-@keyframes nhu-breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.018,.985); } }
-@keyframes nhu-blink { 0%,46%,49%,100% { transform: scaleY(1); } 47.5% { transform: scaleY(.08); } }
-@keyframes nhu-wave { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-18deg); } 50% { transform: rotate(12deg); } 75% { transform: rotate(-12deg); } }
-@keyframes nhu-walk-body { 0%,100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-5px) rotate(1deg); } }
+@keyframes nhu-hero-float { 0%,100% { transform:translateY(0) rotate(-.7deg); } 50% { transform:translateY(-3px) rotate(.7deg); } }
+@keyframes nhu-walk-frames { 0%,24.9% { background-position:0 0; } 25%,49.9% { background-position:100% 0; } 50%,74.9% { background-position:0 100%; } 75%,100% { background-position:100% 100%; } }
+@keyframes nhu-walk-bob { from { transform:translateY(0); } to { transform:translateY(-4px); } }
+@keyframes nhu-sit-rest { 0%,100% { transform:translateY(0) rotate(-.6deg); } 50% { transform:translateY(-2px) rotate(.6deg); } }
+@keyframes nhu-review-blink { 0%,46%,49%,100% { background-position:0 0; } 47%,48% { background-position:100% 0; } }
 @keyframes nhu-sparkle-breathe { 0%,100% { opacity:.28; transform:scale(.92) rotate(0); } 50% { opacity:.52; transform:scale(1.06) rotate(8deg); } }
 @keyframes nhu-heart { to { opacity:0; transform:translate(var(--hx,0),-54px) rotate(18deg) scale(.4); } }
 @keyframes nhu-footer-rest { 0%,100% { transform:translateY(0) scaleY(1); } 50% { transform:translateY(-1px) scaleY(.985); } }
@@ -301,7 +331,6 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
     pointer-events: none;
     opacity: .96;
   }
-  .nhu-mobile-cat-accent--wave { top: 144px; right: 6px; }
   .nhu-mobile-cat-accent--sit { top: 132px; left: 8px; width: 76px; }
   .nhu-mobile-cat-accent--review { top: 76px; right: 8px; width: 78px; }
   .nhu-mobile-cat-accent--footer { right: 10px; bottom: 72px; width: 96px; opacity: .9; }
@@ -310,7 +339,7 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
   .nhu-section-charm--left { left: 5px; transform:translateX(-55%); }
   .nhu-section-charm--right { right: 5px; transform:translateX(55%); }
   [data-cat="sleep"].nhu-replaced { width: 178px !important; }
-  [data-cat="review"].nhu-replaced { width: 72px !important; top: -22px !important; }
+  .nhu-mobile-cat-accent--review.nhu-replaced { width:78px !important; top:76px !important; right:8px !important; left:auto !important; margin-left:0 !important; }
   .nhu-teaser { display:none; }
   .nhu-footer-scene { width:142px; right:16px; top:-38px; }
   .nhu-footer-yarn { width:24px; height:24px; right:-8px; }
@@ -324,7 +353,9 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nhu-bg-orb,.nhu-section-sparkles,.nhu-cat,.nhu-cat *,.nhu-footer-cat,.nhu-booking-particle { animation:none !important; transition-duration:.01ms !important; }
+  .nhu-bg-orb,.nhu-section-sparkles,.nhu-mascot,.nhu-mascot *,.nhu-footer-cat,.nhu-booking-particle { animation:none !important; transition-duration:.01ms !important; }
+  .nhu-mascot--walk .nhu-mascot__sprite,
+  .nhu-mascot--review .nhu-mascot__sprite { background-position:0 0 !important; }
   .nhu-teaser { display:none !important; }
   .nhu-paw-step { opacity:.09; transform:none; }
   [data-reveal] { opacity:1 !important; transform:none !important; }
