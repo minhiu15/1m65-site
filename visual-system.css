@@ -258,24 +258,6 @@
   box-shadow: var(--nhu-shadow);
 }
 
-.nhu-teaser {
-  position: absolute;
-  right: 28px;
-  top: -54px;
-  width: 150px;
-  height: 130px;
-  z-index: 5;
-  pointer-events: none;
-  opacity: 0;
-  transform: translate3d(55px,-45px,0) rotate(9deg);
-  transform-origin: 90% 0;
-}
-.nhu-teaser__stick { position: absolute; right: 7px; top: -22px; width: 4px; height: 104px; border-radius: 99px; background: linear-gradient(#7a5ad0,#cbb9f3); transform: rotate(-27deg); transform-origin: top; }
-.nhu-teaser__string { position: absolute; right: 64px; top: 55px; width: 2px; height: 45px; background: rgba(57,50,68,.52); transform: rotate(14deg); transform-origin: top; }
-.nhu-teaser__toy { position: absolute; right: 53px; bottom: 3px; width: 35px; height: 35px; border-radius: 56% 44% 60% 40%; background: linear-gradient(145deg,#f4b8cf,#f2b38f); box-shadow: 0 10px 18px -10px rgba(57,50,68,.6); }
-.nhu-teaser__toy::before,.nhu-teaser__toy::after { content:""; position:absolute; width:20px; height:9px; border-radius:100%; background:#cbb9f3; top:27px; }
-.nhu-teaser__toy::before { left:-10px; transform:rotate(28deg); }.nhu-teaser__toy::after { right:-10px; transform:rotate(-28deg); }
-
 .nhu-footer-scene {
   position: absolute;
   right: clamp(34px, 8vw, 130px);
@@ -340,7 +322,6 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
   .nhu-section-charm--right { right: 5px; transform:translateX(55%); }
   [data-cat="sleep"].nhu-replaced { width: 178px !important; }
   .nhu-mobile-cat-accent--review.nhu-replaced { width:78px !important; top:76px !important; right:8px !important; left:auto !important; margin-left:0 !important; }
-  .nhu-teaser { display:none; }
   .nhu-footer-scene { width:142px; right:16px; top:-38px; }
   .nhu-footer-yarn { width:24px; height:24px; right:-8px; }
   .nhu-paw-navigation { display:none; }
@@ -356,7 +337,6 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
   .nhu-bg-orb,.nhu-section-sparkles,.nhu-mascot,.nhu-mascot *,.nhu-footer-cat,.nhu-booking-particle { animation:none !important; transition-duration:.01ms !important; }
   .nhu-mascot--walk .nhu-mascot__sprite,
   .nhu-mascot--review .nhu-mascot__sprite { background-position:0 0 !important; }
-  .nhu-teaser { display:none !important; }
   .nhu-paw-step { opacity:.09; transform:none; }
   [data-reveal] { opacity:1 !important; transform:none !important; }
 }
