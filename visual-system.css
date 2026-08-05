@@ -113,11 +113,10 @@
 .nhu-mascot--hero[data-gaze="right"] .nhu-mascot__sprite { background-position:100% 0; }
 .nhu-mascot--hero[data-gaze="up"] .nhu-mascot__sprite { background-position:0 100%; }
 .nhu-mascot--hero[data-gaze="down"] .nhu-mascot__sprite { background-position:50% 100%; }
-.nhu-mascot--hero[data-gaze="blink"] .nhu-mascot__sprite { background-position:100% 100%; }
 .nhu-mascot--walk .nhu-mascot__sprite { background-size:200% 200%; animation:nhu-walk-frames .72s linear infinite; }
 .nhu-mascot--walk { animation:nhu-walk-bob .36s ease-in-out infinite alternate; }
 .nhu-mascot--sit { animation:nhu-sit-rest 5.2s ease-in-out infinite; }
-.nhu-mascot--review .nhu-mascot__sprite { aspect-ratio:.93; background-size:200% 100%; animation:nhu-review-blink 5.4s steps(1,end) infinite; }
+.nhu-mascot--review .nhu-mascot__sprite { aspect-ratio:.93; background-size:200% 100%; background-position:0 0; }
 .nhu-mascot--booking .nhu-mascot__sprite { aspect-ratio:1.05; background-size:300% 100%; background-position:0 0; transition:background-position .01s linear; }
 .nhu-mascot--booking[data-booking="awake"] .nhu-mascot__sprite { background-position:50% 0; }
 .nhu-mascot--booking[data-booking="reach"] .nhu-mascot__sprite { background-position:100% 0; }
@@ -294,7 +293,6 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
 @keyframes nhu-walk-frames { 0%,24.9% { background-position:0 0; } 25%,49.9% { background-position:100% 0; } 50%,74.9% { background-position:0 100%; } 75%,100% { background-position:100% 100%; } }
 @keyframes nhu-walk-bob { from { transform:translateY(0); } to { transform:translateY(-4px); } }
 @keyframes nhu-sit-rest { 0%,100% { transform:translateY(0) rotate(-.6deg); } 50% { transform:translateY(-2px) rotate(.6deg); } }
-@keyframes nhu-review-blink { 0%,46%,49%,100% { background-position:0 0; } 47%,48% { background-position:100% 0; } }
 @keyframes nhu-sparkle-breathe { 0%,100% { opacity:.28; transform:scale(.92) rotate(0); } 50% { opacity:.52; transform:scale(1.06) rotate(8deg); } }
 @keyframes nhu-heart { to { opacity:0; transform:translate(var(--hx,0),-54px) rotate(18deg) scale(.4); } }
 @keyframes nhu-footer-rest { 0%,100% { transform:translateY(0) scaleY(1); } 50% { transform:translateY(-1px) scaleY(.985); } }
