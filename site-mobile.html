@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
+<link rel="stylesheet" href="./visual-system.css?v=20260805f">
 </head>
 <body>
 <x-dc>
@@ -1081,7 +1082,16 @@ class Component extends DCLogic {
     if (super.componentWillUnmount) super.componentWillUnmount();
   }
 
+  loadVisualSystem() {
+    if (window.__nhuBundleLoaded || document.querySelector('script[data-nhu-visual-loader]')) return;
+    const script = document.createElement('script');
+    script.src = './visual-system.js?v=20260805f';
+    script.dataset.nhuVisualLoader = '1';
+    document.head.appendChild(script);
+  }
+
   componentDidMount() {
+    this.loadVisualSystem();
     this.loadGoogleReviews();
     this.on(document, 'click', e => {
       if (this.state.bookOpen || this.state.mobileOpen || this.state.moreOpen) return;
