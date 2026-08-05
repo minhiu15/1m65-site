@@ -118,7 +118,7 @@
 .nhu-mascot--hero[data-gaze="right"] .nhu-mascot__sprite { background-position:100% 0; }
 .nhu-mascot--hero[data-gaze="up"] .nhu-mascot__sprite { background-position:0 100%; }
 .nhu-mascot--hero[data-gaze="down"] .nhu-mascot__sprite { background-position:50% 100%; }
-.nhu-mascot--walk .nhu-mascot__sprite { background-size:300% 200%; animation:nhu-walk-frames .84s steps(1,end) infinite; }
+.nhu-mascot--walk .nhu-mascot__sprite { background-size:1100% 200%; animation:nhu-walk-frames var(--nhu-walk-cycle,1.5s) steps(1,end) infinite; }
 .nhu-mascot--sit { animation:nhu-sit-rest 5.2s ease-in-out infinite; }
 .nhu-mascot--review .nhu-mascot__sprite { aspect-ratio:.93; background-size:200% 100%; background-position:0 0; }
 .nhu-mascot--booking .nhu-mascot__sprite { aspect-ratio:1.05; background-size:300% 100%; background-position:0 0; transition:background-position .01s linear; }
@@ -126,6 +126,9 @@
 .nhu-mascot--booking[data-booking="reach"] .nhu-mascot__sprite { background-position:100% 0; }
 .nhu-mascot.is-paused,
 .nhu-mascot.is-paused .nhu-mascot__sprite { animation-play-state:paused !important; }
+.nhu-walk-stage.is-paused,
+.nhu-walk-stage.is-paused .nhu-mascot__sprite,
+.nhu-walk-stage.is-paused .nhu-legacy-mascot--walk::after { animation-play-state:paused !important; }
 
 .nhu-mobile-cat-accent { display: none; }
 
@@ -136,7 +139,34 @@
 [data-cat="sleep"].nhu-replaced { width: 270px !important; }
 
 .nhu-legacy-mascot { display:block; width:100%; line-height:0; }
-.nhu-legacy-mascot--walk { width:112px; margin:-26px auto -20px; }
+.nhu-legacy-mascot--walk {
+  --nhu-walk-cycle:1.5s;
+  position:relative;
+  width:112px;
+  margin:-26px auto -20px;
+  isolation:isolate;
+}
+.nhu-legacy-mascot--walk > .nhu-mascot { z-index:1; }
+.nhu-legacy-mascot--walk::after {
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:21%;
+  right:12%;
+  bottom:5.5%;
+  height:7%;
+  border-radius:50%;
+  background:rgba(82,64,112,.14);
+  filter:blur(1.5px);
+  transform-origin:center;
+  animation:nhu-walk-shadow var(--nhu-walk-cycle) ease-in-out infinite;
+}
+.nhu-walk-stage {
+  --nhu-walk-cycle:1.5s;
+  animation:nhu-walk-weight var(--nhu-walk-cycle,1.5s) linear infinite !important;
+  transform-origin:50% 92%;
+  will-change:transform;
+}
 .nhu-legacy-mascot--promo { width:82px; margin:0 auto; }
 .nhu-legacy-mascot--mobile-review { width:74px; }
 .nhu-legacy-mascot--peek { width:118px; }
@@ -295,12 +325,36 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
 @keyframes nhu-drift { to { transform: translate3d(26px,-22px,0) rotate(5deg); } }
 @keyframes nhu-hero-float { 0%,100% { transform:translateY(0) rotate(-.7deg); } 50% { transform:translateY(-3px) rotate(.7deg); } }
 @keyframes nhu-walk-frames {
-  0%,16.65% { background-position:0 0; }
-  16.66%,33.32% { background-position:50% 0; }
-  33.33%,49.99% { background-position:100% 0; }
-  50%,66.65% { background-position:0 100%; }
-  66.66%,83.32% { background-position:50% 100%; }
-  83.33%,100% { background-position:100% 100%; }
+  0%,4.544% { background-position:0 0; }
+  4.545%,9.089% { background-position:10% 0; }
+  9.09%,13.635% { background-position:20% 0; }
+  13.636%,18.18% { background-position:30% 0; }
+  18.181%,22.726% { background-position:40% 0; }
+  22.727%,27.271% { background-position:50% 0; }
+  27.272%,31.817% { background-position:60% 0; }
+  31.818%,36.362% { background-position:70% 0; }
+  36.363%,40.908% { background-position:80% 0; }
+  40.909%,45.453% { background-position:90% 0; }
+  45.454%,49.999% { background-position:100% 0; }
+  50%,54.544% { background-position:0 100%; }
+  54.545%,59.089% { background-position:10% 100%; }
+  59.09%,63.635% { background-position:20% 100%; }
+  63.636%,68.18% { background-position:30% 100%; }
+  68.181%,72.726% { background-position:40% 100%; }
+  72.727%,77.271% { background-position:50% 100%; }
+  77.272%,81.817% { background-position:60% 100%; }
+  81.818%,86.362% { background-position:70% 100%; }
+  86.363%,90.908% { background-position:80% 100%; }
+  90.909%,95.453% { background-position:90% 100%; }
+  95.454%,100% { background-position:100% 100%; }
+}
+@keyframes nhu-walk-weight {
+  0%,50%,100% { transform:translateY(.25px); }
+  25%,75% { transform:translateY(-1px); }
+}
+@keyframes nhu-walk-shadow {
+  0%,50%,100% { opacity:.14; transform:scaleX(1.03); }
+  25%,75% { opacity:.1; transform:scaleX(.9); }
 }
 @keyframes nhu-sit-rest { 0%,100% { transform:translateY(0) rotate(-.6deg); } 50% { transform:translateY(-2px) rotate(.6deg); } }
 @keyframes nhu-sparkle-breathe { 0%,100% { opacity:.28; transform:scale(.92) rotate(0); } 50% { opacity:.52; transform:scale(1.06) rotate(8deg); } }
@@ -342,7 +396,7 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nhu-bg-orb,.nhu-section-sparkles,.nhu-mascot,.nhu-mascot *,.nhu-footer-cat,.nhu-booking-particle { animation:none !important; transition-duration:.01ms !important; }
+  .nhu-bg-orb,.nhu-section-sparkles,.nhu-mascot,.nhu-mascot *,.nhu-walk-stage,.nhu-legacy-mascot--walk::after,.nhu-footer-cat,.nhu-booking-particle { animation:none !important; transition-duration:.01ms !important; }
   .nhu-mascot--walk .nhu-mascot__sprite,
   .nhu-mascot--review .nhu-mascot__sprite { background-position:0 0 !important; }
   .nhu-paw-step { opacity:.09; transform:none; }
