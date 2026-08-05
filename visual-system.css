@@ -118,7 +118,7 @@
 .nhu-mascot--hero[data-gaze="right"] .nhu-mascot__sprite { background-position:100% 0; }
 .nhu-mascot--hero[data-gaze="up"] .nhu-mascot__sprite { background-position:0 100%; }
 .nhu-mascot--hero[data-gaze="down"] .nhu-mascot__sprite { background-position:50% 100%; }
-.nhu-mascot--walk .nhu-mascot__sprite { background-size:1100% 200%; animation:nhu-walk-frames var(--nhu-walk-cycle,1.5s) steps(1,end) infinite; }
+.nhu-mascot--walk .nhu-mascot__sprite { background-size:1100% 200%; animation:nhu-walk-frames var(--nhu-walk-cycle,4.8s) steps(1,end) infinite; }
 .nhu-mascot--sit { animation:nhu-sit-rest 5.2s ease-in-out infinite; }
 .nhu-mascot--review .nhu-mascot__sprite { aspect-ratio:.93; background-size:200% 100%; background-position:0 0; }
 .nhu-mascot--booking .nhu-mascot__sprite { aspect-ratio:1.05; background-size:300% 100%; background-position:0 0; transition:background-position .01s linear; }
@@ -140,7 +140,7 @@
 
 .nhu-legacy-mascot { display:block; width:100%; line-height:0; }
 .nhu-legacy-mascot--walk {
-  --nhu-walk-cycle:1.5s;
+  --nhu-walk-cycle:4.8s;
   position:relative;
   width:112px;
   margin:-26px auto -20px;
@@ -162,8 +162,8 @@
   animation:nhu-walk-shadow var(--nhu-walk-cycle) ease-in-out infinite;
 }
 .nhu-walk-stage {
-  --nhu-walk-cycle:1.5s;
-  animation:nhu-walk-weight var(--nhu-walk-cycle,1.5s) linear infinite !important;
+  --nhu-walk-cycle:4.8s;
+  animation:nhu-walk-weight var(--nhu-walk-cycle,4.8s) linear infinite !important;
   transform-origin:50% 92%;
   will-change:transform;
 }
