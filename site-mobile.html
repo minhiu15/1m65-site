@@ -248,7 +248,7 @@ a[href*="google.com/maps/place/1M65"][style*="position:absolute"],a[href*="googl
 </div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
 <sc-for list="{{ slotList }}" as="t" hint-placeholder-count="9">
-<button onClick="{{ t.pick }}" style="{{ t.style }}">
+<button onClick="{{ t.pick }}" aria-disabled="{{ t.off }}" style="{{ t.style }}">
 <span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:15.5px">{{ t.label }}</span>
 <span style="font-size:10px;line-height:1.2;opacity:.8">{{ t.sub }}</span>
 </button>
@@ -1045,6 +1045,29 @@ class Component extends DCLogic {
     }).format(new Date(startAt));
   }
 
+  bookingSlotGrid(availableSlots) {
+    const availableByLabel = new Map((availableSlots || []).map(item => [item.label, item]));
+    const duration = Math.max(5, this.svcTotals().minutes || 0);
+    const parts = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+    }).formatToParts(new Date()).reduce((out, part) => {
+      if (part.type !== 'literal') out[part.type] = part.value;
+      return out;
+    }, {});
+    const today = parts.year + '-' + parts.month + '-' + parts.day;
+    const currentMinute = Number(parts.hour) * 60 + Number(parts.minute);
+    const selectedDate = this.activeDateISO();
+    const grid = [];
+    for (let minute = 9 * 60; minute <= 18 * 60 - duration; minute += 15) {
+      const label = String(Math.floor(minute / 60)).padStart(2, '0') + ':' + String(minute % 60).padStart(2, '0');
+      const available = availableByLabel.get(label);
+      if (selectedDate === today && !available && minute <= currentMinute) continue;
+      grid.push(available || { startAt: '', label: label, available: false });
+    }
+    return grid;
+  }
+
   async bookingRequest(action, payload) {
     const response = await fetch(this.bookingApiEndpoint, {
       method: 'POST',
@@ -1073,10 +1096,11 @@ class Component extends DCLogic {
       const seen = new Set();
       const availableSlots = (Array.isArray(body.slots) ? body.slots : []).map(item => {
         const startAt = item.start_at || item.startAt;
-        return { startAt: startAt, label: this.slotLabel(startAt) };
+        return { startAt: startAt, label: this.slotLabel(startAt), available: true };
       }).filter(item => item.startAt && !seen.has(item.label) && seen.add(item.label));
-      const selected = preferredSlot && availableSlots.some(item => item.label === preferredSlot) ? preferredSlot : null;
-      this.setState({ slotsLoading: false, availableSlots: availableSlots, slot: selected });
+      const slotGrid = this.bookingSlotGrid(availableSlots);
+      const selected = preferredSlot && slotGrid.some(item => item.available && item.label === preferredSlot) ? preferredSlot : null;
+      this.setState({ slotsLoading: false, availableSlots: slotGrid, slot: selected });
       if (preferredSlot && !selected) this.toast(preferredSlot + ' không còn trống — chọn giờ khác nha');
     } catch (error) {
       if (requestId !== this.availabilityRequestId) return;
@@ -1793,7 +1817,7 @@ class Component extends DCLogic {
     const phoneOk = /^0\d{9}$/.test(digits);
     const step3Ready = nameOk && phoneOk;
     const nextOn = !s.bookingPending && (st === 'done' || st === 'conflict' || (s.step === 2 ? step2Ready : s.step === 3 ? step3Ready : picked.length > 0));
-    const alts = (s.availableSlots || []).filter(item => item.label !== s.slot).slice(0, 3);
+    const alts = (s.availableSlots || []).filter(item => item.available !== false && item.label !== s.slot).slice(0, 3);
 
     return {
       catChips: catChips,
@@ -1885,11 +1909,15 @@ class Component extends DCLogic {
         pick: () => {}
       })) : (s.availableSlots || []).length ? (s.availableSlots || []).map(x => {
         const sel = x.label === s.slot;
+        const unavailable = x.available === false;
         return {
           label: x.label,
-          sub: 'còn trống',
-          style: slotBase + 'border:1.5px solid ' + (sel ? '#7A5AD0' : 'rgba(122,90,208,.16)') + ';background:' + (sel ? '#7A5AD0' : '#FFFFFF') + ';color:' + (sel ? '#FFFFFF' : '#2B2440'),
-          pick: () => this.setState({ slot: x.label })
+          off: unavailable,
+          sub: unavailable ? '\u0111\u00e3 c\u00f3 ng\u01b0\u1eddi \u0111\u1eb7t' : 'c\u00f2n tr\u1ed1ng',
+          style: slotBase + (unavailable
+            ? 'border:1.5px solid rgba(90,86,110,.1);background:#F3F2F6;color:#8E8AA0;opacity:.72'
+            : 'border:1.5px solid ' + (sel ? '#7A5AD0' : 'rgba(122,90,208,.16)') + ';background:' + (sel ? '#7A5AD0' : '#FFFFFF') + ';color:' + (sel ? '#FFFFFF' : '#2B2440')),
+          pick: () => unavailable ? this.toast('Khung gi\u1edd n\u00e0y \u0111\u00e3 c\u00f3 kh\u00e1ch \u0111\u1eb7t, b\u1ea1n ch\u1ecdn gi\u1edd kh\u00e1c nha') : this.setState({ slot: x.label })
         };
       }) : [{
         label: '—', sub: 'hết chỗ',
