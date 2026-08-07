@@ -144,7 +144,8 @@
 
 .nhu-doodle--hero-star-lavender { width:clamp(22px,2.2vw,34px); top:14%; left:4%; --nhu-doodle-rotate:-8deg; opacity:.58; }
 .nhu-doodle--hero-bow { width:clamp(62px,7vw,104px); top:20%; right:2.5%; --nhu-doodle-rotate:9deg; opacity:.72; }
-.nhu-doodle--hero-polish { width:clamp(66px,7vw,110px); bottom:10%; right:7%; --nhu-doodle-rotate:7deg; }
+.nhu-doodle--hero-polish { width:46px; top:auto; bottom:28px; left:644px; right:auto; --nhu-doodle-rotate:7deg; }
+.nhu-doodle--loyal-bow { width:60px; max-width:none; top:-34px; right:-18px; bottom:auto; left:auto; z-index:2; opacity:.76; --nhu-doodle-rotate:9deg; }
 
 .nhu-doodle--services-brush { width:clamp(94px,10vw,156px); top:7%; right:2%; --nhu-doodle-rotate:13deg; opacity:.68; }
 .nhu-doodle--services-file { width:clamp(72px,8vw,118px); bottom:4%; left:2.5%; --nhu-doodle-rotate:-14deg; opacity:.65; }
@@ -427,7 +428,7 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
   .nhu-story-card:hover { transform:none !important; }
 
   .nhu-doodle--hero-star-lavender { top:10%; left:2%; width:22px; opacity:.48; }
-  .nhu-doodle--hero-polish { right:1%; bottom:4%; width:62px; opacity:.62; }
+  .nhu-doodle--hero-polish { left:auto; right:1%; bottom:4%; width:62px; opacity:.62; }
   .nhu-doodle--services-brush { top:4%; right:0; width:78px; opacity:.48; }
   .nhu-doodle--services-flower { top:48%; left:1%; width:42px; opacity:.56; }
   .nhu-doodle--services-star-pink { right:3%; bottom:7%; width:19px; translate:40px 18px; opacity:.42; }
