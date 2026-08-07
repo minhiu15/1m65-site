@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
+<script src="./turnstile-config.js?v=20260807a"></script>
+<script src="./turnstile-booking.js?v=20260807a"></script>
 <link rel="stylesheet" href="./visual-system.css?v=20260807servicepaws2">
 </head>
 <body>
@@ -150,7 +152,7 @@ a[href*="google.com/maps/place/1M65"][style*="position:absolute"],a[href*="googl
 <button onClick="{{ g.pick }}" style="flex:none;display:flex;align-items:center;gap:6px;padding:8px 13px;border-radius:999px;border-style:solid;border-width:1px;font-family:Quicksand,sans-serif;font-weight:700;font-size:12.5px;cursor:pointer;white-space:nowrap;transition:none;background:{{ g.bg }};color:{{ g.fg }};border-color:{{ g.bd }}">{{ g.label }}<sc-if value="{{ g.n }}" hint-placeholder-val="{{ 0 }}"><span style="display:grid;place-items:center;min-width:17px;height:17px;padding:0 4px;border-radius:999px;background:rgba(255,255,255,.28);font-size:11px">{{ g.n }}</span></sc-if></button>
 </sc-for>
 </div>
-<p style="margin:0 0 12px;font-size:12px;line-height:1.5;color:#6B6580">{{ bookCatHint }} — chọn bao nhiêu dịch vụ cũng được.</p>
+<p style="margin:0 0 12px;font-size:12px;line-height:1.5;color:#6B6580">{{ bookCatHint }} — chọn tối đa 8 dịch vụ.</p>
 
 <div data-scroll="mew" style="display:flex;flex-direction:column;gap:8px;max-height:none;overflow:visible">
 <sc-for list="{{ serviceList }}" as="s" hint-placeholder-count="6">
@@ -289,7 +291,7 @@ a[href*="google.com/maps/place/1M65"][style*="position:absolute"],a[href*="googl
 <svg width="26" height="26" viewBox="0 0 24 24" style="flex:none;margin-top:2px" aria-hidden="true"><circle cx="12" cy="12" r="9.5" stroke="#C4589C" stroke-width="2" fill="none"></circle><path d="M12 7.5v5.5" stroke="#C4589C" stroke-width="2.2" stroke-linecap="round"></path><circle cx="12" cy="16.6" r="1.3" fill="#C4589C"></circle></svg>
 <div>
 <div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:17px;color:#2B2440;margin-bottom:6px">{{ conflictTitle }}</div>
-<p style="margin:0;font-size:14px;line-height:1.6;color:#5C566F">Bạn không mất chỗ đâu — tụi mình đã giữ sẵn ba giờ gần nhất trong cùng ngày. Chọn một giờ là xong, thông tin của bạn vẫn được giữ nguyên.</p>
+<p style="margin:0;font-size:14px;line-height:1.6;color:#5C566F">Tụi mình đã tải lại các giờ còn trống gần nhất trong cùng ngày. Chọn một giờ khác là xong, thông tin của bạn vẫn được giữ nguyên.</p>
 </div>
 </div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
@@ -1170,6 +1172,9 @@ class Component extends DCLogic {
 
   toggleSvc(id) {
     const cur = this.state.svcIds || [];
+    if (cur.indexOf(id) === -1 && cur.length >= 8) {
+      return this.toast('Mỗi lịch chọn tối đa 8 dịch vụ nha');
+    }
     const next = cur.indexOf(id) > -1 ? cur.filter(x => x !== id) : cur.concat([id]);
     this.setState({ svcIds: next, svc: next[0] || this.state.svc, svcWarn: next.length ? false : this.state.svcWarn });
   }
@@ -1232,6 +1237,7 @@ class Component extends DCLogic {
     }
     this.setState({ bookingPending: true });
     try {
+      const turnstileToken = await window.mewTurnstileBooking.getToken();
       const body = await this.bookingRequest('create', {
         serviceId: (this.state.svcIds && this.state.svcIds.length ? this.state.svcIds[0] : this.state.svc),
         serviceIds: (this.state.svcIds && this.state.svcIds.length ? this.state.svcIds : [this.state.svc]),
@@ -1239,6 +1245,7 @@ class Component extends DCLogic {
         customerName: this.state.name.trim(),
         customerPhone: this.state.phone.replace(/\D/g, ''),
         customerNote: this.state.note.trim(),
+        turnstileToken: turnstileToken,
         website: ''
       });
       clearInterval(this.holdT);
@@ -1248,6 +1255,10 @@ class Component extends DCLogic {
       if (error.code === 'slot_unavailable') {
         this.setState({ status: 'conflict', bookingPending: false, slot: null });
         return this.loadAvailability();
+      }
+      if (error.code === 'human_verification_failed' || error.code === 'turnstile_unavailable') {
+        this.setState({ bookingPending: false });
+        return this.toast('Chưa xác minh được bạn là người thật. Bạn thử lại giúp tụi mình nha');
       }
       this.setState({ bookingPending: false });
       this.toast('Chưa thể xác nhận lịch. Bạn thử lại giúp tụi mình nha');
@@ -1920,7 +1931,7 @@ class Component extends DCLogic {
       summaryPrice: tot.price,
       pickCount: tot.count + ' dịch vụ · ' + tot.dur,
       pickTotal: tot.price,
-      conflictTitle: s.holdLeft === 0 ? 'Hết 5 phút giữ chỗ, ' + (s.slot || '') + ' đã có người đặt' : (s.slot || '') + ' vừa có người đặt trước bạn 40 giây',
+      conflictTitle: 'Giờ bạn chọn vừa không còn trống',
       backLabel: st === 'done' ? '' : st === 'conflict' ? 'Huỷ' : s.step === 1 ? 'Để sau' : 'Quay lại',
       backStyle: (st === 'done' ? 'display:none;' : 'display:block;') + 'padding:15px 22px;border:1px solid rgba(122,90,208,.16);border-radius:999px;background:#FFFFFF;color:#4A3A80;font-family:Quicksand,sans-serif;font-weight:700;font-size:14.5px;cursor:pointer',
       nextLabel: s.bookingPending ? 'Đang xác nhận...' : st === 'done' ? 'Xong' : st === 'conflict' ? 'Chọn giờ khác' : s.step === 3 ? 'Xác nhận đặt hẹn' : s.step === 2 ? (s.slotsLoading ? 'Đang tải giờ trống...' : step2Ready ? 'Tiếp tục' : 'Chọn một giờ trống') : (picked.length ? 'Chọn ngày & giờ' : 'Chọn dịch vụ trước'),
