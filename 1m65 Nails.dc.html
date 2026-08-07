@@ -251,6 +251,12 @@ Xem thư viện móng
 <p style="max-width:330px;margin:0;font-size:15.5px;line-height:1.6;color:#6B6580">Giá đã gồm tháo móng cũ, dưỡng da tay và một ly trà. Không phụ phí ẩn.</p>
 </div>
 
+<div data-reveal="1" style="display:flex;flex-wrap:wrap;gap:9px;margin:0 0 24px">
+<sc-for list="{{ catChips }}" as="c" key="{{ c.id }}" hint-placeholder-count="7">
+<button onClick="{{ c.pick }}" data-cursor="link" style="padding:10px 18px;border-radius:999px;border-style:solid;border-width:1px;font-family:Quicksand,sans-serif;font-weight:700;font-size:14px;cursor:pointer;white-space:nowrap;transition:none;background:{{ c.bg }};color:{{ c.fg }};border-color:{{ c.bd }};box-shadow:{{ c.sh }}">{{ c.label }}</button>
+</sc-for>
+</div>
+<sc-if value="{{ isHot }}" hint-placeholder-val="{{ true }}">
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
 
 <div data-tilt="1" data-reveal="1" data-cursor="link" style="position:relative;grid-column:span 2;display:flex;gap:22px;align-items:center;padding:26px;border-radius:32px;background:linear-gradient(120deg,#F1ECFE,#FDEBF2 88%);border:1px solid rgba(122,90,208,.08);overflow:hidden;transition:transform .4s cubic-bezier(.2,.9,.3,1),box-shadow .4s ease" style-hover="box-shadow:0 30px 54px -30px rgba(122,90,208,.55)">
@@ -271,10 +277,10 @@ Xem thư viện móng
 <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
 <span style="padding:5px 11px;border-radius:999px;background:#7A5AD0;color:#FFFFFF;font-family:Quicksand,sans-serif;font-weight:700;font-size:11px;letter-spacing:.04em">ĐƯỢC CHỌN NHIỀU NHẤT</span>
 </div>
-<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:26px;letter-spacing:-.02em;color:#2B2440;margin:0 0 6px">Nail mèo — vẽ tay</h3>
-<p style="margin:0 0 14px;font-size:15px;line-height:1.55;color:#6B6580;max-width:380px">Mỗi ngón một biểu cảm mèo khác nhau. Bạn kể về mèo nhà bạn, tụi mình vẽ lại.</p>
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:26px;letter-spacing:-.02em;color:#2B2440;margin:0 0 6px">Nail design vẽ tay</h3>
+<p style="margin:0 0 14px;font-size:15px;line-height:1.55;color:#6B6580;max-width:380px">Mắt mèo, tráng gương, ombre, flash — vẽ tay từng ngón. Tính theo ngón hoặc trọn bàn.</p>
 <div style="display:flex;align-items:baseline;gap:12px">
-<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:24px;color:#7A5AD0">390.000₫</span>
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:24px;color:#7A5AD0">từ 40.000₫</span>
 <span style="font-size:13.5px;color:#767089">· 90 phút</span>
 </div>
 </div>
@@ -284,45 +290,45 @@ Xem thư viện móng
 <div style="width:64px;height:64px;border-radius:20px;background:#FDF4E8;display:grid;place-items:center;margin-bottom:16px;animation:mewFloatSm 5.4s ease-in-out 0s infinite">
 <svg width="40" height="40" viewBox="0 0 60 60" aria-hidden="true"><rect x="22" y="14" width="16" height="30" rx="8" fill="#F2A8C6" stroke="#3B3350" stroke-width="3"></rect><rect x="25" y="6" width="10" height="10" rx="4" fill="#CDBBF4" stroke="#3B3350" stroke-width="3"></rect><ellipse cx="30" cy="50" rx="14" ry="4" fill="#F1ECFE"></ellipse></svg>
 </div>
-<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">Sơn gel cơ bản</h3>
-<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Một màu, bóng đẹp, giữ 3 tuần.</p>
-<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#7A5AD0">180.000₫</span><span style="font-size:13px;color:#767089">· 45 phút</span></div>
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">Sơn gel Hàn / Nhật</h3>
+<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Một màu, bóng căng, giữ 3 tuần.</p>
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#7A5AD0">70.000₫</span><span style="font-size:13px;color:#767089">· 45 phút</span></div>
 </div>
 
 <div data-tilt="1" data-reveal="1" data-cursor="link" style="position:relative;padding:26px;border-radius:32px;background:#FFFFFF;border:1px solid rgba(122,90,208,.1);transition:transform .4s cubic-bezier(.2,.9,.3,1),box-shadow .4s ease" style-hover="box-shadow:0 30px 54px -30px rgba(122,90,208,.45)">
 <div style="width:64px;height:64px;border-radius:20px;background:#FDEBF2;display:grid;place-items:center;margin-bottom:16px;animation:mewFloatSm 6.1s ease-in-out .5s infinite">
 <svg width="40" height="40" viewBox="0 0 60 60" aria-hidden="true"><path d="M18 46V22a12 12 0 0124 0v24z" fill="#FFFFFF" stroke="#3B3350" stroke-width="3"></path><path d="M18 30h24" stroke="#3B3350" stroke-width="3"></path><path d="M18 22a12 12 0 0124 0v8H18z" fill="#FDE3D2"></path></svg>
 </div>
-<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">French tip</h3>
-<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Viền mảnh, sạch, không bao giờ cũ.</p>
-<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#7A5AD0">250.000₫</span><span style="font-size:13px;color:#767089">· 60 phút</span></div>
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">Nối móng đắp Gel</h3>
+<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Dáng móng theo ý bạn, nhẹ và bền.</p>
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#7A5AD0">120.000₫</span><span style="font-size:13px;color:#767089">· 90 phút</span></div>
 </div>
 
 <div data-tilt="1" data-reveal="1" data-cursor="link" style="position:relative;padding:26px;border-radius:32px;background:#FFFFFF;border:1px solid rgba(122,90,208,.1);transition:transform .4s cubic-bezier(.2,.9,.3,1),box-shadow .4s ease" style-hover="box-shadow:0 30px 54px -30px rgba(122,90,208,.45)">
 <div style="width:64px;height:64px;border-radius:20px;background:#E2EEFB;display:grid;place-items:center;margin-bottom:16px;animation:mewFloatSm 5.7s ease-in-out 1.1s infinite">
-<svg width="40" height="40" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="15" fill="#FFFFFF" stroke="#3B3350" stroke-width="3"></circle><circle cx="30" cy="30" r="6" fill="#F9CFE0"></circle><path d="M30 8v6M30 46v6M8 30h6M46 30h6" stroke="#3B3350" stroke-width="3" stroke-linecap="round"></path></svg>
+<svg width="40" height="40" viewBox="0 0 60 60" aria-hidden="true"><rect x="17" y="27" width="26" height="24" rx="7" fill="#FFFFFF" stroke="#3B3350" stroke-width="3"></rect><path d="M17 35h26" stroke="#3B3350" stroke-width="3"></path><rect x="22" y="20" width="16" height="8" rx="4" fill="#E4DAFB" stroke="#3B3350" stroke-width="3"></rect><circle cx="25" cy="43" r="2.4" fill="#F9CFE0"></circle><circle cx="34" cy="45" r="2" fill="#CBB9F2"></circle><path d="M46 14l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#F2A8C6"></path></svg>
 </div>
-<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">Nail Nhật vẽ tay</h3>
-<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Hoa nhỏ, lá mảnh, chi tiết tới từng nét.</p>
-<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#7A5AD0">520.000₫</span><span style="font-size:13px;color:#767089">· 120 phút</span></div>
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">Nối móng đắp bột</h3>
+<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Cứng cáp, giữ dáng lâu nhất trong các kiểu nối.</p>
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#7A5AD0">150.000₫</span><span style="font-size:13px;color:#767089">· 100 phút</span></div>
 </div>
 
 <div data-tilt="1" data-reveal="1" data-cursor="link" style="position:relative;padding:26px;border-radius:32px;background:#FFFFFF;border:1px solid rgba(122,90,208,.1);transition:transform .4s cubic-bezier(.2,.9,.3,1),box-shadow .4s ease" style-hover="box-shadow:0 30px 54px -30px rgba(122,90,208,.45)">
 <div style="width:64px;height:64px;border-radius:20px;background:#F1ECFE;display:grid;place-items:center;margin-bottom:16px;animation:mewFloatSm 6.4s ease-in-out .8s infinite">
-<svg width="40" height="40" viewBox="0 0 60 60" aria-hidden="true"><ellipse cx="30" cy="34" rx="17" ry="14" fill="#FFFFFF" stroke="#3B3350" stroke-width="3"></ellipse><path d="M20 22l-2-9 10 5zM40 22l2-9-10 5z" fill="#FFFFFF" stroke="#3B3350" stroke-width="3" stroke-linejoin="round"></path><path d="M24 34c2 2 4 2 5 0M36 34c-2 2-4 2-5 0" stroke="#3B3350" stroke-width="2.6" stroke-linecap="round"></path></svg>
+<svg width="40" height="40" viewBox="0 0 60 60" aria-hidden="true"><path d="M11 33h38v6a12 12 0 01-12 12H23a12 12 0 01-12-12z" fill="#FFFFFF" stroke="#3B3350" stroke-width="3" stroke-linejoin="round"></path><path d="M11 33h38" stroke="#3B3350" stroke-width="3" stroke-linecap="round"></path><ellipse cx="30" cy="39" rx="13" ry="3.2" fill="#E2EEFB"></ellipse><path d="M21 25c0-4 3-5.6 3-8.6M30 23c0-4 3-5.6 3-8.6M39 25c0-4 3-5.6 3-8.6" stroke="#3B3350" stroke-width="2.8" stroke-linecap="round" fill="none"></path></svg>
 </div>
-<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">Nail Hàn trong veo</h3>
-<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Lớp sữa mờ, ánh nhẹ như da tay bạn.</p>
-<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#7A5AD0">320.000₫</span><span style="font-size:13px;color:#767089">· 75 phút</span></div>
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">Combo Foot</h3>
+<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Ngâm thảo dược, tẩy tế bào chết, chà gót, massage, dưỡng ẩm.</p>
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#7A5AD0">200.000₫</span><span style="font-size:13px;color:#767089">· 60 phút</span></div>
 </div>
 
 <div data-tilt="1" data-reveal="1" data-cursor="link" style="position:relative;padding:26px;border-radius:32px;background:linear-gradient(150deg,#FDF4E8,#FDE3D2);border:1px solid rgba(224,136,95,.14);transition:transform .4s cubic-bezier(.2,.9,.3,1),box-shadow .4s ease" style-hover="box-shadow:0 30px 54px -30px rgba(224,136,95,.5)">
 <div style="width:64px;height:64px;border-radius:20px;background:rgba(255,255,255,.75);display:grid;place-items:center;margin-bottom:16px;animation:mewFloatSm 5.9s ease-in-out 1.5s infinite">
-<svg width="40" height="40" viewBox="0 0 60 60" aria-hidden="true"><path d="M14 34h32a16 16 0 01-32 0z" fill="#FFFFFF" stroke="#3B3350" stroke-width="3"></path><ellipse cx="30" cy="34" rx="16" ry="4" fill="#E2EEFB"></ellipse><circle cx="24" cy="20" r="3" fill="#F9CFE0"></circle><circle cx="33" cy="15" r="2.4" fill="#CBB9F2"></circle></svg>
+<svg width="40" height="40" viewBox="0 0 60 60" aria-hidden="true"><path d="M9 37c7-12 14-18 21-18s14 6 21 18z" fill="#FFFFFF" stroke="#3B3350" stroke-width="3" stroke-linejoin="round"></path><circle cx="30" cy="31" r="6.4" fill="#CBB9F2" stroke="#3B3350" stroke-width="3"></circle><path d="M14 26l-5-5M22 20l-3-7M30 17V9M38 20l3-7M46 26l5-5" stroke="#3B3350" stroke-width="3" stroke-linecap="round"></path></svg>
 </div>
-<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">Spa tay &amp; móng</h3>
-<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Ngâm ấm, tẩy da chết, massage 15 phút.</p>
-<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#C4589C">150.000₫</span><span style="font-size:13px;color:#767089">· 40 phút</span></div>
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">Nối mi Classic</h3>
+<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Sợi mảnh, dày tự nhiên. Tháo mi free nếu bộ cũ do 1M65 làm.</p>
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#C4589C">150.000₫</span><span style="font-size:13px;color:#767089">· 90 phút</span></div>
 </div>
 
 <div data-tilt="1" data-reveal="1" data-cursor="link" style="position:relative;grid-column:span 2;display:flex;gap:22px;align-items:center;padding:26px;border-radius:32px;background:linear-gradient(120deg,#E2EEFB,#F1ECFE 92%);border:1px solid rgba(122,90,208,.1);overflow:hidden;transition:transform .4s cubic-bezier(.2,.9,.3,1),box-shadow .4s ease" style-hover="box-shadow:0 30px 54px -30px rgba(122,90,208,.5)">
@@ -341,14 +347,53 @@ Xem thư viện móng
 <span style="padding:5px 11px;border-radius:999px;background:#4A8FB8;color:#FFFFFF;font-family:Quicksand,sans-serif;font-weight:700;font-size:11px;letter-spacing:.04em">MỚI Ở 1M65</span>
 </div>
 <h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:26px;letter-spacing:-.02em;color:#2B2440;margin:0 0 6px">Gội đầu dưỡng sinh</h3>
-<p style="margin:0 0 14px;font-size:15px;line-height:1.55;color:#6B6580;max-width:400px">Gội thảo mộc ấm, massage đầu — vai — cổ, ấn huyệt nhẹ. Nhiều khách ngủ quên luôn.</p>
+<p style="margin:0 0 14px;font-size:15px;line-height:1.55;color:#6B6580;max-width:400px">Gội thảo mộc ấm, tẩy tế bào chết da đầu, massage đầu — vai — cổ. Nhiều khách ngủ quên luôn.</p>
 <div style="display:flex;align-items:baseline;gap:12px">
-<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:24px;color:#7A5AD0">220.000₫</span>
-<span style="font-size:13.5px;color:#767089">· 60 phút</span>
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:24px;color:#7A5AD0">89.000₫</span>
+<span style="font-size:13.5px;color:#767089">· 45 phút</span>
 </div>
 </div>
 </div>
 </div>
+</sc-if>
+
+<sc-if value="{{ isCat }}" hint-placeholder-val="{{ false }}">
+<div>
+<div data-reveal="1" style="display:flex;align-items:flex-end;justify-content:space-between;gap:22px;flex-wrap:wrap;margin:0 0 20px">
+<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:clamp(22px,2.2vw,28px);letter-spacing:-.025em;color:#2B2440;margin:0">{{ catTitle }}</h3>
+<p style="max-width:400px;margin:0;font-size:14.5px;line-height:1.6;color:#767089">{{ catNote }}</p>
+</div>
+<div data-reveal="1" style="padding:24px 30px;border-radius:32px;background:#FFFFFF;border:1px solid rgba(122,90,208,.1);box-shadow:0 24px 52px -42px rgba(122,90,208,.55)">
+<div style="display:grid;grid-template-columns:1fr 1px 1fr;gap:0 26px">
+<div>
+<sc-for list="{{ catLeft }}" as="i" hint-placeholder-count="4">
+<div onClick="{{ i.pick }}" data-cursor="link" style="display:flex;align-items:baseline;gap:14px;padding:13px 12px;margin:0 -12px;border-radius:14px;cursor:pointer;transition:background .3s ease;border-bottom-width:1px;border-bottom-style:dashed;border-bottom-color:{{ i.line }}" style-hover="background:rgba(122,90,208,.045)">
+<div style="min-width:0">
+<div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:15.5px;letter-spacing:-.01em;color:#2B2440;text-wrap:pretty">{{ i.name }}</div>
+<div style="margin-top:3px;font-size:12.5px;line-height:1.45;color:#6B6580">{{ i.sub }}</div>
+</div>
+<span style="flex:1"></span>
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:15.5px;color:#7A5AD0;white-space:nowrap">{{ i.price }}</span>
+</div>
+</sc-for>
+</div>
+<div style="background:linear-gradient(180deg,rgba(122,90,208,0),rgba(122,90,208,.16) 12%,rgba(122,90,208,.16) 88%,rgba(122,90,208,0))"></div>
+<div>
+<sc-for list="{{ catRight }}" as="i" hint-placeholder-count="4">
+<div onClick="{{ i.pick }}" data-cursor="link" style="display:flex;align-items:baseline;gap:14px;padding:13px 12px;margin:0 -12px;border-radius:14px;cursor:pointer;transition:background .3s ease;border-bottom-width:1px;border-bottom-style:dashed;border-bottom-color:{{ i.line }}" style-hover="background:rgba(122,90,208,.045)">
+<div style="min-width:0">
+<div style="font-family:Quicksand,sans-serif;font-weight:700;font-size:15.5px;letter-spacing:-.01em;color:#2B2440;text-wrap:pretty">{{ i.name }}</div>
+<div style="margin-top:3px;font-size:12.5px;line-height:1.45;color:#6B6580">{{ i.sub }}</div>
+</div>
+<span style="flex:1"></span>
+<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:15.5px;color:#7A5AD0;white-space:nowrap">{{ i.price }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
 </section>
 
 <section style="position:relative;max-width:1240px;margin:0 auto;padding:56px 24px 0">
@@ -1002,6 +1047,72 @@ class Component extends DCLogic {
     { id: 'spa', name: 'Spa tay & móng', price: '150.000₫', dur: '40 phút' },
     { id: 'goi', name: 'Gội đầu dưỡng sinh', price: '220.000₫', dur: '60 phút' }
   ];
+  priceGroups = [
+    { id: 'hot', label: 'Nổi bật' },
+    { id: 'nail', label: 'Nail care', svc: 'french', tone: '#F1ECFE', ink: '#7A5AD0', bg: 'linear-gradient(150deg,#FBF8FF,#FFFFFF)',
+      title: 'Nail care — chăm móng cơ bản', note: 'Cắt da, tháo bộ cũ và nối móng. Giá theo bộ, đã gồm dưỡng da tay.',
+      items: [
+        { name: 'Cắt da tay', sub: 'Gọn viền, không đau', price: '20.000₫' },
+        { name: 'Cắt da chân', sub: 'Gọn viền, không đau', price: '30.000₫' },
+        { name: 'Tháo sơn gel', sub: 'Không bào mỏng móng thật', price: '15.000₫' },
+        { name: 'Tháo móng úp / Nail box', sub: 'Tháo nhẹ, giữ móng thật', price: '20.000₫' },
+        { name: 'Tháo Gel / Bột', sub: 'Ngâm mềm rồi tháo', price: '30.000₫' },
+        { name: 'Nối móng Úp Xgel', sub: 'Nhanh, nhẹ tay nhất', price: '90.000₫' },
+        { name: 'Nối móng đắp Gel', sub: 'Dáng theo ý bạn, nhẹ và bền', price: '120.000₫' },
+        { name: 'Nối móng đắp bột', sub: 'Cứng cáp, giữ dáng lâu nhất', price: '150.000₫', svc: 'nhat' }
+      ] },
+    { id: 'classic', label: 'Classic', svc: 'gel', tone: '#FDEBF2', ink: '#C4589C', bg: 'linear-gradient(150deg,#FFF7FB,#FFFFFF)',
+      title: 'Classic — sơn một màu', note: 'Màu trơn, bóng căng, giữ khoảng 3 tuần.',
+      items: [
+        { name: 'Sơn cứng móng', sub: 'Lớp bảo vệ móng yếu', price: '20.000₫' },
+        { name: 'Sơn gel Hàn / Nhật', sub: 'Bảng màu trong trẻo', price: '70.000₫' },
+        { name: 'Sơn gel thạch', sub: 'Trong như thạch, ánh nhẹ', price: '80.000₫', svc: 'gel' }
+      ] },
+    { id: 'design', label: 'Design', svc: 'meo', tone: '#FDF4E8', ink: '#C97B3E', bg: 'linear-gradient(150deg,#FFFBF4,#FFFFFF)',
+      title: 'Design — vẽ và trang trí', note: 'Tính theo ngón hoặc trọn bàn. Mẫu càng chi tiết, tụi mình báo giá trước khi làm.',
+      items: [
+        { name: 'Flash', sub: '7.000₫ / ngón', price: '40.000₫ / bàn' },
+        { name: 'Mắt mèo', sub: '10.000₫ / ngón', price: '50.000₫ / bàn' },
+        { name: 'Tráng gương', sub: '10.000₫ / ngón', price: '50.000₫ / bàn' },
+        { name: 'Ombre', sub: '10.000₫ / ngón', price: '50.000₫ / bàn' },
+        { name: 'Đính đá', sub: 'Tính theo viên', price: '2.000₫ / viên' },
+        { name: 'Charm', sub: 'Tuỳ mẫu charm', price: '10.000 – 20.000₫' },
+        { name: 'Sticker', sub: 'Dán sẵn, lên nhanh', price: '5.000₫' },
+        { name: 'Vẽ tay', sub: 'Tuỳ độ chi tiết', price: '5.000 – 15.000₫' },
+        { name: 'Ẩn xà cừ / Kim tuyến', sub: 'Ánh nhẹ dưới lớp gel', price: '5.000 – 10.000₫' },
+        { name: 'Giấy bạc / Phụ kiện', sub: 'Báo giá theo mẫu', price: 'liên hệ' }
+      ] },
+    { id: 'foot', label: 'Combo Foot', svc: 'han', tone: '#E2EEFB', ink: '#4A8FB8', bg: 'linear-gradient(150deg,#F6FAFE,#FFFFFF)',
+      title: 'Combo Foot — 200.000₫', note: 'Sáu bước liền mạch trong một buổi, khoảng 60 phút.',
+      items: [
+        { name: 'Cắt da chân', sub: 'Bước 1', price: 'trong combo' },
+        { name: 'Ngâm chân thảo dược', sub: 'Bước 2', price: 'trong combo' },
+        { name: 'Tẩy tế bào chết', sub: 'Bước 3', price: 'trong combo' },
+        { name: 'Chà gót chân', sub: 'Bước 4', price: 'trong combo' },
+        { name: 'Massage chân', sub: 'Bước 5', price: 'trong combo' },
+        { name: 'Dưỡng ẩm', sub: 'Bước 6', price: 'trong combo' }
+      ] },
+    { id: 'mi', label: 'Mi', svc: 'spa', tone: '#F1ECFE', ink: '#7A5AD0', bg: 'linear-gradient(150deg,#FBF8FF,#FFFFFF)',
+      title: 'Mi — uốn và nối', note: 'Tháo mi miễn phí nếu bộ mi cũ do 1M65 làm.',
+      items: [
+        { name: 'Uốn mi Collagen', sub: 'Cong tự nhiên, giữ 1–2 tháng', price: '145.000₫' },
+        { name: 'Uốn mi Collagen + phủ đen', sub: 'Đậm nét hơn, không cần chuốt', price: '165.000₫' },
+        { name: 'Nối mi Classic', sub: 'Sợi mảnh, dày tự nhiên', price: '150.000₫' },
+        { name: 'Nối mi thỏ / em bé', sub: 'Dáng cong tròn, trẻ mắt', price: '150.000₫' },
+        { name: 'Nối mi Volume', sub: 'Dày và bồng nhất', price: '200.000₫' },
+        { name: 'Nối mi Sole Thái / Anime', sub: 'Thiết kế theo dáng mắt', price: '200.000₫' },
+        { name: 'Nối mi dưới', sub: 'Làm kèm bộ mi trên', price: '20.000₫' }
+      ] },
+    { id: 'goi', label: 'Gội', svc: 'goi', tone: '#FDEBF2', ink: '#C4589C', bg: 'linear-gradient(150deg,#FFF7FB,#FFFFFF)',
+      title: 'Gội — thư giãn đầu, vai, cổ', note: 'Gội xong nằm nghỉ thêm chút cũng được, tụi mình không giục.',
+      items: [
+        { name: 'Gội dầu gội thảo dược', sub: '30 phút', price: '29.000₫' },
+        { name: 'Gội dầu gội thường', sub: 'Nhanh gọn, sạch nhẹ', price: '29.000₫' },
+        { name: 'Gội phục hồi hư tổn', sub: 'Ủ dưỡng cho tóc khô', price: '69.000₫' },
+        { name: 'Gội dưỡng sinh + tẩy tế bào chết da đầu', sub: 'Massage đầu — vai — cổ', price: '89.000₫' }
+      ] }
+  ];
+
   slots = ['9:30', '10:30', '11:30', '13:00', '14:00', '15:00', '16:15', '17:30', '18:30'];
   bookingApiEndpoint = 'https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api';
 
@@ -1571,6 +1682,33 @@ class Component extends DCLogic {
 
   renderVals() {
     const s = this.state;
+    const cats = this.priceGroups;
+    const activeSvcCat = s.svcCat || 'hot';
+    const cur = cats.filter(g => g.id === activeSvcCat)[0] || cats[0];
+    const catChips = cats.map(g => {
+      const on = g.id === activeSvcCat;
+      return {
+        id: g.id,
+        label: g.label,
+        pick: () => this.setState({ svcCat: g.id }),
+        bg: on ? '#7A5AD0' : '#FFFFFF',
+        fg: on ? '#FFFFFF' : '#4A4360',
+        bd: on ? 'transparent' : 'rgba(122,90,208,.16)',
+        sh: on ? '0 14px 26px -16px rgba(122,90,208,.9)' : 'none'
+      };
+    });
+    const catItems = (cur.items || []).map((it, n) => ({
+      pick: () => this.openBook({ step: 1 }),
+      name: it.name,
+      sub: it.sub,
+      price: it.price,
+      line: 'rgba(122,90,208,.13)'
+    }));
+    const half = Math.ceil(catItems.length / 2);
+    const catLeft = catItems.slice(0, half).map((it, n) => Object.assign({}, it, { line: n === half - 1 ? 'transparent' : it.line }));
+    const catRight = catItems.slice(half).map((it, n, arr) => Object.assign({}, it, { line: n === arr.length - 1 ? 'transparent' : it.line }));
+
+
     const st = s.status;
     const sv = this.svcs.filter(x => x.id === s.svc)[0] || this.svcs[0];
     const ds = this.dates();
@@ -1625,6 +1763,14 @@ class Component extends DCLogic {
     const alts = (s.availableSlots || []).filter(item => item.label !== s.slot).slice(0, 3);
 
     return {
+      catChips: catChips,
+      isHot: (s.svcCat || 'hot') === 'hot',
+      isCat: (s.svcCat || 'hot') !== 'hot',
+      catTitle: cur.title || '',
+      catNote: cur.note || '',
+      catItems: catItems,
+      catLeft: catLeft,
+      catRight: catRight,
       pauseReviews: () => { this.pauseR = true; },
       resumeReviews: () => { this.pauseR = false; },
       trackStyle: 'display:flex;gap:20px;width:100%;align-items:center;will-change:transform;transform:translateX(calc(-1 * ' + s.rIdx + ' * ((100% - 40px)/3 + 20px)));'
