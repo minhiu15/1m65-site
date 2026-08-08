@@ -5,7 +5,6 @@
   const SESSION_KEY = '1m65-admin-session';
   const TIME_ZONE = 'Asia/Ho_Chi_Minh';
   const STATUS_LABELS = {
-    pending: 'Chờ xác nhận',
     confirmed: 'Đã xác nhận',
     completed: 'Hoàn thành',
     cancelled: 'Đã hủy',
@@ -512,7 +511,7 @@
 
     const statusColumn = node('div', 'status-column');
     statusColumn.append(node('span', `badge ${item.status}`, STATUS_LABELS[item.status] || item.status));
-    if (item.status === 'pending' || item.status === 'confirmed') {
+    if (item.status === 'confirmed') {
       const reschedule = node('button', 'reschedule-button', 'Dời lịch');
       reschedule.type = 'button';
       reschedule.addEventListener('click', () => openReschedulePanel(item, card, reschedule));
@@ -538,7 +537,7 @@
       save.type = 'button';
       save.addEventListener('click', () => updateStatus(item, select.value, save));
       statusColumn.append(select, save);
-      if (item.status === 'pending' || item.status === 'confirmed') {
+      if (item.status === 'confirmed') {
         const complete = node('button', 'complete-button', '✓ Đánh dấu hoàn thành');
         complete.type = 'button';
         complete.addEventListener('click', () => completeAppointment(item, complete));
@@ -811,7 +810,7 @@
     const start = new Date(`${date}T${minutesToTime(minutes)}:00+07:00`).getTime();
     const end = start + 30 * 60 * 1000;
     return blockDayAppointments.some((appointment) =>
-      (appointment.status === 'pending' || appointment.status === 'confirmed')
+      appointment.status === 'confirmed'
       && new Date(appointment.startAt).getTime() < end
       && new Date(appointment.endAt).getTime() > start
     );

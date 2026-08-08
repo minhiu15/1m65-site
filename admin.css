@@ -209,7 +209,6 @@ button:disabled { cursor: wait; opacity: .55; }
 .reschedule-message { margin: 7px 0 0 !important; }
 .reschedule-actions { display: grid; gap: 8px; min-width: 155px; }
 .badge { display: inline-flex; width: fit-content; border-radius: 999px; padding: 6px 10px; font-size: .75rem; font-weight: 850; }
-.badge.pending { color: var(--amber); background: var(--amber-soft); }
 .badge.confirmed, .badge.completed { color: var(--green); background: var(--green-soft); }
 .badge.cancelled, .badge.no_show { color: var(--red); background: var(--red-soft); }
 .empty { padding: 56px 24px; border: 1px dashed #d9c6cf; border-radius: 20px; text-align: center; color: var(--muted); }
