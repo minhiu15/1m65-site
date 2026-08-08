@@ -943,7 +943,7 @@ class Component extends DCLogic {
     const currentMinute = Number(parts.hour) * 60 + Number(parts.minute);
     const selectedDate = this.activeDateISO();
     const grid = [];
-    for (let minute = 9 * 60; minute <= 18 * 60 - duration; minute += 30) {
+    for (let minute = 9 * 60; minute <= 17 * 60; minute += 30) {
       const label = String(Math.floor(minute / 60)).padStart(2, '0') + ':' + String(minute % 60).padStart(2, '0');
       const available = availableByLabel.get(label);
       if (selectedDate === today && !available && minute <= currentMinute) continue;
