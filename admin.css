@@ -130,6 +130,7 @@ button:disabled { cursor: wait; opacity: .55; }
 }
 .slot-chip.selected { border-color: var(--rose); background: var(--rose); color: #fff; }
 .slot-chip.booked { border-style: dashed; background: #f1eef1; color: #8a8187; }
+.slot-chip.blocked { background: var(--rose-soft); color: var(--rose-dark); }
 .slot-chip:disabled { cursor: not-allowed; opacity: .4; }
 #all-day-button[aria-pressed="true"] { border-color: var(--rose); background: var(--rose-soft); color: var(--rose-dark); }
 #select-all-button[aria-pressed="true"] { border-color: var(--rose); background: var(--rose-soft); color: var(--rose-dark); }

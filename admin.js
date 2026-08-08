@@ -372,13 +372,18 @@
       button.dataset.minutes = String(minutes);
       button.setAttribute('aria-pressed', 'false');
       const booked = blockSlotIsBooked(minutes);
+      const locked = blockSlotIsLocked(minutes);
       button.classList.toggle('booked', booked);
+      button.classList.toggle('blocked', locked);
       if (booked) {
         button.title = 'Đã có lịch khách';
         button.setAttribute('aria-label', `${minutesToTime(minutes)} · Đã có lịch khách`);
+      } else if (locked) {
+        button.title = 'Khung giờ đã khóa';
+        button.setAttribute('aria-label', `${minutesToTime(minutes)} · Khung giờ đã khóa`);
       }
       button.addEventListener('click', () => {
-        if (booked) return;
+        if (booked || locked) return;
         if (selectedBlockSlots.has(minutes)) selectedBlockSlots.delete(minutes);
         else selectedBlockSlots.add(minutes);
         updateBlockSelection();
@@ -399,17 +404,31 @@
     );
   }
 
+  function blockSlotIsLocked(minutes) {
+    const date = elements.blockDate.value;
+    const start = new Date(`${date}T${minutesToTime(minutes)}:00+07:00`).getTime();
+    const end = start + 30 * 60 * 1000;
+    return blocks.some((block) =>
+      new Date(block.startAt).getTime() < end
+      && new Date(block.endAt).getTime() > start
+    );
+  }
+
   function updateBlockSelection() {
     elements.allDayButton.setAttribute('aria-pressed', String(blockWholeDay));
     const selectable = [];
     elements.blockSlotGrid.querySelectorAll('.slot-chip').forEach((button) => {
       const minutes = Number(button.dataset.minutes);
       const booked = blockSlotIsBooked(minutes);
-      const selected = selectedBlockSlots.has(Number(button.dataset.minutes));
+      const locked = blockSlotIsLocked(minutes);
+      if ((booked || locked) && selectedBlockSlots.has(minutes)) selectedBlockSlots.delete(minutes);
+      const selected = selectedBlockSlots.has(minutes);
+      button.classList.toggle('booked', booked);
+      button.classList.toggle('blocked', locked);
       button.classList.toggle('selected', selected);
       button.setAttribute('aria-pressed', String(selected));
-      button.disabled = blockWholeDay || booked || blockDayLoading;
-      if (!booked) selectable.push(minutes);
+      button.disabled = blockWholeDay || booked || locked || blockDayLoading;
+      if (!booked && !locked) selectable.push(minutes);
     });
     const allSelectableSelected = selectable.length > 0
       && selectable.every((minutes) => selectedBlockSlots.has(minutes));
@@ -576,7 +595,7 @@
   });
   elements.selectAllButton.addEventListener('click', () => {
     if (blockWholeDay) return;
-    const selectable = [...elements.blockSlotGrid.querySelectorAll('.slot-chip:not(.booked)')]
+    const selectable = [...elements.blockSlotGrid.querySelectorAll('.slot-chip:not(.booked):not(.blocked)')]
       .map((button) => Number(button.dataset.minutes));
     const allSelected = selectable.length > 0
       && selectable.every((minutes) => selectedBlockSlots.has(minutes));
