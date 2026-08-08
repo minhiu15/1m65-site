@@ -29,7 +29,6 @@
     appointmentList: document.querySelector('#appointment-list'),
     blockDate: document.querySelector('#block-date'),
     blockReason: document.querySelector('#block-reason'),
-    selectAllButton: document.querySelector('#select-all-button'),
     allDayButton: document.querySelector('#all-day-button'),
     blockSlotGrid: document.querySelector('#block-slot-grid'),
     blockSelection: document.querySelector('#block-selection'),
@@ -430,10 +429,7 @@
       button.disabled = blockWholeDay || booked || locked || blockDayLoading;
       if (!booked && !locked) selectable.push(minutes);
     });
-    const allSelectableSelected = selectable.length > 0
-      && selectable.every((minutes) => selectedBlockSlots.has(minutes));
-    elements.selectAllButton.setAttribute('aria-pressed', String(allSelectableSelected && !blockWholeDay));
-    elements.selectAllButton.disabled = blockWholeDay || blockDayLoading || selectable.length === 0;
+    elements.allDayButton.disabled = blockDayLoading || (!blockWholeDay && selectable.length === 0);
     const count = selectedBlockSlots.size;
     elements.blockSelection.textContent = blockWholeDay
       ? 'Đã chọn khóa cả ngày.'
@@ -593,16 +589,6 @@
     blockWholeDay = false;
     updateBlockSelection();
     loadBlocks();
-  });
-  elements.selectAllButton.addEventListener('click', () => {
-    if (blockWholeDay) return;
-    const selectable = [...elements.blockSlotGrid.querySelectorAll('.slot-chip:not(.booked):not(.blocked)')]
-      .map((button) => Number(button.dataset.minutes));
-    const allSelected = selectable.length > 0
-      && selectable.every((minutes) => selectedBlockSlots.has(minutes));
-    if (allSelected) selectable.forEach((minutes) => selectedBlockSlots.delete(minutes));
-    else selectable.forEach((minutes) => selectedBlockSlots.add(minutes));
-    updateBlockSelection();
   });
   elements.allDayButton.addEventListener('click', () => {
     blockWholeDay = !blockWholeDay;

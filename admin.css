@@ -133,7 +133,7 @@ button:disabled { cursor: wait; opacity: .55; }
 .slot-chip.blocked { background: var(--rose-soft); color: var(--rose-dark); }
 .slot-chip:disabled { cursor: not-allowed; opacity: .4; }
 #all-day-button[aria-pressed="true"] { border-color: var(--rose); background: var(--rose-soft); color: var(--rose-dark); }
-#select-all-button[aria-pressed="true"] { border-color: var(--rose); background: var(--rose-soft); color: var(--rose-dark); }
+#create-block-button:disabled { background: #eee8eb; color: #a89da3; box-shadow: none; opacity: 1; }
 .block-actions { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
 .block-actions p { margin: 0; }
 .existing-blocks { padding-top: 4px; border-top: 1px solid var(--line); }
