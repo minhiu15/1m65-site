@@ -131,7 +131,8 @@
       invalid_admin_date_range: 'Khoảng ngày không hợp lệ hoặc dài hơn 93 ngày.',
       invalid_appointment_status: 'Trạng thái lịch không hợp lệ.',
       appointment_not_found: 'Không tìm thấy lịch hẹn.',
-      slot_unavailable: 'Không thể mở lại lịch này vì đã trùng với một lịch khác.',
+      appointment_not_reschedulable: 'Chỉ có thể dời lịch đang chờ hoặc đã xác nhận.',
+      slot_unavailable: 'Khung giờ này không còn trống. Vui lòng chọn giờ khác.',
       too_many_requests: 'Bạn thử đăng nhập quá nhiều lần. Vui lòng chờ một lúc.',
       invalid_block_range: 'Khoảng thời gian khóa không hợp lệ.',
       too_many_blocks: 'Bạn chọn quá nhiều khoảng khóa cùng lúc.',
@@ -511,6 +512,12 @@
 
     const statusColumn = node('div', 'status-column');
     statusColumn.append(node('span', `badge ${item.status}`, STATUS_LABELS[item.status] || item.status));
+    if (item.status === 'pending' || item.status === 'confirmed') {
+      const reschedule = node('button', 'reschedule-button', 'Dời lịch');
+      reschedule.type = 'button';
+      reschedule.addEventListener('click', () => openReschedulePanel(item, card, reschedule));
+      statusColumn.append(reschedule);
+    }
     if (item.status === 'completed') {
       const reset = node('button', 'reset-status', 'Reset trạng thái');
       reset.type = 'button';
@@ -541,6 +548,137 @@
 
     card.append(timing, customer, service, statusColumn);
     return card;
+  }
+
+  function openReschedulePanel(item, card, trigger) {
+    document.querySelectorAll('.reschedule-panel').forEach((panel) => panel.remove());
+    document.querySelectorAll('.reschedule-button').forEach((button) => { button.disabled = false; });
+    trigger.disabled = true;
+
+    const panel = node('section', 'reschedule-panel');
+    panel.setAttribute('aria-label', `Dời lịch ${item.reference}`);
+    const heading = node('div', 'reschedule-heading');
+    heading.append(
+      node('strong', '', `Dời lịch ${item.reference}`),
+      node('span', '', 'Chọn ngày mới rồi chọn một giờ còn trống.')
+    );
+
+    const dateLabel = node('label', 'reschedule-date-label', 'Ngày mới');
+    const dateInput = node('input');
+    dateInput.type = 'date';
+    dateInput.min = dateInTimeZone();
+    dateInput.max = addDays(dateInput.min, Number(bookingConfig?.advanceBookingDays || 30));
+    const currentDate = dateInTimeZone(new Date(item.startAt));
+    dateInput.value = currentDate < dateInput.min ? dateInput.min : currentDate;
+    dateLabel.append(dateInput);
+
+    const slotArea = node('div', 'reschedule-slot-area');
+    const slotLabel = node('p', 'field-label', 'Giờ mới');
+    const slotGrid = node('div', 'reschedule-slot-grid');
+    const message = node('p', 'message reschedule-message');
+    slotArea.append(slotLabel, slotGrid, message);
+
+    const actions = node('div', 'reschedule-actions');
+    const cancel = node('button', 'ghost compact', 'Đóng');
+    cancel.type = 'button';
+    const submit = node('button', 'primary compact', 'Xác nhận dời lịch');
+    submit.type = 'button';
+    submit.disabled = true;
+    actions.append(cancel, submit);
+    panel.append(heading, dateLabel, slotArea, actions);
+    card.append(panel);
+
+    let selectedStartAt = '';
+    let requestId = 0;
+    let availableSlots = [];
+
+    function renderSlots(loading = false) {
+      submit.disabled = loading || !selectedStartAt;
+      if (loading) {
+        slotGrid.replaceChildren(node('p', 'admin-slot-empty', 'Đang tải giờ trống…'));
+        return;
+      }
+      if (!availableSlots.length) {
+        slotGrid.replaceChildren(node('p', 'admin-slot-empty', 'Ngày này không có giờ khác phù hợp.'));
+        return;
+      }
+      slotGrid.replaceChildren(...availableSlots.map((slot) => {
+        const button = node('button', 'slot-chip', slot.label);
+        button.type = 'button';
+        const selected = slot.startAt === selectedStartAt;
+        button.classList.toggle('selected', selected);
+        button.setAttribute('aria-pressed', String(selected));
+        button.addEventListener('click', () => {
+          selectedStartAt = slot.startAt;
+          setMessage(message);
+          renderSlots();
+        });
+        return button;
+      }));
+    }
+
+    async function loadSlots() {
+      const currentRequest = ++requestId;
+      selectedStartAt = '';
+      availableSlots = [];
+      setMessage(message);
+      renderSlots(true);
+      try {
+        const data = await adminRequest({
+          action: 'admin_reschedule_availability',
+          appointmentId: item.id,
+          date: dateInput.value
+        });
+        if (currentRequest !== requestId || !panel.isConnected) return;
+        const currentStart = new Date(item.startAt).getTime();
+        const seen = new Set();
+        availableSlots = (Array.isArray(data.slots) ? data.slots : []).map((slot) => {
+          const startAt = slot.start_at || slot.startAt;
+          return { startAt, label: localTime(startAt) };
+        }).filter((slot) => slot.startAt
+          && new Date(slot.startAt).getTime() !== currentStart
+          && !seen.has(slot.label)
+          && seen.add(slot.label));
+      } catch (error) {
+        if (currentRequest === requestId) setMessage(message, errorMessage(error.message));
+      } finally {
+        if (currentRequest === requestId && panel.isConnected) renderSlots();
+      }
+    }
+
+    dateInput.addEventListener('change', loadSlots);
+    cancel.addEventListener('click', () => {
+      requestId += 1;
+      panel.remove();
+      trigger.disabled = false;
+    });
+    submit.addEventListener('click', async () => {
+      if (!selectedStartAt) return;
+      const oldTime = timeParts(item.startAt);
+      const newTime = localTime(selectedStartAt);
+      if (!window.confirm(
+        `Dời lịch ${item.reference} từ ${oldTime.time} ${oldTime.date} sang ${newTime} ngày ${dateInput.value}?`
+      )) return;
+      submit.disabled = true;
+      cancel.disabled = true;
+      setMessage(message, 'Đang dời lịch…');
+      try {
+        await adminRequest({
+          action: 'admin_reschedule_appointment',
+          appointmentId: item.id,
+          startAt: selectedStartAt
+        });
+        await loadAppointments();
+        setMessage(elements.dashboardMessage, `Đã dời lịch ${item.reference}.`, true);
+      } catch (error) {
+        setMessage(message, errorMessage(error.message));
+        cancel.disabled = false;
+        if (error.message === 'slot_unavailable') await loadSlots();
+        else submit.disabled = !selectedStartAt;
+      }
+    });
+
+    loadSlots();
   }
 
   function renderAppointments() {

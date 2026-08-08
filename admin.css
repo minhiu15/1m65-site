@@ -197,6 +197,17 @@ button:disabled { cursor: wait; opacity: .55; }
 }
 .complete-button { border: 0; background: var(--green); color: #fff; }
 .reset-status { border: 1px solid var(--line); background: #fff; color: var(--ink); }
+.reschedule-button { min-height: 38px; border: 1px solid var(--rose); border-radius: 999px; background: #fff; color: var(--rose-dark); font-weight: 800; }
+.reschedule-panel { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(190px, .7fr) minmax(180px, .5fr) minmax(320px, 1.8fr) auto; gap: 14px; align-items: end; margin-top: 2px; padding: 16px; border: 1px solid #ead5de; border-radius: 16px; background: #fff9fb; }
+.reschedule-heading { align-self: center; }
+.reschedule-heading strong, .reschedule-heading span { display: block; }
+.reschedule-heading span { margin-top: 4px; color: var(--muted); font-size: .8rem; line-height: 1.4; }
+.reschedule-date-label input { margin-top: 7px; }
+.reschedule-slot-area .field-label { margin-bottom: 7px; }
+.reschedule-slot-grid { display: grid; grid-template-columns: repeat(6, minmax(58px, 1fr)); gap: 7px; }
+.reschedule-slot-grid .slot-chip { min-height: 38px; }
+.reschedule-message { margin: 7px 0 0 !important; }
+.reschedule-actions { display: grid; gap: 8px; min-width: 155px; }
 .badge { display: inline-flex; width: fit-content; border-radius: 999px; padding: 6px 10px; font-size: .75rem; font-weight: 850; }
 .badge.pending { color: var(--amber); background: var(--amber-soft); }
 .badge.confirmed, .badge.completed { color: var(--green); background: var(--green-soft); }
@@ -211,6 +222,9 @@ button:disabled { cursor: wait; opacity: .55; }
   .slot-grid { grid-template-columns: repeat(6, minmax(60px, 1fr)); }
   .admin-service-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .admin-booking-slot-grid { grid-template-columns: repeat(6, minmax(58px, 1fr)); }
+  .reschedule-panel { grid-template-columns: 1fr 1fr; align-items: start; }
+  .reschedule-slot-area { grid-column: 1 / -1; }
+  .reschedule-actions { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 560px) {
@@ -224,6 +238,10 @@ button:disabled { cursor: wait; opacity: .55; }
   .slot-grid { grid-template-columns: repeat(3, 1fr); }
   .admin-service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-height: 330px; }
   .admin-booking-slot-grid { grid-template-columns: repeat(3, 1fr); }
+  .reschedule-panel { grid-template-columns: 1fr; }
+  .reschedule-slot-area, .reschedule-actions { grid-column: auto; }
+  .reschedule-slot-grid { grid-template-columns: repeat(3, 1fr); }
+  .reschedule-actions { grid-template-columns: 1fr; }
   .admin-create-actions { align-items: stretch; flex-direction: column; }
   .compact { width: 100%; }
   .appointment { grid-template-columns: 1fr; gap: 12px; }
