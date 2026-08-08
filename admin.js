@@ -486,7 +486,8 @@
       details.append(node('strong', '', allDay
         ? 'Cả ngày'
         : `${localTime(block.startAt)} – ${localTime(block.endAt)}`));
-      if (block.reason) details.append(node('span', '', block.reason));
+      const reason = String(block.reason || '').trim();
+      details.append(node('span', '', !reason || reason === 'tiệm hôm nay nghỉ' ? 'tiệm nghỉ' : reason));
       const remove = node('button', 'unlock-button', 'Mở khóa');
       remove.type = 'button';
       remove.addEventListener('click', () => deleteBlock(block, remove));
@@ -535,7 +536,7 @@
       await adminRequest({
         action: 'admin_create_blocks',
         ranges,
-        reason: elements.blockReason.value.trim()
+        reason: elements.blockReason.value.trim() || 'tiệm nghỉ'
       });
       selectedBlockSlots.clear();
       blockWholeDay = false;

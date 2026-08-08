@@ -1049,7 +1049,8 @@ class Component extends DCLogic {
     const availableByLabel = new Map((availableSlots || []).map(item => [item.label, item]));
     const blockedByLabel = new Map((blockedSlots || []).map(item => {
       const startAt = item.start_at || item.startAt;
-      return [this.slotLabel(startAt), { content: item.content || 'tiệm hôm nay nghỉ' }];
+      const content = item.content === 'tiệm hôm nay nghỉ' ? 'tiệm nghỉ' : (item.content || 'tiệm nghỉ');
+      return [this.slotLabel(startAt), { content }];
     }));
     const duration = Math.max(5, this.svcTotals().minutes || 0);
     const parts = new Intl.DateTimeFormat('en-GB', {
@@ -1923,13 +1924,13 @@ class Component extends DCLogic {
         return {
           label: x.label,
           off: unavailable,
-          sub: adminBlocked ? (x.blockContent || 'tiệm hôm nay nghỉ') : unavailable ? '\u0111\u00e3 c\u00f3 ng\u01b0\u1eddi \u0111\u1eb7t' : 'c\u00f2n tr\u1ed1ng',
+          sub: adminBlocked ? (x.blockContent || 'tiệm nghỉ') : unavailable ? '\u0111\u00e3 c\u00f3 ng\u01b0\u1eddi \u0111\u1eb7t' : 'c\u00f2n tr\u1ed1ng',
           subColor: adminBlocked ? '#B4233F' : 'inherit',
           style: slotBase + (unavailable
             ? 'border:1.5px solid rgba(90,86,110,.1);background:#F3F2F6;color:#8E8AA0;opacity:.72'
             : 'border:1.5px solid ' + (sel ? '#7A5AD0' : 'rgba(122,90,208,.16)') + ';background:' + (sel ? '#7A5AD0' : '#FFFFFF') + ';color:' + (sel ? '#FFFFFF' : '#2B2440')),
           pick: () => unavailable
-            ? this.toast(adminBlocked ? (x.blockContent || 'tiệm hôm nay nghỉ') : 'Khung gi\u1edd n\u00e0y \u0111\u00e3 c\u00f3 kh\u00e1ch \u0111\u1eb7t, b\u1ea1n ch\u1ecdn gi\u1edd kh\u00e1c nha')
+            ? this.toast(adminBlocked ? 'Khung giờ này tiệm nghỉ, bạn chọn lại khung khác giúp tiệm với nhaa!!' : 'Khung gi\u1edd n\u00e0y \u0111\u00e3 c\u00f3 kh\u00e1ch \u0111\u1eb7t, b\u1ea1n ch\u1ecdn gi\u1edd kh\u00e1c nha')
             : this.setState({ slot: x.label })
         };
       }) : [{
