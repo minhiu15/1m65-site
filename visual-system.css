@@ -155,7 +155,7 @@
 
 .nhu-doodle--services-note-paws { width:clamp(44px,4.5vw,60px); top:15%; right:3%; --nhu-doodle-rotate:-12deg; opacity:.62; }
 .nhu-doodle--promo-teacup { width:clamp(64px,5.5vw,76px); bottom:7%; right:1.4%; --nhu-doodle-rotate:4deg; opacity:.64; }
-.nhu-doodle--promo-star-peach { width:clamp(20px,2vw,32px); top:.5%; right:1.5%; --nhu-doodle-rotate:9deg; opacity:.54; }
+.nhu-doodle--promo-star-peach { width:clamp(20px,2vw,32px); top:.5%; right:.3%; --nhu-doodle-rotate:9deg; opacity:.54; }
 
 .nhu-services-note {
   position:relative !important;
@@ -204,9 +204,9 @@
 }
 .nhu-doodle--about-stamp { width:clamp(58px,6vw,92px); top:45%; right:2.5%; --nhu-doodle-rotate:10deg; opacity:.64; }
 
-.nhu-doodle--review-envelope { width:clamp(58px,6vw,92px); top:7%; right:5%; --nhu-doodle-rotate:8deg; opacity:.66; }
-.nhu-doodle--review-star-pink { width:clamp(20px,2vw,32px); bottom:13%; left:5%; --nhu-doodle-rotate:-8deg; opacity:.5; }
-.nhu-doodle--review-flower { width:clamp(42px,4vw,68px); top:112px; left:10%; --nhu-doodle-rotate:6deg; opacity:.62; }
+.nhu-doodle--review-envelope { width:clamp(46px,4.5vw,70px); top:calc(10% + 40px); right:5%; --nhu-doodle-rotate:8deg; opacity:.66; }
+.nhu-doodle--review-star-pink { width:clamp(20px,2vw,32px); bottom:3%; left:.2%; --nhu-doodle-rotate:-8deg; opacity:.5; }
+.nhu-doodle--review-flower { width:clamp(34px,3.1vw,52px); top:112px; left:10%; --nhu-doodle-rotate:6deg; opacity:.62; }
 
 .nhu-doodle--booking-scissors { width:clamp(58px,6vw,94px); top:5%; left:3%; --nhu-doodle-rotate:-11deg; opacity:.62; }
 .nhu-doodle--booking-paws { width:clamp(56px,6vw,88px); bottom:7%; right:7%; --nhu-doodle-rotate:19deg; opacity:.62; }
@@ -281,10 +281,11 @@
 .nhu-mascot--hero[data-gaze="right"] .nhu-mascot__sprite { background-position:100% 0; }
 .nhu-mascot--hero[data-gaze="up"] .nhu-mascot__sprite { background-position:0 100%; }
 .nhu-mascot--hero[data-gaze="down"] .nhu-mascot__sprite { background-position:50% 100%; }
-.nhu-mascot--walk .nhu-mascot__sprite { background-size:900% 200%; animation:nhu-walk-frames var(--nhu-walk-cycle,4.8s) steps(1,end) infinite; }
+.nhu-mascot--walk .nhu-mascot__sprite { background-size:400% 200%; animation:nhu-walk-frames var(--nhu-walk-cycle,1.4s) steps(1,end) infinite; }
 .nhu-mascot--sit { animation:nhu-sit-rest 5.2s ease-in-out infinite; }
-.nhu-mascot--review .nhu-mascot__sprite { aspect-ratio:.93; background-size:200% 100%; background-position:0 0; }
-.nhu-mascot--booking .nhu-mascot__sprite { aspect-ratio:1.05; background-size:300% 100%; background-position:0 0; transition:background-position .01s linear; }
+.nhu-mascot--review .nhu-mascot__sprite { aspect-ratio:1; background-size:200% 100%; background-position:0 0; }
+[data-cat="review"][data-review="closed"] .nhu-mascot__sprite { background-position:100% 0; }
+.nhu-mascot--booking .nhu-mascot__sprite { aspect-ratio:1; background-size:300% 100%; background-position:0 0; transition:background-position .01s linear; }
 .nhu-mascot--booking[data-booking="awake"] .nhu-mascot__sprite { background-position:50% 0; }
 .nhu-mascot--booking[data-booking="reach"] .nhu-mascot__sprite { background-position:100% 0; }
 .nhu-mascot.is-paused,
@@ -298,12 +299,13 @@
 [data-cat].nhu-replaced > :not(.nhu-mascot) { display: none !important; }
 [data-cat].nhu-replaced { overflow: visible !important; }
 [data-cat="hero"].nhu-replaced > .nhu-mascot { animation:nhu-hero-float 5.8s ease-in-out infinite; }
-[data-cat="review"].nhu-replaced { width:104px !important; top:-60px !important; margin-left:-52px !important; }
+[data-cat="review"].nhu-replaced { width:104px !important; top:-48px !important; margin-left:-52px !important; cursor:pointer; touch-action:manipulation; }
+[data-cat="review"].nhu-replaced:focus-visible { outline:3px solid rgba(122,90,208,.42); outline-offset:5px; border-radius:24px; }
 [data-cat="sleep"].nhu-replaced { width: 270px !important; }
 
 .nhu-legacy-mascot { display:block; width:100%; line-height:0; }
 .nhu-legacy-mascot--walk {
-  --nhu-walk-cycle:4.8s;
+  --nhu-walk-cycle:1.4s;
   position:relative;
   width:112px;
   margin:-26px auto -20px;
@@ -325,8 +327,8 @@
   animation:nhu-walk-shadow var(--nhu-walk-cycle) ease-in-out infinite;
 }
 .nhu-walk-stage {
-  --nhu-walk-cycle:4.8s;
-  animation:nhu-walk-weight var(--nhu-walk-cycle,4.8s) linear infinite !important;
+  --nhu-walk-cycle:1.4s;
+  animation:nhu-walk-weight var(--nhu-walk-cycle,1.4s) linear infinite !important;
   transform-origin:50% 92%;
   will-change:transform;
 }
@@ -338,16 +340,6 @@
 .nhu-legacy-mascot--success { width:190px; margin:0 auto; }
 .nhu-legacy-mascot--head .nhu-mascot__sprite,
 .nhu-legacy-mascot--icon .nhu-mascot__sprite { background-position:0 0; animation:none; }
-.nhu-review-avatar {
-  background-color:#FFF8EE !important;
-  background-image:url('./mascot/nhu-nhi-review.png') !important;
-  background-repeat:no-repeat !important;
-  background-size:200% 100% !important;
-  background-position:0 0 !important;
-  border:2px solid rgba(255,255,255,.9);
-  box-shadow:0 6px 14px -9px rgba(57,50,68,.55);
-}
-
 [data-tilt] {
   overflow: visible !important;
   transform-style: flat !important;
@@ -467,24 +459,14 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
 @keyframes nhu-drift { to { transform: translate3d(26px,-22px,0) rotate(5deg); } }
 @keyframes nhu-hero-float { 0%,100% { transform:translateY(0) rotate(-.7deg); } 50% { transform:translateY(-3px) rotate(.7deg); } }
 @keyframes nhu-walk-frames {
-  0%,5.554% { background-position:0 0; }
-  5.555%,11.11% { background-position:12.5% 0; }
-  11.111%,16.665% { background-position:25% 0; }
-  16.666%,22.221% { background-position:37.5% 0; }
-  22.222%,27.776% { background-position:50% 0; }
-  27.777%,33.332% { background-position:62.5% 0; }
-  33.333%,38.887% { background-position:75% 0; }
-  38.888%,44.443% { background-position:87.5% 0; }
-  44.444%,49.999% { background-position:100% 0; }
-  50%,55.554% { background-position:0 100%; }
-  55.555%,61.11% { background-position:12.5% 100%; }
-  61.111%,66.665% { background-position:25% 100%; }
-  66.666%,72.221% { background-position:37.5% 100%; }
-  72.222%,77.776% { background-position:50% 100%; }
-  77.777%,83.332% { background-position:62.5% 100%; }
-  83.333%,88.887% { background-position:75% 100%; }
-  88.888%,94.443% { background-position:87.5% 100%; }
-  94.444%,100% { background-position:100% 100%; }
+  0%,12.499% { background-position:0 0; }
+  12.5%,24.999% { background-position:33.333% 0; }
+  25%,37.499% { background-position:66.667% 0; }
+  37.5%,49.999% { background-position:100% 0; }
+  50%,62.499% { background-position:0 100%; }
+  62.5%,74.999% { background-position:33.333% 100%; }
+  75%,87.499% { background-position:66.667% 100%; }
+  87.5%,100% { background-position:100% 100%; }
 }
 @keyframes nhu-walk-weight {
   0%,50%,100% { transform:translateY(.25px); }
@@ -684,7 +666,6 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
     will-change: auto;
   }
   .nhu-bg-orb,.nhu-mascot,.nhu-mascot *,.nhu-walk-stage,.nhu-legacy-mascot--walk::after,.nhu-footer-cat,.nhu-booking-particle { animation:none !important; transition-duration:.01ms !important; }
-  .nhu-mascot--walk .nhu-mascot__sprite,
-  .nhu-mascot--review .nhu-mascot__sprite { background-position:0 0 !important; }
+  .nhu-mascot--walk .nhu-mascot__sprite { background-position:0 0 !important; }
   [data-reveal] { opacity:1 !important; transform:none !important; }
 }
