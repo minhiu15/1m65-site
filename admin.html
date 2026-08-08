@@ -7,7 +7,7 @@
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://aomiaszicxqrctcgeoms.supabase.co; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'self'">
   <title>Quản lý lịch · 1M65 Nails</title>
-  <link rel="stylesheet" href="admin.css?v=20260808-6">
+  <link rel="stylesheet" href="admin.css?v=20260808-7">
 </head>
 <body>
   <main class="shell">
@@ -50,7 +50,10 @@
     <!-- ================= DASHBOARD ================= -->
     <section id="dashboard-view" class="dashboard" hidden aria-labelledby="dashboard-title">
 
-      <aside class="app-sidebar">
+      <button id="drawer-scrim" class="drawer-scrim" type="button" aria-label="Đóng menu quản lý" tabindex="-1"></button>
+
+      <aside id="admin-sidebar" class="app-sidebar" aria-label="Menu quản lý">
+        <button id="drawer-close-button" class="drawer-close" type="button" aria-label="Đóng menu">×</button>
         <a class="brand-lockup" href="index.html" aria-label="Về trang chủ 1M65 Nails">
           <span class="brand-mark"><span class="one">1</span><span class="rest">M65</span></span>
           <span class="brand-tag">NAILS, EYELASHES, SHAMPOO</span>
@@ -78,6 +81,9 @@
 
       <div class="app-main">
         <div class="topbar">
+          <button id="drawer-toggle-button" class="drawer-toggle" type="button" aria-controls="admin-sidebar" aria-expanded="false">
+            <span aria-hidden="true">☰</span><span>Menu</span>
+          </button>
           <p class="crumb">Studio · <strong>Quản lý lịch</strong></p>
           <span class="topbar-spacer"></span>
           <a class="btn primary compact" href="#sec-create">+ Tạo lịch</a>
@@ -262,7 +268,7 @@
     </section>
   </main>
 
-  <script src="admin.js?v=20260808-6" defer></script>
-  <script src="admin-datepicker.js?v=20260808-6" defer></script>
+  <script src="admin.js?v=20260808-7" defer></script>
+  <script src="admin-datepicker.js?v=20260808-7" defer></script>
 </body>
 </html>

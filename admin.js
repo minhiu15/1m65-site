@@ -50,6 +50,10 @@
     statusFilter: document.querySelector('#status-filter'),
     refreshButton: document.querySelector('#refresh-button'),
     logoutButton: document.querySelector('#logout-button'),
+    sidebar: document.querySelector('#admin-sidebar'),
+    drawerToggleButton: document.querySelector('#drawer-toggle-button'),
+    drawerCloseButton: document.querySelector('#drawer-close-button'),
+    drawerScrim: document.querySelector('#drawer-scrim'),
     summary: document.querySelector('#summary'),
     appointmentList: document.querySelector('#appointment-list'),
     adminBookingForm: document.querySelector('#admin-booking-form'),
@@ -77,6 +81,7 @@
   const navigationSections = navigationLinks
     .map((link) => document.querySelector(link.getAttribute('href')))
     .filter(Boolean);
+  const mobileDrawerMedia = window.matchMedia('(max-width: 900px)');
 
   let session = readSession();
   let appointments = [];
@@ -205,6 +210,7 @@
     elements.dashboardView.hidden = true;
     elements.loginView.hidden = false;
     elements.loginForm.reset();
+    setDrawerOpen(false, false);
     setMessage(elements.loginMessage, message);
   }
 
@@ -213,7 +219,34 @@
     elements.dashboardView.hidden = false;
     const admin = session?.admin || {};
     elements.adminIdentity.textContent = [admin.displayName, admin.email].filter(Boolean).join(' · ');
+    syncDrawerForViewport();
     updateActiveNavigation(window.location.hash || '#sec-overview');
+  }
+
+  function drawerFocusableElements() {
+    return [...elements.sidebar.querySelectorAll('a[href], button:not(:disabled)')]
+      .filter((item) => !item.hidden && item.getClientRects().length > 0);
+  }
+
+  function setDrawerOpen(open, restoreFocus = true) {
+    const shouldOpen = Boolean(open && mobileDrawerMedia.matches && !elements.dashboardView.hidden);
+    const wasOpen = document.body.classList.contains('drawer-open');
+    document.body.classList.toggle('drawer-open', shouldOpen);
+    elements.drawerToggleButton.setAttribute('aria-expanded', String(shouldOpen));
+    elements.drawerScrim.setAttribute('aria-hidden', String(!shouldOpen));
+    if (mobileDrawerMedia.matches) {
+      elements.sidebar.setAttribute('aria-hidden', String(!shouldOpen));
+      elements.sidebar.inert = !shouldOpen;
+    } else {
+      elements.sidebar.removeAttribute('aria-hidden');
+      elements.sidebar.inert = false;
+    }
+    if (shouldOpen && !wasOpen) elements.drawerCloseButton.focus();
+    if (!shouldOpen && wasOpen && restoreFocus) elements.drawerToggleButton.focus();
+  }
+
+  function syncDrawerForViewport() {
+    setDrawerOpen(false, false);
   }
 
   function updateActiveNavigation(sectionHash) {
@@ -229,6 +262,7 @@
   function initializeSectionNavigation() {
     navigationLinks.forEach((link) => link.addEventListener('click', () => {
       updateActiveNavigation(link.getAttribute('href'));
+      setDrawerOpen(false);
     }));
     window.addEventListener('hashchange', () => updateActiveNavigation(window.location.hash));
     if (!('IntersectionObserver' in window)) return;
@@ -239,6 +273,34 @@
       if (visible?.target?.id) updateActiveNavigation(`#${visible.target.id}`);
     }, { rootMargin: '-18% 0px -65% 0px', threshold: [0, 0.15, 0.4] });
     navigationSections.forEach((section) => observer.observe(section));
+  }
+
+  function initializeMobileDrawer() {
+    elements.drawerToggleButton.addEventListener('click', () => setDrawerOpen(true));
+    elements.drawerCloseButton.addEventListener('click', () => setDrawerOpen(false));
+    elements.drawerScrim.addEventListener('click', () => setDrawerOpen(false));
+    mobileDrawerMedia.addEventListener('change', syncDrawerForViewport);
+    document.addEventListener('keydown', (event) => {
+      if (!document.body.classList.contains('drawer-open')) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setDrawerOpen(false);
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      const focusable = drawerFocusableElements();
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+    syncDrawerForViewport();
   }
 
   function currency(value) {
@@ -1121,6 +1183,7 @@
   setDateValue(elements.adminBookingDate, today);
   setDateValue(elements.blockDate, today);
   initializeSectionNavigation();
+  initializeMobileDrawer();
   renderAdminServices();
   renderAdminSlots();
   createSlotButtons();
