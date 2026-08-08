@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://aomiaszicxqrctcgeoms.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; script-src 'self' https://challenges.cloudflare.com; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'self'">
+  <title>Quản lý lịch hẹn · 1M65 Nails</title>
+  <link rel="icon" href="favicon.svg">
+  <link rel="stylesheet" href="manage-booking.css?v=20260808-1">
+  <script src="turnstile-config.js?v=20260807a"></script>
+  <script src="turnstile-booking.js?v=20260807a"></script>
+  <script src="manage-booking.js?v=20260808-1" defer></script>
+</head>
+<body>
+  <main class="page-shell">
+    <header class="page-header">
+      <a class="back-link" href="index.html">← Về trang chủ</a>
+      <a class="brand" href="index.html" aria-label="1M65 Nails">1M65 <em>Nails</em></a>
+    </header>
+
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">Lịch hẹn của bạn</p>
+      <h1 id="page-title">Xem, dời hoặc hủy lịch</h1>
+      <p>Dùng mã lịch và số điện thoại đã đặt. Thông tin của bạn chỉ được hiển thị khi cả hai dữ liệu khớp.</p>
+    </section>
+
+    <section class="lookup-card" aria-labelledby="lookup-title">
+      <h2 id="lookup-title">Tìm lịch hẹn</h2>
+      <form id="lookup-form" autocomplete="off">
+        <label for="booking-reference">Mã lịch</label>
+        <input id="booking-reference" name="reference" type="text" maxlength="32" placeholder="Nhập mã lịch" autocapitalize="characters" required>
+        <label for="booking-phone">Số điện thoại đã đặt</label>
+        <input id="booking-phone" name="phone" type="tel" inputmode="numeric" pattern="0[0-9]{9}" maxlength="10" placeholder="Nhập số điện thoại" autocomplete="tel" required>
+        <button id="lookup-button" class="button primary" type="submit">Xem lịch hẹn</button>
+      </form>
+      <p id="lookup-message" class="message" role="alert" aria-live="polite"></p>
+    </section>
+
+    <section id="appointment-view" class="appointment-view" aria-labelledby="appointment-title" hidden>
+      <div class="appointment-heading">
+        <div>
+          <p class="eyebrow">Thông tin đã xác thực</p>
+          <h2 id="appointment-title">Lịch <span id="appointment-reference"></span></h2>
+        </div>
+        <span id="appointment-status" class="status-badge"></span>
+      </div>
+
+      <dl class="appointment-details">
+        <div><dt>Khách hàng</dt><dd id="appointment-customer"></dd></div>
+        <div><dt>Ngày và giờ</dt><dd id="appointment-time"></dd></div>
+        <div><dt>Dịch vụ</dt><dd id="appointment-services"></dd></div>
+        <div><dt>Thời lượng</dt><dd id="appointment-duration"></dd></div>
+        <div><dt>Tổng tiền</dt><dd id="appointment-price"></dd></div>
+        <div><dt>Ghi chú</dt><dd id="appointment-note"></dd></div>
+      </dl>
+
+      <p id="manage-notice" class="manage-notice"></p>
+
+      <div id="manage-actions" class="manage-actions">
+        <section class="reschedule-card" aria-labelledby="reschedule-title">
+          <h3 id="reschedule-title">Dời sang giờ khác</h3>
+          <p>Chọn ngày mới để xem những khung giờ còn trống.</p>
+          <div class="date-row">
+            <label for="reschedule-date">Ngày mới</label>
+            <input id="reschedule-date" type="date">
+            <button id="load-slots-button" class="button secondary" type="button">Xem giờ trống</button>
+          </div>
+          <div id="reschedule-slots" class="slot-grid" aria-label="Khung giờ còn trống"></div>
+          <p id="reschedule-message" class="message" role="status" aria-live="polite"></p>
+          <button id="confirm-reschedule-button" class="button primary" type="button" disabled>Xác nhận dời lịch</button>
+        </section>
+
+        <section class="cancel-card" aria-labelledby="cancel-title">
+          <div>
+            <h3 id="cancel-title">Bạn không thể đến?</h3>
+            <p>Hủy lịch sẽ mở lại khung giờ này cho khách khác.</p>
+          </div>
+          <button id="cancel-button" class="button danger" type="button">Hủy lịch hẹn</button>
+        </section>
+      </div>
+    </section>
+
+    <footer>Cần tiệm hỗ trợ? Liên hệ trực tiếp với 1M65 Nails để được xử lý giúp.</footer>
+  </main>
+</body>
+</html>
