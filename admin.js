@@ -364,7 +364,7 @@
     let firstMinute = 9 * 60;
     if (selectedDate < today) firstMinute = 18 * 60;
     if (selectedDate === today) {
-      firstMinute = Math.max(9 * 60, Math.floor(currentMinuteInTimeZone() / 30) * 30 - 30);
+      firstMinute = Math.max(9 * 60, Math.floor(currentMinuteInTimeZone() / 30) * 30 + 30);
     }
     for (let minutes = firstMinute; minutes <= 17 * 60; minutes += 30) {
       const button = node('button', 'slot-chip', minutesToTime(minutes));
