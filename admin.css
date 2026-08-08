@@ -31,7 +31,7 @@ body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-button, input, select { font: inherit; }
+button, input, select, textarea { font: inherit; }
 button { cursor: pointer; }
 
 .shell { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 42px 0 72px; }
@@ -54,7 +54,7 @@ h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp
 
 form { display: grid; gap: 10px; margin-top: 28px; }
 label { color: var(--ink); font-size: .85rem; font-weight: 750; }
-input, select {
+input, select, textarea {
   width: 100%;
   min-height: 46px;
   margin-top: 7px;
@@ -65,7 +65,8 @@ input, select {
   padding: 10px 13px;
   outline: none;
 }
-input:focus, select:focus { border-color: var(--rose); box-shadow: 0 0 0 3px rgba(182, 80, 120, .12); }
+textarea { resize: vertical; }
+input:focus, select:focus, textarea:focus { border-color: var(--rose); box-shadow: 0 0 0 3px rgba(182, 80, 120, .12); }
 
 .primary, .ghost {
   min-height: 46px;
@@ -103,7 +104,7 @@ button:disabled { cursor: wait; opacity: .55; }
 .summary-card span { color: var(--muted); font-size: .82rem; }
 .appointment-list { display: grid; gap: 14px; }
 
-.blocker {
+.blocker, .creator {
   display: grid;
   gap: 18px;
   padding: 22px;
@@ -112,6 +113,23 @@ button:disabled { cursor: wait; opacity: .55; }
   background: var(--card);
   box-shadow: 0 14px 35px rgba(92, 49, 69, .07);
 }
+.admin-booking-form { margin-top: 0; gap: 18px; }
+.admin-service-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; max-height: 270px; overflow: auto; padding: 2px; }
+.admin-service-option { min-height: 58px; border: 1px solid var(--line); border-radius: 13px; background: #fff; color: var(--ink); padding: 9px 11px; text-align: left; }
+.admin-service-option strong, .admin-service-option span { display: block; }
+.admin-service-option span { margin-top: 3px; color: var(--muted); font-size: .76rem; line-height: 1.35; }
+.admin-service-option[aria-pressed="true"] { border-color: var(--rose); background: var(--rose-soft); color: var(--rose-dark); }
+.admin-service-option:disabled { cursor: not-allowed; opacity: .38; }
+.admin-service-summary { margin: 9px 0 0; font-size: .86rem; }
+.admin-date-slots { display: grid; grid-template-columns: minmax(180px, .32fr) minmax(0, 1.68fr); gap: 14px; align-items: start; }
+.admin-date-slots .field-label { margin-top: 0; }
+.admin-booking-slot-grid { display: grid; grid-template-columns: repeat(8, minmax(58px, 1fr)); gap: 8px; }
+.admin-booking-slot-grid .slot-chip { min-height: 46px; }
+.admin-slot-empty { margin: 0; color: var(--muted); font-size: .86rem; line-height: 1.5; }
+.admin-customer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.admin-create-actions { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.admin-create-actions .message { margin: 0; }
+#admin-create-booking-button:disabled { background: #eee8eb; color: #a89da3; box-shadow: none; opacity: 1; }
 .section-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
 .block-heading-actions { display: flex; gap: 9px; flex-wrap: wrap; justify-content: flex-end; }
 .section-heading .eyebrow { margin-top: 0; }
@@ -185,6 +203,8 @@ button:disabled { cursor: wait; opacity: .55; }
   .appointment { grid-template-columns: 130px 1fr; }
   .status-column { grid-column: 2; }
   .slot-grid { grid-template-columns: repeat(6, minmax(60px, 1fr)); }
+  .admin-service-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .admin-booking-slot-grid { grid-template-columns: repeat(6, minmax(58px, 1fr)); }
 }
 
 @media (max-width: 560px) {
@@ -194,8 +214,11 @@ button:disabled { cursor: wait; opacity: .55; }
   .topbar .muted { display: none; }
   .filters { grid-template-columns: 1fr; }
   .section-heading, .block-actions { align-items: stretch; flex-direction: column; }
-  .block-controls { grid-template-columns: 1fr; }
+  .block-controls, .admin-date-slots, .admin-customer-grid { grid-template-columns: 1fr; }
   .slot-grid { grid-template-columns: repeat(3, 1fr); }
+  .admin-service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-height: 330px; }
+  .admin-booking-slot-grid { grid-template-columns: repeat(3, 1fr); }
+  .admin-create-actions { align-items: stretch; flex-direction: column; }
   .compact { width: 100%; }
   .appointment { grid-template-columns: 1fr; gap: 12px; }
   .status-column { grid-column: auto; }

@@ -27,6 +27,16 @@
     logoutButton: document.querySelector('#logout-button'),
     summary: document.querySelector('#summary'),
     appointmentList: document.querySelector('#appointment-list'),
+    adminBookingForm: document.querySelector('#admin-booking-form'),
+    adminServiceGrid: document.querySelector('#admin-service-grid'),
+    adminServiceSummary: document.querySelector('#admin-service-summary'),
+    adminBookingDate: document.querySelector('#admin-booking-date'),
+    adminBookingSlotGrid: document.querySelector('#admin-booking-slot-grid'),
+    adminCustomerName: document.querySelector('#admin-customer-name'),
+    adminCustomerPhone: document.querySelector('#admin-customer-phone'),
+    adminCustomerNote: document.querySelector('#admin-customer-note'),
+    adminBookingMessage: document.querySelector('#admin-booking-message'),
+    adminCreateBookingButton: document.querySelector('#admin-create-booking-button'),
     blockDate: document.querySelector('#block-date'),
     blockReason: document.querySelector('#block-reason'),
     allDayButton: document.querySelector('#all-day-button'),
@@ -44,6 +54,13 @@
   let selectedBlockSlots = new Set();
   let blockWholeDay = false;
   let blockDayLoading = false;
+  let bookingConfig = null;
+  let adminSelectedServiceIds = new Set();
+  let adminAvailableSlots = [];
+  let adminSelectedStartAt = '';
+  let adminAvailabilityLoading = false;
+  let adminCreatePending = false;
+  let adminAvailabilityRequestId = 0;
 
   function readSession() {
     try {
@@ -91,6 +108,17 @@
       too_many_blocks: 'Bạn chọn quá nhiều khoảng khóa cùng lúc.',
       block_reason_too_long: 'Lý do khóa lịch dài quá 120 ký tự.',
       block_not_found: 'Khoảng khóa này không còn tồn tại.',
+      invalid_customer_name: 'Tên khách cần từ 2 đến 80 ký tự.',
+      invalid_customer_phone: 'Số điện thoại phải gồm 10 số và bắt đầu bằng 0.',
+      customer_note_too_long: 'Ghi chú dài quá 500 ký tự.',
+      date_outside_booking_window: 'Ngày hẹn nằm ngoài thời gian cho phép đặt.',
+      start_time_is_in_the_past: 'Giờ hẹn đã qua. Vui lòng chọn giờ khác.',
+      outside_business_hours: 'Giờ hẹn nằm ngoài giờ hoạt động.',
+      invalid_slot_interval: 'Giờ hẹn không đúng khung 30 phút.',
+      invalid_service_selection: 'Vui lòng chọn ít nhất một dịch vụ.',
+      too_many_services: 'Mỗi lịch được chọn tối đa 8 dịch vụ.',
+      service_not_found: 'Một dịch vụ không còn hoạt động. Vui lòng chọn lại.',
+      service_selection_too_long: 'Tổng thời lượng dịch vụ quá dài.',
       request_failed: 'Không thể kết nối máy chủ. Vui lòng thử lại.'
     };
     return messages[code] || messages.request_failed;
@@ -189,6 +217,188 @@
     if (className) item.className = className;
     if (text !== '') item.textContent = text;
     return item;
+  }
+
+  function selectedAdminServices() {
+    const services = Array.isArray(bookingConfig?.services) ? bookingConfig.services : [];
+    return services.filter((service) => adminSelectedServiceIds.has(service.id));
+  }
+
+  function updateAdminCreateButton() {
+    elements.adminCreateBookingButton.disabled = adminCreatePending
+      || adminAvailabilityLoading
+      || adminSelectedServiceIds.size === 0
+      || !adminSelectedStartAt;
+  }
+
+  function renderAdminServiceSummary() {
+    const services = selectedAdminServices();
+    if (!services.length) {
+      elements.adminServiceSummary.textContent = 'Chưa chọn dịch vụ.';
+      updateAdminCreateButton();
+      return;
+    }
+    const duration = services.reduce((sum, service) => sum + Number(service.durationMinutes || 0), 0);
+    const price = services.reduce((sum, service) => sum + Number(service.price || 0), 0);
+    elements.adminServiceSummary.textContent = `${services.length} dịch vụ · ${duration} phút · ${currency(price)}`;
+    updateAdminCreateButton();
+  }
+
+  function renderAdminServices() {
+    const services = Array.isArray(bookingConfig?.services) ? bookingConfig.services : [];
+    if (!services.length) {
+      elements.adminServiceGrid.replaceChildren(node('p', 'admin-slot-empty', 'Chưa tải được danh sách dịch vụ.'));
+      renderAdminServiceSummary();
+      return;
+    }
+    elements.adminServiceGrid.replaceChildren(...services.map((service) => {
+      const selected = adminSelectedServiceIds.has(service.id);
+      const button = node('button', 'admin-service-option');
+      button.type = 'button';
+      button.setAttribute('aria-pressed', String(selected));
+      button.disabled = !selected && adminSelectedServiceIds.size >= 8;
+      button.append(
+        node('strong', '', service.name),
+        node('span', '', `${service.durationMinutes} phút · ${currency(service.price)}`)
+      );
+      button.addEventListener('click', () => {
+        if (selected) adminSelectedServiceIds.delete(service.id);
+        else if (adminSelectedServiceIds.size < 8) adminSelectedServiceIds.add(service.id);
+        adminSelectedStartAt = '';
+        renderAdminServices();
+        renderAdminSlots();
+        loadAdminAvailability();
+      });
+      return button;
+    }));
+    renderAdminServiceSummary();
+  }
+
+  function renderAdminSlots() {
+    if (adminAvailabilityLoading) {
+      elements.adminBookingSlotGrid.replaceChildren(node('p', 'admin-slot-empty', 'Đang tải giờ trống…'));
+      updateAdminCreateButton();
+      return;
+    }
+    if (!adminSelectedServiceIds.size) {
+      elements.adminBookingSlotGrid.replaceChildren(node('p', 'admin-slot-empty', 'Chọn dịch vụ trước để xem giờ trống.'));
+      updateAdminCreateButton();
+      return;
+    }
+    if (!adminAvailableSlots.length) {
+      elements.adminBookingSlotGrid.replaceChildren(node('p', 'admin-slot-empty', 'Ngày này không còn giờ phù hợp.'));
+      updateAdminCreateButton();
+      return;
+    }
+    elements.adminBookingSlotGrid.replaceChildren(...adminAvailableSlots.map((slot) => {
+      const button = node('button', 'slot-chip', slot.label);
+      button.type = 'button';
+      const selected = slot.startAt === adminSelectedStartAt;
+      button.classList.toggle('selected', selected);
+      button.setAttribute('aria-pressed', String(selected));
+      button.addEventListener('click', () => {
+        adminSelectedStartAt = slot.startAt;
+        renderAdminSlots();
+      });
+      return button;
+    }));
+    updateAdminCreateButton();
+  }
+
+  async function loadAdminBookingConfig() {
+    try {
+      const data = await adminRequest({ action: 'config' });
+      bookingConfig = data.config || null;
+      const today = dateInTimeZone();
+      elements.adminBookingDate.min = today;
+      elements.adminBookingDate.max = addDays(today, Number(bookingConfig?.advanceBookingDays || 30));
+      renderAdminServices();
+      renderAdminSlots();
+    } catch (error) {
+      setMessage(elements.adminBookingMessage, errorMessage(error.message));
+    }
+  }
+
+  async function loadAdminAvailability() {
+    const date = elements.adminBookingDate.value;
+    const serviceIds = [...adminSelectedServiceIds];
+    adminSelectedStartAt = '';
+    adminAvailableSlots = [];
+    if (!date || !serviceIds.length) {
+      renderAdminSlots();
+      return;
+    }
+    const requestId = ++adminAvailabilityRequestId;
+    adminAvailabilityLoading = true;
+    renderAdminSlots();
+    setMessage(elements.adminBookingMessage, '');
+    try {
+      const data = await adminRequest({ action: 'availability', date, serviceIds });
+      if (requestId !== adminAvailabilityRequestId) return;
+      const seen = new Set();
+      adminAvailableSlots = (Array.isArray(data.slots) ? data.slots : []).map((slot) => {
+        const startAt = slot.start_at || slot.startAt;
+        return { startAt, label: localTime(startAt) };
+      }).filter((slot) => slot.startAt && !seen.has(slot.label) && seen.add(slot.label));
+    } catch (error) {
+      if (requestId === adminAvailabilityRequestId) {
+        setMessage(elements.adminBookingMessage, errorMessage(error.message));
+      }
+    } finally {
+      if (requestId === adminAvailabilityRequestId) {
+        adminAvailabilityLoading = false;
+        renderAdminSlots();
+      }
+    }
+  }
+
+  async function createAdminAppointment(event) {
+    event.preventDefault();
+    if (!elements.adminBookingForm.reportValidity()) return;
+    const services = selectedAdminServices();
+    if (!services.length || !adminSelectedStartAt) {
+      setMessage(elements.adminBookingMessage, 'Vui lòng chọn dịch vụ và giờ hẹn.');
+      return;
+    }
+    const customerName = elements.adminCustomerName.value.trim();
+    const customerPhone = elements.adminCustomerPhone.value.replace(/\D/g, '');
+    const date = elements.adminBookingDate.value;
+    const time = localTime(adminSelectedStartAt);
+    if (!window.confirm(`Tạo lịch ${time} ngày ${date} cho ${customerName}?`)) return;
+    adminCreatePending = true;
+    updateAdminCreateButton();
+    setMessage(elements.adminBookingMessage, 'Đang tạo lịch…');
+    try {
+      const data = await adminRequest({
+        action: 'admin_create_appointment',
+        serviceIds: services.map((service) => service.id),
+        startAt: adminSelectedStartAt,
+        customerName,
+        customerPhone,
+        customerNote: elements.adminCustomerNote.value.trim()
+      });
+      const reference = data.appointment?.reference || '';
+      elements.adminCustomerName.value = '';
+      elements.adminCustomerPhone.value = '';
+      elements.adminCustomerNote.value = '';
+      adminSelectedServiceIds.clear();
+      adminSelectedStartAt = '';
+      adminAvailableSlots = [];
+      renderAdminServices();
+      renderAdminSlots();
+      if (date < elements.fromDate.value || date > elements.toDate.value) {
+        elements.fromDate.value = date;
+        elements.toDate.value = date;
+      }
+      await loadAppointments();
+      setMessage(elements.adminBookingMessage, `Đã tạo lịch ${reference}.`, true);
+    } catch (error) {
+      setMessage(elements.adminBookingMessage, errorMessage(error.message));
+      if (error.message === 'slot_unavailable') await loadAdminAvailability();
+    } finally {
+      adminCreatePending = false;
+      updateAdminCreateButton();
+    }
   }
 
   function renderSummary() {
@@ -572,7 +782,7 @@
       });
       storeSession(data.session);
       showDashboard();
-      await Promise.all([loadAppointments(), loadBlocks()]);
+      await Promise.all([loadAppointments(), loadBlocks(), loadAdminBookingConfig()]);
     } catch (error) {
       storeSession(null);
       setMessage(elements.loginMessage, errorMessage(error.message));
@@ -583,6 +793,11 @@
 
   elements.refreshButton.addEventListener('click', loadAppointments);
   elements.statusFilter.addEventListener('change', loadAppointments);
+  elements.adminBookingDate.addEventListener('change', loadAdminAvailability);
+  elements.adminCustomerPhone.addEventListener('input', () => {
+    elements.adminCustomerPhone.value = elements.adminCustomerPhone.value.replace(/\D/g, '').slice(0, 10);
+  });
+  elements.adminBookingForm.addEventListener('submit', createAdminAppointment);
   elements.blockDate.addEventListener('change', () => {
     selectedBlockSlots.clear();
     blockDayAppointments = [];
@@ -606,13 +821,16 @@
   const today = dateInTimeZone();
   elements.fromDate.value = today;
   elements.toDate.value = addDays(today, 7);
+  elements.adminBookingDate.value = today;
   elements.blockDate.value = today;
+  renderAdminServices();
+  renderAdminSlots();
   createSlotButtons();
   updateBlockSelection();
 
   if (session) {
     showDashboard();
-    Promise.all([loadAppointments(), loadBlocks()]);
+    Promise.all([loadAppointments(), loadBlocks(), loadAdminBookingConfig()]);
   } else {
     showLogin();
   }

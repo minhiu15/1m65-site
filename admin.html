@@ -55,6 +55,39 @@
 
       <p id="dashboard-message" class="message" role="status" aria-live="polite"></p>
 
+      <section class="creator" aria-labelledby="creator-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Khách gọi điện / nhắn tin</p>
+            <h2 id="creator-title">Tạo lịch cho khách</h2>
+            <p class="muted">Giá, thời lượng và giờ trống được kiểm tra trực tiếp từ hệ thống booking.</p>
+          </div>
+        </div>
+        <form id="admin-booking-form" class="admin-booking-form">
+          <div>
+            <p class="field-label">Dịch vụ (chọn tối đa 8)</p>
+            <div id="admin-service-grid" class="admin-service-grid" aria-label="Danh sách dịch vụ"></div>
+            <p id="admin-service-summary" class="muted admin-service-summary">Chưa chọn dịch vụ.</p>
+          </div>
+          <div class="admin-date-slots">
+            <label>Ngày hẹn<input id="admin-booking-date" type="date" required></label>
+            <div>
+              <p class="field-label">Giờ còn trống</p>
+              <div id="admin-booking-slot-grid" class="admin-booking-slot-grid" aria-label="Giờ còn trống"></div>
+            </div>
+          </div>
+          <div class="admin-customer-grid">
+            <label>Tên khách<input id="admin-customer-name" type="text" minlength="2" maxlength="80" autocomplete="name" required></label>
+            <label>Số điện thoại<input id="admin-customer-phone" type="tel" inputmode="numeric" pattern="0[0-9]{9}" maxlength="10" autocomplete="tel" required></label>
+          </div>
+          <label>Ghi chú<textarea id="admin-customer-note" maxlength="500" rows="3" placeholder="Không bắt buộc"></textarea></label>
+          <div class="admin-create-actions">
+            <p id="admin-booking-message" class="message" role="status" aria-live="polite"></p>
+            <button id="admin-create-booking-button" class="primary compact" type="submit" disabled>Tạo lịch</button>
+          </div>
+        </form>
+      </section>
+
       <section class="blocker" aria-labelledby="blocker-title">
         <div class="section-heading">
           <div>
