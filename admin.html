@@ -62,11 +62,14 @@
             <h2 id="blocker-title">Khóa khung giờ</h2>
             <p class="muted">Booking đã tồn tại vẫn giữ nguyên. Mọi lịch mới chạm vào vùng khóa sẽ bị chặn.</p>
           </div>
-          <button id="all-day-button" class="ghost" type="button" aria-pressed="false">Khóa cả ngày</button>
+          <div class="block-heading-actions">
+            <button id="select-all-button" class="ghost" type="button" aria-pressed="false">Chọn tất cả</button>
+            <button id="all-day-button" class="ghost" type="button" aria-pressed="false">Khóa cả ngày</button>
+          </div>
         </div>
         <div class="block-controls">
           <label>Ngày cần khóa<input id="block-date" type="date"></label>
-          <label>Lý do (không bắt buộc)<input id="block-reason" type="text" maxlength="120" placeholder="Ví dụ: Nghỉ, bận việc riêng"></label>
+          <label>Nội dung:<input id="block-reason" type="text" maxlength="120" placeholder="Mặc định: tiệm hôm nay nghỉ"></label>
         </div>
         <div>
           <p class="field-label">Chọn một hoặc nhiều khung 30 phút</p>

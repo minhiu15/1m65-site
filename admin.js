@@ -29,6 +29,7 @@
     appointmentList: document.querySelector('#appointment-list'),
     blockDate: document.querySelector('#block-date'),
     blockReason: document.querySelector('#block-reason'),
+    selectAllButton: document.querySelector('#select-all-button'),
     allDayButton: document.querySelector('#all-day-button'),
     blockSlotGrid: document.querySelector('#block-slot-grid'),
     blockSelection: document.querySelector('#block-selection'),
@@ -40,8 +41,10 @@
   let session = readSession();
   let appointments = [];
   let blocks = [];
+  let blockDayAppointments = [];
   let selectedBlockSlots = new Set();
   let blockWholeDay = false;
+  let blockDayLoading = false;
 
   function readSession() {
     try {
@@ -170,6 +173,16 @@
     return new Intl.DateTimeFormat('en-GB', {
       timeZone: TIME_ZONE, hour: '2-digit', minute: '2-digit', hour12: false
     }).format(new Date(value));
+  }
+
+  function currentMinuteInTimeZone() {
+    const parts = new Intl.DateTimeFormat('en-GB', {
+      timeZone: TIME_ZONE, hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+    }).formatToParts(new Date()).reduce((result, part) => {
+      if (part.type !== 'literal') result[part.type] = part.value;
+      return result;
+    }, {});
+    return Number(parts.hour) * 60 + Number(parts.minute);
   }
 
   function node(tag, className = '', text = '') {
@@ -346,12 +359,26 @@
 
   function createSlotButtons() {
     const buttons = [];
-    for (let minutes = 9 * 60; minutes <= 17 * 60; minutes += 30) {
+    const selectedDate = elements.blockDate.value;
+    const today = dateInTimeZone();
+    let firstMinute = 9 * 60;
+    if (selectedDate < today) firstMinute = 18 * 60;
+    if (selectedDate === today) {
+      firstMinute = Math.max(9 * 60, Math.floor(currentMinuteInTimeZone() / 30) * 30 - 30);
+    }
+    for (let minutes = firstMinute; minutes <= 17 * 60; minutes += 30) {
       const button = node('button', 'slot-chip', minutesToTime(minutes));
       button.type = 'button';
       button.dataset.minutes = String(minutes);
       button.setAttribute('aria-pressed', 'false');
+      const booked = blockSlotIsBooked(minutes);
+      button.classList.toggle('booked', booked);
+      if (booked) {
+        button.title = 'Đã có lịch khách';
+        button.setAttribute('aria-label', `${minutesToTime(minutes)} · Đã có lịch khách`);
+      }
       button.addEventListener('click', () => {
+        if (booked) return;
         if (selectedBlockSlots.has(minutes)) selectedBlockSlots.delete(minutes);
         else selectedBlockSlots.add(minutes);
         updateBlockSelection();
@@ -361,19 +388,38 @@
     elements.blockSlotGrid.replaceChildren(...buttons);
   }
 
+  function blockSlotIsBooked(minutes) {
+    const date = elements.blockDate.value;
+    const start = new Date(`${date}T${minutesToTime(minutes)}:00+07:00`).getTime();
+    const end = start + 30 * 60 * 1000;
+    return blockDayAppointments.some((appointment) =>
+      (appointment.status === 'pending' || appointment.status === 'confirmed')
+      && new Date(appointment.startAt).getTime() < end
+      && new Date(appointment.endAt).getTime() > start
+    );
+  }
+
   function updateBlockSelection() {
     elements.allDayButton.setAttribute('aria-pressed', String(blockWholeDay));
+    const selectable = [];
     elements.blockSlotGrid.querySelectorAll('.slot-chip').forEach((button) => {
+      const minutes = Number(button.dataset.minutes);
+      const booked = blockSlotIsBooked(minutes);
       const selected = selectedBlockSlots.has(Number(button.dataset.minutes));
       button.classList.toggle('selected', selected);
       button.setAttribute('aria-pressed', String(selected));
-      button.disabled = blockWholeDay;
+      button.disabled = blockWholeDay || booked || blockDayLoading;
+      if (!booked) selectable.push(minutes);
     });
+    const allSelectableSelected = selectable.length > 0
+      && selectable.every((minutes) => selectedBlockSlots.has(minutes));
+    elements.selectAllButton.setAttribute('aria-pressed', String(allSelectableSelected && !blockWholeDay));
+    elements.selectAllButton.disabled = blockWholeDay || blockDayLoading || selectable.length === 0;
     const count = selectedBlockSlots.size;
     elements.blockSelection.textContent = blockWholeDay
       ? 'Đã chọn khóa cả ngày.'
       : count ? `Đã chọn ${count} khung 30 phút.` : 'Chưa chọn khung giờ.';
-    elements.createBlockButton.disabled = !blockWholeDay && count === 0;
+    elements.createBlockButton.disabled = blockDayLoading || (!blockWholeDay && count === 0);
   }
 
   function selectedRanges() {
@@ -433,18 +479,29 @@
   async function loadBlocks() {
     const date = elements.blockDate.value;
     if (!date || !session) return;
+    blockDayLoading = true;
+    selectedBlockSlots.clear();
+    createSlotButtons();
+    updateBlockSelection();
     setMessage(elements.blockMessage, 'Đang tải lịch khóa…');
     try {
-      const data = await adminRequest({
-        action: 'admin_list_blocks',
-        from: `${date}T00:00:00+07:00`,
-        to: `${addDays(date, 1)}T00:00:00+07:00`
-      });
-      blocks = Array.isArray(data.blocks) ? data.blocks : [];
+      const from = `${date}T00:00:00+07:00`;
+      const to = `${addDays(date, 1)}T00:00:00+07:00`;
+      const [blockData, appointmentData] = await Promise.all([
+        adminRequest({ action: 'admin_list_blocks', from, to }),
+        adminRequest({ action: 'admin_list', from, to, status: null })
+      ]);
+      blocks = Array.isArray(blockData.blocks) ? blockData.blocks : [];
+      blockDayAppointments = Array.isArray(appointmentData.appointments)
+        ? appointmentData.appointments : [];
       renderBlocks();
       setMessage(elements.blockMessage, '');
     } catch (error) {
       setMessage(elements.blockMessage, errorMessage(error.message));
+    } finally {
+      blockDayLoading = false;
+      createSlotButtons();
+      updateBlockSelection();
     }
   }
 
@@ -512,9 +569,20 @@
   elements.statusFilter.addEventListener('change', loadAppointments);
   elements.blockDate.addEventListener('change', () => {
     selectedBlockSlots.clear();
+    blockDayAppointments = [];
     blockWholeDay = false;
     updateBlockSelection();
     loadBlocks();
+  });
+  elements.selectAllButton.addEventListener('click', () => {
+    if (blockWholeDay) return;
+    const selectable = [...elements.blockSlotGrid.querySelectorAll('.slot-chip:not(.booked)')]
+      .map((button) => Number(button.dataset.minutes));
+    const allSelected = selectable.length > 0
+      && selectable.every((minutes) => selectedBlockSlots.has(minutes));
+    if (allSelected) selectable.forEach((minutes) => selectedBlockSlots.delete(minutes));
+    else selectable.forEach((minutes) => selectedBlockSlots.add(minutes));
+    updateBlockSelection();
   });
   elements.allDayButton.addEventListener('click', () => {
     blockWholeDay = !blockWholeDay;

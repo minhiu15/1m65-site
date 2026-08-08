@@ -113,6 +113,7 @@ button:disabled { cursor: wait; opacity: .55; }
   box-shadow: 0 14px 35px rgba(92, 49, 69, .07);
 }
 .section-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+.block-heading-actions { display: flex; gap: 9px; flex-wrap: wrap; justify-content: flex-end; }
 .section-heading .eyebrow { margin-top: 0; }
 .section-heading h2 { margin: 0; font-family: Georgia, serif; font-size: 1.8rem; font-weight: 500; }
 .section-heading .muted { margin-bottom: 0; }
@@ -128,8 +129,10 @@ button:disabled { cursor: wait; opacity: .55; }
   font-weight: 750;
 }
 .slot-chip.selected { border-color: var(--rose); background: var(--rose); color: #fff; }
+.slot-chip.booked { border-style: dashed; background: #f1eef1; color: #8a8187; }
 .slot-chip:disabled { cursor: not-allowed; opacity: .4; }
 #all-day-button[aria-pressed="true"] { border-color: var(--rose); background: var(--rose-soft); color: var(--rose-dark); }
+#select-all-button[aria-pressed="true"] { border-color: var(--rose); background: var(--rose-soft); color: var(--rose-dark); }
 .block-actions { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
 .block-actions p { margin: 0; }
 .existing-blocks { padding-top: 4px; border-top: 1px solid var(--line); }

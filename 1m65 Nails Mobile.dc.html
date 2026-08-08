@@ -929,8 +929,12 @@ class Component extends DCLogic {
     }).format(new Date(startAt));
   }
 
-  bookingSlotGrid(availableSlots) {
+  bookingSlotGrid(availableSlots, blockedSlots) {
     const availableByLabel = new Map((availableSlots || []).map(item => [item.label, item]));
+    const blockedByLabel = new Map((blockedSlots || []).map(item => {
+      const startAt = item.start_at || item.startAt;
+      return [this.slotLabel(startAt), { content: item.content || 'tiệm hôm nay nghỉ' }];
+    }));
     const duration = Math.max(5, this.svcTotals().minutes || 0);
     const parts = new Intl.DateTimeFormat('en-GB', {
       timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit',
@@ -946,8 +950,13 @@ class Component extends DCLogic {
     for (let minute = 9 * 60; minute <= 17 * 60; minute += 30) {
       const label = String(Math.floor(minute / 60)).padStart(2, '0') + ':' + String(minute % 60).padStart(2, '0');
       const available = availableByLabel.get(label);
+      const blocked = blockedByLabel.get(label);
       if (selectedDate === today && !available && minute <= currentMinute) continue;
-      grid.push(available || { startAt: '', label: label, available: false });
+      grid.push(available || {
+        startAt: '', label: label, available: false,
+        blockedByAdmin: !!blocked,
+        blockContent: blocked ? blocked.content : ''
+      });
     }
     return grid;
   }
@@ -982,7 +991,7 @@ class Component extends DCLogic {
         const startAt = item.start_at || item.startAt;
         return { startAt: startAt, label: this.slotLabel(startAt), available: true };
       }).filter(item => item.startAt && !seen.has(item.label) && seen.add(item.label));
-      const slotGrid = this.bookingSlotGrid(availableSlots);
+      const slotGrid = this.bookingSlotGrid(availableSlots, Array.isArray(body.blockedSlots) ? body.blockedSlots : []);
       const selected = preferredSlot && slotGrid.some(item => item.available && item.label === preferredSlot) ? preferredSlot : null;
       this.setState({ slotsLoading: false, availableSlots: slotGrid, slot: selected });
       if (preferredSlot && !selected) this.toast(preferredSlot + ' không còn trống — chọn giờ khác nha');
@@ -1763,14 +1772,19 @@ class Component extends DCLogic {
       })) : (s.availableSlots || []).length ? (s.availableSlots || []).map(x => {
         const sel = x.label === s.slot;
         const unavailable = x.available === false;
+        const adminBlocked = unavailable && x.blockedByAdmin;
         return {
           label: x.label,
           off: unavailable,
-          sub: unavailable ? '\u0111\u00e3 c\u00f3 ng\u01b0\u1eddi \u0111\u1eb7t' : 'c\u00f2n tr\u1ed1ng',
+          sub: adminBlocked ? (x.blockContent || 'tiệm hôm nay nghỉ') : unavailable ? '\u0111\u00e3 c\u00f3 ng\u01b0\u1eddi \u0111\u1eb7t' : 'c\u00f2n tr\u1ed1ng',
           style: slotBase + (unavailable
-            ? 'border:1.5px solid rgba(90,86,110,.1);background:#F3F2F6;color:#8E8AA0;opacity:.72'
+            ? adminBlocked
+              ? 'border:1.5px solid rgba(190,45,65,.3);background:#FFF0F2;color:#B4233F;opacity:.92'
+              : 'border:1.5px solid rgba(90,86,110,.1);background:#F3F2F6;color:#8E8AA0;opacity:.72'
             : 'border:1.5px solid ' + (sel ? '#7A5AD0' : 'rgba(122,90,208,.16)') + ';background:' + (sel ? '#7A5AD0' : '#FFFFFF') + ';color:' + (sel ? '#FFFFFF' : '#2B2440')),
-          pick: () => unavailable ? this.toast('Khung gi\u1edd n\u00e0y \u0111\u00e3 c\u00f3 kh\u00e1ch \u0111\u1eb7t, b\u1ea1n ch\u1ecdn gi\u1edd kh\u00e1c nha') : this.setState({ slot: x.label })
+          pick: () => unavailable
+            ? this.toast(adminBlocked ? (x.blockContent || 'tiệm hôm nay nghỉ') : 'Khung gi\u1edd n\u00e0y \u0111\u00e3 c\u00f3 kh\u00e1ch \u0111\u1eb7t, b\u1ea1n ch\u1ecdn gi\u1edd kh\u00e1c nha')
+            : this.setState({ slot: x.label })
         };
       }) : [{
         label: '—', sub: 'hết chỗ',
