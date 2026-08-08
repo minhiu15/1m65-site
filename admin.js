@@ -73,6 +73,10 @@
     blockMessage: document.querySelector('#block-message'),
     blockList: document.querySelector('#block-list')
   };
+  const navigationLinks = [...document.querySelectorAll('.app-nav a[href^="#sec-"]')];
+  const navigationSections = navigationLinks
+    .map((link) => document.querySelector(link.getAttribute('href')))
+    .filter(Boolean);
 
   let session = readSession();
   let appointments = [];
@@ -87,6 +91,7 @@
   let adminAvailableSlots = [];
   let adminSelectedStartAt = '';
   let adminAvailabilityLoading = false;
+  let adminConfigLoading = true;
   let adminCreatePending = false;
   let adminAvailabilityRequestId = 0;
 
@@ -116,6 +121,11 @@
     const [year, month, day] = dateText.split('-').map(Number);
     const date = new Date(Date.UTC(year, month - 1, day + days));
     return date.toISOString().slice(0, 10);
+  }
+
+  function setDateValue(input, value) {
+    input.value = value;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
   function setMessage(target, message = '', success = false) {
@@ -203,6 +213,32 @@
     elements.dashboardView.hidden = false;
     const admin = session?.admin || {};
     elements.adminIdentity.textContent = [admin.displayName, admin.email].filter(Boolean).join(' · ');
+    updateActiveNavigation(window.location.hash || '#sec-overview');
+  }
+
+  function updateActiveNavigation(sectionHash) {
+    const fallback = '#sec-overview';
+    const activeHash = navigationLinks.some((link) => link.getAttribute('href') === sectionHash)
+      ? sectionHash : fallback;
+    navigationLinks.forEach((link) => {
+      if (link.getAttribute('href') === activeHash) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
+  function initializeSectionNavigation() {
+    navigationLinks.forEach((link) => link.addEventListener('click', () => {
+      updateActiveNavigation(link.getAttribute('href'));
+    }));
+    window.addEventListener('hashchange', () => updateActiveNavigation(window.location.hash));
+    if (!('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible?.target?.id) updateActiveNavigation(`#${visible.target.id}`);
+    }, { rootMargin: '-18% 0px -65% 0px', threshold: [0, 0.15, 0.4] });
+    navigationSections.forEach((section) => observer.observe(section));
   }
 
   function currency(value) {
@@ -246,6 +282,37 @@
     if (className) item.className = className;
     if (text !== '') item.textContent = text;
     return item;
+  }
+
+  function skeletonLine(className = '') {
+    return node('span', `skeleton-line ${className}`.trim());
+  }
+
+  function renderAppointmentSkeletons() {
+    const cards = Array.from({ length: 3 }, () => {
+      const card = node('article', 'appointment appointment-skeleton');
+      card.setAttribute('aria-hidden', 'true');
+      const timing = node('div');
+      timing.append(skeletonLine('wide'), skeletonLine('medium'), skeletonLine('short'));
+      const customer = node('div');
+      customer.append(skeletonLine('wide'), skeletonLine('medium'));
+      const service = node('div');
+      service.append(skeletonLine('wide'), skeletonLine('medium'), skeletonLine('short'));
+      const status = node('div', 'status-column');
+      status.append(skeletonLine('badge-shape'), skeletonLine('action-shape'));
+      card.append(timing, customer, service, status);
+      return card;
+    });
+    elements.appointmentList.replaceChildren(...cards);
+  }
+
+  function renderSummarySkeletons() {
+    elements.summary.replaceChildren(...Array.from({ length: 4 }, () => {
+      const card = node('article', 'summary-card summary-skeleton');
+      card.setAttribute('aria-hidden', 'true');
+      card.append(skeletonLine('summary-number'), skeletonLine('summary-label'));
+      return card;
+    }));
   }
 
   function selectedAdminServices() {
@@ -293,7 +360,9 @@
     if (!services.length) {
       elements.adminServiceTabs.replaceChildren();
       elements.adminServiceCategoryHint.textContent = '';
-      elements.adminServiceGrid.replaceChildren(node('p', 'admin-slot-empty', 'Chưa tải được danh sách dịch vụ.'));
+      elements.adminServiceGrid.replaceChildren(node(
+        'p', 'admin-slot-empty', adminConfigLoading ? 'Đang tải danh sách dịch vụ…' : 'Chưa tải được danh sách dịch vụ.'
+      ));
       renderAdminServiceSummary();
       return;
     }
@@ -372,16 +441,20 @@
   }
 
   async function loadAdminBookingConfig() {
+    adminConfigLoading = true;
+    renderAdminServices();
     try {
       const data = await adminRequest({ action: 'config' });
       bookingConfig = data.config || null;
       const today = dateInTimeZone();
       elements.adminBookingDate.min = today;
       elements.adminBookingDate.max = addDays(today, Number(bookingConfig?.advanceBookingDays || 30));
-      renderAdminServices();
-      renderAdminSlots();
     } catch (error) {
       setMessage(elements.adminBookingMessage, errorMessage(error.message));
+    } finally {
+      adminConfigLoading = false;
+      renderAdminServices();
+      renderAdminSlots();
     }
   }
 
@@ -453,8 +526,8 @@
       renderAdminServices();
       renderAdminSlots();
       if (date < elements.fromDate.value || date > elements.toDate.value) {
-        elements.fromDate.value = date;
-        elements.toDate.value = date;
+        setDateValue(elements.fromDate, date);
+        setDateValue(elements.toDate, date);
       }
       await loadAppointments();
       setMessage(elements.adminBookingMessage, `Đã tạo lịch ${reference}.`, true);
@@ -578,9 +651,9 @@
     slotArea.append(slotLabel, slotGrid, message);
 
     const actions = node('div', 'reschedule-actions');
-    const cancel = node('button', 'ghost compact', 'Đóng');
+    const cancel = node('button', 'btn ghost compact', 'Đóng');
     cancel.type = 'button';
-    const submit = node('button', 'primary compact', 'Xác nhận dời lịch');
+    const submit = node('button', 'btn primary compact', 'Xác nhận dời lịch');
     submit.type = 'button';
     submit.disabled = true;
     actions.append(cancel, submit);
@@ -697,6 +770,10 @@
       return;
     }
     elements.refreshButton.disabled = true;
+    elements.refreshButton.textContent = 'Đang tải…';
+    elements.appointmentList.setAttribute('aria-busy', 'true');
+    renderAppointmentSkeletons();
+    if (!appointments.length) renderSummarySkeletons();
     setMessage(elements.dashboardMessage, 'Đang tải lịch…');
     try {
       const data = await adminRequest({
@@ -714,9 +791,13 @@
         showLogin(errorMessage(error.message));
         return;
       }
+      renderSummary();
+      elements.appointmentList.replaceChildren(node('div', 'empty error-empty', 'Không tải được lịch hẹn. Vui lòng thử lại.'));
       setMessage(elements.dashboardMessage, errorMessage(error.message));
     } finally {
       elements.refreshButton.disabled = false;
+      elements.refreshButton.textContent = '↻ Xem lịch';
+      elements.appointmentList.removeAttribute('aria-busy');
     }
   }
 
@@ -912,6 +993,15 @@
     selectedBlockSlots.clear();
     createSlotButtons();
     updateBlockSelection();
+    elements.blockList.setAttribute('aria-busy', 'true');
+    elements.blockList.replaceChildren(...Array.from({ length: 2 }, () => {
+      const row = node('div', 'block-row block-row-skeleton');
+      row.setAttribute('aria-hidden', 'true');
+      const details = node('div');
+      details.append(skeletonLine('medium'), skeletonLine('wide'));
+      row.append(details, skeletonLine('unlock-shape'));
+      return row;
+    }));
     setMessage(elements.blockMessage, 'Đang tải lịch khóa…');
     try {
       const from = `${date}T00:00:00+07:00`;
@@ -926,9 +1016,11 @@
       renderBlocks();
       setMessage(elements.blockMessage, '');
     } catch (error) {
+      renderBlocks();
       setMessage(elements.blockMessage, errorMessage(error.message));
     } finally {
       blockDayLoading = false;
+      elements.blockList.removeAttribute('aria-busy');
       createSlotButtons();
       updateBlockSelection();
     }
@@ -975,6 +1067,7 @@
   elements.loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     elements.loginButton.disabled = true;
+    elements.loginButton.textContent = 'Đang đăng nhập…';
     setMessage(elements.loginMessage, 'Đang đăng nhập…');
     try {
       const form = new FormData(elements.loginForm);
@@ -991,6 +1084,7 @@
       setMessage(elements.loginMessage, errorMessage(error.message));
     } finally {
       elements.loginButton.disabled = false;
+      elements.loginButton.textContent = 'Đăng nhập';
     }
   });
 
@@ -1022,10 +1116,11 @@
   });
 
   const today = dateInTimeZone();
-  elements.fromDate.value = today;
-  elements.toDate.value = addDays(today, 7);
-  elements.adminBookingDate.value = today;
-  elements.blockDate.value = today;
+  setDateValue(elements.fromDate, today);
+  setDateValue(elements.toDate, addDays(today, 7));
+  setDateValue(elements.adminBookingDate, today);
+  setDateValue(elements.blockDate, today);
+  initializeSectionNavigation();
   renderAdminServices();
   renderAdminSlots();
   createSlotButtons();

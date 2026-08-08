@@ -7,122 +7,262 @@
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://aomiaszicxqrctcgeoms.supabase.co; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'self'">
   <title>Quản lý lịch · 1M65 Nails</title>
-  <link rel="stylesheet" href="admin.css?v=20260808-5">
+  <link rel="stylesheet" href="admin.css?v=20260808-6">
 </head>
 <body>
   <main class="shell">
-    <section id="login-view" class="login-card" aria-labelledby="login-title">
-      <a class="brand" href="index.html" aria-label="Về trang chủ 1M65 Nails">1M65 <span>Nails</span></a>
-      <p class="eyebrow">Khu vực nội bộ</p>
-      <h1 id="login-title">Đăng nhập quản lý lịch</h1>
-      <p class="muted">Chỉ tài khoản admin đã được cấp quyền mới xem được thông tin khách hàng.</p>
-      <form id="login-form" method="post" autocomplete="on">
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" autocomplete="username" required>
-        <label for="password">Mật khẩu</label>
-        <input id="password" name="password" type="password" autocomplete="current-password" minlength="6" required>
-        <button id="login-button" class="primary" type="submit">Đăng nhập</button>
-      </form>
-      <p id="login-message" class="message" role="alert" aria-live="polite"></p>
+
+    <!-- ================= ĐĂNG NHẬP ================= -->
+    <section id="login-view" class="login-view" aria-labelledby="login-title">
+      <div class="login-doodles" aria-hidden="true"><span>✦</span><span>✧</span><span>♡</span><span>✦</span></div>
+
+      <div class="login-head">
+        <div class="sparkle" aria-hidden="true">✦</div>
+        <!-- Thay khối này bằng <img src="../assets/logo.svg" alt="1M65 Nails"> khi có logo chính thức -->
+        <a class="brand-lockup" href="index.html" aria-label="Về trang chủ 1M65 Nails">
+          <span class="brand-mark"><span class="one">1</span><span class="rest">M65</span></span>
+          <span class="brand-tag">NAILS, EYELASHES, SHAMPOO</span>
+        </a>
+        <p class="brand-role">STUDIO ADMIN</p>
+      </div>
+
+      <div class="login-card">
+        <h1 id="login-title">Chào bạn trở lại <span class="doodle" aria-hidden="true">♡</span></h1>
+        <p class="muted">Đăng nhập để xem lịch hẹn, tạo lịch cho khách và khóa khung giờ.</p>
+        <hr class="rule">
+        <form id="login-form" method="post" autocomplete="on">
+          <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="username" required>
+          </div>
+          <div>
+            <label for="password">Mật khẩu</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" minlength="6" required>
+          </div>
+          <button id="login-button" class="btn primary" type="submit">Đăng nhập</button>
+        </form>
+        <p id="login-message" class="message" role="alert" aria-live="polite"></p>
+      </div>
+
+      <p class="login-foot">Khu vực nội bộ · chỉ tài khoản đã được cấp quyền<br>Phiên đăng nhập chỉ tồn tại trong tab này.</p>
     </section>
 
+    <!-- ================= DASHBOARD ================= -->
     <section id="dashboard-view" class="dashboard" hidden aria-labelledby="dashboard-title">
-      <header class="topbar">
-        <div>
-          <a class="brand" href="index.html">1M65 <span>Nails</span></a>
-          <p class="eyebrow">Quản lý lịch</p>
-          <h1 id="dashboard-title">Lịch hẹn</h1>
-          <p id="admin-identity" class="muted"></p>
-        </div>
-        <button id="logout-button" class="ghost" type="button">Đăng xuất</button>
-      </header>
 
-      <section class="filters" aria-label="Bộ lọc lịch hẹn">
-        <label>Từ ngày<input id="from-date" type="date"></label>
-        <label>Đến ngày<input id="to-date" type="date"></label>
-        <label>Trạng thái
-          <select id="status-filter">
-            <option value="">Tất cả</option>
-            <option value="confirmed">Đã xác nhận</option>
-            <option value="completed">Hoàn thành</option>
-            <option value="cancelled">Đã hủy</option>
-            <option value="no_show">Không đến</option>
-          </select>
-        </label>
-        <button id="refresh-button" class="primary compact" type="button">Xem lịch</button>
-      </section>
+      <aside class="app-sidebar">
+        <a class="brand-lockup" href="index.html" aria-label="Về trang chủ 1M65 Nails">
+          <span class="brand-mark"><span class="one">1</span><span class="rest">M65</span></span>
+          <span class="brand-tag">NAILS, EYELASHES, SHAMPOO</span>
+        </a>
+        <p class="brand-role">STUDIO ADMIN</p>
+        <hr class="rule">
 
-      <p id="dashboard-message" class="message" role="status" aria-live="polite"></p>
+        <nav class="app-nav" aria-label="Điều hướng quản lý">
+          <a href="#sec-overview"><span class="glyph" aria-hidden="true">♡</span><span class="label">Tổng quan</span></a>
+          <a href="#sec-schedule"><span class="glyph" aria-hidden="true">◷</span><span class="label">Lịch hẹn</span></a>
+          <a href="#sec-create"><span class="glyph" aria-hidden="true">✦</span><span class="label">Tạo lịch</span></a>
+          <a href="#sec-block"><span class="glyph" aria-hidden="true">▣</span><span class="label">Khóa lịch</span></a>
+        </nav>
 
-      <section class="creator" aria-labelledby="creator-title">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Khách gọi điện / nhắn tin</p>
-            <h2 id="creator-title">Tạo lịch cho khách</h2>
-            <p class="muted">Giá, thời lượng và giờ trống được kiểm tra trực tiếp từ hệ thống booking.</p>
+        <div class="sidebar-spacer"></div>
+
+        <div class="who">
+          <div class="who-row">
+            <span class="avatar" aria-hidden="true">✦</span>
+            <p id="admin-identity" class="muted"></p>
           </div>
+          <button id="logout-button" class="btn ghost" type="button">Đăng xuất</button>
         </div>
-        <form id="admin-booking-form" class="admin-booking-form">
-          <div>
-            <p class="field-label">Dịch vụ (chọn tối đa 8)</p>
-            <div id="admin-service-tabs" class="admin-service-tabs" role="tablist" aria-label="Nhóm dịch vụ"></div>
-            <p id="admin-service-category-hint" class="muted admin-service-category-hint"></p>
-            <div id="admin-service-grid" class="admin-service-grid" aria-label="Danh sách dịch vụ"></div>
-            <p id="admin-service-summary" class="muted admin-service-summary">Chưa chọn dịch vụ.</p>
-          </div>
-          <div class="admin-date-slots">
-            <label>Ngày hẹn<input id="admin-booking-date" type="date" required></label>
-            <div>
-              <p class="field-label">Giờ còn trống</p>
-              <div id="admin-booking-slot-grid" class="admin-booking-slot-grid" aria-label="Giờ còn trống"></div>
+      </aside>
+
+      <div class="app-main">
+        <div class="topbar">
+          <p class="crumb">Studio · <strong>Quản lý lịch</strong></p>
+          <span class="topbar-spacer"></span>
+          <a class="btn primary compact" href="#sec-create">+ Tạo lịch</a>
+        </div>
+
+        <div class="app-body">
+          <p id="dashboard-message" class="message" role="status" aria-live="polite"></p>
+
+          <!-- ---- Tổng quan ---- -->
+          <section class="panel" id="sec-overview">
+            <div class="panel-head greeting">
+              <div>
+                <p class="eyebrow">Tổng quan</p>
+                <h1 id="dashboard-title">Lịch hẹn của studio</h1>
+                <p class="muted">Bốn con số dưới đây tính theo khoảng ngày đang lọc. Dữ liệu lấy trực tiếp từ hệ thống booking.</p>
+              </div>
+              <p class="note-chip"><span class="doodle" aria-hidden="true">✧</span> Trạng thái có cả chữ và ký hiệu, không chỉ dựa vào màu</p>
             </div>
-          </div>
-          <div class="admin-customer-grid">
-            <label>Tên khách<input id="admin-customer-name" type="text" minlength="2" maxlength="80" autocomplete="name" required></label>
-            <label>Số điện thoại<input id="admin-customer-phone" type="tel" inputmode="numeric" pattern="0[0-9]{9}" maxlength="10" autocomplete="tel" required></label>
-          </div>
-          <label>Ghi chú<textarea id="admin-customer-note" maxlength="500" rows="3" placeholder="Không bắt buộc"></textarea></label>
-          <div class="admin-create-actions">
-            <p id="admin-booking-message" class="message" role="status" aria-live="polite"></p>
-            <button id="admin-create-booking-button" class="primary compact" type="submit" disabled>Tạo lịch</button>
-          </div>
-        </form>
-      </section>
+            <section id="summary" class="summary" aria-label="Tổng quan lịch"></section>
+          </section>
 
-      <section class="blocker" aria-labelledby="blocker-title">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Chặn lịch mới</p>
-            <h2 id="blocker-title">Khóa khung giờ</h2>
-            <p class="muted">Booking đã tồn tại vẫn giữ nguyên. Mọi lịch mới chạm vào vùng khóa sẽ bị chặn.</p>
-          </div>
-          <div class="block-heading-actions">
-            <button id="all-day-button" class="ghost" type="button" aria-pressed="false">Khóa cả ngày</button>
-          </div>
-        </div>
-        <div class="block-controls">
-          <label>Ngày cần khóa<input id="block-date" type="date"></label>
-          <label>Nội dung:<input id="block-reason" type="text" maxlength="120" placeholder="Mặc định: tiệm nghỉ"></label>
-        </div>
-        <div>
-          <p class="field-label">Chọn một hoặc nhiều khung 30 phút</p>
-          <div id="block-slot-grid" class="slot-grid" aria-label="Các khung giờ có thể khóa"></div>
-        </div>
-        <div class="block-actions">
-          <p id="block-selection" class="muted">Chưa chọn khung giờ.</p>
-          <button id="create-block-button" class="primary compact" type="button" disabled>Khóa lịch đã chọn</button>
-        </div>
-        <p id="block-message" class="message" role="status" aria-live="polite"></p>
-        <div class="existing-blocks">
-          <h3>Lịch đang khóa trong ngày</h3>
-          <div id="block-list" class="block-list"></div>
-        </div>
-      </section>
+          <!-- ---- Lịch hẹn ---- -->
+          <section class="panel" id="sec-schedule" aria-labelledby="schedule-title">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Lịch hẹn</p>
+                <h2 id="schedule-title">Quản lý lịch hẹn</h2>
+                <p class="muted">Xem, đổi trạng thái và dời lịch cho khách. Khoảng lọc tối đa 93 ngày.</p>
+              </div>
+            </div>
 
-      <section id="summary" class="summary" aria-label="Tổng quan lịch"></section>
-      <section id="appointment-list" class="appointment-list" aria-live="polite"></section>
+            <section class="filters" aria-label="Bộ lọc lịch hẹn">
+              <label for="from-date">Từ ngày
+                <input id="from-date" type="date">
+              </label>
+              <label for="to-date">Đến ngày
+                <input id="to-date" type="date">
+              </label>
+              <label for="status-filter">Trạng thái
+                <select id="status-filter">
+                  <option value="">Tất cả</option>
+                  <option value="confirmed">Đã xác nhận</option>
+                  <option value="completed">Hoàn thành</option>
+                  <option value="cancelled">Đã hủy</option>
+                  <option value="no_show">Không đến</option>
+                </select>
+              </label>
+              <button id="refresh-button" class="btn primary" type="button">↻ Xem lịch</button>
+            </section>
+
+            <section id="appointment-list" class="appointment-list" aria-live="polite"></section>
+          </section>
+
+          <!-- ---- Tạo lịch cho khách ---- -->
+          <section class="panel panel-card creator" id="sec-create" aria-labelledby="creator-title">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Khách gọi điện / nhắn tin</p>
+                <h2 id="creator-title">Tạo lịch cho khách</h2>
+                <p class="muted">Giá, thời lượng và giờ trống được kiểm tra trực tiếp từ hệ thống booking.</p>
+              </div>
+            </div>
+
+            <form id="admin-booking-form" class="admin-booking-form">
+              <div>
+                <div class="step">
+                  <span class="step-no" aria-hidden="true">1</span>
+                  <h3>Chọn dịch vụ</h3>
+                  <span class="step-note">tối đa 8 dịch vụ</span>
+                </div>
+                <div id="admin-service-tabs" class="admin-service-tabs" role="tablist" aria-label="Nhóm dịch vụ"></div>
+                <p id="admin-service-category-hint" class="muted admin-service-category-hint"></p>
+                <div id="admin-service-grid" class="admin-service-grid" aria-label="Danh sách dịch vụ"></div>
+                <p id="admin-service-summary" class="muted admin-service-summary">Chưa chọn dịch vụ.</p>
+              </div>
+
+              <div class="admin-date-slots">
+                <div class="step">
+                  <span class="step-no" aria-hidden="true">2</span>
+                  <h3>Ngày &amp; giờ</h3>
+                </div>
+                <label for="admin-booking-date">Ngày hẹn
+                  <input id="admin-booking-date" type="date" required>
+                </label>
+                <div>
+                  <p class="field-label">Giờ còn trống</p>
+                  <div id="admin-booking-slot-grid" class="admin-booking-slot-grid" aria-label="Giờ còn trống"></div>
+                  <div class="legend" aria-hidden="true">
+                    <span><i></i>còn trống</span>
+                    <span><i class="is-selected"></i>đang chọn</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="step">
+                  <span class="step-no" aria-hidden="true">3</span>
+                  <h3>Thông tin khách</h3>
+                </div>
+                <div class="admin-customer-grid">
+                  <label for="admin-customer-name">Tên khách
+                    <input id="admin-customer-name" type="text" minlength="2" maxlength="80" autocomplete="name" placeholder="2–80 ký tự" required>
+                  </label>
+                  <label for="admin-customer-phone">Số điện thoại
+                    <input id="admin-customer-phone" type="tel" inputmode="numeric" pattern="0[0-9]{9}" maxlength="10" autocomplete="tel" placeholder="0xxxxxxxxx" required>
+                  </label>
+                </div>
+                <label for="admin-customer-note">Ghi chú
+                  <textarea id="admin-customer-note" maxlength="500" rows="3" placeholder="Không bắt buộc"></textarea>
+                </label>
+              </div>
+
+              <div class="admin-create-actions">
+                <p id="admin-booking-message" class="message" role="status" aria-live="polite"></p>
+                <button id="admin-create-booking-button" class="btn primary" type="submit" disabled>Tạo lịch cho khách</button>
+              </div>
+            </form>
+          </section>
+
+          <!-- ---- Khóa khung giờ ---- -->
+          <section class="panel blocker" id="sec-block" aria-labelledby="blocker-title">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Chặn lịch mới</p>
+                <h2 id="blocker-title">Khóa khung giờ</h2>
+                <p class="muted">Chặn khách đặt vào các khung tiệm không nhận. Chỉ hiện những khung 30 phút còn lại trong ngày.</p>
+              </div>
+            </div>
+
+            <div class="warn">
+              <p>Booking đã tồn tại vẫn giữ nguyên. Mọi lịch <strong>mới</strong> chạm vào vùng khóa sẽ bị chặn. Thao tác khóa và mở khóa đều hỏi xác nhận.</p>
+            </div>
+
+            <div class="blocker-grid">
+              <div class="panel-card">
+                <div class="block-controls">
+                  <label for="block-date">Ngày cần khóa
+                    <input id="block-date" type="date">
+                  </label>
+                  <label for="block-reason">Nội dung hiển thị cho khách
+                    <input id="block-reason" type="text" maxlength="120" placeholder="Mặc định: tiệm nghỉ">
+                  </label>
+                  <div class="block-heading-actions">
+                    <button id="all-day-button" class="btn ghost" type="button" aria-pressed="false">Khóa cả ngày</button>
+                  </div>
+                </div>
+
+                <hr class="rule">
+
+                <p class="field-label">Chọn một hoặc nhiều khung 30 phút</p>
+                <div id="block-slot-grid" class="slot-grid" aria-label="Các khung giờ có thể khóa"></div>
+
+                <div class="block-actions">
+                  <p id="block-selection" class="muted">Chưa chọn khung giờ.</p>
+                  <button id="create-block-button" class="btn primary" type="button" disabled>Khóa lịch đã chọn</button>
+                </div>
+                <p id="block-message" class="message" role="status" aria-live="polite"></p>
+              </div>
+
+              <div class="panel-card">
+                <p class="eyebrow">Chú thích</p>
+                <div class="legend">
+                  <span><i></i>còn trống — chọn được</span>
+                  <span><i class="is-selected"></i>đang chọn để khóa</span>
+                  <span><i class="is-booked"></i>đã có lịch khách</span>
+                  <span><i class="is-blocked"></i>đã khóa từ trước</span>
+                </div>
+
+                <hr class="rule">
+
+                <div class="existing-blocks">
+                  <h3>Lịch đang khóa trong ngày</h3>
+                  <div id="block-list" class="block-list"></div>
+                  <p class="muted block-empty">Mở khóa sẽ hỏi xác nhận. Sau khi mở, khung giờ trở lại khả dụng nếu không vướng booking khác.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
     </section>
   </main>
-  <script src="admin.js?v=20260808-5" defer></script>
+
+  <script src="admin.js?v=20260808-6" defer></script>
+  <script src="admin-datepicker.js?v=20260808-6" defer></script>
 </body>
 </html>
