@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://aomiaszicxqrctcgeoms.supabase.co; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'self'">
+  <title>Quản lý lịch · 1M65 Nails</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <main class="shell">
+    <section id="login-view" class="login-card" aria-labelledby="login-title">
+      <a class="brand" href="index.html" aria-label="Về trang chủ 1M65 Nails">1M65 <span>Nails</span></a>
+      <p class="eyebrow">Khu vực nội bộ</p>
+      <h1 id="login-title">Đăng nhập quản lý lịch</h1>
+      <p class="muted">Chỉ tài khoản admin đã được cấp quyền mới xem được thông tin khách hàng.</p>
+      <form id="login-form" method="post" autocomplete="on">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="username" required>
+        <label for="password">Mật khẩu</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" minlength="6" required>
+        <button id="login-button" class="primary" type="submit">Đăng nhập</button>
+      </form>
+      <p id="login-message" class="message" role="alert" aria-live="polite"></p>
+    </section>
+
+    <section id="dashboard-view" class="dashboard" hidden aria-labelledby="dashboard-title">
+      <header class="topbar">
+        <div>
+          <a class="brand" href="index.html">1M65 <span>Nails</span></a>
+          <p class="eyebrow">Quản lý lịch</p>
+          <h1 id="dashboard-title">Lịch hẹn</h1>
+          <p id="admin-identity" class="muted"></p>
+        </div>
+        <button id="logout-button" class="ghost" type="button">Đăng xuất</button>
+      </header>
+
+      <section class="filters" aria-label="Bộ lọc lịch hẹn">
+        <label>Từ ngày<input id="from-date" type="date"></label>
+        <label>Đến ngày<input id="to-date" type="date"></label>
+        <label>Trạng thái
+          <select id="status-filter">
+            <option value="">Tất cả</option>
+            <option value="pending">Chờ xác nhận</option>
+            <option value="confirmed">Đã xác nhận</option>
+            <option value="completed">Hoàn thành</option>
+            <option value="cancelled">Đã hủy</option>
+            <option value="no_show">Không đến</option>
+          </select>
+        </label>
+        <button id="refresh-button" class="primary compact" type="button">Xem lịch</button>
+      </section>
+
+      <p id="dashboard-message" class="message" role="status" aria-live="polite"></p>
+      <section id="summary" class="summary" aria-label="Tổng quan lịch"></section>
+      <section id="appointment-list" class="appointment-list" aria-live="polite"></section>
+    </section>
+  </main>
+  <script src="admin.js" defer></script>
+</body>
+</html>
