@@ -11,6 +11,32 @@
     cancelled: 'Đã hủy',
     no_show: 'Không đến'
   };
+  const SERVICE_CATEGORIES = [
+    {
+      id: 'nail', label: 'Nail care', hint: 'Chăm móng, tháo bộ cũ và nối móng',
+      serviceIds: ['ct-tay', 'ct-chan', 'thao-gel', 'thao-up', 'thao-bot', 'noi-up', 'noi-gel', 'noi-bot']
+    },
+    {
+      id: 'classic', label: 'Classic', hint: 'Sơn một màu, bóng căng, giữ 3 tuần',
+      serviceIds: ['son-cung', 'gel-hn', 'gel-thach']
+    },
+    {
+      id: 'design', label: 'Design', hint: 'Cộng thêm vào bộ móng — tính trọn bàn',
+      serviceIds: ['flash', 'matmeo', 'guong', 'ombre', 'da', 'charm', 'sticker', 've', 'xacu']
+    },
+    {
+      id: 'foot', label: 'Combo Foot', hint: 'Sáu bước liền mạch trong một buổi',
+      serviceIds: ['combo-foot']
+    },
+    {
+      id: 'mi', label: 'Mi', hint: 'Tháo mi miễn phí nếu bộ cũ do 1M65 làm',
+      serviceIds: ['uon-mi', 'uon-mi-den', 'mi-classic', 'mi-tho', 'mi-volume', 'mi-sole', 'mi-duoi']
+    },
+    {
+      id: 'goi', label: 'Gội', hint: 'Thư giãn đầu, vai, cổ',
+      serviceIds: ['goi-thao', 'goi-thuong', 'goi-phuchoi', 'goi-duongsinh']
+    }
+  ];
 
   const elements = {
     loginView: document.querySelector('#login-view'),
@@ -28,6 +54,8 @@
     summary: document.querySelector('#summary'),
     appointmentList: document.querySelector('#appointment-list'),
     adminBookingForm: document.querySelector('#admin-booking-form'),
+    adminServiceTabs: document.querySelector('#admin-service-tabs'),
+    adminServiceCategoryHint: document.querySelector('#admin-service-category-hint'),
     adminServiceGrid: document.querySelector('#admin-service-grid'),
     adminServiceSummary: document.querySelector('#admin-service-summary'),
     adminBookingDate: document.querySelector('#admin-booking-date'),
@@ -56,6 +84,7 @@
   let blockDayLoading = false;
   let bookingConfig = null;
   let adminSelectedServiceIds = new Set();
+  let activeAdminServiceCategory = SERVICE_CATEGORIES[0].id;
   let adminAvailableSlots = [];
   let adminSelectedStartAt = '';
   let adminAvailabilityLoading = false;
@@ -224,6 +253,21 @@
     return services.filter((service) => adminSelectedServiceIds.has(service.id));
   }
 
+  function adminServiceCategories() {
+    const services = Array.isArray(bookingConfig?.services) ? bookingConfig.services : [];
+    const servicesById = new Map(services.map((service) => [service.id, service]));
+    const categorizedIds = new Set(SERVICE_CATEGORIES.flatMap((category) => category.serviceIds));
+    const categories = SERVICE_CATEGORIES.map((category) => ({
+      ...category,
+      services: category.serviceIds.map((id) => servicesById.get(id)).filter(Boolean)
+    })).filter((category) => category.services.length);
+    const uncategorized = services.filter((service) => !categorizedIds.has(service.id));
+    if (uncategorized.length) {
+      categories.push({ id: 'other', label: 'Khác', hint: 'Các dịch vụ khác đang hoạt động', services: uncategorized });
+    }
+    return categories;
+  }
+
   function updateAdminCreateButton() {
     elements.adminCreateBookingButton.disabled = adminCreatePending
       || adminAvailabilityLoading
@@ -247,11 +291,33 @@
   function renderAdminServices() {
     const services = Array.isArray(bookingConfig?.services) ? bookingConfig.services : [];
     if (!services.length) {
+      elements.adminServiceTabs.replaceChildren();
+      elements.adminServiceCategoryHint.textContent = '';
       elements.adminServiceGrid.replaceChildren(node('p', 'admin-slot-empty', 'Chưa tải được danh sách dịch vụ.'));
       renderAdminServiceSummary();
       return;
     }
-    elements.adminServiceGrid.replaceChildren(...services.map((service) => {
+    const categories = adminServiceCategories();
+    if (!categories.some((category) => category.id === activeAdminServiceCategory)) {
+      activeAdminServiceCategory = categories[0]?.id || '';
+    }
+    const activeCategory = categories.find((category) => category.id === activeAdminServiceCategory);
+    elements.adminServiceTabs.replaceChildren(...categories.map((category) => {
+      const button = node('button', 'admin-service-tab');
+      const selectedCount = category.services.filter((service) => adminSelectedServiceIds.has(service.id)).length;
+      button.type = 'button';
+      button.role = 'tab';
+      button.setAttribute('aria-selected', String(category.id === activeAdminServiceCategory));
+      button.append(node('span', '', category.label));
+      if (selectedCount) button.append(node('span', 'admin-service-tab-count', String(selectedCount)));
+      button.addEventListener('click', () => {
+        activeAdminServiceCategory = category.id;
+        renderAdminServices();
+      });
+      return button;
+    }));
+    elements.adminServiceCategoryHint.textContent = activeCategory?.hint || '';
+    elements.adminServiceGrid.replaceChildren(...(activeCategory?.services || []).map((service) => {
       const selected = adminSelectedServiceIds.has(service.id);
       const button = node('button', 'admin-service-option');
       button.type = 'button';
