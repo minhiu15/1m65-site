@@ -54,6 +54,35 @@
       </section>
 
       <p id="dashboard-message" class="message" role="status" aria-live="polite"></p>
+
+      <section class="blocker" aria-labelledby="blocker-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Chặn lịch mới</p>
+            <h2 id="blocker-title">Khóa khung giờ</h2>
+            <p class="muted">Booking đã tồn tại vẫn giữ nguyên. Mọi lịch mới chạm vào vùng khóa sẽ bị chặn.</p>
+          </div>
+          <button id="all-day-button" class="ghost" type="button" aria-pressed="false">Khóa cả ngày</button>
+        </div>
+        <div class="block-controls">
+          <label>Ngày cần khóa<input id="block-date" type="date"></label>
+          <label>Lý do (không bắt buộc)<input id="block-reason" type="text" maxlength="120" placeholder="Ví dụ: Nghỉ, bận việc riêng"></label>
+        </div>
+        <div>
+          <p class="field-label">Chọn một hoặc nhiều khung 30 phút</p>
+          <div id="block-slot-grid" class="slot-grid" aria-label="Các khung giờ có thể khóa"></div>
+        </div>
+        <div class="block-actions">
+          <p id="block-selection" class="muted">Chưa chọn khung giờ.</p>
+          <button id="create-block-button" class="primary compact" type="button" disabled>Khóa lịch đã chọn</button>
+        </div>
+        <p id="block-message" class="message" role="status" aria-live="polite"></p>
+        <div class="existing-blocks">
+          <h3>Lịch đang khóa trong ngày</h3>
+          <div id="block-list" class="block-list"></div>
+        </div>
+      </section>
+
       <section id="summary" class="summary" aria-label="Tổng quan lịch"></section>
       <section id="appointment-list" class="appointment-list" aria-live="polite"></section>
     </section>

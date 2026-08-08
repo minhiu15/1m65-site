@@ -26,11 +26,22 @@
     refreshButton: document.querySelector('#refresh-button'),
     logoutButton: document.querySelector('#logout-button'),
     summary: document.querySelector('#summary'),
-    appointmentList: document.querySelector('#appointment-list')
+    appointmentList: document.querySelector('#appointment-list'),
+    blockDate: document.querySelector('#block-date'),
+    blockReason: document.querySelector('#block-reason'),
+    allDayButton: document.querySelector('#all-day-button'),
+    blockSlotGrid: document.querySelector('#block-slot-grid'),
+    blockSelection: document.querySelector('#block-selection'),
+    createBlockButton: document.querySelector('#create-block-button'),
+    blockMessage: document.querySelector('#block-message'),
+    blockList: document.querySelector('#block-list')
   };
 
   let session = readSession();
   let appointments = [];
+  let blocks = [];
+  let selectedBlockSlots = new Set();
+  let blockWholeDay = false;
 
   function readSession() {
     try {
@@ -74,6 +85,10 @@
       appointment_not_found: 'Không tìm thấy lịch hẹn.',
       slot_unavailable: 'Không thể mở lại lịch này vì đã trùng với một lịch khác.',
       too_many_requests: 'Bạn thử đăng nhập quá nhiều lần. Vui lòng chờ một lúc.',
+      invalid_block_range: 'Khoảng thời gian khóa không hợp lệ.',
+      too_many_blocks: 'Bạn chọn quá nhiều khoảng khóa cùng lúc.',
+      block_reason_too_long: 'Lý do khóa lịch dài quá 120 ký tự.',
+      block_not_found: 'Khoảng khóa này không còn tồn tại.',
       request_failed: 'Không thể kết nối máy chủ. Vui lòng thử lại.'
     };
     return messages[code] || messages.request_failed;
@@ -147,6 +162,16 @@
     };
   }
 
+  function minutesToTime(minutes) {
+    return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
+  }
+
+  function localTime(value) {
+    return new Intl.DateTimeFormat('en-GB', {
+      timeZone: TIME_ZONE, hour: '2-digit', minute: '2-digit', hour12: false
+    }).format(new Date(value));
+  }
+
   function node(tag, className = '', text = '') {
     const item = document.createElement(tag);
     if (className) item.className = className;
@@ -198,18 +223,33 @@
 
     const statusColumn = node('div', 'status-column');
     statusColumn.append(node('span', `badge ${item.status}`, STATUS_LABELS[item.status] || item.status));
-    const select = node('select');
-    select.setAttribute('aria-label', `Trạng thái lịch ${item.reference}`);
-    Object.entries(STATUS_LABELS).forEach(([value, label]) => {
-      const option = node('option', '', label);
-      option.value = value;
-      option.selected = value === item.status;
-      select.append(option);
-    });
-    const save = node('button', 'save-status', 'Lưu trạng thái');
-    save.type = 'button';
-    save.addEventListener('click', () => updateStatus(item, select.value, save));
-    statusColumn.append(select, save);
+    if (item.status === 'completed') {
+      const reset = node('button', 'reset-status', 'Reset trạng thái');
+      reset.type = 'button';
+      reset.addEventListener('click', () => resetCompleted(item, reset));
+      statusColumn.append(reset);
+    } else {
+      const select = node('select');
+      select.setAttribute('aria-label', `Trạng thái lịch ${item.reference}`);
+      Object.entries(STATUS_LABELS)
+        .filter(([value]) => value !== 'completed')
+        .forEach(([value, label]) => {
+          const option = node('option', '', label);
+          option.value = value;
+          option.selected = value === item.status;
+          select.append(option);
+        });
+      const save = node('button', 'save-status', 'Lưu trạng thái');
+      save.type = 'button';
+      save.addEventListener('click', () => updateStatus(item, select.value, save));
+      statusColumn.append(select, save);
+      if (item.status === 'pending' || item.status === 'confirmed') {
+        const complete = node('button', 'complete-button', '✓ Đánh dấu hoàn thành');
+        complete.type = 'button';
+        complete.addEventListener('click', () => completeAppointment(item, complete));
+        statusColumn.append(complete);
+      }
+    }
 
     card.append(timing, customer, service, statusColumn);
     return card;
@@ -277,6 +317,175 @@
     }
   }
 
+  async function completeAppointment(item, button) {
+    if (!window.confirm(`Xác nhận lịch ${item.reference} đã hoàn thành?`)) return;
+    await applyDirectStatus(item, 'completed', button, `Đã hoàn thành ${item.reference}.`);
+  }
+
+  async function resetCompleted(item, button) {
+    if (!window.confirm(`Reset lịch ${item.reference} về trạng thái Đã xác nhận?`)) return;
+    await applyDirectStatus(item, 'confirmed', button, `Đã reset ${item.reference}.`);
+  }
+
+  async function applyDirectStatus(item, status, button, successMessage) {
+    button.disabled = true;
+    setMessage(elements.dashboardMessage, `Đang cập nhật ${item.reference}…`);
+    try {
+      await adminRequest({
+        action: 'admin_update_status',
+        appointmentId: item.id,
+        status
+      });
+      setMessage(elements.dashboardMessage, successMessage, true);
+      await loadAppointments();
+    } catch (error) {
+      setMessage(elements.dashboardMessage, errorMessage(error.message));
+      button.disabled = false;
+    }
+  }
+
+  function createSlotButtons() {
+    const buttons = [];
+    for (let minutes = 9 * 60; minutes <= 17 * 60; minutes += 30) {
+      const button = node('button', 'slot-chip', minutesToTime(minutes));
+      button.type = 'button';
+      button.dataset.minutes = String(minutes);
+      button.setAttribute('aria-pressed', 'false');
+      button.addEventListener('click', () => {
+        if (selectedBlockSlots.has(minutes)) selectedBlockSlots.delete(minutes);
+        else selectedBlockSlots.add(minutes);
+        updateBlockSelection();
+      });
+      buttons.push(button);
+    }
+    elements.blockSlotGrid.replaceChildren(...buttons);
+  }
+
+  function updateBlockSelection() {
+    elements.allDayButton.setAttribute('aria-pressed', String(blockWholeDay));
+    elements.blockSlotGrid.querySelectorAll('.slot-chip').forEach((button) => {
+      const selected = selectedBlockSlots.has(Number(button.dataset.minutes));
+      button.classList.toggle('selected', selected);
+      button.setAttribute('aria-pressed', String(selected));
+      button.disabled = blockWholeDay;
+    });
+    const count = selectedBlockSlots.size;
+    elements.blockSelection.textContent = blockWholeDay
+      ? 'Đã chọn khóa cả ngày.'
+      : count ? `Đã chọn ${count} khung 30 phút.` : 'Chưa chọn khung giờ.';
+    elements.createBlockButton.disabled = !blockWholeDay && count === 0;
+  }
+
+  function selectedRanges() {
+    const date = elements.blockDate.value;
+    if (!date) return [];
+    if (blockWholeDay) {
+      return [{
+        startAt: `${date}T00:00:00+07:00`,
+        endAt: `${addDays(date, 1)}T00:00:00+07:00`
+      }];
+    }
+    const values = [...selectedBlockSlots].sort((a, b) => a - b);
+    if (!values.length) return [];
+    const ranges = [];
+    let start = values[0];
+    let previous = values[0];
+    values.slice(1).forEach((minutes) => {
+      if (minutes === previous + 30) {
+        previous = minutes;
+        return;
+      }
+      ranges.push({ start, end: previous + 30 });
+      start = minutes;
+      previous = minutes;
+    });
+    ranges.push({ start, end: previous + 30 });
+    return ranges.map((range) => ({
+      startAt: `${date}T${minutesToTime(range.start)}:00+07:00`,
+      endAt: `${date}T${minutesToTime(range.end)}:00+07:00`
+    }));
+  }
+
+  function renderBlocks() {
+    if (!blocks.length) {
+      elements.blockList.replaceChildren(node('p', 'block-empty', 'Ngày này chưa có khoảng khóa.'));
+      return;
+    }
+    elements.blockList.replaceChildren(...blocks.map((block) => {
+      const row = node('div', 'block-row');
+      const details = node('div');
+      const startDate = dateInTimeZone(new Date(block.startAt));
+      const allDay = localTime(block.startAt) === '00:00'
+        && localTime(block.endAt) === '00:00'
+        && dateInTimeZone(new Date(block.endAt)) === addDays(startDate, 1);
+      details.append(node('strong', '', allDay
+        ? 'Cả ngày'
+        : `${localTime(block.startAt)} – ${localTime(block.endAt)}`));
+      if (block.reason) details.append(node('span', '', block.reason));
+      const remove = node('button', 'unlock-button', 'Mở khóa');
+      remove.type = 'button';
+      remove.addEventListener('click', () => deleteBlock(block, remove));
+      row.append(details, remove);
+      return row;
+    }));
+  }
+
+  async function loadBlocks() {
+    const date = elements.blockDate.value;
+    if (!date || !session) return;
+    setMessage(elements.blockMessage, 'Đang tải lịch khóa…');
+    try {
+      const data = await adminRequest({
+        action: 'admin_list_blocks',
+        from: `${date}T00:00:00+07:00`,
+        to: `${addDays(date, 1)}T00:00:00+07:00`
+      });
+      blocks = Array.isArray(data.blocks) ? data.blocks : [];
+      renderBlocks();
+      setMessage(elements.blockMessage, '');
+    } catch (error) {
+      setMessage(elements.blockMessage, errorMessage(error.message));
+    }
+  }
+
+  async function createBlocks() {
+    const ranges = selectedRanges();
+    if (!ranges.length) return;
+    const description = blockWholeDay ? 'cả ngày' : `${selectedBlockSlots.size} khung đã chọn`;
+    if (!window.confirm(`Xác nhận khóa ${description} ngày ${elements.blockDate.value}?`)) return;
+    elements.createBlockButton.disabled = true;
+    setMessage(elements.blockMessage, 'Đang khóa lịch…');
+    try {
+      await adminRequest({
+        action: 'admin_create_blocks',
+        ranges,
+        reason: elements.blockReason.value.trim()
+      });
+      selectedBlockSlots.clear();
+      blockWholeDay = false;
+      elements.blockReason.value = '';
+      updateBlockSelection();
+      await loadBlocks();
+      setMessage(elements.blockMessage, 'Đã khóa lịch. Website sẽ loại các giờ bị ảnh hưởng.', true);
+    } catch (error) {
+      setMessage(elements.blockMessage, errorMessage(error.message));
+      updateBlockSelection();
+    }
+  }
+
+  async function deleteBlock(block, button) {
+    if (!window.confirm('Mở khóa khoảng thời gian này để khách có thể đặt lại?')) return;
+    button.disabled = true;
+    try {
+      await adminRequest({ action: 'admin_delete_block', blockId: block.id });
+      await loadBlocks();
+      setMessage(elements.blockMessage, 'Đã mở khóa lịch.', true);
+    } catch (error) {
+      setMessage(elements.blockMessage, errorMessage(error.message));
+      button.disabled = false;
+    }
+  }
+
   elements.loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     elements.loginButton.disabled = true;
@@ -290,7 +499,7 @@
       });
       storeSession(data.session);
       showDashboard();
-      await loadAppointments();
+      await Promise.all([loadAppointments(), loadBlocks()]);
     } catch (error) {
       storeSession(null);
       setMessage(elements.loginMessage, errorMessage(error.message));
@@ -301,6 +510,18 @@
 
   elements.refreshButton.addEventListener('click', loadAppointments);
   elements.statusFilter.addEventListener('change', loadAppointments);
+  elements.blockDate.addEventListener('change', () => {
+    selectedBlockSlots.clear();
+    blockWholeDay = false;
+    updateBlockSelection();
+    loadBlocks();
+  });
+  elements.allDayButton.addEventListener('click', () => {
+    blockWholeDay = !blockWholeDay;
+    if (blockWholeDay) selectedBlockSlots.clear();
+    updateBlockSelection();
+  });
+  elements.createBlockButton.addEventListener('click', createBlocks);
   elements.logoutButton.addEventListener('click', async () => {
     const token = session?.accessToken || '';
     storeSession(null);
@@ -311,10 +532,13 @@
   const today = dateInTimeZone();
   elements.fromDate.value = today;
   elements.toDate.value = addDays(today, 7);
+  elements.blockDate.value = today;
+  createSlotButtons();
+  updateBlockSelection();
 
   if (session) {
     showDashboard();
-    loadAppointments();
+    Promise.all([loadAppointments(), loadBlocks()]);
   } else {
     showLogin();
   }
