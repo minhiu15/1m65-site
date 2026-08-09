@@ -38,7 +38,7 @@
     const link = documentRoot.createElement('a');
     link.dataset.bookingManageEntry = 'true';
     link.target = '_top';
-    link.textContent = 'Xem và chỉnh lịch hẹn';
+    link.textContent = 'Xem lịch của bạn';
     link.style.cssText = [
       'display:inline-flex',
       'align-items:center',
