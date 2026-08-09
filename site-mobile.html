@@ -275,7 +275,7 @@ a[href*="google.com/maps/place/1M65"][style*="position:absolute"],a[href*="googl
 </label>
 <label style="display:flex;flex-direction:column;gap:7px">
 <span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;color:#4A4360">Ghi chú cho thợ <span style="font-weight:500;color:#767089">· không bắt buộc</span></span>
-<input value="{{ note }}" onChange="{{ setNote }}" placeholder="Bạn muốn dặn thêm gì cho thợ?" style="padding:15px 18px;border:1px solid rgba(122,90,208,.18);border-radius:18px;background:#FFFFFF;font-family:Nunito,sans-serif;font-size:15.5px;color:#222222;outline:none" style-focus="border-color:#7A5AD0"></input>
+<textarea data-book-note value="{{ note }}" onInput="{{ setNote }}" onChange="{{ setNote }}" rows="1" placeholder="Bạn muốn dặn thêm gì cho thợ?" style="box-sizing:border-box;width:100%;min-height:52px;max-height:144px;padding:13px 18px;border:1px solid rgba(122,90,208,.18);border-radius:18px;background:#FFFFFF;font-family:Nunito,sans-serif;font-size:15.5px;line-height:1.45;color:#222222;outline:none;resize:none;overflow-x:hidden;overflow-y:hidden;white-space:pre-wrap;overflow-wrap:anywhere" style-focus="border-color:#7A5AD0"></textarea>
 </label>
 </div>
 <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:20px;padding:16px 20px;border-radius:22px;background:linear-gradient(120deg,#F6F2FE,#FDEBF2)">
@@ -1998,7 +1998,15 @@ class Component extends DCLogic {
       bookingReference: s.bookingReference || '—',
       setName: e => this.setState({ name: e.target.value }),
       setPhone: e => this.setState({ phone: e.target.value.replace(/\D/g, '').slice(0, 10) }),
-      setNote: e => this.setState({ note: e.target.value }),
+      setNote: e => {
+        const field = e.target;
+        const value = field.value;
+        field.style.height = 'auto';
+        const contentHeight = field.scrollHeight;
+        field.style.height = Math.min(Math.max(contentHeight, 52), 144) + 'px';
+        field.style.overflowY = contentHeight > 144 ? 'auto' : 'hidden';
+        this.setState({ note: value });
+      },
       summaryService: tot.names + ' · ' + tot.dur,
       summaryWhen: dateLabel + ' lúc ' + (s.slot || '—'),
       summaryPrice: tot.price,
