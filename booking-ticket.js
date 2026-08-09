@@ -2,7 +2,7 @@
   "use strict";
 
   const SELF_URL = document.currentScript && document.currentScript.src;
-  const CSS_URL = SELF_URL ? new URL("booking-ticket.css?v=20260809-2", SELF_URL).href : "booking-ticket.css?v=20260809-2";
+  const CSS_URL = SELF_URL ? new URL("booking-ticket.css?v=20260809-3", SELF_URL).href : "booking-ticket.css?v=20260809-3";
 
   function make(tag, className, text) {
     const node = document.createElement(tag);
