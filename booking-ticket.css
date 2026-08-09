@@ -350,10 +350,6 @@ a.mew-ticket-meta-value:visited {
     white-space: normal;
   }
 
-  .mew-ticket-title-line + .mew-ticket-title-line::before {
-    content: " ";
-  }
-
   .mew-ticket-copy {
     max-width: none;
     font-size: 14.5px;

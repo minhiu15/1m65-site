@@ -2,7 +2,7 @@
   "use strict";
 
   const SELF_URL = document.currentScript && document.currentScript.src;
-  const CSS_URL = SELF_URL ? new URL("booking-ticket.css?v=20260809-5", SELF_URL).href : "booking-ticket.css?v=20260809-5";
+  const CSS_URL = SELF_URL ? new URL("booking-ticket.css?v=20260809-6", SELF_URL).href : "booking-ticket.css?v=20260809-6";
   const CAT_URL = SELF_URL ? new URL("mascot/nhu-nhi-ticket.png?v=20260809-1", SELF_URL).href : "mascot/nhu-nhi-ticket.png?v=20260809-1";
 
   function make(tag, className, text) {
@@ -56,7 +56,7 @@
     main.append(topline);
 
     const title = make("h2", "mew-ticket-title");
-    title.innerHTML = '<span class="mew-ticket-title-line">Bàn tay bạn xứng đáng</span><span class="mew-ticket-title-line">một buổi chiều tử tế</span>';
+    title.innerHTML = '<span class="mew-ticket-title-line">Bàn tay bạn xứng đáng</span> <span class="mew-ticket-title-line">một buổi chiều tử tế</span>';
     main.append(title);
     main.append(make("p", "mew-ticket-copy mew-ticket-copy--desktop", "Không cần đặt cọc, không phụ thu cuối tuần. Đặt xong bạn cứ tới, bận thì nhắn Zalo dời lịch."));
     main.append(make("p", "mew-ticket-copy mew-ticket-copy--mobile", "Không cần đặt cọc, không phụ thu cuối tuần."));
