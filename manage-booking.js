@@ -16,6 +16,7 @@
     appointment_not_manageable: 'Lịch này không còn có thể dời hoặc hủy trên website.',
     appointment_change_cutoff: 'Đã qua thời hạn tự thay đổi lịch. Bạn liên hệ trực tiếp với tiệm giúp mình nhé.',
     slot_unavailable: 'Khung giờ này vừa có người chọn. Bạn chọn lại khung khác nhé.',
+    booking_configuration_not_found: 'Tính năng xem lịch đang được tiệm cập nhật. Bạn thử lại sau ít phút giúp mình nhé.',
     human_verification_failed: 'Chưa xác minh được bạn là người thật. Bạn thử lại giúp mình nhé.',
     turnstile_unavailable: 'Chưa thể mở bước xác minh. Bạn kiểm tra mạng rồi thử lại nhé.',
     request_failed: 'Chưa thể kết nối máy chủ. Bạn thử lại sau nhé.'

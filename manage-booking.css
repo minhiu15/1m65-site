@@ -53,7 +53,7 @@ h1,h2,h3,p{margin-top:0}
 .doodle-peach{width:42px;left:8%;bottom:12%;transform:rotate(-12deg);opacity:.38}
 .doodle-envelope{width:82px;right:3%;bottom:8%;transform:rotate(8deg);opacity:.36}
 
-.page-shell{position:relative;z-index:1;width:min(1060px,calc(100% - 40px));margin:0 auto;padding:24px 0 52px}
+.page-shell{position:relative;z-index:1;width:min(1060px,calc(100% - 40px));min-height:100vh;margin:0 auto;padding:24px 0 34px;display:flex;flex-direction:column}
 .page-header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:54px}
 .brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
 .brand-paw{width:38px;height:38px;display:grid;place-items:center;border-radius:14px;background:var(--lavender-soft);transform:rotate(-7deg)}
@@ -76,19 +76,23 @@ h1 span{background:linear-gradient(96deg,#8e6ade,#c4589c 67%,#e0885f);-webkit-ba
 .intro-note p{margin:-10px 0 0;color:var(--muted);font:700 12.5px/1.55 'Quicksand',sans-serif;text-align:center}
 
 .lookup-card,.appointment-view{border:1px solid var(--line);border-radius:32px;background:rgba(255,255,255,.92);box-shadow:var(--shadow);backdrop-filter:blur(14px)}
-.lookup-card{position:relative;padding:26px;overflow:hidden}
+.lookup-card{position:relative;width:min(760px,100%);margin-inline:auto;padding:28px 30px 30px;overflow:hidden}
 .lookup-card::after{content:'';position:absolute;width:180px;height:180px;right:-72px;top:-92px;border-radius:50%;background:rgba(221,212,243,.28);pointer-events:none}
 .card-title-row{position:relative;z-index:1;display:flex;align-items:center;gap:13px;margin-bottom:19px}
 .step-bubble{width:36px;height:36px;display:grid;place-items:center;flex:0 0 auto;border-radius:14px;background:var(--purple);color:#fff;font:700 14px/1 'Quicksand',sans-serif;box-shadow:0 12px 24px -14px rgba(122,90,208,.9)}
 .card-kicker{margin:0 0 3px;color:var(--purple-2);font:700 10.5px/1 'Quicksand',sans-serif;letter-spacing:.13em;text-transform:uppercase}
 .lookup-card h2{margin:0;font:700 20px/1.2 'Quicksand',sans-serif;letter-spacing:-.02em}
-#lookup-form{position:relative;z-index:1;display:grid;grid-template-columns:1fr auto;gap:9px 12px;align-items:end}
+#lookup-form{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:9px 12px;align-items:end}
 label{color:var(--ink-soft);font:700 12.5px/1.3 'Quicksand',sans-serif}
 #lookup-form label{grid-column:1/-1}
-input{width:100%;min-height:50px;padding:0 15px;border:1px solid rgba(122,90,208,.18);border-radius:16px;background:#fff;color:var(--ink);outline:0;transition:border-color .18s ease,box-shadow .18s ease}
+.phone-field{position:relative;min-width:0}
+.phone-field-icon{position:absolute;z-index:1;left:16px;top:50%;width:24px;height:24px;display:grid;place-items:center;transform:translateY(-50%);border-radius:9px;background:var(--lavender-soft);color:var(--purple);pointer-events:none}
+.phone-field-icon svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+input{width:100%;min-height:54px;padding:0 16px;border:1px solid rgba(122,90,208,.18);border-radius:17px;background:#fff;color:var(--ink);outline:0;transition:border-color .18s ease,box-shadow .18s ease}
+.phone-field input{padding-left:52px;font-size:16px;font-weight:700;letter-spacing:.025em}
 input:focus{border-color:var(--purple);box-shadow:0 0 0 4px rgba(122,90,208,.11)}
 input::placeholder{color:#aaa3b6}
-.button{min-height:50px;padding:0 21px;border:0;border-radius:999px;font:700 13.5px/1 'Quicksand',sans-serif;cursor:pointer;transition:transform .2s var(--ease),background .2s ease,box-shadow .2s ease,opacity .2s ease}
+.button{min-height:54px;padding:0 21px;border:0;border-radius:999px;font:700 13.5px/1 'Quicksand',sans-serif;cursor:pointer;transition:transform .2s var(--ease),background .2s ease,box-shadow .2s ease,opacity .2s ease}
 .button:hover:not(:disabled){transform:translateY(-2px)}
 .button:disabled{cursor:wait;opacity:.48;transform:none}
 .primary{color:#fff;background:var(--purple);box-shadow:0 18px 32px -20px rgba(122,90,208,.92)}
@@ -144,11 +148,11 @@ input::placeholder{color:#aaa3b6}
 #confirm-reschedule-button{margin-top:12px}
 .cancel-card{display:flex;align-items:center;justify-content:space-between;gap:18px;background:linear-gradient(120deg,#fff,#fff7fa)}
 .cancel-card p{margin-bottom:0}
-footer{padding:30px 8px 0;color:var(--muted-2);font:600 13px/1.6 'Quicksand',sans-serif;text-align:center}
-footer span{color:var(--pink)}
+.support-footer{margin-top:auto;padding:34px 8px 0;color:var(--muted-2);font:600 13px/1.6 'Quicksand',sans-serif;text-align:center}
+.support-footer span{color:var(--pink)}
 
 body.is-embedded{background:transparent}
-.is-embedded .page-shell{width:min(940px,calc(100% - 34px));padding:42px 0 48px}
+.is-embedded .page-shell{width:min(940px,calc(100% - 34px));min-height:100dvh;padding:42px 0 24px}
 .is-embedded .page-header{display:none}
 .is-embedded .intro{margin-bottom:24px}
 .is-embedded .ambient-doodles{position:absolute}
@@ -161,6 +165,7 @@ body.is-embedded{background:transparent}
   .intro-note{display:none}
   #lookup-form{grid-template-columns:1fr}
   #lookup-form label{grid-column:1;grid-row:auto}
+  #lookup-button{width:100%;margin-top:3px}
   .appointment-details{grid-template-columns:1fr 1fr}
 }
 @media (max-width:560px){
@@ -185,5 +190,6 @@ body.is-embedded{background:transparent}
   .slot-grid{grid-template-columns:repeat(3,1fr)}
   #confirm-reschedule-button,.cancel-card .button{width:100%}
   .cancel-card{align-items:stretch;flex-direction:column}
-  .is-embedded .page-shell{width:min(100% - 20px,480px);padding-top:68px}
+  .support-footer{padding-top:28px;font-size:12px}
+  .is-embedded .page-shell{width:min(100% - 20px,480px);padding:68px 0 18px}
 }
