@@ -30,7 +30,11 @@
 @font-face{font-family:'Nunito';src:url('assets/fonts/Nunito-Variable.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
 
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:rgba(122,90,208,.5) transparent}
+html::-webkit-scrollbar{width:10px}
+html::-webkit-scrollbar-track{background:transparent}
+html::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:999px;background:linear-gradient(180deg,rgba(138,102,216,.62),rgba(196,88,156,.5));background-clip:padding-box}
+html::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,rgba(122,90,208,.82),rgba(196,88,156,.7));background-clip:padding-box}
 body{
   margin:0;min-height:100vh;color:var(--ink);overflow-x:hidden;
   background:
@@ -177,6 +181,7 @@ body.is-embedded{background:transparent}
 .is-embedded .page-shell{width:min(940px,calc(100% - 96px));min-height:100dvh;padding:64px 0 32px}
 .is-embedded .page-header{display:none}
 .is-embedded .intro{margin-bottom:24px}
+.is-embedded .lookup-card{width:100%}
 .is-embedded .ambient-doodles{position:absolute}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
