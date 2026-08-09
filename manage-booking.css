@@ -174,7 +174,7 @@ input::placeholder{color:#aaa3b6}
 .support-footer span{color:var(--pink)}
 
 body.is-embedded{background:transparent}
-.is-embedded .page-shell{width:min(940px,calc(100% - 34px));min-height:100dvh;padding:42px 0 24px}
+.is-embedded .page-shell{width:min(940px,calc(100% - 96px));min-height:100dvh;padding:64px 0 32px}
 .is-embedded .page-header{display:none}
 .is-embedded .intro{margin-bottom:24px}
 .is-embedded .ambient-doodles{position:absolute}
@@ -213,5 +213,5 @@ body.is-embedded{background:transparent}
   #confirm-reschedule-button,.cancel-card .button{width:100%}
   .cancel-card{align-items:stretch;flex-direction:column}
   .support-footer{padding-top:28px;font-size:12px}
-  .is-embedded .page-shell{width:min(100% - 20px,480px);padding:68px 0 18px}
+  .is-embedded .page-shell{width:min(100% - 36px,480px);padding:82px 0 22px}
 }
