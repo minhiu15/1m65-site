@@ -1457,7 +1457,38 @@ class Component extends DCLogic {
   closeBook() {
     clearInterval(this.holdT);
     clearTimeout(this.flipT);
+    if (this.state.status === 'done') return this.resetBookingDraft(false);
     this.setState({ bookOpen: false, status: '', step: 1, slot: null });
+  }
+
+  resetBookingDraft(keepOpen) {
+    clearInterval(this.holdT);
+    clearTimeout(this.flipT);
+    this.availabilityRequestId = (this.availabilityRequestId || 0) + 1;
+    this.setState({
+      bookOpen: !!keepOpen,
+      status: '',
+      step: 1,
+      svc: 've',
+      svcIds: [],
+      bookCat: 'nail',
+      svcWarn: false,
+      dateIdx: 0,
+      customDate: '',
+      calOpen: false,
+      calY: null,
+      calM: null,
+      slot: null,
+      name: '',
+      phone: '',
+      note: '',
+      holdLeft: 300,
+      toast: '',
+      availableSlots: [],
+      slotsLoading: false,
+      bookingPending: false,
+      bookingReference: ''
+    });
   }
 
   flipOne() {
@@ -2131,7 +2162,7 @@ class Component extends DCLogic {
       conflictTitle: 'Giờ bạn chọn vừa không còn trống',
       backLabel: st === 'done' ? '' : st === 'conflict' ? 'Huỷ' : s.step === 1 ? 'Để sau' : 'Quay lại',
       backStyle: (st === 'done' ? 'display:none;' : 'display:block;') + 'padding:17px 28px;border:1px solid rgba(122,90,208,.16);border-radius:999px;background:#FFFFFF;color:#4A3A80;font-family:Quicksand,sans-serif;font-weight:700;font-size:17px;cursor:none',
-      nextLabel: s.bookingPending ? 'Đang xác nhận...' : st === 'done' ? 'Xong' : st === 'conflict' ? 'Chọn giờ khác' : s.step === 3 ? 'Xác nhận đặt hẹn' : s.step === 2 ? (s.slotsLoading ? 'Đang tải giờ trống...' : step2Ready ? 'Tiếp tục' : 'Chọn một giờ trống') : (picked.length ? 'Chọn ngày & giờ' : 'Chọn dịch vụ trước'),
+      nextLabel: s.bookingPending ? 'Đang xác nhận...' : st === 'done' ? 'Đặt lịch tiếp' : st === 'conflict' ? 'Chọn giờ khác' : s.step === 3 ? 'Xác nhận đặt hẹn' : s.step === 2 ? (s.slotsLoading ? 'Đang tải giờ trống...' : step2Ready ? 'Tiếp tục' : 'Chọn một giờ trống') : (picked.length ? 'Chọn ngày & giờ' : 'Chọn dịch vụ trước'),
       nextStyle: 'margin-left:auto;padding:18px 32px;border:none;border-radius:999px;font-family:Quicksand,sans-serif;font-weight:700;font-size:18px;cursor:none;transition:transform .3s cubic-bezier(.34,1.56,.64,1);' + (nextOn ? 'background:#7A5AD0;color:#FFFFFF;box-shadow:0 18px 36px -14px rgba(122,90,208,.8)' : 'background:#F3EFFB;color:#8E8AA0'),
       back: () => {
         if (st === 'conflict') return this.closeBook();
@@ -2139,7 +2170,7 @@ class Component extends DCLogic {
         this.setState({ step: s.step - 1 });
       },
       next: () => {
-        if (st === 'done') return this.closeBook();
+        if (st === 'done') return this.resetBookingDraft(true);
         if (st === 'conflict') return this.setState({ status: '', step: 2, slot: null });
         if (s.step === 3) {
           if (!nameOk) return this.toast('Cho tụi mình xin tên bạn với nha');
