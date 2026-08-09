@@ -9,7 +9,7 @@
   let returnFocus = null;
 
   function managerUrl(reference = '') {
-    const params = new URLSearchParams({ embed: '1' });
+    const params = new URLSearchParams({ embed: '1', view: '20260809-9' });
     const normalizedReference = String(reference || '').trim().toUpperCase();
     if (normalizedReference) params.set('reference', normalizedReference);
     return `manage-booking.html?${params.toString()}`;
