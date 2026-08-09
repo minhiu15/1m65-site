@@ -1388,10 +1388,20 @@ class Component extends DCLogic {
   componentDidUpdate2() {
     this.lockScroll(this.state.bookOpen || this.state.mobileOpen || this.state.moreOpen);
     this.applyGalleryTone();
+    if (this.state.bookOpen && this.state.step === 3) this.resizeNoteField();
     if (this.state.moreOpen) {
       this.syncModalChips();
       if (!this._modalFilled) { this._modalFilled = true; this.fillModalGrid(); }
     } else this._modalFilled = false;
+  }
+
+  resizeNoteField(field) {
+    const target = field && field.isConnected ? field : document.querySelector('[data-book-note]');
+    if (!target) return;
+    target.style.height = 'auto';
+    const contentHeight = target.scrollHeight;
+    target.style.height = Math.min(Math.max(contentHeight, 52), 144) + 'px';
+    target.style.overflowY = contentHeight > 144 ? 'auto' : 'hidden';
   }
 
   syncModalChips() {
@@ -2001,10 +2011,7 @@ class Component extends DCLogic {
       setNote: e => {
         const field = e.target;
         const value = field.value;
-        field.style.height = 'auto';
-        const contentHeight = field.scrollHeight;
-        field.style.height = Math.min(Math.max(contentHeight, 52), 144) + 'px';
-        field.style.overflowY = contentHeight > 144 ? 'auto' : 'hidden';
+        this.resizeNoteField(field);
         this.setState({ note: value });
       },
       summaryService: tot.names + ' · ' + tot.dur,
