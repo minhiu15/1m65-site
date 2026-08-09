@@ -8,6 +8,8 @@ SIL Open Font License 1.1.
 - Lora: `ofl/lora`
 - DM Mono: `ofl/dmmono`
 - Great Vibes: `ofl/greatvibes`
+- Quicksand: `ofl/quicksand`
+- Nunito: `ofl/nunito`
 
 Font chỉ được tải từ cùng origin; Content Security Policy của trang admin không
 cần cho phép Google Fonts hoặc domain bên ngoài.

@@ -1,107 +1,169 @@
-:root {
-  color-scheme: light;
-  --ink: #2b2026;
-  --muted: #74676e;
-  --line: #ead9e1;
-  --pink: #b94e79;
-  --pink-dark: #94375f;
-  --pink-soft: #fff0f5;
-  --green: #246b50;
-  --green-soft: #e9f7f0;
-  --red: #a83249;
-  --red-soft: #fff0f2;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+:root{
+  color-scheme:light;
+  --ink:#2b2440;
+  --ink-soft:#4a4360;
+  --muted:#6b6580;
+  --muted-2:#767089;
+  --paper:#fffcf9;
+  --white:#fff;
+  --purple:#7a5ad0;
+  --purple-2:#8a66d8;
+  --purple-dark:#5f479e;
+  --lavender:#ddd4f3;
+  --lavender-soft:#f7f4fc;
+  --pink:#c4589c;
+  --pink-soft:#fce4ed;
+  --peach:#e0885f;
+  --peach-soft:#fceee6;
+  --blue-soft:#eff6fc;
+  --green:#34735b;
+  --green-soft:#e8f6ef;
+  --red:#a8465c;
+  --red-soft:#fff0f3;
+  --line:rgba(122,90,208,.14);
+  --shadow:0 26px 58px -36px rgba(77,56,122,.48);
+  --ease:cubic-bezier(.22,1,.36,1);
+  font-family:'Nunito',ui-rounded,system-ui,-apple-system,'Segoe UI',sans-serif;
 }
 
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  min-height: 100vh;
-  color: var(--ink);
+@font-face{font-family:'Quicksand';src:url('assets/fonts/Quicksand-Variable.ttf') format('truetype');font-weight:400 700;font-style:normal;font-display:swap}
+@font-face{font-family:'Nunito';src:url('assets/fonts/Nunito-Variable.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;min-height:100vh;color:var(--ink);overflow-x:hidden;
   background:
-    radial-gradient(circle at 4% 2%, rgba(244, 199, 216, .42), transparent 32rem),
-    radial-gradient(circle at 96% 12%, rgba(255, 227, 190, .42), transparent 28rem),
-    #fffaf9;
+    radial-gradient(58rem 30rem at -8% -5%,rgba(221,212,243,.78),transparent 68%),
+    radial-gradient(50rem 28rem at 105% 3%,rgba(252,228,237,.72),transparent 66%),
+    linear-gradient(180deg,#fffdfb 0%,var(--paper) 48%,#fff9f6 100%);
 }
-button, input { font: inherit; }
-a { color: inherit; }
-.page-shell { width: min(940px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 48px; }
-.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 44px; }
-.back-link { color: var(--muted); font-weight: 700; text-decoration: none; }
-.back-link:hover { color: var(--pink-dark); }
-.brand { font-size: 1.3rem; font-weight: 900; text-decoration: none; letter-spacing: -.03em; }
-.brand em { color: var(--pink); font-family: Georgia, serif; font-weight: 500; }
-.intro { max-width: 680px; margin-bottom: 24px; }
-.eyebrow { margin: 0 0 8px; color: var(--pink-dark); font-size: .78rem; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
-h1, h2, h3, p { margin-top: 0; }
-h1 { margin-bottom: 12px; font: 500 clamp(2.25rem, 7vw, 4.3rem)/.98 Georgia, serif; letter-spacing: -.045em; }
-.intro > p:last-child { max-width: 620px; color: var(--muted); line-height: 1.65; }
-.lookup-card, .appointment-view {
-  border: 1px solid var(--line);
-  border-radius: 26px;
-  background: rgba(255, 253, 252, .95);
-  box-shadow: 0 24px 64px -44px rgba(91, 42, 63, .5);
-}
-.lookup-card { padding: 24px; }
-.lookup-card h2 { font-size: 1.1rem; }
-#lookup-form { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px 12px; align-items: end; }
-label { color: var(--ink); font-size: .82rem; font-weight: 800; }
-#lookup-form label { grid-row: 1; }
-#lookup-form label:nth-of-type(2) { grid-column: 2; }
-input {
-  width: 100%; min-height: 48px; border: 1px solid var(--line); border-radius: 14px;
-  padding: 0 14px; color: var(--ink); background: #fff;
-}
-input:focus { outline: 3px solid rgba(185, 78, 121, .14); border-color: var(--pink); }
-.button {
-  min-height: 48px; border: 0; border-radius: 999px; padding: 0 20px;
-  font-weight: 850; cursor: pointer; transition: transform .18s ease, opacity .18s ease, background .18s ease;
-}
-.button:hover:not(:disabled) { transform: translateY(-1px); }
-.button:disabled { cursor: wait; opacity: .48; }
-.primary { color: #fff; background: var(--pink); box-shadow: 0 16px 30px -20px var(--pink-dark); }
-.primary:hover:not(:disabled) { background: var(--pink-dark); }
-.secondary { color: var(--pink-dark); background: var(--pink-soft); border: 1px solid #f2cad9; }
-.danger { color: var(--red); background: #fff; border: 1px solid #efbac6; }
-.danger:hover:not(:disabled) { background: var(--red-soft); }
-.message { min-height: 1.3em; margin: 12px 0 0; color: var(--red); font-size: .9rem; }
-.message.success { color: var(--green); }
-.appointment-view { margin-top: 22px; padding: 28px; }
-.appointment-heading { display: flex; align-items: start; justify-content: space-between; gap: 18px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
-.appointment-heading h2 { margin: 0; font: 500 1.85rem/1.15 Georgia, serif; }
-.status-badge { display: inline-flex; border-radius: 999px; padding: 7px 11px; color: var(--green); background: var(--green-soft); font-size: .78rem; font-weight: 850; white-space: nowrap; }
-.status-badge.cancelled, .status-badge.no_show { color: var(--red); background: var(--red-soft); }
-.appointment-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin: 0; }
-.appointment-details > div { padding: 18px 12px 18px 0; border-bottom: 1px solid #f2e7eb; }
-.appointment-details dt { margin-bottom: 6px; color: var(--muted); font-size: .76rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
-.appointment-details dd { margin: 0; font-weight: 750; line-height: 1.5; white-space: pre-line; }
-.manage-notice { margin: 20px 0 0; border-radius: 14px; padding: 13px 15px; color: var(--green); background: var(--green-soft); font-size: .9rem; font-weight: 700; }
-.manage-notice.locked { color: var(--red); background: var(--red-soft); }
-.manage-actions { display: grid; gap: 16px; margin-top: 18px; }
-.reschedule-card, .cancel-card { border: 1px solid var(--line); border-radius: 20px; padding: 20px; }
-.reschedule-card h3, .cancel-card h3 { margin-bottom: 6px; }
-.reschedule-card > p, .cancel-card p { margin-bottom: 16px; color: var(--muted); }
-.date-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: end; }
-.date-row label { grid-column: 1 / -1; }
-.slot-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 16px; }
-.slot-button { min-height: 42px; border: 1px solid var(--line); border-radius: 13px; color: var(--ink); background: #fff; font-weight: 800; cursor: pointer; }
-.slot-button[aria-pressed="true"] { color: #fff; border-color: var(--pink); background: var(--pink); }
-#confirm-reschedule-button { margin-top: 12px; }
-.cancel-card { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
-.cancel-card p { margin-bottom: 0; }
-footer { padding: 28px 8px 0; color: var(--muted); text-align: center; font-size: .86rem; }
+button,input{font:inherit}
+button{cursor:pointer}
+a{color:inherit}
+h1,h2,h3,p{margin-top:0}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid rgba(122,90,208,.35);outline-offset:3px}
+::selection{background:var(--lavender)}
 
-@media (max-width: 720px) {
-  .page-shell { width: min(100% - 22px, 560px); padding-top: 18px; }
-  .page-header { margin-bottom: 32px; }
-  #lookup-form { grid-template-columns: 1fr; }
-  #lookup-form label, #lookup-form label:nth-of-type(2) { grid-column: 1; grid-row: auto; }
-  .lookup-card, .appointment-view { border-radius: 22px; padding: 20px; }
-  .appointment-heading { align-items: flex-start; flex-direction: column; }
-  .appointment-details { grid-template-columns: 1fr; }
-  .appointment-details > div { padding-right: 0; }
-  .date-row { grid-template-columns: 1fr; }
-  .date-row label { grid-column: 1; }
-  .slot-grid { grid-template-columns: repeat(3, 1fr); }
-  .cancel-card { align-items: stretch; flex-direction: column; }
+.ambient-doodles{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.doodle{position:absolute;object-fit:contain;filter:saturate(.92);opacity:.48}
+.doodle-paws{width:96px;left:2.5%;top:29%;transform:rotate(-17deg)}
+.doodle-star{width:34px;right:7%;top:12%;transform:rotate(8deg)}
+.doodle-peach{width:42px;left:8%;bottom:12%;transform:rotate(-12deg);opacity:.38}
+.doodle-envelope{width:82px;right:3%;bottom:8%;transform:rotate(8deg);opacity:.36}
+
+.page-shell{position:relative;z-index:1;width:min(1060px,calc(100% - 40px));margin:0 auto;padding:24px 0 52px}
+.page-header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:54px}
+.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.brand-paw{width:38px;height:38px;display:grid;place-items:center;border-radius:14px;background:var(--lavender-soft);transform:rotate(-7deg)}
+.brand-paw svg{width:27px;height:27px;fill:var(--purple-2)}
+.brand-copy{display:flex;flex-direction:column;line-height:1}
+.brand-copy strong{font:700 21px/1 'Quicksand',sans-serif;letter-spacing:-.03em}
+.brand-copy small{margin-top:6px;color:var(--purple);font:700 10px/1 'Quicksand',sans-serif;letter-spacing:.1em}
+.back-link{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 16px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.86);color:var(--purple-dark);font:700 13px/1 'Quicksand',sans-serif;text-decoration:none;box-shadow:0 12px 30px -25px rgba(67,43,108,.7);backdrop-filter:blur(10px);transition:transform .2s var(--ease),background .2s ease}
+.back-link:hover{transform:translateY(-2px);background:var(--lavender-soft)}
+
+.intro{display:grid;grid-template-columns:minmax(0,1fr) 240px;align-items:center;gap:46px;margin-bottom:28px}
+.intro-copy{max-width:720px}
+.eyebrow{display:flex;align-items:center;gap:8px;margin:0 0 11px;color:var(--purple-2);font:700 12px/1.2 'Quicksand',sans-serif;letter-spacing:.15em;text-transform:uppercase}
+.eyebrow span{display:grid;width:24px;height:24px;place-items:center;border-radius:50%;background:var(--pink-soft);color:var(--pink);font-size:13px;letter-spacing:0}
+h1{margin-bottom:17px;font:700 clamp(2.35rem,6vw,4.35rem)/1.03 'Quicksand',sans-serif;letter-spacing:-.045em;text-wrap:balance}
+h1 span{background:linear-gradient(96deg,#8e6ade,#c4589c 67%,#e0885f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.intro-copy>p:last-child{max-width:650px;margin-bottom:0;color:var(--muted);font-size:16px;line-height:1.7}
+.intro-note{position:relative;min-height:182px;display:grid;place-items:center;padding:18px;border:1px dashed rgba(122,90,208,.22);border-radius:32px;background:rgba(255,255,255,.68);transform:rotate(2deg)}
+.intro-note img{width:92px;margin-top:-28px;object-fit:contain}
+.intro-note p{margin:-10px 0 0;color:var(--muted);font:700 12.5px/1.55 'Quicksand',sans-serif;text-align:center}
+
+.lookup-card,.appointment-view{border:1px solid var(--line);border-radius:32px;background:rgba(255,255,255,.92);box-shadow:var(--shadow);backdrop-filter:blur(14px)}
+.lookup-card{position:relative;padding:26px;overflow:hidden}
+.lookup-card::after{content:'';position:absolute;width:180px;height:180px;right:-72px;top:-92px;border-radius:50%;background:rgba(221,212,243,.28);pointer-events:none}
+.card-title-row{position:relative;z-index:1;display:flex;align-items:center;gap:13px;margin-bottom:19px}
+.step-bubble{width:36px;height:36px;display:grid;place-items:center;flex:0 0 auto;border-radius:14px;background:var(--purple);color:#fff;font:700 14px/1 'Quicksand',sans-serif;box-shadow:0 12px 24px -14px rgba(122,90,208,.9)}
+.card-kicker{margin:0 0 3px;color:var(--purple-2);font:700 10.5px/1 'Quicksand',sans-serif;letter-spacing:.13em;text-transform:uppercase}
+.lookup-card h2{margin:0;font:700 20px/1.2 'Quicksand',sans-serif;letter-spacing:-.02em}
+#lookup-form{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr auto;gap:9px 12px;align-items:end}
+label{color:var(--ink-soft);font:700 12.5px/1.3 'Quicksand',sans-serif}
+#lookup-form label{grid-row:1}
+#lookup-form label:nth-of-type(2){grid-column:2}
+input{width:100%;min-height:50px;padding:0 15px;border:1px solid rgba(122,90,208,.18);border-radius:16px;background:#fff;color:var(--ink);outline:0;transition:border-color .18s ease,box-shadow .18s ease}
+input:focus{border-color:var(--purple);box-shadow:0 0 0 4px rgba(122,90,208,.11)}
+input::placeholder{color:#aaa3b6}
+.button{min-height:50px;padding:0 21px;border:0;border-radius:999px;font:700 13.5px/1 'Quicksand',sans-serif;cursor:pointer;transition:transform .2s var(--ease),background .2s ease,box-shadow .2s ease,opacity .2s ease}
+.button:hover:not(:disabled){transform:translateY(-2px)}
+.button:disabled{cursor:wait;opacity:.48;transform:none}
+.primary{color:#fff;background:var(--purple);box-shadow:0 18px 32px -20px rgba(122,90,208,.92)}
+.primary:hover:not(:disabled){background:#6948c2;box-shadow:0 22px 36px -20px rgba(122,90,208,1)}
+.secondary{color:var(--purple-dark);background:var(--lavender-soft);border:1px solid rgba(122,90,208,.2)}
+.danger{color:var(--red);background:#fff;border:1px solid rgba(168,70,92,.24)}
+.danger:hover:not(:disabled){background:var(--red-soft)}
+.message{min-height:1.3em;margin:13px 0 0;color:var(--red);font-size:13.5px;line-height:1.5}
+.message:empty{min-height:0;margin-top:0}
+.message.success{color:var(--green)}
+
+.appointment-view{margin-top:24px;padding:30px;scroll-margin-top:18px}
+.appointment-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding-bottom:22px;border-bottom:1px dashed rgba(122,90,208,.2)}
+.appointment-heading .eyebrow{margin-bottom:8px}
+.appointment-heading h2{margin:0;font:700 28px/1.15 'Quicksand',sans-serif;letter-spacing:-.03em}
+.status-badge{display:inline-flex;align-items:center;min-height:32px;padding:0 12px;border-radius:999px;background:var(--green-soft);color:var(--green);font:700 11.5px/1 'Quicksand',sans-serif;white-space:nowrap}
+.status-badge::before{content:'✓';margin-right:6px}
+.status-badge.cancelled,.status-badge.no_show{background:var(--red-soft);color:var(--red)}
+.status-badge.cancelled::before{content:'×'}
+.status-badge.no_show::before{content:'⊘'}
+.appointment-details{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin:20px 0 0}
+.appointment-details>div{min-width:0;padding:16px;border:1px solid rgba(122,90,208,.1);border-radius:18px;background:var(--lavender-soft)}
+.appointment-details>div:nth-child(2),.appointment-details>div:nth-child(5){background:#fff7fa;border-color:rgba(196,88,156,.1)}
+.appointment-details>div:nth-child(3),.appointment-details>div:nth-child(6){background:#fff9f4;border-color:rgba(224,136,95,.12)}
+.appointment-details dt{margin-bottom:7px;color:var(--muted-2);font:700 10.5px/1 'Quicksand',sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.appointment-details dd{margin:0;font-size:14px;font-weight:800;line-height:1.55;white-space:pre-line;overflow-wrap:anywhere}
+.manage-notice{margin:18px 0 0;padding:14px 16px;border:1px solid rgba(52,115,91,.12);border-radius:16px;background:var(--green-soft);color:var(--green);font-size:13.5px;font-weight:800;line-height:1.55}
+.manage-notice.locked{border-color:rgba(168,70,92,.12);background:var(--red-soft);color:var(--red)}
+.manage-actions{display:grid;gap:15px;margin-top:17px}
+.reschedule-card,.cancel-card{border:1px solid var(--line);border-radius:24px;background:#fff;padding:22px}
+.action-title{display:flex;align-items:flex-start;gap:12px}
+.action-title>span{width:34px;height:34px;display:grid;place-items:center;flex:0 0 auto;border-radius:13px;background:var(--lavender-soft);color:var(--purple);font-size:17px;font-weight:800}
+.reschedule-card h3,.cancel-card h3{margin-bottom:6px;font:700 18px/1.25 'Quicksand',sans-serif}
+.reschedule-card .action-title p,.cancel-card p{margin-bottom:17px;color:var(--muted);font-size:13.5px;line-height:1.55}
+.date-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;margin-top:3px}
+.date-row label{grid-column:1/-1}
+.slot-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:16px}
+.slot-button{min-height:44px;border:1px solid rgba(122,90,208,.17);border-radius:14px;background:#fff;color:var(--ink-soft);font:700 13px/1 'Quicksand',sans-serif;cursor:pointer;transition:transform .18s var(--ease),background .18s ease,border-color .18s ease}
+.slot-button:hover{transform:translateY(-1px);border-color:var(--lavender);background:var(--lavender-soft)}
+.slot-button[aria-pressed=true]{border-color:var(--purple);background:var(--purple);color:#fff;box-shadow:0 12px 20px -16px rgba(122,90,208,.95)}
+#confirm-reschedule-button{margin-top:12px}
+.cancel-card{display:flex;align-items:center;justify-content:space-between;gap:18px;background:linear-gradient(120deg,#fff,#fff7fa)}
+.cancel-card p{margin-bottom:0}
+footer{padding:30px 8px 0;color:var(--muted-2);font:600 13px/1.6 'Quicksand',sans-serif;text-align:center}
+footer span{color:var(--pink)}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+@media (max-width:800px){
+  .page-shell{width:min(100% - 28px,620px);padding-top:16px}
+  .page-header{margin-bottom:36px}
+  .intro{grid-template-columns:1fr;gap:0}
+  .intro-note{display:none}
+  #lookup-form{grid-template-columns:1fr}
+  #lookup-form label,#lookup-form label:nth-of-type(2){grid-column:1;grid-row:auto}
+  .appointment-details{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .ambient-doodles{opacity:.58}
+  .doodle-paws{width:64px;left:-15px;top:24%}
+  .doodle-envelope{display:none}
+  .page-shell{width:min(100% - 22px,480px)}
+  .brand-paw{width:34px;height:34px}
+  .brand-copy strong{font-size:18px}
+  .brand-copy small{font-size:8px}
+  .back-link{min-height:40px;padding:0 13px;font-size:12px}
+  .page-header{gap:10px;margin-bottom:32px}
+  h1{font-size:clamp(2.1rem,10vw,3rem)}
+  .intro-copy>p:last-child{font-size:14px}
+  .lookup-card,.appointment-view{border-radius:24px;padding:20px}
+  .appointment-heading{flex-direction:column;gap:12px}
+  .appointment-details{grid-template-columns:1fr}
+  .date-row{grid-template-columns:1fr}
+  .date-row label{grid-column:1}
+  .slot-grid{grid-template-columns:repeat(3,1fr)}
+  #confirm-reschedule-button,.cancel-card .button{width:100%}
+  .cancel-card{align-items:stretch;flex-direction:column}
 }

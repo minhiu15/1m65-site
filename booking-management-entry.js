@@ -28,7 +28,7 @@
     link.dataset.bookingManageEntry = 'true';
     link.href = `manage-booking.html?reference=${encodeURIComponent(reference)}`;
     link.target = '_top';
-    link.textContent = 'Quản lý lịch hẹn';
+    link.textContent = 'Xem và chỉnh lịch hẹn';
     link.style.cssText = [
       'display:inline-flex',
       'align-items:center',
