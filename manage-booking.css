@@ -48,7 +48,6 @@ h1,h2,h3,p{margin-top:0}
 
 .ambient-doodles{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .doodle{position:absolute;object-fit:contain;filter:saturate(.92);opacity:.48}
-.doodle-paws{width:96px;left:2.5%;top:29%;transform:rotate(-17deg)}
 .doodle-star{width:34px;right:7%;top:12%;transform:rotate(8deg)}
 .doodle-peach{width:42px;left:8%;bottom:12%;transform:rotate(-12deg);opacity:.38}
 .doodle-envelope{width:82px;right:3%;bottom:8%;transform:rotate(8deg);opacity:.36}
@@ -193,7 +192,6 @@ body.is-embedded{background:transparent}
 }
 @media (max-width:560px){
   .ambient-doodles{opacity:.58}
-  .doodle-paws{width:64px;left:-15px;top:24%}
   .doodle-envelope{display:none}
   .page-shell{width:min(100% - 22px,480px)}
   .brand-paw{width:34px;height:34px}
