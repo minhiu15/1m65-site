@@ -3,6 +3,17 @@
 
   const REFERENCE_PATTERN = /1M65-[0-9]{6}-[A-F0-9]{6}/i;
 
+  function bindManageLink(link, reference) {
+    link.href = `manage-booking.html?reference=${encodeURIComponent(reference)}`;
+    if (link.dataset.bookingManageBound === 'true') return;
+    link.dataset.bookingManageBound = 'true';
+    link.addEventListener('click', (event) => {
+      if (typeof window.mewBookingManager?.open !== 'function') return;
+      event.preventDefault();
+      window.mewBookingManager.open(reference);
+    });
+  }
+
   function addSuccessLink(frame) {
     let documentRoot;
     try {
@@ -20,13 +31,12 @@
     if (!anchor) return;
     const existingLink = anchor.parentElement?.querySelector('[data-booking-manage-entry]');
     if (existingLink) {
-      existingLink.href = `manage-booking.html?reference=${encodeURIComponent(reference)}`;
+      bindManageLink(existingLink, reference);
       return;
     }
 
     const link = documentRoot.createElement('a');
     link.dataset.bookingManageEntry = 'true';
-    link.href = `manage-booking.html?reference=${encodeURIComponent(reference)}`;
     link.target = '_top';
     link.textContent = 'Xem và chỉnh lịch hẹn';
     link.style.cssText = [
@@ -43,6 +53,7 @@
       'font:700 14px/1 system-ui,sans-serif',
       'text-decoration:none'
     ].join(';');
+    bindManageLink(link, reference);
     anchor.insertAdjacentElement('afterend', link);
   }
 
@@ -55,5 +66,5 @@
     else frame.addEventListener('load', start, { once: true });
   }
 
-  document.querySelectorAll('iframe').forEach(bindFrame);
+  document.querySelectorAll('main > iframe').forEach(bindFrame);
 })();

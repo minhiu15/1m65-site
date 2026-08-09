@@ -136,6 +136,12 @@ input::placeholder{color:#aaa3b6}
 footer{padding:30px 8px 0;color:var(--muted-2);font:600 13px/1.6 'Quicksand',sans-serif;text-align:center}
 footer span{color:var(--pink)}
 
+body.is-embedded{background:transparent}
+.is-embedded .page-shell{width:min(940px,calc(100% - 34px));padding:42px 0 48px}
+.is-embedded .page-header{display:none}
+.is-embedded .intro{margin-bottom:24px}
+.is-embedded .ambient-doodles{position:absolute}
+
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
 @media (max-width:800px){
   .page-shell{width:min(100% - 28px,620px);padding-top:16px}
@@ -166,4 +172,5 @@ footer span{color:var(--pink)}
   .slot-grid{grid-template-columns:repeat(3,1fr)}
   #confirm-reschedule-button,.cancel-card .button{width:100%}
   .cancel-card{align-items:stretch;flex-direction:column}
+  .is-embedded .page-shell{width:min(100% - 20px,480px);padding-top:68px}
 }

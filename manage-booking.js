@@ -1,6 +1,8 @@
 (() => {
   'use strict';
 
+  if (window.self !== window.top) document.body.classList.add('is-embedded');
+
   const API_URL = 'https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-manage';
   const TIME_ZONE = 'Asia/Ho_Chi_Minh';
   const STATUS_LABELS = {
