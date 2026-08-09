@@ -2,7 +2,7 @@
   "use strict";
 
   const SELF_URL = document.currentScript && document.currentScript.src;
-  const CSS_URL = SELF_URL ? new URL("booking-ticket.css?v=20260809-3", SELF_URL).href : "booking-ticket.css?v=20260809-3";
+  const CSS_URL = SELF_URL ? new URL("booking-ticket.css?v=20260809-4", SELF_URL).href : "booking-ticket.css?v=20260809-4";
 
   function make(tag, className, text) {
     const node = document.createElement(tag);
@@ -92,6 +92,21 @@
     return true;
   }
 
+  function transformMobileContact() {
+    if (!window.matchMedia("(max-width: 767px)").matches) return false;
+
+    const contact = document.getElementById("lienhe");
+    const mapFrame = contact && contact.querySelector('iframe[title*="1M65"]');
+    const map = mapFrame && mapFrame.parentElement;
+    const copy = map && map.nextElementSibling;
+    if (!contact || !map || !copy || copy.classList.contains("mew-mobile-contact-copy")) return false;
+
+    map.classList.add("mew-mobile-contact-map");
+    copy.classList.add("mew-mobile-contact-copy");
+    contact.insertBefore(copy, map);
+    return true;
+  }
+
   function ensureFrameAssets(frame) {
     let doc;
     try {
@@ -135,6 +150,7 @@
       document.head.append(style);
     }
     transformBookingTicket();
+    transformMobileContact();
   } else if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", bootParent, { once: true });
   } else {

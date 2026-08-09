@@ -257,6 +257,14 @@
     text-wrap: balance;
   }
 
+  #lienhe .mew-mobile-contact-copy {
+    margin: 0 0 14px !important;
+  }
+
+  #lienhe .mew-mobile-contact-map {
+    margin: 0 0 16px !important;
+  }
+
   #datlich.mew-ticket-section {
     width: 100% !important;
     padding: 28px 18px 0 !important;
