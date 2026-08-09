@@ -1,37 +1,30 @@
+@keyframes mew-ticket-sweep {
+  0% { transform: translateX(-105%); }
+  100% { transform: translateX(105%); }
+}
+
 #datlich.mew-ticket-section {
   position: relative !important;
-  width: min(100%, 1240px) !important;
-  max-width: 1240px !important;
+  width: min(100%, 1760px) !important;
+  max-width: 1760px !important;
   margin: 0 auto !important;
-  padding: 78px 24px 0 !important;
+  padding: 88px 24px 0 !important;
 }
 
 #datlich.mew-ticket-section > .mew-booking-ticket {
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 320px;
-  min-height: 430px;
-  overflow: hidden;
+  min-height: 436px;
   color: #2b2440;
-  background: linear-gradient(122deg, #f7f3fc 0%, #f6f0fe 44%, #fff4f7 100%);
-  box-shadow: 0 34px 76px -42px rgba(72, 48, 111, 0.46);
+  background: linear-gradient(122deg, #f7f3fc 0%, #f6f0fe 40%, #fff4f7 100%);
+  box-shadow: 0 30px 60px -40px rgba(74, 58, 128, 0.5);
   isolation: isolate;
-}
-
-.mew-booking-ticket::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 17% 14%, rgba(255, 255, 255, 0.68), transparent 26%),
-    radial-gradient(circle at 73% 88%, rgba(245, 198, 220, 0.23), transparent 30%);
 }
 
 .mew-ticket-cutout {
   position: absolute;
-  z-index: 5;
+  z-index: 6;
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -47,45 +40,50 @@
 .mew-ticket-main {
   display: flex;
   flex-direction: column;
+  gap: 22px;
   min-width: 0;
-  padding: 50px 54px 44px;
+  padding: 56px 54px 46px;
 }
 
 .mew-ticket-topline {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 34px;
+  gap: 12px;
+  min-width: 0;
+}
+
+.mew-ticket-eyebrow {
+  flex: none;
+  color: #c4589c;
   font-family: Quicksand, sans-serif;
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #8a66d8;
 }
 
-.mew-ticket-topline::after {
-  content: "";
+.mew-ticket-rule {
   flex: 1;
-  min-width: 28px;
-  border-top: 1px dashed rgba(122, 90, 208, 0.3);
+  min-width: 24px;
+  height: 1px;
+  border-bottom: 1px dashed rgba(196, 88, 156, 0.35);
 }
 
-.mew-ticket-number {
-  color: #a19ab4;
-  letter-spacing: 0.08em;
+.mew-ticket-validity {
+  flex: none;
+  color: #8a8399;
+  font-size: 13px;
   white-space: nowrap;
 }
 
 .mew-ticket-title {
-  max-width: 720px;
-  margin: 0 0 17px;
+  margin: 0;
+  color: #241e38;
   font-family: Quicksand, sans-serif;
-  font-size: clamp(40px, 3.8vw, 50px);
+  font-size: 52px;
   font-weight: 700;
-  line-height: 1.06;
-  letter-spacing: -0.045em;
-  text-wrap: balance;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
 }
 
 .mew-ticket-title-line {
@@ -93,110 +91,140 @@
   white-space: nowrap;
 }
 
-.mew-ticket-title-line--accent {
-  color: #c4589c;
-}
-
 .mew-ticket-copy {
-  max-width: 620px;
+  max-width: 520px;
   margin: 0;
-  color: #6b6580;
-  font-size: 16px;
-  line-height: 1.72;
+  color: #5c566f;
+  font-size: 17px;
+  line-height: 1.6;
   text-wrap: pretty;
 }
 
+.mew-ticket-copy--mobile {
+  display: none;
+}
+
 .mew-ticket-meta {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 22px;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
   margin-top: auto;
-  padding-top: 32px;
-  border-top: 1px dashed rgba(122, 90, 208, 0.28);
+  padding-top: 20px;
+  border-top: 1px dashed rgba(122, 90, 208, 0.24);
 }
 
 .mew-ticket-meta-item {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 4px;
   min-width: 0;
+  padding: 0 28px;
+}
+
+.mew-ticket-meta-item:first-child { padding-left: 0; }
+.mew-ticket-meta-item:last-child { padding-right: 0; }
+
+.mew-ticket-meta-item + .mew-ticket-meta-item {
+  border-left: 1px solid rgba(122, 90, 208, 0.18);
 }
 
 .mew-ticket-meta-label {
-  display: block;
-  margin-bottom: 7px;
+  color: #8a66d8;
   font-family: Quicksand, sans-serif;
-  font-size: 10px;
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #a19ab4;
 }
 
 .mew-ticket-meta-value,
 .mew-ticket-meta-value:visited {
-  display: block;
-  color: #403851;
+  overflow: hidden;
+  color: #241e38;
   font-family: Quicksand, sans-serif;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 700;
-  line-height: 1.45;
+  line-height: 1.35;
   text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+a.mew-ticket-meta-value,
+a.mew-ticket-meta-value:visited {
+  color: #7a5ad0;
+}
+
+.mew-ticket-meta-note {
+  color: #8a8399;
+  font-size: 13.5px;
+  line-height: 1.45;
 }
 
 .mew-ticket-stub {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  gap: 16px;
   min-width: 0;
-  padding: 48px 36px 122px;
+  overflow: hidden;
+  padding: 48px 36px 112px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.52);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .mew-ticket-stub::before {
   content: "";
   position: absolute;
-  top: 24px;
-  bottom: 24px;
+  top: 0;
+  bottom: 0;
   left: 0;
-  border-left: 1px dashed rgba(122, 90, 208, 0.34);
+  width: 2px;
+  background-image: repeating-linear-gradient(to bottom, rgba(122, 90, 208, 0.4) 0 9px, transparent 9px 18px);
+}
+
+.mew-ticket-stub-head {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .mew-ticket-stub-label {
-  margin-bottom: 22px;
+  color: #8a66d8;
   font-family: Quicksand, sans-serif;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #a19ab4;
 }
 
 .mew-ticket-stub-title {
-  margin: 0 0 25px;
+  margin: 0;
+  color: #2b2440;
   font-family: Quicksand, sans-serif;
-  font-size: 30px;
+  font-size: 27px;
   font-weight: 700;
-  line-height: 1.14;
-  letter-spacing: -0.035em;
+  line-height: 1.2;
 }
 
 #datlich .mew-ticket-button {
   position: relative !important;
   z-index: 2;
-  display: inline-flex !important;
+  display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 10px !important;
   width: 100% !important;
   min-height: 58px !important;
-  padding: 16px 22px !important;
+  padding: 19px 24px !important;
   overflow: hidden !important;
   border-radius: 999px !important;
   color: #fff !important;
   background: #7a5ad0 !important;
-  box-shadow: 0 20px 38px -16px rgba(122, 90, 208, 0.9) !important;
+  box-shadow: 0 20px 38px -18px rgba(122, 90, 208, 0.9) !important;
   font-family: Quicksand, sans-serif !important;
-  font-size: 16px !important;
+  font-size: 17px !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   text-decoration: none !important;
@@ -205,46 +233,58 @@
 
 #datlich .mew-ticket-button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 27px 46px -16px rgba(122, 90, 208, 0.96) !important;
+  box-shadow: 0 26px 44px -17px rgba(122, 90, 208, 0.96) !important;
 }
 
-.mew-ticket-button svg {
-  flex: none;
+.mew-ticket-button-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.42) 50%, transparent 62%);
+  animation: mew-ticket-sweep 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.mew-ticket-button-label {
+  position: relative;
 }
 
 .mew-ticket-note {
-  margin: 13px 0 0;
-  color: #817a92;
-  font-size: 12px;
-  line-height: 1.45;
+  margin: 0;
+  color: #8a8399;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
-.mew-ticket-mobile-meta {
+.mew-ticket-mobile-info {
   display: none;
 }
 
-#datlich .mew-ticket-mascot {
-  position: absolute !important;
-  right: 50% !important;
-  bottom: -48px !important;
-  left: auto !important;
-  width: 170px !important;
-  margin: 0 !important;
+.mew-ticket-cat {
+  position: absolute;
+  right: 50%;
+  bottom: 0;
+  z-index: 2;
+  display: block;
+  width: 164px;
+  height: auto;
   transform: translateX(50%);
   pointer-events: none;
 }
 
-#datlich .mew-ticket-mascot .nhu-mascot {
-  width: 100%;
+#datlich .mew-ticket-legacy-mascot {
+  display: none !important;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) and (min-width: 768px) {
   #datlich.mew-ticket-section > .mew-booking-ticket {
-    grid-template-columns: minmax(0, 1fr) 280px;
+    grid-template-columns: minmax(0, 1fr) 290px;
   }
 
-  .mew-ticket-main { padding-right: 42px; padding-left: 42px; }
-  .mew-ticket-title { font-size: 42px; }
+  .mew-ticket-main { padding-right: 38px; padding-left: 38px; }
+  .mew-ticket-title { font-size: 40px; }
+  .mew-ticket-title-line { white-space: normal; }
+  .mew-ticket-meta-item { padding-right: 16px; padding-left: 16px; }
+  .mew-ticket-meta-value { font-size: 15px; }
   .mew-ticket-stub { padding-right: 28px; padding-left: 28px; }
 }
 
@@ -257,23 +297,20 @@
     text-wrap: balance;
   }
 
-  #lienhe .mew-mobile-contact-copy {
-    margin: 0 0 14px !important;
-  }
-
-  #lienhe .mew-mobile-contact-map {
-    margin: 0 0 16px !important;
-  }
+  #lienhe .mew-mobile-contact-copy { margin: 0 0 14px !important; }
+  #lienhe .mew-mobile-contact-map { margin: 0 0 16px !important; }
 
   #datlich.mew-ticket-section {
     width: 100% !important;
-    padding: 28px 18px 0 !important;
+    padding: 28px 20px 0 !important;
   }
 
   #datlich.mew-ticket-section > .mew-booking-ticket {
-    display: block;
+    display: flex;
+    flex-direction: column;
     min-height: 0;
-    border-radius: 0;
+    background: linear-gradient(160deg, #f7f3fc 0%, #f6f0fe 45%, #fff4f7 100%);
+    box-shadow: 0 24px 44px -38px rgba(74, 58, 128, 0.6);
   }
 
   .mew-ticket-cutout {
@@ -287,92 +324,98 @@
   .mew-ticket-cutout--br { right: -14px; bottom: -14px; }
 
   .mew-ticket-main {
-    display: block;
-    padding: 27px 22px 23px;
+    display: flex;
+    gap: 13px;
+    padding: 26px 22px 20px;
   }
 
-  .mew-ticket-topline {
-    gap: 10px;
-    margin-bottom: 22px;
-    font-size: 10px;
-    letter-spacing: 0.13em;
+  .mew-ticket-topline { display: block; }
+
+  .mew-ticket-eyebrow {
+    font-size: 10.5px;
   }
 
-  .mew-ticket-number { display: none; }
-
-  .mew-ticket-title {
-    margin-bottom: 13px;
-    font-size: clamp(28px, 8.3vw, 36px);
-    line-height: 1.08;
-    letter-spacing: -0.042em;
-  }
-
-  .mew-ticket-title-line {
-    white-space: normal;
-  }
-
-  .mew-ticket-copy {
-    font-size: 14px;
-    line-height: 1.65;
-  }
-
-  .mew-ticket-meta {
+  .mew-ticket-rule,
+  .mew-ticket-validity {
     display: none;
   }
 
+  .mew-ticket-title {
+    font-size: 28px;
+    line-height: 1.05;
+  }
+
+  .mew-ticket-title-line {
+    display: inline;
+    white-space: normal;
+  }
+
+  .mew-ticket-title-line + .mew-ticket-title-line::before {
+    content: " ";
+  }
+
+  .mew-ticket-copy {
+    max-width: none;
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+
+  .mew-ticket-copy--desktop {
+    display: none;
+  }
+
+  .mew-ticket-copy--mobile {
+    display: block;
+  }
+
+  .mew-ticket-meta { display: none; }
+
   .mew-ticket-stub {
     align-items: stretch;
-    padding: 24px 22px 88px;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 20px 20px 84px;
     text-align: left;
   }
 
   .mew-ticket-stub::before {
     top: 0;
-    right: 20px;
+    right: 0;
     bottom: auto;
-    left: 20px;
-    border-top: 1px dashed rgba(122, 90, 208, 0.34);
-    border-left: 0;
+    left: 0;
+    width: auto;
+    height: 2px;
+    background-image: repeating-linear-gradient(to right, rgba(122, 90, 208, 0.4) 0 9px, transparent 9px 18px);
   }
 
-  .mew-ticket-stub-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    margin-bottom: 17px;
-  }
-
-  .mew-ticket-stub-label { margin: 0; }
-
-  .mew-ticket-stub-title {
-    margin: 0;
-    font-size: 22px;
-    text-align: right;
+  .mew-ticket-stub-head,
+  .mew-ticket-note {
+    display: none;
   }
 
   #datlich .mew-ticket-button {
-    min-height: 56px !important;
-    font-size: 15px !important;
+    min-height: 55px !important;
+    padding: 17px !important;
+    font-size: 16.5px !important;
   }
 
-  .mew-ticket-mobile-meta {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 18px;
-    padding-top: 17px;
-    border-top: 1px dashed rgba(122, 90, 208, 0.22);
+  .mew-ticket-mobile-info {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    color: #5c566f;
+    font-size: 12.5px;
+    line-height: 1.4;
   }
 
-  .mew-ticket-mobile-meta .mew-ticket-meta-value {
-    font-size: 12px;
+  .mew-ticket-mobile-info a,
+  .mew-ticket-mobile-info a:visited {
+    color: #7a5ad0;
+    font-weight: 700;
+    text-decoration: none;
   }
 
-  #datlich .mew-ticket-mascot {
-    right: 18px !important;
-    bottom: -39px !important;
-    width: 126px !important;
-    transform: none;
+  .mew-ticket-cat {
+    width: 132px;
   }
 }

@@ -2,7 +2,8 @@
   "use strict";
 
   const SELF_URL = document.currentScript && document.currentScript.src;
-  const CSS_URL = SELF_URL ? new URL("booking-ticket.css?v=20260809-4", SELF_URL).href : "booking-ticket.css?v=20260809-4";
+  const CSS_URL = SELF_URL ? new URL("booking-ticket.css?v=20260809-5", SELF_URL).href : "booking-ticket.css?v=20260809-5";
+  const CAT_URL = SELF_URL ? new URL("mascot/nhu-nhi-ticket.png?v=20260809-1", SELF_URL).href : "mascot/nhu-nhi-ticket.png?v=20260809-1";
 
   function make(tag, className, text) {
     const node = document.createElement(tag);
@@ -11,12 +12,13 @@
     return node;
   }
 
-  function metaItem(label, value, href) {
+  function metaItem(label, value, note, href) {
     const item = make("div", "mew-ticket-meta-item");
     item.append(make("span", "mew-ticket-meta-label", label));
     const valueNode = make(href ? "a" : "span", "mew-ticket-meta-value", value);
     if (href) valueNode.href = href;
     item.append(valueNode);
+    item.append(make("span", "mew-ticket-meta-note", note));
     return item;
   }
 
@@ -24,12 +26,7 @@
     button.className = "mew-ticket-button";
     button.removeAttribute("style");
     button.removeAttribute("style-hover");
-    button.innerHTML =
-      '<span>Giữ chỗ cho mình</span>' +
-      '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">' +
-      '<path d="M7 4v3M17 4v3M4.5 9.5h15M6.5 6h11a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
-      '<path d="m9 14 2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>' +
-      "</svg>";
+    button.innerHTML = '<span class="mew-ticket-button-shine" aria-hidden="true"></span><span class="mew-ticket-button-label">Đặt hẹn ngay</span>';
     return button;
   }
 
@@ -39,8 +36,8 @@
 
     const oldCard = section.querySelector(".nhu-major-surface--booking");
     const button = section.querySelector("#mewBookBtn");
-    const mascot = section.querySelector('[data-cat="sleep"]');
-    if (!oldCard || !button || !mascot) return false;
+    const legacyMascot = section.querySelector('[data-cat="sleep"]');
+    if (!oldCard || !button || !legacyMascot) return false;
 
     section.dataset.mewTicketReady = "true";
     section.classList.add("mew-ticket-section");
@@ -53,19 +50,21 @@
 
     const main = make("div", "mew-ticket-main");
     const topline = make("div", "mew-ticket-topline");
-    topline.append(make("span", "", "Vé mời · 1M65 Nails"));
-    topline.append(make("span", "mew-ticket-number", "No. 000165"));
+    topline.append(make("span", "mew-ticket-eyebrow", "Vé mời · 1M65 Nails"));
+    topline.append(make("span", "mew-ticket-rule"));
+    topline.append(make("span", "mew-ticket-validity", "không giới hạn ngày dùng"));
     main.append(topline);
 
     const title = make("h2", "mew-ticket-title");
-    title.innerHTML = '<span class="mew-ticket-title-line">Bàn tay bạn xứng đáng</span><span class="mew-ticket-title-line mew-ticket-title-line--accent">một buổi chiều tử tế.</span>';
+    title.innerHTML = '<span class="mew-ticket-title-line">Bàn tay bạn xứng đáng</span><span class="mew-ticket-title-line">một buổi chiều tử tế</span>';
     main.append(title);
-    main.append(make("p", "mew-ticket-copy", "Chọn dịch vụ bạn thích, tìm một khung giờ vừa vặn rồi để tụi mình chăm phần còn lại. Không cần đặt cọc."));
+    main.append(make("p", "mew-ticket-copy mew-ticket-copy--desktop", "Không cần đặt cọc, không phụ thu cuối tuần. Đặt xong bạn cứ tới, bận thì nhắn Zalo dời lịch."));
+    main.append(make("p", "mew-ticket-copy mew-ticket-copy--mobile", "Không cần đặt cọc, không phụ thu cuối tuần."));
 
     const meta = make("div", "mew-ticket-meta");
-    meta.append(metaItem("Giờ mở cửa", "9:00 – 18:00 mỗi ngày"));
-    meta.append(metaItem("Ghé tiệm", "TP. Thủ Đức · TP.HCM"));
-    meta.append(metaItem("Gọi cho tiệm", "028 3822 0100", "tel:+842838220100"));
+    meta.append(metaItem("Giờ mở cửa", "9:00 – 18:00", "cả tuần, kể cả chủ nhật"));
+    meta.append(metaItem("Tiệm ở", "Thủ Đức, TP.HCM", "có chỗ để xe ngay trước tiệm"));
+    meta.append(metaItem("Gọi hoặc Zalo", "028 3822 0100", "trả lời trong 5 phút", "tel:+842838220100"));
     main.append(meta);
 
     const stub = make("div", "mew-ticket-stub");
@@ -76,16 +75,24 @@
     stubHead.append(stubTitle);
     stub.append(stubHead);
     stub.append(prepareButton(button));
-    stub.append(make("p", "mew-ticket-note", "Chỉ khoảng 30 giây · không cần đặt cọc"));
+    stub.append(make("p", "mew-ticket-note", "30 giây · không cần đặt cọc"));
 
-    const mobileMeta = make("div", "mew-ticket-mobile-meta");
-    mobileMeta.append(metaItem("Giờ mở cửa", "9:00 – 18:00"));
-    mobileMeta.append(metaItem("Gọi cho tiệm", "028 3822 0100", "tel:+842838220100"));
-    stub.append(mobileMeta);
+    const mobileInfo = make("div", "mew-ticket-mobile-info");
+    mobileInfo.append(make("span", "", "9:00 – 18:00 cả tuần"));
+    const phone = make("a", "", "028 3822 0100");
+    phone.href = "tel:+842838220100";
+    mobileInfo.append(phone);
+    stub.append(mobileInfo);
 
-    mascot.classList.add("mew-ticket-mascot");
-    mascot.removeAttribute("style");
-    stub.append(mascot);
+    const cat = make("img", "mew-ticket-cat");
+    cat.src = CAT_URL;
+    cat.alt = "Nhu Nhi";
+    cat.decoding = "async";
+    stub.append(cat);
+
+    legacyMascot.classList.add("mew-ticket-legacy-mascot");
+    legacyMascot.removeAttribute("style");
+    stub.append(legacyMascot);
 
     ticket.append(main, stub);
     section.replaceChildren(ticket);
