@@ -30,11 +30,12 @@
 @font-face{font-family:'Nunito';src:url('assets/fonts/Nunito-Variable.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
 
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:rgba(122,90,208,.5) transparent}
-html::-webkit-scrollbar{width:10px}
-html::-webkit-scrollbar-track{background:transparent}
-html::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:999px;background:linear-gradient(180deg,rgba(138,102,216,.62),rgba(196,88,156,.5));background-clip:padding-box}
-html::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,rgba(122,90,208,.82),rgba(196,88,156,.7));background-clip:padding-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:#DDD4F3 rgba(122,90,208,.07)}
+html::-webkit-scrollbar{width:6px}
+html::-webkit-scrollbar-track{margin:0;border-radius:999px;background:rgba(122,90,208,.07)}
+html::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:999px;background:linear-gradient(180deg,#DDD4F3,#E2A9CB);background-clip:padding-box}
+html::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#B49CE9,#D894BC)}
+html::-webkit-scrollbar-button{display:none;width:0;height:0}
 body{
   margin:0;min-height:100vh;color:var(--ink);overflow-x:hidden;
   background:
@@ -196,8 +197,7 @@ body.is-embedded{background:transparent}
   .appointment-details{grid-template-columns:1fr 1fr}
 }
 @media (max-width:560px){
-  html{scrollbar-width:none}
-  html::-webkit-scrollbar{display:none;width:0;height:0}
+  html::-webkit-scrollbar-track{margin:8px 0}
   .ambient-doodles{opacity:.58}
   .doodle-envelope{display:none}
   .page-shell{width:min(100% - 22px,480px)}
