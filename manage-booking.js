@@ -41,7 +41,15 @@
     note: document.querySelector('#appointment-note'),
     notice: document.querySelector('#manage-notice'),
     actions: document.querySelector('#manage-actions'),
+    datePicker: document.querySelector('#reschedule-date-picker'),
     date: document.querySelector('#reschedule-date'),
+    dateTrigger: document.querySelector('#reschedule-date-trigger'),
+    dateDisplay: document.querySelector('#reschedule-date-display'),
+    calendar: document.querySelector('#reschedule-calendar'),
+    calendarMonthLabel: document.querySelector('#calendar-month-label'),
+    calendarDays: document.querySelector('#calendar-days'),
+    calendarPrevMonth: document.querySelector('#calendar-prev-month'),
+    calendarNextMonth: document.querySelector('#calendar-next-month'),
     loadSlotsButton: document.querySelector('#load-slots-button'),
     slots: document.querySelector('#reschedule-slots'),
     rescheduleMessage: document.querySelector('#reschedule-message'),
@@ -53,6 +61,9 @@
   let appointment = null;
   let activeAppointments = [];
   let selectedStartAt = '';
+  let calendarMinDate = '';
+  let calendarMaxDate = '';
+  let calendarVisibleMonth = null;
   const preferredReference = String(
     new URLSearchParams(window.location.search).get('reference') || ''
   ).trim().toUpperCase().slice(0, 32);
@@ -127,6 +138,120 @@
       return result;
     }, {});
     return `${parts.year}-${parts.month}-${parts.day}`;
+  }
+
+  function calendarDate(value) {
+    const [year, month, day] = String(value).split('-').map(Number);
+    return new Date(year, month - 1, day, 12);
+  }
+
+  function calendarIso(value) {
+    const year = value.getFullYear();
+    const month = String(value.getMonth() + 1).padStart(2, '0');
+    const day = String(value.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  function calendarMonthKey(value) {
+    return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, '0')}`;
+  }
+
+  function selectedDateLabel(value) {
+    const label = new Intl.DateTimeFormat('vi-VN', {
+      weekday: 'long',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    }).format(calendarDate(value));
+    return `${label.charAt(0).toUpperCase()}${label.slice(1)}`;
+  }
+
+  function closeCalendar() {
+    elements.calendar.hidden = true;
+    elements.dateTrigger.setAttribute('aria-expanded', 'false');
+  }
+
+  function clearRescheduleChoice() {
+    selectedStartAt = '';
+    elements.slots.replaceChildren();
+    elements.confirmRescheduleButton.disabled = true;
+    setMessage(elements.rescheduleMessage);
+  }
+
+  function selectCalendarDate(value, shouldFocus = true) {
+    const changed = elements.date.value !== value;
+    elements.date.value = value;
+    elements.dateDisplay.textContent = selectedDateLabel(value);
+    calendarVisibleMonth = new Date(
+      calendarDate(value).getFullYear(),
+      calendarDate(value).getMonth(),
+      1,
+      12
+    );
+    if (changed) clearRescheduleChoice();
+    renderCalendar();
+    closeCalendar();
+    if (shouldFocus) elements.dateTrigger.focus();
+  }
+
+  function renderCalendar() {
+    if (!calendarVisibleMonth || !calendarMinDate || !calendarMaxDate) return;
+    const year = calendarVisibleMonth.getFullYear();
+    const month = calendarVisibleMonth.getMonth();
+    const firstDayOffset = (calendarVisibleMonth.getDay() + 6) % 7;
+    const daysInMonth = new Date(year, month + 1, 0, 12).getDate();
+    const today = isoDateInTimeZone();
+    const nodes = [];
+
+    for (let index = 0; index < firstDayOffset; index += 1) {
+      const blank = document.createElement('span');
+      blank.className = 'calendar-blank';
+      blank.setAttribute('aria-hidden', 'true');
+      nodes.push(blank);
+    }
+
+    for (let day = 1; day <= daysInMonth; day += 1) {
+      const date = new Date(year, month, day, 12);
+      const value = calendarIso(date);
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'calendar-day';
+      button.textContent = String(day);
+      button.setAttribute('aria-label', selectedDateLabel(value));
+      button.setAttribute('aria-selected', String(value === elements.date.value));
+      button.classList.toggle('is-today', value === today);
+      button.disabled = value < calendarMinDate || value > calendarMaxDate;
+      button.addEventListener('click', () => selectCalendarDate(value));
+      nodes.push(button);
+    }
+
+    elements.calendarDays.replaceChildren(...nodes);
+    elements.calendarMonthLabel.textContent = new Intl.DateTimeFormat('vi-VN', {
+      month: 'long',
+      year: 'numeric'
+    }).format(calendarVisibleMonth);
+    elements.calendarPrevMonth.disabled = calendarMonthKey(calendarVisibleMonth)
+      <= calendarMinDate.slice(0, 7);
+    elements.calendarNextMonth.disabled = calendarMonthKey(calendarVisibleMonth)
+      >= calendarMaxDate.slice(0, 7);
+  }
+
+  function configureCalendar(minDate, maxDate, selectedDate) {
+    calendarMinDate = minDate;
+    calendarMaxDate = maxDate;
+    elements.date.value = '';
+    selectCalendarDate(selectedDate, false);
+  }
+
+  function shiftCalendarMonth(offset) {
+    if (!calendarVisibleMonth) return;
+    calendarVisibleMonth = new Date(
+      calendarVisibleMonth.getFullYear(),
+      calendarVisibleMonth.getMonth() + offset,
+      1,
+      12
+    );
+    renderCalendar();
   }
 
   function currency(value) {
@@ -223,9 +348,7 @@
     const currentDate = isoDateInTimeZone(new Date(appointment.startAt));
     const today = isoDateInTimeZone();
     const maxDate = isoDateInTimeZone(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000));
-    elements.date.min = today;
-    elements.date.max = maxDate;
-    elements.date.value = currentDate < today ? today : currentDate;
+    configureCalendar(today, maxDate, currentDate < today ? today : currentDate);
     selectedStartAt = '';
     elements.slots.replaceChildren();
     elements.confirmRescheduleButton.disabled = true;
@@ -353,6 +476,23 @@
   }
 
   elements.lookupForm.addEventListener('submit', lookup);
+  elements.dateTrigger.addEventListener('click', () => {
+    const willOpen = elements.calendar.hidden;
+    elements.calendar.hidden = !willOpen;
+    elements.dateTrigger.setAttribute('aria-expanded', String(willOpen));
+    if (willOpen) renderCalendar();
+  });
+  elements.calendarPrevMonth.addEventListener('click', () => shiftCalendarMonth(-1));
+  elements.calendarNextMonth.addEventListener('click', () => shiftCalendarMonth(1));
+  document.addEventListener('click', (event) => {
+    if (!elements.calendar.hidden && !elements.datePicker.contains(event.target)) closeCalendar();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !elements.calendar.hidden) {
+      closeCalendar();
+      elements.dateTrigger.focus();
+    }
+  });
   elements.loadSlotsButton.addEventListener('click', loadSlots);
   elements.confirmRescheduleButton.addEventListener('click', reschedule);
   elements.cancelButton.addEventListener('click', cancelAppointment);

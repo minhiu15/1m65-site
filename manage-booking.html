@@ -8,10 +8,10 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://aomiaszicxqrctcgeoms.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; script-src 'self' https://challenges.cloudflare.com; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'self'">
   <title>Quản lý lịch hẹn · 1M65 Nails</title>
   <link rel="icon" href="favicon.svg">
-  <link rel="stylesheet" href="manage-booking.css?v=20260809-4">
+  <link rel="stylesheet" href="manage-booking.css?v=20260809-5">
   <script src="turnstile-config.js?v=20260807a"></script>
   <script src="turnstile-booking.js?v=20260807a"></script>
-  <script src="manage-booking.js?v=20260809-3" defer></script>
+  <script src="manage-booking.js?v=20260809-4" defer></script>
 </head>
 <body>
   <div class="ambient-doodles" aria-hidden="true">
@@ -96,8 +96,26 @@
         <section class="reschedule-card" aria-labelledby="reschedule-title">
           <div class="action-title"><span aria-hidden="true">↻</span><div><h3 id="reschedule-title">Dời sang giờ khác</h3><p>Chọn ngày mới để xem những khung giờ còn trống.</p></div></div>
           <div class="date-row">
-            <label for="reschedule-date">Ngày mới</label>
-            <input id="reschedule-date" type="date">
+            <label id="reschedule-date-label" for="reschedule-date-trigger">Ngày mới</label>
+            <div id="reschedule-date-picker" class="date-picker">
+              <input id="reschedule-date" type="hidden">
+              <button id="reschedule-date-trigger" class="date-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="reschedule-calendar">
+                <span class="date-trigger-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 9h16M5.5 5h13A1.5 1.5 0 0 1 20 6.5v12a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5Z"></path></svg>
+                </span>
+                <span id="reschedule-date-display">Chọn ngày mới</span>
+                <svg class="date-trigger-chevron" viewBox="0 0 12 8" aria-hidden="true"><path d="m1 1 5 5 5-5"></path></svg>
+              </button>
+              <div id="reschedule-calendar" class="calendar-popover" role="dialog" aria-modal="false" aria-labelledby="calendar-month-label" hidden>
+                <div class="calendar-header">
+                  <button id="calendar-prev-month" class="calendar-nav" type="button" aria-label="Tháng trước">‹</button>
+                  <strong id="calendar-month-label"></strong>
+                  <button id="calendar-next-month" class="calendar-nav" type="button" aria-label="Tháng sau">›</button>
+                </div>
+                <div class="calendar-weekdays" aria-hidden="true"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div>
+                <div id="calendar-days" class="calendar-days" role="group" aria-label="Ngày trong tháng"></div>
+              </div>
+            </div>
             <button id="load-slots-button" class="button secondary" type="button">Xem giờ trống</button>
           </div>
           <div id="reschedule-slots" class="slot-grid" aria-label="Khung giờ còn trống"></div>
