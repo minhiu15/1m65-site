@@ -196,6 +196,8 @@ body.is-embedded{background:transparent}
   .appointment-details{grid-template-columns:1fr 1fr}
 }
 @media (max-width:560px){
+  html{scrollbar-width:none}
+  html::-webkit-scrollbar{display:none;width:0;height:0}
   .ambient-doodles{opacity:.58}
   .doodle-envelope{display:none}
   .page-shell{width:min(100% - 22px,480px)}
@@ -218,5 +220,5 @@ body.is-embedded{background:transparent}
   #confirm-reschedule-button,.cancel-card .button{width:100%}
   .cancel-card{align-items:stretch;flex-direction:column}
   .support-footer{padding-top:28px;font-size:12px}
-  .is-embedded .page-shell{width:min(100% - 56px,480px);padding:96px 0 28px}
+  .is-embedded .page-shell{width:min(100% - 48px,480px);padding:32px 0 24px}
 }
