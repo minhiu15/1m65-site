@@ -72,12 +72,14 @@ h1,h2,h3,p{margin-top:0}
 .intro-copy{max-width:720px}
 .eyebrow{display:flex;align-items:center;gap:8px;margin:0 0 11px;color:var(--purple-2);font:700 12px/1.2 'Quicksand',sans-serif;letter-spacing:.15em;text-transform:uppercase}
 .eyebrow span{display:grid;width:24px;height:24px;place-items:center;border-radius:50%;background:var(--pink-soft);color:var(--pink);font-size:13px;letter-spacing:0}
+.intro-copy>.eyebrow{gap:7px;font-size:10.5px;letter-spacing:.14em}
+.intro-copy>.eyebrow span{width:20px;height:20px;font-size:11px}
 h1{margin-bottom:17px;font:700 clamp(2.35rem,6vw,4.35rem)/1.03 'Quicksand',sans-serif;letter-spacing:-.045em;text-wrap:balance}
 h1 span{background:linear-gradient(96deg,#8e6ade,#c4589c 67%,#e0885f);-webkit-background-clip:text;background-clip:text;color:transparent}
-.intro-copy>p:last-child{max-width:650px;margin-bottom:0;color:var(--muted);font-size:16px;line-height:1.7}
-.intro-note{position:relative;min-height:182px;display:grid;place-items:center;padding:18px;border:1px dashed rgba(122,90,208,.22);border-radius:32px;background:rgba(255,255,255,.68);transform:rotate(2deg)}
-.intro-note img{width:92px;margin-top:-28px;object-fit:contain}
-.intro-note p{margin:-10px 0 0;color:var(--muted);font:700 12.5px/1.55 'Quicksand',sans-serif;text-align:center}
+.intro-copy>p:last-child{max-width:620px;margin-bottom:0;color:var(--muted);font-size:14px;line-height:1.65}
+.intro-note{position:relative;min-height:182px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:18px;border:1px dashed rgba(122,90,208,.22);border-radius:32px;background:rgba(255,255,255,.68);transform:rotate(2deg)}
+.intro-note img{width:84px;flex:0 0 auto;object-fit:contain}
+.intro-note p{margin:0;color:var(--muted);font:700 12px/1.5 'Quicksand',sans-serif;text-align:center}
 
 .lookup-card,.appointment-view{border:1px solid var(--line);border-radius:32px;background:rgba(255,255,255,.92);box-shadow:var(--shadow);backdrop-filter:blur(14px)}
 .lookup-card{position:relative;width:min(760px,100%);margin-inline:auto;padding:28px 30px 30px;overflow:hidden}
@@ -207,7 +209,7 @@ body.is-embedded{background:transparent}
   .back-link{min-height:40px;padding:0 13px;font-size:12px}
   .page-header{gap:10px;margin-bottom:32px}
   h1{font-size:clamp(2.1rem,10vw,3rem)}
-  .intro-copy>p:last-child{font-size:14px}
+  .intro-copy>p:last-child{font-size:13px}
   .lookup-card,.appointment-list-view,.appointment-view{border-radius:24px;padding:20px}
   .appointment-list-heading{align-items:flex-start;flex-direction:column;gap:10px}
   .appointment-list{grid-template-columns:1fr}
