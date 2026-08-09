@@ -81,14 +81,19 @@
   max-width: 720px;
   margin: 0 0 17px;
   font-family: Quicksand, sans-serif;
-  font-size: clamp(42px, 4.1vw, 54px);
+  font-size: clamp(40px, 3.8vw, 50px);
   font-weight: 700;
   line-height: 1.06;
   letter-spacing: -0.045em;
   text-wrap: balance;
 }
 
-.mew-ticket-title span {
+.mew-ticket-title-line {
+  display: block;
+  white-space: nowrap;
+}
+
+.mew-ticket-title-line--accent {
   color: #c4589c;
 }
 
@@ -214,6 +219,10 @@
   line-height: 1.45;
 }
 
+.mew-ticket-mobile-meta {
+  display: none;
+}
+
 #datlich .mew-ticket-mascot {
   position: absolute !important;
   right: 50% !important;
@@ -282,6 +291,10 @@
     letter-spacing: -0.042em;
   }
 
+  .mew-ticket-title-line {
+    white-space: normal;
+  }
+
   .mew-ticket-copy {
     font-size: 14px;
     line-height: 1.65;
@@ -347,4 +360,3 @@
     transform: none;
   }
 }
-

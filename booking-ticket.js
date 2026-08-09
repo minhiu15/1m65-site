@@ -58,7 +58,7 @@
     main.append(topline);
 
     const title = make("h2", "mew-ticket-title");
-    title.innerHTML = "Bàn tay bạn xứng đáng<br><span>một buổi chiều tử tế.</span>";
+    title.innerHTML = '<span class="mew-ticket-title-line">Bàn tay bạn xứng đáng</span><span class="mew-ticket-title-line mew-ticket-title-line--accent">một buổi chiều tử tế.</span>';
     main.append(title);
     main.append(make("p", "mew-ticket-copy", "Chọn dịch vụ bạn thích, tìm một khung giờ vừa vặn rồi để tụi mình chăm phần còn lại. Không cần đặt cọc."));
 
@@ -141,4 +141,3 @@
     bootParent();
   }
 })();
-
