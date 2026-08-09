@@ -102,7 +102,7 @@
 }
 
 .nhu-paw-runner-track {
-  top: 18px !important;
+  top: 6px !important;
   z-index: 3;
   animation: mewMarch 32s linear infinite !important;
   will-change: transform;
@@ -114,10 +114,13 @@
   padding-left: 0 !important;
 }
 
-.nhu-paw-runner-track svg {
-  width: 16px !important;
-  height: 16px !important;
+.nhu-paw-runner-track .nhu-paw-runner-mark {
+  display: block;
+  width: 28px !important;
+  height: 28px !important;
+  object-fit: contain;
   flex: none;
+  filter: drop-shadow(0 2px 3px rgba(92,70,127,.14));
 }
 
 .nhu-story-card {
@@ -157,13 +160,146 @@
   background: linear-gradient(180deg,#F8F5FC 0%,rgba(255,255,255,.985) 62%,#FFFFFF 100%) !important;
 }
 
+.nhu-hero-pinboard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  gap: 10px;
+  min-height: 0;
+  padding: 15px 14px 13px;
+  border: 6px solid #FFFCF9;
+  border-radius: 28px;
+  background: #F4EFFA;
+  box-shadow: 0 22px 44px -30px rgba(43,36,64,.5);
+  rotate: 1.2deg;
+  transform-origin: center;
+}
+
+.nhu-doodle--hero-bow.nhu-doodle--hero-pinboard-bow {
+  width: 56px;
+  max-width: none;
+  top: auto;
+  right: -20px;
+  bottom: -24px;
+  left: auto;
+  z-index: 4;
+  opacity: .82;
+  --nhu-doodle-rotate: 9deg;
+}
+
+.nhu-hero-pinboard__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.nhu-hero-pinboard__head > :first-child {
+  font-family: Quicksand,sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #2B2440;
+}
+
+.nhu-hero-pinboard__head > :last-child {
+  font: 600 10px/1 ui-monospace,Menlo,monospace;
+  letter-spacing: .1em;
+  color: #7A5AD0;
+}
+
+.nhu-hero-pinboard__slots {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 8px 7px;
+  padding-top: 5px;
+}
+
+.nhu-hero-pin-slot {
+  appearance: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: 58px;
+  padding: 13px 5px 8px;
+  border: 0;
+  border-radius: 0;
+  background: #FDE9D9;
+  box-shadow: 0 12px 24px -14px rgba(224,136,95,.7);
+  color: #5C3A2D;
+  text-align: left;
+  cursor: none;
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s ease;
+}
+
+.nhu-hero-pin-slot > [data-live-slot-time] {
+  font: 600 10.5px/1 ui-monospace,Menlo,monospace;
+  color: #7D4B39;
+}
+
+.nhu-hero-pin-slot > [data-live-slot-status] {
+  font: 700 12.5px/1.05 Quicksand,sans-serif;
+  white-space: nowrap;
+}
+
+.nhu-hero-pin-slot::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  margin-left: -4.5px;
+  border-radius: 50%;
+  background: #E0885F;
+  box-shadow: 0 3px 5px rgba(43,36,64,.3);
+}
+
+.nhu-hero-pin-slot:not(.is-disabled):hover {
+  transform: translateY(-3px) scale(1.025);
+  box-shadow: 0 16px 26px -14px rgba(224,136,95,.78);
+}
+
+.nhu-hero-pin-slot.is-disabled {
+  background: #FFFFFF;
+  box-shadow: 0 10px 20px -15px rgba(43,36,64,.45);
+  color: #6B6580;
+  cursor: default;
+}
+
+.nhu-hero-pin-slot.is-disabled::before {
+  background: #B29AE8;
+}
+
+.nhu-hero-pin-slot.is-disabled > [data-live-slot-time] {
+  color: #78718D;
+}
+
+.nhu-hero-pin-slot.is-disabled > [data-live-slot-status] {
+  color: #6B6580;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.nhu-hero-pinboard__note {
+  padding-top: 9px;
+  border-top: 1px dashed rgba(122,90,208,.28);
+  font-size: 12px;
+  line-height: 1.42;
+  color: #5C566F;
+}
+
 .nhu-story-section--top .nhu-doodle-layer,
 .nhu-story-section--datlich .nhu-doodle-layer { opacity: .86; }
 
 .nhu-doodle--hero-star-lavender { width:clamp(22px,2.2vw,34px); top:14%; left:4%; --nhu-doodle-rotate:-8deg; opacity:.58; }
-.nhu-doodle--hero-bow { width:clamp(62px,7vw,104px); top:20%; right:2.5%; --nhu-doodle-rotate:9deg; opacity:.72; }
-.nhu-doodle--hero-polish { width:46px; top:auto; bottom:28px; left:644px; right:auto; --nhu-doodle-rotate:7deg; }
-.nhu-doodle--loyal-bow { width:60px; max-width:none; top:-34px; right:-18px; bottom:auto; left:auto; z-index:2; opacity:.76; --nhu-doodle-rotate:9deg; }
+.nhu-doodle--hero-bow { width:60px; max-width:none; top:auto; right:4.5%; bottom:18px; z-index:0; --nhu-doodle-rotate:9deg; opacity:.72; }
+.nhu-doodle--hero-polish { width:39px; top:380px; bottom:auto; left:clamp(24px,calc(51% - 88px),610px); right:auto; --nhu-doodle-rotate:12deg; }
 
 .nhu-doodle--services-brush { width:clamp(94px,10vw,156px); top:7%; right:2%; --nhu-doodle-rotate:13deg; opacity:.68; }
 .nhu-doodle--services-file { width:clamp(72px,8vw,118px); bottom:4%; left:2.5%; --nhu-doodle-rotate:-14deg; opacity:.65; }
@@ -321,6 +457,11 @@
 [data-cat="sleep"].nhu-replaced { width: 270px !important; }
 
 .nhu-legacy-mascot { display:block; width:100%; line-height:0; }
+.nhu-legacy-mascot--wave {
+  width:112px;
+  margin:-26px auto -20px;
+}
+.nhu-legacy-mascot--wave > .nhu-mascot { animation:nhu-sit-rest 5.2s ease-in-out infinite; }
 .nhu-legacy-mascot--walk {
   --nhu-walk-cycle:1.4s;
   position:relative;
@@ -459,7 +600,13 @@
   z-index: 2147483647 !important;
   pointer-events: none !important;
 }
-#mewPaw.nhu-cursor-layer > svg { display:block; width:100%; height:100%; }
+#mewPaw.nhu-cursor-layer > .nhu-cursor-paw-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 1px rgba(255,255,255,.98)) drop-shadow(0 3px 6px rgba(60,39,83,.46));
+}
 #mewTrail.nhu-cursor-trail-layer {
   position: fixed !important;
   inset: 0 !important;
@@ -645,7 +792,7 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
   .nhu-story-card:hover { transform:none !important; }
 
   .nhu-doodle--hero-star-lavender { top:10%; left:2%; width:22px; opacity:.48; }
-  .nhu-doodle--hero-polish { left:auto; right:1%; bottom:4%; width:62px; opacity:.62; }
+  .nhu-doodle--hero-polish { top:auto; left:auto; right:1%; bottom:4%; width:62px; opacity:.62; }
   .nhu-doodle--services-brush { top:4%; right:0; width:78px; opacity:.48; }
   .nhu-doodle--services-flower { top:48%; left:1%; width:42px; opacity:.56; }
   .nhu-doodle--services-star-pink { right:3%; bottom:7%; width:19px; translate:40px 18px; opacity:.42; }
@@ -666,13 +813,13 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
   .nhu-doodle--footer-stamp { right:7%; bottom:6%; width:38px; opacity:.46; }
 
   .nhu-paw-runner-track {
-    top: 16px !important;
+    top: 8px !important;
     animation-duration: 28s !important;
   }
 
-  .nhu-paw-runner-track svg {
-    width: 14px !important;
-    height: 14px !important;
+  .nhu-paw-runner-track .nhu-paw-runner-mark {
+    width: 24px !important;
+    height: 24px !important;
   }
 
 }
@@ -691,4 +838,738 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
   .nhu-bg-orb,.nhu-mascot,.nhu-mascot *,.nhu-walk-stage,.nhu-legacy-mascot--walk::after,.nhu-footer-cat,.nhu-booking-particle { animation:none !important; transition-duration:.01ms !important; }
   .nhu-mascot--walk .nhu-mascot__sprite { background-position:0 0 !important; }
   [data-reveal] { opacity:1 !important; transform:none !important; }
+}
+
+/* Footer bento: a compact, useful final chapter for the 1M65 storybook. */
+.nhu-footer {
+  position: relative;
+  margin-top: 76px !important;
+  padding: 0 24px 40px !important;
+}
+.nhu-footer-paw-divider {
+  max-width: 1240px;
+  margin: 0 auto 18px;
+  opacity: .9;
+}
+.nhu-footer-shell {
+  position: relative;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 22px !important;
+  overflow: hidden;
+  border-radius: 38px !important;
+  background:
+    radial-gradient(circle at 1px 1px, rgba(122,90,208,.045) 1px, transparent 1.35px) 0 0 / 22px 22px,
+    linear-gradient(135deg,rgba(247,243,252,.98),rgba(255,250,252,.98) 54%,rgba(254,249,243,.98)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.94),
+    0 30px 70px -48px rgba(63,47,106,.5) !important;
+}
+.nhu-footer-grid {
+  position: relative;
+  z-index: 1;
+  display: grid !important;
+  grid-template-columns: repeat(12,minmax(0,1fr)) !important;
+  grid-template-rows: auto auto;
+  gap: 16px !important;
+}
+.nhu-footer-card {
+  position: relative;
+  min-width: 0;
+  padding: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(122,90,208,.11);
+  border-radius: 26px;
+  background: rgba(255,255,255,.82);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.94),
+    0 20px 38px -32px rgba(57,50,68,.34);
+}
+.nhu-footer-brand-card {
+  grid-column: 1 / span 4;
+  grid-row: 1 / span 2;
+  min-height: 430px;
+  padding: 28px 28px 154px;
+  background:
+    radial-gradient(circle at 82% 15%,rgba(255,255,255,.84),transparent 24%),
+    linear-gradient(145deg,#EEE7FD 0%,#F7E9F1 58%,#FFF0E7 100%);
+}
+.nhu-footer-brand-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle,rgba(255,255,255,.72) 1.25px,transparent 1.5px);
+  background-size: 25px 25px;
+  opacity: .62;
+}
+.nhu-footer-brand-card > :not(.nhu-footer-scene):not(.nhu-footer-decoration) {
+  position: relative;
+  z-index: 2;
+}
+.nhu-footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 22px !important;
+}
+.nhu-footer-title {
+  max-width: 330px;
+  margin: 0 0 10px;
+  color: #2B2440;
+  font: 700 clamp(27px,2.25vw,38px)/1.08 Quicksand,sans-serif;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+.nhu-footer-intro {
+  max-width: 300px !important;
+  margin: 0 0 20px !important;
+  color: #676078 !important;
+  font-size: 14.5px !important;
+  line-height: 1.6 !important;
+}
+.nhu-footer-booking-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: #7A5AD0;
+  color: #FFFFFF !important;
+  font: 700 14.5px/1 Quicksand,sans-serif;
+  box-shadow: 0 16px 30px -16px rgba(122,90,208,.9);
+  transition: transform .28s cubic-bezier(.34,1.56,.64,1),box-shadow .28s ease;
+}
+.nhu-footer-socials {
+  display: flex !important;
+  gap: 8px !important;
+  margin-top: 16px;
+}
+.nhu-footer-socials a {
+  display: grid !important;
+  place-items: center;
+  width: 44px !important;
+  height: 44px !important;
+  border: 1px solid rgba(122,90,208,.14) !important;
+  border-radius: 15px !important;
+  background: rgba(255,255,255,.84) !important;
+  transition: transform .25s ease,background .25s ease,border-color .25s ease;
+}
+.nhu-footer-services-card {
+  grid-column: 5 / span 3;
+  grid-row: 1;
+  background: linear-gradient(145deg,rgba(255,255,255,.94),rgba(249,246,255,.9));
+}
+.nhu-footer-info-card {
+  grid-column: 5 / span 3;
+  grid-row: 2;
+  background: linear-gradient(145deg,rgba(255,255,255,.94),rgba(255,246,249,.92));
+}
+.nhu-footer-map-card {
+  grid-column: 8 / span 5;
+  grid-row: 1 / span 2;
+  display: flex;
+  flex-direction: column;
+  min-height: 430px;
+  padding: 20px;
+  background: rgba(255,255,255,.88);
+}
+.nhu-footer-card-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 15px !important;
+  color: #2B2440 !important;
+  font: 700 14px/1.25 Quicksand,sans-serif !important;
+}
+.nhu-footer-card-title::before {
+  content: "";
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#8A66D8,#E2A9CB);
+  box-shadow: 0 0 0 5px rgba(122,90,208,.08);
+}
+.nhu-footer-service-list {
+  display: grid !important;
+  gap: 7px !important;
+  font-size: 13.5px !important;
+}
+.nhu-footer-service-list a {
+  display: flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 6px 11px;
+  border: 1px solid rgba(122,90,208,.08);
+  border-radius: 12px;
+  background: rgba(255,255,255,.72);
+  color: #6B6580 !important;
+  transition: transform .22s ease,color .22s ease,border-color .22s ease,background .22s ease;
+}
+.nhu-footer-hours {
+  display: grid !important;
+  gap: 9px !important;
+  color: #7C7791 !important;
+  font-size: 14px !important;
+}
+.nhu-footer-hour-row {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 38px;
+  padding: 8px 11px;
+  border-radius: 13px;
+  background: rgba(255,255,255,.76);
+}
+.nhu-footer-contact {
+  margin-top: 4px !important;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(122,90,208,.18);
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+}
+.nhu-footer-contact a { color:#6B6580 !important; }
+.nhu-footer-map-frame {
+  position: relative;
+  flex: 1;
+  min-height: 330px;
+  overflow: hidden;
+  border: 1px solid rgba(122,90,208,.14);
+  border-radius: 20px;
+  background: #EFF6FC;
+}
+.nhu-footer-map-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.nhu-footer-map-link {
+  left: 14px !important;
+  right: auto !important;
+  top: 14px !important;
+  bottom: auto !important;
+  z-index: 2;
+  min-height: 42px;
+  padding: 0 15px !important;
+  border: 1px solid rgba(122,90,208,.12);
+  background: rgba(255,255,255,.95) !important;
+  box-shadow: 0 12px 24px -14px rgba(43,36,64,.55) !important;
+}
+.nhu-footer-bottom {
+  position: relative;
+  z-index: 2;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 16px !important;
+  padding: 14px 6px 0 !important;
+  border-top: 1px solid rgba(122,90,208,.11) !important;
+}
+.nhu-footer-copyright {
+  color: #7C7791 !important;
+  font-size: 12.5px !important;
+}
+.nhu-footer-signoff {
+  color: #8A66D8;
+  font: 700 12px/1.4 Quicksand,sans-serif;
+  letter-spacing: .02em;
+}
+.nhu-footer-scene {
+  position: absolute !important;
+  right: 18px !important;
+  bottom: 16px !important;
+  top: auto !important;
+  width: min(66%,280px) !important;
+  z-index: 1 !important;
+}
+.nhu-footer-cat {
+  animation: nhu-footer-rest 6.8s ease-in-out infinite;
+  filter: drop-shadow(0 14px 16px rgba(57,50,68,.12));
+}
+.nhu-footer-decoration {
+  position: absolute;
+  pointer-events: none;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 9px rgba(57,50,68,.08));
+}
+.nhu-footer-decoration--yarn {
+  left: auto;
+  top: 18px;
+  bottom: auto;
+  right: 18px;
+  width: 72px;
+  max-width: none;
+  opacity: .28;
+  transform: rotate(8deg);
+}
+.nhu-footer-decoration--stamp {
+  left: auto;
+  top: auto;
+  right: 50%;
+  bottom: 8px;
+  width: 38px;
+  max-width: none;
+  opacity: .5;
+  transform: translateX(50%) rotate(4deg);
+}
+
+@media (hover:hover) and (pointer:fine) {
+  .nhu-footer-booking-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 22px 36px -16px rgba(122,90,208,.96);
+  }
+  .nhu-footer-socials a:hover,
+  .nhu-footer-service-list a:hover {
+    transform: translateY(-2px);
+    border-color: rgba(122,90,208,.22) !important;
+    background: #FFFFFF !important;
+    color: #7A5AD0 !important;
+  }
+}
+.nhu-footer-booking-cta:focus-visible,
+.nhu-footer-socials a:focus-visible,
+.nhu-footer-service-list a:focus-visible,
+.nhu-footer-map-link:focus-visible {
+  outline: 3px solid rgba(196,88,156,.38);
+  outline-offset: 3px;
+}
+
+@media (max-width:1080px) and (min-width:768px) {
+  .nhu-footer-grid { grid-template-columns:repeat(6,minmax(0,1fr)) !important; }
+  .nhu-footer-brand-card { grid-column:1 / span 3; grid-row:1; }
+  .nhu-footer-map-card { grid-column:4 / span 3; grid-row:1; }
+  .nhu-footer-services-card { grid-column:1 / span 3; grid-row:2; }
+  .nhu-footer-info-card { grid-column:4 / span 3; grid-row:2; }
+}
+
+@media (max-width:767px) {
+  .nhu-footer {
+    margin-top: 30px !important;
+    padding: 0 12px 24px !important;
+  }
+  .nhu-footer-paw-divider { margin:0 8px 12px; }
+  .nhu-footer-shell {
+    margin: 0 !important;
+    padding: 10px !important;
+    border-radius: 30px !important;
+  }
+  .nhu-footer-grid {
+    grid-template-columns: minmax(0,1fr) !important;
+    grid-template-rows: none;
+    gap: 10px !important;
+  }
+  .nhu-footer-card {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    padding: 20px;
+    border-radius: 22px;
+  }
+  .nhu-footer-brand-card {
+    order: 1;
+    min-height: 365px;
+    padding: 22px 20px 144px;
+  }
+  .nhu-footer-map-card {
+    order: 2;
+    min-height: 0;
+    padding: 14px;
+  }
+  .nhu-footer-info-card { order:3; }
+  .nhu-footer-services-card { order:4; }
+  .nhu-footer-logo { margin-bottom:18px !important; }
+  .nhu-footer-title { max-width:280px; font-size:29px; }
+  .nhu-footer-intro { max-width:260px !important; font-size:14px !important; }
+  .nhu-footer-booking-cta {
+    width: 100%;
+    min-height: 52px;
+    border-radius: 17px;
+  }
+  .nhu-footer-socials a { width:44px !important; height:44px !important; }
+  .nhu-footer-map-frame {
+    flex: none;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+  }
+  .nhu-footer-map-link { min-height:44px; }
+  .nhu-footer-service-list {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 7px !important;
+  }
+  .nhu-footer-service-list a {
+    min-height: 44px;
+    padding: 8px 10px;
+    font-size: 12.5px;
+    line-height: 1.3;
+  }
+  .nhu-footer-hour-row { min-height:44px; }
+  .nhu-footer-scene {
+    right: 10px !important;
+    bottom: 12px !important;
+    width: min(78%,270px) !important;
+  }
+  .nhu-footer-decoration--yarn { top:14px; right:13px; width:62px; opacity:.24; }
+  .nhu-footer-decoration--stamp { display:none; }
+  .nhu-footer-bottom {
+    align-items: flex-start !important;
+    padding: 13px 6px 2px !important;
+  }
+  .nhu-footer-copyright { max-width:210px; font-size:11.5px !important; }
+  .nhu-footer-signoff { max-width:90px; text-align:right; font-size:11px; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .nhu-footer-booking-cta,
+  .nhu-footer-socials a,
+  .nhu-footer-service-list a,
+  .nhu-footer-cat { animation:none !important; transition:none !important; transform:none !important; }
+}
+
+/* Approved 1M65 footer artwork: exact desktop composition with live controls. */
+.nhu-footer.nhu-footer-exact {
+  position: relative !important;
+  display: block !important;
+  width: min(100%, 1672px) !important;
+  aspect-ratio: 1672 / 941;
+  min-height: 0 !important;
+  margin: 76px auto 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  isolation: isolate;
+  background: #fff !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.nhu-footer-exact__design {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+.nhu-footer-exact__actions {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+.nhu-footer-hotspot,
+.nhu-footer-map-activate,
+.nhu-footer-map-control {
+  position: absolute;
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  color: transparent;
+  background: transparent;
+  box-shadow: none;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+.nhu-footer-hotspot {
+  text-decoration: none;
+  transition: background-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.nhu-footer-hotspot--instagram { left:5.44%; top:31.35%; width:3%; height:5.63%; }
+.nhu-footer-hotspot--facebook { left:9.45%; top:31.35%; width:3%; height:5.63%; }
+.nhu-footer-hotspot--tiktok { left:13.76%; top:31.35%; width:3%; height:5.63%; }
+.nhu-footer-hotspot--location { left:18.12%; top:31.35%; width:3%; height:5.63%; }
+.nhu-footer-hotspot--services-title { left:25.18%; top:12.96%; width:8.4%; height:4.85%; }
+.nhu-footer-hotspot--service { left:25.18%; width:14.4%; height:4.75%; }
+.nhu-footer-hotspot--service-1 { top:19.76%; }
+.nhu-footer-hotspot--service-2 { top:25.5%; }
+.nhu-footer-hotspot--service-3 { top:31.24%; }
+.nhu-footer-hotspot--service-4 { top:36.98%; }
+.nhu-footer-hotspot--service-5 { top:42.72%; }
+.nhu-footer-hotspot--service-6 { top:48.46%; }
+.nhu-footer-hotspot--service-7 { top:54.2%; }
+.nhu-footer-hotspot--phone { left:56.28%; top:20.72%; width:10.9%; height:4.75%; }
+.nhu-footer-hotspot--contact-instagram { left:56.28%; top:25.92%; width:11.5%; height:4.75%; }
+.nhu-footer-hotspot--zalo { left:56.28%; top:31.88%; width:11.5%; height:4.75%; }
+.nhu-footer-hotspot--address { left:56.28%; top:37.83%; width:12.1%; height:14.35%; }
+.nhu-footer-hotspot--booking-note { left:41.55%; top:41.13%; width:12.7%; height:14.45%; }
+.nhu-footer-hotspot--map { left:74.82%; top:56.32%; width:17.78%; height:5.65%; }
+.nhu-footer-hotspot--booking-benefit { left:66.2%; top:73.9%; width:20.2%; height:8.3%; }
+.nhu-footer-map-live {
+  position: absolute;
+  left: 70.7%;
+  top: 19.45%;
+  z-index: 3;
+  width: 26.05%;
+  height: 34.62%;
+  overflow: hidden;
+  border-radius: 24px 24px 0 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .22s ease;
+}
+.nhu-footer-map-live iframe {
+  position: absolute;
+  inset: -8px;
+  width: calc(100% + 16px);
+  height: calc(100% + 16px);
+  border: 0;
+  filter: saturate(.72) contrast(.88) brightness(1.08) hue-rotate(330deg);
+}
+.nhu-footer-exact.is-map-live .nhu-footer-map-live {
+  opacity: 1;
+  pointer-events: auto;
+}
+.nhu-footer-map-activate {
+  left: 70.7%;
+  top: 19.45%;
+  z-index: 4;
+  width: 26.05%;
+  height: 34.62%;
+  cursor: grab;
+}
+.nhu-footer-exact.is-map-live .nhu-footer-map-activate { display:none; }
+.nhu-footer-map-control {
+  left: 93.56%;
+  z-index: 7;
+  width: 2.62%;
+  height: 4.8%;
+  cursor: pointer;
+}
+.nhu-footer-map-control--in { top:21.22%; }
+.nhu-footer-map-control--out { top:25.83%; }
+.nhu-footer-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0,0,0,0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+.nhu-footer-exact .nhu-doodle-layer,
+.nhu-footer-exact .nhu-footer-scene { display:none !important; }
+@media (hover:hover) and (pointer:fine) {
+  .nhu-footer-hotspot:hover {
+    background: rgba(234, 191, 246, .13);
+    box-shadow: 0 0 0 2px rgba(190, 135, 218, .2), 0 8px 22px rgba(111, 73, 142, .09);
+    transform: translateY(-1px);
+  }
+  .nhu-footer-map-control:hover { background:rgba(225, 197, 239, .18); }
+}
+.nhu-footer-hotspot:focus-visible,
+.nhu-footer-map-activate:focus-visible,
+.nhu-footer-map-control:focus-visible {
+  outline: 3px solid #a96dcc;
+  outline-offset: 2px;
+  background: rgba(255,255,255,.24);
+}
+@media (prefers-reduced-motion:reduce) {
+  .nhu-footer-hotspot,
+  .nhu-footer-map-live { transition:none !important; }
+}
+
+
+/* Crisp semantic footer: real text/SVG, compact desktop scale. */
+.nhu-footer.nhu-footer-exact{width:min(calc(100% - 44px),1240px)!important;aspect-ratio:auto!important;min-height:0!important;margin:54px auto 18px!important;overflow:visible!important;background:transparent!important;color:#423568;font-family:Nunito,system-ui,sans-serif}
+.nhu-footer-crisp__panel{position:relative;overflow:hidden;padding:26px 26px 10px;border:1px solid rgba(180,139,207,.32);border-radius:26px;background:radial-gradient(circle at 8% 10%,rgba(255,223,237,.24),transparent 22%),radial-gradient(circle at 78% 0,rgba(231,212,249,.22),transparent 25%),#fff;box-shadow:0 16px 42px -30px rgba(80,49,104,.38)}
+.nhu-footer-crisp__panel::after{content:"";position:absolute;left:0;right:0;bottom:39px;height:1px;background:linear-gradient(90deg,rgba(201,159,224,.72),rgba(245,178,209,.7),rgba(201,159,224,.72));opacity:.65}
+.nhu-footer-crisp__main{display:grid;grid-template-columns:1.2fr 1.02fr .86fr 1.08fr 1.55fr;min-height:260px}
+.nhu-footer-crisp__main>section{position:relative;min-width:0;padding:0 18px}
+.nhu-footer-crisp__main>section:first-child{padding-left:12px}.nhu-footer-crisp__main>section+section{border-left:1px dashed rgba(190,150,216,.38)}
+.nhu-footer-crisp__column h2,.nhu-footer-crisp__map h2{display:flex;align-items:center;gap:8px;min-height:28px;margin:0 0 12px;color:#64478c;font:800 14px/1.2 Quicksand,sans-serif}
+.nhu-footer-crisp__column h2>.nhu-footer-crisp__icon,.nhu-footer-crisp__map h2>.nhu-footer-crisp__icon{width:19px;height:19px;fill:#d7b3ea;stroke:none}
+.nhu-footer-crisp__icon{display:block;width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nhu-footer-crisp__brand{display:flex;flex-direction:column}.nhu-footer-crisp__logo{display:flex;align-items:center;gap:10px;width:max-content;max-width:100%;color:#7652a3!important;text-decoration:none}
+.nhu-footer-crisp__logo-paw{display:grid;place-items:center;width:34px;height:34px;color:#ff91bb}.nhu-footer-crisp__logo-paw .nhu-footer-crisp__icon{width:31px;height:31px;fill:currentColor;stroke:none}
+.nhu-footer-crisp__logo strong{display:block;font:800 30px/.95 Quicksand,sans-serif;letter-spacing:-.04em}.nhu-footer-crisp__logo small{display:block;margin-top:5px;color:#bc8bd2;font:800 9px/1.2 Quicksand,sans-serif;letter-spacing:.08em;white-space:nowrap}
+.nhu-footer-crisp__brand>p{margin:15px 0 12px;color:#544770;font-size:12.5px;line-height:1.6}.nhu-footer-crisp__brand>p b,.nhu-footer-crisp__booking-note b{color:#ff8fbd}
+.nhu-footer-crisp__socials{position:relative;z-index:2;display:flex;gap:8px}.nhu-footer-crisp__socials a{display:grid;place-items:center;width:34px;height:34px;border:1px solid rgba(181,139,207,.26);border-radius:11px;background:rgba(255,255,255,.88);color:#9d6abd!important;box-shadow:0 5px 12px -9px rgba(77,46,101,.7);text-decoration:none;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+.nhu-footer-crisp__socials .nhu-footer-crisp__icon{width:18px;height:18px}.nhu-footer-crisp__socials b{font:700 19px/1 Arial,sans-serif}
+.nhu-footer-crisp__brand-cat{position:absolute;right:5px;bottom:-7px;width:126px;height:126px;object-fit:contain;pointer-events:none}
+.nhu-footer-crisp__service-list{display:grid;gap:4px}.nhu-footer-crisp__service{display:flex;align-items:center;gap:8px;min-height:28px;padding:3px 5px;border-radius:9px;color:#40345f!important;font-size:12px;font-weight:650;line-height:1.25;text-decoration:none;transition:background .18s ease,transform .18s ease}
+.nhu-footer-crisp__service-icon{display:grid;place-items:center;width:22px;height:22px;flex:none;border-radius:8px;background:#faf5ff;color:#b778cc}.nhu-footer-crisp__service-icon .nhu-footer-crisp__icon{width:15px;height:15px;stroke-width:1.7}
+.nhu-footer-crisp__hours-line{display:flex;align-items:flex-start;gap:9px;margin-top:5px;color:#6d4d93}.nhu-footer-crisp__hours-line>.nhu-footer-crisp__icon{width:25px;height:25px}.nhu-footer-crisp__hours-line span{display:flex;flex-direction:column;gap:4px;color:#4f416b;font-size:12.5px}.nhu-footer-crisp__hours-line strong{color:#ff78ad;font:800 17px/1.2 Quicksand,sans-serif;white-space:nowrap}
+.nhu-footer-crisp__sleep-pill{display:flex;align-items:center;gap:5px;width:max-content;margin:12px 0 17px 29px;padding:6px 9px;border:1px solid rgba(190,150,216,.25);border-radius:999px;background:#fcf8ff;color:#6f568d;font-size:11px;white-space:nowrap}.nhu-footer-crisp__sleep-pill .nhu-footer-crisp__icon{width:15px;height:15px;color:#ef8db7}
+.nhu-footer-crisp__booking-note{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-top:4px}.nhu-footer-crisp__booking-note>.nhu-footer-crisp__icon{width:34px;height:34px;color:#9d68b7}.nhu-footer-crisp__booking-note p{margin:0;color:#51426b;font-size:11.5px;line-height:1.45}
+.nhu-footer-crisp__booking-note a{display:inline-flex;align-items:center;min-height:30px;padding:0 12px;border-radius:999px;background:#8d62b0;color:#fff!important;font-size:11px;font-weight:800;text-decoration:none;box-shadow:0 8px 16px -12px rgba(91,55,119,.8)}
+.nhu-footer-crisp__contact{padding-bottom:76px!important}.nhu-footer-crisp__contact>a{display:flex;align-items:center;gap:9px;min-height:31px;color:#40345f!important;font-size:12px;font-weight:650;line-height:1.45;text-decoration:none}.nhu-footer-crisp__contact>a>.nhu-footer-crisp__icon{width:19px;height:19px;color:#aa72c5}
+.nhu-footer-crisp__zalo{display:grid;place-items:center;width:24px;height:18px;flex:none;border-radius:7px;background:#a975c5;color:#fff;font-size:7px;font-weight:900}.nhu-footer-crisp__address{align-items:flex-start!important;margin-top:3px}
+.nhu-footer-crisp__contact-cat{position:absolute;right:5px;bottom:-9px;width:106px;height:84px;object-fit:contain;pointer-events:none}
+.nhu-footer-crisp__map h2{margin-left:1px}.nhu-footer-crisp__map-frame{position:relative;height:224px;overflow:hidden;border:2px solid rgba(190,142,215,.48);border-radius:24px;background:#f7f2fb;box-shadow:0 9px 22px -18px rgba(67,42,84,.55)}
+.nhu-footer-crisp__map-frame iframe{display:block;width:100%;height:100%;border:0;filter:saturate(.68) contrast(.9) brightness(1.08) hue-rotate(330deg)}
+.nhu-footer-crisp__map-controls{position:absolute;top:12px;right:12px;display:grid;overflow:hidden;border:1px solid rgba(167,126,193,.28);border-radius:11px;background:rgba(255,255,255,.94);box-shadow:0 7px 16px -11px rgba(47,30,65,.6)}
+.nhu-footer-crisp__map-controls button{display:grid;place-items:center;width:34px;height:31px;padding:0;border:0;background:transparent;color:#5c477b;font:700 20px/1 Arial,sans-serif;cursor:pointer}.nhu-footer-crisp__map-controls button+button{border-top:1px solid rgba(167,126,193,.2)}
+.nhu-footer-crisp__map-link{position:absolute;left:50%;bottom:38px;translate:-50% 0;display:flex;align-items:center;justify-content:center;gap:7px;min-width:185px;min-height:34px;padding:0 14px;border:1px solid rgba(167,126,193,.15);border-radius:999px;background:rgba(255,255,255,.94);color:#594274!important;font-size:11.5px;font-weight:800;text-decoration:none;white-space:nowrap;box-shadow:0 8px 18px -13px rgba(47,30,65,.55)}.nhu-footer-crisp__map-link span{color:#ff8db9}
+.nhu-footer-crisp__benefits{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));min-height:65px;margin:17px 12px 0;border:1px solid rgba(184,143,207,.2);border-radius:18px;background:linear-gradient(100deg,rgba(252,248,255,.96),rgba(255,251,253,.98))}
+.nhu-footer-crisp__benefits>div,.nhu-footer-crisp__benefits>a{display:flex;align-items:center;gap:11px;min-width:0;padding:10px 15px;color:#56406f!important;text-decoration:none}.nhu-footer-crisp__benefits>*+*{border-left:1px dashed rgba(183,139,207,.35)}.nhu-footer-crisp__benefits .nhu-footer-crisp__icon{width:30px;height:30px;color:#a96fc0}
+.nhu-footer-crisp__benefits span{display:flex;min-width:0;flex-direction:column;gap:3px}.nhu-footer-crisp__benefits strong{overflow:hidden;color:#594173;font:800 11.5px/1.2 Quicksand,sans-serif;text-overflow:ellipsis;white-space:nowrap}.nhu-footer-crisp__benefits small{color:#716083;font-size:10.5px;white-space:nowrap}
+.nhu-footer-crisp__bottom{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;min-height:40px;padding-top:8px;color:#6c5786;font-size:10.5px}.nhu-footer-crisp__bottom img{position:absolute;right:12px;bottom:-4px;width:48px;height:48px;object-fit:contain;opacity:.58}
+.nhu-footer-crisp__service:focus-visible,.nhu-footer-crisp__socials a:focus-visible,.nhu-footer-crisp__booking-note a:focus-visible,.nhu-footer-crisp__contact a:focus-visible,.nhu-footer-crisp__map-link:focus-visible,.nhu-footer-crisp__map-controls button:focus-visible,.nhu-footer-crisp__benefits a:focus-visible{outline:3px solid #a96dcc;outline-offset:2px}
+@media (hover:hover) and (pointer:fine){.nhu-footer-crisp__socials a:hover{transform:translateY(-2px);background:#fff;box-shadow:0 9px 18px -11px rgba(77,46,101,.72)}.nhu-footer-crisp__service:hover{background:#fbf5ff;transform:translateX(2px)}.nhu-footer-crisp__booking-note a:hover,.nhu-footer-crisp__benefits a:hover{transform:translateY(-1px)}.nhu-footer-crisp__map-controls button:hover{background:#f9f2ff}}
+@media (max-width:1050px) and (min-width:768px){.nhu-footer.nhu-footer-exact{width:calc(100% - 28px)!important}.nhu-footer-crisp__panel{padding-inline:18px}.nhu-footer-crisp__main>section{padding-inline:12px}.nhu-footer-crisp__logo strong{font-size:26px}.nhu-footer-crisp__logo small{font-size:7.5px}.nhu-footer-crisp__service{font-size:11px}.nhu-footer-crisp__brand-cat{width:108px;height:108px}.nhu-footer-crisp__map-link{min-width:160px;font-size:10.5px}.nhu-footer-crisp__benefits>div,.nhu-footer-crisp__benefits>a{padding-inline:10px;gap:8px}}
+@media (prefers-reduced-motion:reduce){.nhu-footer-crisp__socials a,.nhu-footer-crisp__service,.nhu-footer-crisp__booking-note a,.nhu-footer-crisp__benefits a{transition:none!important;transform:none!important}}
+
+
+/* Restore the approved footer's decorative details without rasterizing its content. */
+.nhu-footer.nhu-footer-exact{width:100%!important;max-width:none!important}
+.nhu-footer-crisp__panel::after{display:none}
+.nhu-footer-crisp__brand-scene{position:absolute;left:4px;right:4px;bottom:-8px;height:140px;pointer-events:none}
+.nhu-footer-crisp__brand-cat{left:50%;right:auto;bottom:-2px;width:126px;height:126px;translate:-50% 0}
+.nhu-footer-crisp__brand-polish{position:absolute;z-index:2;width:31px;height:47px;object-fit:contain;filter:drop-shadow(0 5px 7px rgba(86,52,105,.09))}
+.nhu-footer-crisp__brand-polish--left{left:9px;bottom:6px;rotate:-8deg}
+.nhu-footer-crisp__brand-polish--right{right:7px;bottom:4px;rotate:8deg;scale:-1 1}
+.nhu-footer-crisp__brand-hearts{position:absolute;right:19px;top:29px;width:30px;height:30px;object-fit:contain;opacity:.72}
+.nhu-footer-crisp__brand-star{position:absolute;left:35px;top:33px;width:17px;height:17px;object-fit:contain;opacity:.68}
+.nhu-footer-crisp__contact-hearts{position:absolute;left:13px;bottom:22px;width:28px;height:28px;object-fit:contain;opacity:.48;rotate:-10deg;pointer-events:none}
+.nhu-footer-crisp__map-heart{position:absolute;z-index:4;right:16px;top:-9px;color:#d997c6;font:400 42px/1 Quicksand,sans-serif;rotate:12deg;pointer-events:none}
+.nhu-footer-crisp__map-star{position:absolute;z-index:4;right:55px;top:6px;width:14px;height:14px;opacity:.62;pointer-events:none}
+.nhu-footer-crisp__benefits>div,.nhu-footer-crisp__benefits>a{position:relative}
+.nhu-footer-crisp__benefits>*:not(:last-child)::after{content:"♡";position:absolute;right:9px;top:8px;color:#f39abe;font-size:12px;opacity:.65}
+.nhu-footer-crisp__wave{display:block;width:calc(100% + 52px);height:16px;margin:5px -26px -5px;overflow:visible}
+.nhu-footer-crisp__wave path{fill:none;stroke:url("#nhu-footer-wave-gradient");stroke:#d8b1e6;stroke-width:1.7;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.nhu-footer-crisp__bottom::before{content:"♡";position:absolute;left:52px;top:7px;color:#f2a0c4;font-size:15px;rotate:-10deg}
+@media (max-width:1050px) and (min-width:768px){.nhu-footer.nhu-footer-exact{width:100%!important}.nhu-footer-crisp__brand-polish{width:27px;height:42px}.nhu-footer-crisp__brand-hearts{right:14px}}
+
+
+/* Exact alignment and approved map/mascot details. */
+.nhu-footer.nhu-footer-exact{width:calc(100% - 48px)!important}
+.nhu-footer-crisp__brand-scene{left:50%;right:auto;bottom:-8px;width:220px;height:150px;translate:-50% 0;overflow:hidden}
+.nhu-footer-crisp__brand-art{position:absolute;left:-52px;top:-249px;width:1104px;max-width:none;height:auto;user-select:none}
+.nhu-footer-crisp__map-frame{border:0;border-radius:30px}
+.nhu-footer-crisp__map-controls{z-index:6}
+.nhu-footer-crisp__map-link{z-index:6}
+.nhu-footer-crisp__map-outline{position:absolute;inset:0;z-index:5;width:100%;height:100%;overflow:visible;pointer-events:none}
+.nhu-footer-crisp__map-outline path{fill:none;stroke:#d6a8e4;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;filter:drop-shadow(0 1px 0 rgba(255,255,255,.9))}
+@media (max-width:1050px) and (min-width:768px){.nhu-footer.nhu-footer-exact{width:calc(100% - 48px)!important}.nhu-footer-crisp__brand-art{left:-47px;top:-226px;width:1004px}}
+
+/* Footer neutral typography: retain pastel accents while restoring the old black/grey hierarchy. */
+.nhu-footer.nhu-footer-exact{color:#343238}
+.nhu-footer-crisp__column h2,.nhu-footer-crisp__map h2,.nhu-footer-crisp__service,.nhu-footer-crisp__contact>a,.nhu-footer-crisp__benefits strong{color:#2f2d33!important}
+.nhu-footer-crisp__brand>p,.nhu-footer-crisp__hours-line span,.nhu-footer-crisp__booking-note p,.nhu-footer-crisp__map-link,.nhu-footer-crisp__bottom{color:#74717b!important}
+.nhu-footer-crisp__sleep-pill{color:#66636b}
+.nhu-footer-crisp__benefits>div,.nhu-footer-crisp__benefits>a{color:#4a474f!important}
+.nhu-footer-crisp__benefits small{color:#89858e}
+.nhu-footer-crisp__map-controls button{color:#45424a}
+
+/* Four-column reference footer: brand, services, contact/hours, and interactive map. */
+.nhu-footer-crisp__panel--reference{padding:40px 38px 0;border-color:rgba(187,151,207,.34);border-radius:28px;background:radial-gradient(circle at 6% 12%,rgba(255,239,245,.34),transparent 24%),radial-gradient(circle at 82% 5%,rgba(240,226,249,.25),transparent 26%),#fff;box-shadow:0 14px 36px -25px rgba(69,54,79,.34)}
+.nhu-footer-crisp__panel--reference::after{display:none}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__main{grid-template-columns:1.16fr 1.02fr 1.28fr 1.54fr;min-height:418px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>section{padding:0 32px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>section:first-child{padding-left:7px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>section+section{border-left:1px dashed rgba(190,150,216,.46)}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>.nhu-footer-crisp__map{padding:0;border-left:0}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__column h2,.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map h2{min-height:34px;margin-bottom:18px;font-size:16px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__column h2>.nhu-footer-crisp__icon,.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map h2>.nhu-footer-crisp__icon{width:24px;height:24px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo{gap:13px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo-paw{width:45px;height:45px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo-paw .nhu-footer-crisp__icon{width:42px;height:42px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo strong{font-size:39px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo small{margin-top:8px;font-size:11px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand>p{margin:23px 0 20px;font-size:14px;line-height:1.72}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__socials{gap:12px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__socials a{width:44px;height:44px;border-radius:11px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__socials .nhu-footer-crisp__icon{width:21px;height:21px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-scene{left:calc(50% - 19px);bottom:-1px;width:240px;height:218px;clip-path:inset(0 0 34px 0)}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-art{left:-61px;top:-289px;width:1280px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__service-list{gap:5px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__service{gap:11px;min-height:42px;padding:4px 5px;font-size:13.5px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__service-icon{width:28px;height:28px;background:transparent}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__service-icon .nhu-footer-crisp__icon{width:22px;height:22px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact{padding-bottom:0!important}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact>a{gap:12px;min-height:48px;font-size:14px;line-height:1.55}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact>a>.nhu-footer-crisp__icon{width:24px;height:24px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__zalo{width:29px;height:22px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__address{margin-top:0}
+.nhu-footer-crisp__contact-hours{display:flex;align-items:flex-start;gap:12px;margin-top:13px}
+.nhu-footer-crisp__contact-hours>.nhu-footer-crisp__icon{width:25px;height:25px;flex:none;color:#b181c6}
+.nhu-footer-crisp__contact-hours span{display:flex;flex-direction:column;gap:4px}
+.nhu-footer-crisp__contact-hours strong{color:#ff78ad;font:800 17px/1.2 Quicksand,sans-serif;white-space:nowrap}
+.nhu-footer-crisp__contact-hours small{color:#74717b;font-size:13px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact-hearts{left:auto;right:14px;bottom:20px;width:38px;height:38px;opacity:.64}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map h2{margin-left:10px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-frame{height:348px;border-radius:35px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-frame iframe{width:calc(100% - 14px);height:calc(100% - 14px);margin:7px;border-radius:28px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-outline path{stroke-width:2.35}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-heart{right:18px;top:-3px;font-size:52px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-star{right:70px;top:15px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-controls{top:17px;right:17px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-controls button{width:40px;height:38px;font-size:22px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-link{bottom:32px;min-width:218px;min-height:42px;font-size:13px}
+.nhu-footer-crisp__map-cat{position:absolute;z-index:7;right:-7px;bottom:2px;width:158px;height:118px;object-fit:contain;pointer-events:none}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__service,.nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact>a,.nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact-hours strong,.nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact-hours small,.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-link{color:#74717b!important}
+.nhu-footer-crisp__separator{position:relative;height:25px;margin:0 -38px}
+.nhu-footer-crisp__separator::before,.nhu-footer-crisp__separator::after{content:"";position:absolute;top:50%;height:1px;background:rgba(201,172,216,.46)}
+.nhu-footer-crisp__separator::before{left:0;right:calc(50% + 25px)}
+.nhu-footer-crisp__separator::after{left:calc(50% + 25px);right:0}
+.nhu-footer-crisp__separator span{position:absolute;left:50%;top:50%;display:grid;place-items:center;width:36px;height:28px;translate:-50% -50%;color:#bf92d2;background:#fff}
+.nhu-footer-crisp__separator .nhu-footer-crisp__icon{width:25px;height:25px;fill:currentColor;stroke:none}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__bottom{justify-content:space-between;min-height:61px;padding:0 5px;font-size:11.5px}
+.nhu-footer-crisp__thanks{position:relative;padding-right:34px;color:#c49ad3!important;font:italic 18px/1.2 "Segoe Script","Brush Script MT",cursive}
+.nhu-footer-crisp__thanks::after{content:"";position:absolute;right:-4px;bottom:-4px;width:50px;height:16px;border-bottom:2px solid rgba(199,158,217,.64);border-radius:0 0 50% 50%;rotate:-8deg}
+.nhu-footer-crisp__thanks b{color:#f59bbe;font:400 23px/1 Quicksand,sans-serif}
+
+@media (max-width:1050px) and (min-width:768px){
+  .nhu-footer-crisp__panel--reference{padding:30px 24px 0}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main{grid-template-columns:1fr 1fr 1.18fr;row-gap:28px;min-height:0}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>.nhu-footer-crisp__map{grid-column:1/-1;padding:0;border-left:0}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map h2{margin-left:0}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-frame{height:360px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-scene{left:calc(50% - 32px);width:215px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-art{left:-55px;top:-260px;width:1150px}
+  .nhu-footer-crisp__separator{margin:0 -24px}
+}
+
+/* Mobile reference footer: the same visual language, rearranged for touch and narrow screens. */
+@media (max-width:767px){
+  .nhu-footer.nhu-footer-exact{width:calc(100% - 20px)!important;margin:34px auto 12px!important}
+  .nhu-footer-crisp__panel--reference{padding:24px 18px 0;border-radius:24px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main{display:grid;grid-template-columns:minmax(0,1fr);min-height:0}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>section,.nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>section:first-child{padding:23px 4px 27px;border-left:0!important}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>section:first-child{padding-top:2px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>section+section{border-top:1px dashed rgba(190,150,216,.46)}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__column h2,.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map h2{min-height:30px;margin:0 0 14px;font-size:16px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand{min-height:305px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo strong{font-size:35px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo small{font-size:9.5px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo-paw{width:40px;height:40px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo-paw .nhu-footer-crisp__icon{width:37px;height:37px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand>p{margin:18px 0 16px;font-size:13px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__socials{gap:10px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__socials a{width:44px;height:44px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-scene{left:50%;bottom:-4px;width:235px;height:205px;translate:-50% 0;clip-path:inset(0 0 31px 0)}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-art{left:-61px;top:-289px;width:1280px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__service-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__service{gap:8px;min-height:48px;padding:5px 7px;border:1px solid rgba(190,150,216,.18);border-radius:12px;background:rgba(251,248,253,.72);font-size:12px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__service:last-child{grid-column:1/-1}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__service-icon{width:25px;height:25px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__service-icon .nhu-footer-crisp__icon{width:19px;height:19px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact{padding-bottom:34px!important}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact>a{min-height:48px;font-size:13px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact-hours{margin-top:14px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact-hearts{right:6px;bottom:9px;width:32px;height:32px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>.nhu-footer-crisp__map{padding:23px 0 29px;border-top:1px dashed rgba(190,150,216,.46)}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map h2{margin-left:4px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-frame{height:286px;border-radius:30px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-frame iframe{border-radius:24px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-controls{top:14px;right:14px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-controls button{width:44px;height:44px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-link{bottom:24px;min-width:205px;min-height:44px;padding-inline:12px;font-size:12px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-heart{right:10px;top:9px;font-size:42px}
+  .nhu-footer-crisp__map-cat{right:-2px;bottom:12px;width:122px;height:92px}
+  .nhu-footer-crisp__separator{height:24px;margin:0 -18px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__bottom{flex-direction:column;justify-content:center;gap:9px;min-height:92px;padding:8px 0 13px;text-align:center;font-size:10.5px;line-height:1.5}
+  .nhu-footer-crisp__thanks{padding-right:22px;font-size:15px}
+  .nhu-footer-crisp__thanks::after{right:-7px;width:42px}
 }
