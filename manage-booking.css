@@ -213,5 +213,5 @@ body.is-embedded{background:transparent}
   #confirm-reschedule-button,.cancel-card .button{width:100%}
   .cancel-card{align-items:stretch;flex-direction:column}
   .support-footer{padding-top:28px;font-size:12px}
-  .is-embedded .page-shell{width:min(100% - 36px,480px);padding:82px 0 22px}
+  .is-embedded .page-shell{width:min(100% - 56px,480px);padding:96px 0 28px}
 }
