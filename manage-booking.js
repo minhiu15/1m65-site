@@ -12,7 +12,7 @@
     no_show: 'Không đến'
   };
   const ERRORS = {
-    booking_lookup_failed: 'Không tìm thấy lịch phù hợp. Bạn kiểm tra lại mã lịch và số điện thoại nhé.',
+    booking_lookup_failed: 'Số điện thoại chưa đúng hoặc chưa có lịch nào đang đặt. Bạn kiểm tra lại giúp mình nhé.',
     appointment_not_manageable: 'Lịch này không còn có thể dời hoặc hủy trên website.',
     appointment_change_cutoff: 'Đã qua thời hạn tự thay đổi lịch. Bạn liên hệ trực tiếp với tiệm giúp mình nhé.',
     slot_unavailable: 'Khung giờ này vừa có người chọn. Bạn chọn lại khung khác nhé.',
@@ -23,10 +23,12 @@
 
   const elements = {
     lookupForm: document.querySelector('#lookup-form'),
-    reference: document.querySelector('#booking-reference'),
     phone: document.querySelector('#booking-phone'),
     lookupButton: document.querySelector('#lookup-button'),
     lookupMessage: document.querySelector('#lookup-message'),
+    listView: document.querySelector('#appointment-list-view'),
+    listCount: document.querySelector('#appointment-list-count'),
+    list: document.querySelector('#appointment-list'),
     view: document.querySelector('#appointment-view'),
     appointmentReference: document.querySelector('#appointment-reference'),
     status: document.querySelector('#appointment-status'),
@@ -48,7 +50,11 @@
 
   let credentials = null;
   let appointment = null;
+  let activeAppointments = [];
   let selectedStartAt = '';
+  const preferredReference = String(
+    new URLSearchParams(window.location.search).get('reference') || ''
+  ).trim().toUpperCase().slice(0, 32);
 
   function setMessage(target, text = '', success = false) {
     target.textContent = text;
@@ -126,6 +132,62 @@
     return `${new Intl.NumberFormat('vi-VN').format(Number(value || 0))}đ`;
   }
 
+  function serviceNames(value) {
+    const names = (Array.isArray(value?.services) ? value.services : [])
+      .map((service) => String(service?.name || '').trim())
+      .filter(Boolean);
+    return names.length ? names : [String(value?.service || '').trim()].filter(Boolean);
+  }
+
+  function selectAppointment(nextAppointment) {
+    credentials.reference = String(nextAppointment.reference || '');
+    elements.list.querySelectorAll('.appointment-list-item').forEach((item) => {
+      item.setAttribute('aria-pressed', String(item.dataset.reference === credentials.reference));
+    });
+    renderAppointment(nextAppointment);
+  }
+
+  function renderAppointmentList(nextAppointments) {
+    activeAppointments = (Array.isArray(nextAppointments) ? nextAppointments : [])
+      .filter((item) => item?.status === 'confirmed');
+    elements.list.replaceChildren();
+    elements.listView.hidden = activeAppointments.length === 0;
+    elements.listCount.textContent = `${activeAppointments.length} lịch`;
+
+    const items = activeAppointments.map((item) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'appointment-list-item';
+      button.dataset.reference = String(item.reference || '');
+      button.setAttribute('aria-pressed', 'false');
+
+      const time = document.createElement('span');
+      time.className = 'appointment-list-time';
+      time.textContent = dateTime(item.startAt);
+
+      const services = document.createElement('span');
+      services.className = 'appointment-list-service';
+      services.textContent = serviceNames(item).join(' + ') || 'Dịch vụ tại tiệm';
+
+      const reference = document.createElement('span');
+      reference.className = 'appointment-list-reference';
+      reference.textContent = String(item.reference || '');
+
+      button.append(time, services, reference);
+      button.addEventListener('click', () => selectAppointment(item));
+      return button;
+    });
+    elements.list.append(...items);
+  }
+
+  function updateActiveAppointment(nextAppointment) {
+    activeAppointments = activeAppointments.map((item) => (
+      item.reference === nextAppointment.reference ? nextAppointment : item
+    ));
+    renderAppointmentList(activeAppointments);
+    selectAppointment(nextAppointment);
+  }
+
   function renderAppointment(nextAppointment) {
     appointment = nextAppointment;
     elements.appointmentReference.textContent = appointment.reference || '';
@@ -133,11 +195,9 @@
     elements.status.className = `status-badge ${appointment.status || ''}`;
     elements.customer.textContent = `${appointment.customerName || ''} · ${appointment.maskedPhone || ''}`;
     elements.time.textContent = dateTime(appointment.startAt);
-    const serviceNames = (Array.isArray(appointment.services) ? appointment.services : [])
-      .map((service) => String(service?.name || '').trim())
-      .filter(Boolean);
-    elements.services.textContent = serviceNames.length
-      ? serviceNames.join('\n')
+    const names = serviceNames(appointment);
+    elements.services.textContent = names.length
+      ? names.join('\n')
       : String(appointment.service || '');
     elements.duration.textContent = `${Number(appointment.durationMinutes || 0)} phút`;
     elements.price.textContent = currency(appointment.price);
@@ -175,18 +235,32 @@
   async function lookup(event) {
     event.preventDefault();
     credentials = {
-      reference: elements.reference.value.trim().toUpperCase(),
+      reference: '',
       phone: elements.phone.value.replace(/\D/g, '')
     };
-    elements.reference.value = credentials.reference;
     elements.phone.value = credentials.phone;
     elements.lookupButton.disabled = true;
+    elements.listView.hidden = true;
     elements.view.hidden = true;
+    appointment = null;
+    activeAppointments = [];
     setMessage(elements.lookupMessage, 'Đang kiểm tra lịch hẹn…');
     try {
       const body = await request('lookup');
-      renderAppointment(body.appointment);
-      setMessage(elements.lookupMessage, 'Đã tìm thấy lịch hẹn.', true);
+      renderAppointmentList(body.appointments);
+      if (!activeAppointments.length) {
+        setMessage(elements.lookupMessage, 'Số điện thoại này hiện chưa có lịch nào đang đặt.');
+        return;
+      }
+      const preferred = activeAppointments.find((item) => item.reference === preferredReference);
+      if (preferred) selectAppointment(preferred);
+      else if (activeAppointments.length === 1) selectAppointment(activeAppointments[0]);
+      setMessage(
+        elements.lookupMessage,
+        `Đã tìm thấy ${activeAppointments.length} lịch đang đặt.`,
+        true
+      );
+      elements.listView.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } catch (error) {
       setMessage(elements.lookupMessage, ERRORS[errorCode(error)] || ERRORS.request_failed);
     } finally {
@@ -241,7 +315,7 @@
     setMessage(elements.rescheduleMessage, 'Đang dời lịch…');
     try {
       const body = await request('reschedule', { startAt: selectedStartAt });
-      renderAppointment(body.appointment);
+      updateActiveAppointment(body.appointment);
       setMessage(elements.rescheduleMessage, 'Đã dời lịch thành công.', true);
     } catch (error) {
       setMessage(elements.rescheduleMessage, ERRORS[errorCode(error)] || ERRORS.request_failed);
@@ -256,8 +330,20 @@
     setMessage(elements.lookupMessage, 'Đang hủy lịch…');
     try {
       const body = await request('cancel');
-      renderAppointment(body.appointment);
-      setMessage(elements.lookupMessage, 'Đã hủy lịch hẹn. Khung giờ đã được mở lại.', true);
+      activeAppointments = activeAppointments.filter((item) => (
+        item.reference !== body.appointment?.reference
+      ));
+      appointment = null;
+      credentials.reference = '';
+      elements.view.hidden = true;
+      renderAppointmentList(activeAppointments);
+      setMessage(
+        elements.lookupMessage,
+        activeAppointments.length
+          ? 'Đã hủy lịch hẹn. Các lịch đang đặt khác vẫn hiển thị bên dưới.'
+          : 'Đã hủy lịch hẹn. Bạn không còn lịch nào đang đặt.',
+        true
+      );
     } catch (error) {
       setMessage(elements.lookupMessage, ERRORS[errorCode(error)] || ERRORS.request_failed);
     } finally {
@@ -265,8 +351,6 @@
     }
   }
 
-  const queryReference = new URLSearchParams(window.location.search).get('reference');
-  if (queryReference) elements.reference.value = queryReference.trim().toUpperCase().slice(0, 32);
   elements.lookupForm.addEventListener('submit', lookup);
   elements.loadSlotsButton.addEventListener('click', loadSlots);
   elements.confirmRescheduleButton.addEventListener('click', reschedule);

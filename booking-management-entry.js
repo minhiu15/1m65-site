@@ -2,6 +2,32 @@
   'use strict';
 
   const REFERENCE_PATTERN = /1M65-[0-9]{6}-[A-F0-9]{6}/i;
+  const siteFrames = Array.from(document.querySelectorAll('main > iframe'));
+  const floatingLink = document.querySelector('.manage-appointment-link');
+
+  function isVisible(element) {
+    const style = element.ownerDocument.defaultView.getComputedStyle(element);
+    const rect = element.getBoundingClientRect();
+    return style.display !== 'none'
+      && style.visibility !== 'hidden'
+      && rect.width > 0
+      && rect.height > 0;
+  }
+
+  function frameHasOpenPopup(frame) {
+    if (!isVisible(frame)) return false;
+    try {
+      return Array.from(frame.contentDocument?.querySelectorAll('button[aria-label="Đóng"]') || [])
+        .some(isVisible);
+    } catch {
+      return false;
+    }
+  }
+
+  function syncFloatingLink() {
+    if (!floatingLink) return;
+    floatingLink.hidden = siteFrames.some(frameHasOpenPopup);
+  }
 
   function bindManageLink(link, reference) {
     link.href = `manage-booking.html?reference=${encodeURIComponent(reference)}`;
@@ -61,10 +87,12 @@
     const start = () => {
       addSuccessLink(frame);
       window.setInterval(() => addSuccessLink(frame), 800);
+      syncFloatingLink();
     };
     if (frame.contentDocument?.readyState === 'complete') start();
     else frame.addEventListener('load', start, { once: true });
   }
 
-  document.querySelectorAll('main > iframe').forEach(bindFrame);
+  siteFrames.forEach(bindFrame);
+  window.setInterval(syncFloatingLink, 120);
 })();

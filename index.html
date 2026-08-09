@@ -16,15 +16,16 @@
     .mobile{display:none}
     .manage-appointment-link{position:fixed;right:18px;bottom:18px;z-index:20;display:inline-flex;align-items:center;min-height:42px;padding:0 16px;border:1px solid rgba(122,90,208,.22);border-radius:999px;color:#5f479e;background:rgba(255,255,255,.94);box-shadow:0 14px 34px -20px rgba(67,43,108,.72);font:700 13px/1 system-ui,sans-serif;text-decoration:none;backdrop-filter:blur(12px)}
     .manage-appointment-link:hover{background:#f7f2ff}
+    .manage-appointment-link[hidden]{display:none}
     .booking-modal[hidden]{display:none}
-    .booking-modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:24px;background:rgba(43,36,64,.52);backdrop-filter:blur(12px);animation:booking-modal-in .2s ease-out}
-    .booking-modal__panel{position:relative;width:min(1120px,100%);height:min(900px,90vh);overflow:hidden;border:1px solid rgba(255,255,255,.76);border-radius:32px;background:#fffaf7;box-shadow:0 36px 90px -28px rgba(30,19,55,.72)}
-    .booking-modal__frame{width:100%;height:100%;border:0;background:#fffaf7}
-    .booking-modal__close{position:absolute;top:14px;right:14px;z-index:2;width:44px;height:44px;display:grid;place-items:center;padding:0;border:1px solid rgba(122,90,208,.2);border-radius:50%;color:#5f479e;background:rgba(255,255,255,.94);box-shadow:0 12px 28px -18px rgba(43,36,64,.7);font:500 27px/1 system-ui,sans-serif;cursor:pointer}
-    .booking-modal__close:hover{background:#f7f2ff}
-    @keyframes booking-modal-in{from{opacity:0}to{opacity:1}}
+    .booking-modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:24px;background:rgba(43,36,64,.3);backdrop-filter:blur(7px)}
+    .booking-modal__panel{position:relative;width:min(1080px,100%);height:min(840px,calc(100vh - 48px));max-height:calc(100vh - 48px);overflow:hidden;border-radius:44px;background:#fffcf9;box-shadow:0 58px 132px -38px rgba(43,36,64,.58)}
+    .booking-modal__frame{width:100%;height:100%;border:0;background:#fffcf9}
+    .booking-modal__close{position:absolute;top:12px;right:46px;z-index:2;width:46px;height:46px;display:grid;place-items:center;padding:0;border:1px solid rgba(122,90,208,.14);border-radius:16px;background:#fff;cursor:pointer;transition:background .25s ease}
+    .booking-modal__close:hover{background:#f1ecfe}
+    .booking-modal__close svg{display:block;width:14px;height:14px}
     @media(max-width:767px){.desktop{display:none}.mobile{display:block}}
-    @media(max-width:600px){.booking-modal{padding:0}.booking-modal__panel{width:100%;height:100%;border:0;border-radius:0}.booking-modal__close{top:10px;right:10px}}
+    @media(max-width:600px){.booking-modal{padding:14px;background:rgba(43,36,64,.38)}.booking-modal__panel{width:100%;height:calc(100dvh - 28px);max-height:calc(100dvh - 28px);border-radius:26px;box-shadow:0 24px 64px -20px rgba(43,36,64,.52)}.booking-modal__close{top:18px;right:18px;width:44px;height:44px;border-radius:14px}}
   </style>
 </head>
 <body>
@@ -35,11 +36,13 @@
   <a class="manage-appointment-link" href="manage-booking.html" data-booking-modal-open>Xem lịch của bạn</a>
   <section class="booking-modal" id="booking-modal" role="dialog" aria-modal="true" aria-label="Xem lịch của bạn" hidden>
     <div class="booking-modal__panel">
-      <button class="booking-modal__close" type="button" aria-label="Đóng cửa sổ quản lý lịch">×</button>
+      <button class="booking-modal__close" type="button" aria-label="Đóng cửa sổ quản lý lịch">
+        <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="#4A3A80" stroke-width="2.4" stroke-linecap="round" fill="none"></path></svg>
+      </button>
       <iframe class="booking-modal__frame" id="booking-modal-frame" title="Xem lịch của bạn"></iframe>
     </div>
   </section>
   <script src="booking-management-modal.js?v=20260809-1"></script>
-  <script src="booking-management-entry.js?v=20260809-7"></script>
+  <script src="booking-management-entry.js?v=20260809-8"></script>
 </body>
 </html>
