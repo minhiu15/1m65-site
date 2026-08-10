@@ -1,0 +1,514 @@
+:root {
+  --nhu-lavender: #f2d3e1;
+  --nhu-lilac: #f7dfe9;
+  --nhu-purple: #c34f88;
+  --nhu-pink: #f4c5d8;
+  --purple: #c34f88;
+  --purple-2: #b95a89;
+  --purple-dark: #843d60;
+  --lavender: #f0cfdd;
+  --lavender-soft: #fceaf2;
+  --line: rgba(195, 79, 136, .15);
+}
+
+html.nhu-rose-theme,
+html.nhu-rose-theme body {
+  accent-color: #c34f88;
+  scrollbar-color: #e7b6cc rgba(195, 79, 136, .07);
+}
+
+.mew-page.nhu-polished {
+  background:
+    url('./doodles/paper-grain.png') 0 0 / 128px 128px repeat,
+    radial-gradient(circle at 7% 18%, rgba(239, 198, 217, .11), transparent 22%),
+    radial-gradient(circle at 94% 42%, rgba(244, 184, 207, .09), transparent 21%),
+    radial-gradient(circle at 12% 76%, rgba(246, 214, 227, .08), transparent 22%),
+    #fffbfa !important;
+}
+
+.nhu-section-stitch {
+  background: repeating-linear-gradient(90deg, rgba(195, 79, 136, .38) 0 7px, transparent 7px 15px);
+}
+
+.nhu-major-surface {
+  border-color: rgba(195, 79, 136, .13) !important;
+}
+
+.nhu-major-surface--about,
+#vechungminh .nhu-about-layout {
+  background:
+    radial-gradient(circle at 1px 1px, rgba(195, 79, 136, .035) 1px, transparent 1.5px) 0 0 / 22px 22px,
+    linear-gradient(118deg, rgba(255, 247, 251, .97), rgba(255, 253, 250, .99) 48%, rgba(255, 245, 249, .94)) !important;
+}
+
+.nhu-hero-pinboard {
+  background: #faedf3;
+}
+
+.nhu-editorial {
+  background-color: #fdf7fa !important;
+  background-image: linear-gradient(135deg, rgba(242, 211, 225, .38), rgba(255, 255, 255, .9) 52%, rgba(244, 184, 207, .1)) !important;
+}
+
+.nhu-editorial:nth-child(3n+2) {
+  background-image: linear-gradient(145deg, rgba(244, 184, 207, .22), rgba(255, 255, 255, .9), rgba(242, 179, 143, .09)) !important;
+}
+
+.nhu-editorial:nth-child(3n) {
+  background-image: linear-gradient(145deg, rgba(247, 218, 230, .3), rgba(255, 255, 255, .92), rgba(236, 207, 221, .16)) !important;
+}
+
+.nhu-service-price-grid::after {
+  background: linear-gradient(180deg, transparent 0, rgba(195, 79, 136, .16) 7%, rgba(195, 79, 136, .16) 93%, transparent 100%);
+}
+
+[data-cat="review"].nhu-replaced:focus-visible,
+a[data-cursor="link"]:focus-visible,
+button:focus-visible {
+  outline-color: rgba(195, 79, 136, .34) !important;
+}
+
+#vechungminh .nhu-about-stats > div {
+  border-color: rgba(195, 79, 136, .08) !important;
+}
+
+.nhu-footer-shell {
+  background:
+    radial-gradient(circle at 1px 1px, rgba(195, 79, 136, .045) 1px, transparent 1.35px) 0 0 / 22px 22px,
+    linear-gradient(135deg, rgba(252, 240, 246, .98), rgba(255, 249, 252, .98) 54%, rgba(254, 249, 243, .98)) !important;
+}
+
+.nhu-footer-card,
+.nhu-footer-socials a,
+.nhu-footer-service-list a,
+.nhu-footer-map-frame,
+.nhu-footer-map-link {
+  border-color: rgba(195, 79, 136, .13) !important;
+}
+
+.nhu-footer-brand-card {
+  background: linear-gradient(145deg, #f8ddea 0%, #fae7ef 58%, #fff0e7 100%) !important;
+}
+
+.nhu-footer-booking-cta {
+  background: #c34f88;
+  box-shadow: 0 16px 30px -16px rgba(195, 79, 136, .72);
+}
+
+.nhu-footer-card-title::before {
+  background: linear-gradient(135deg, #b95a89, #e2a9cb);
+  box-shadow: 0 0 0 5px rgba(195, 79, 136, .08);
+}
+
+.nhu-footer-contact,
+.nhu-footer-bottom {
+  border-color: rgba(195, 79, 136, .13) !important;
+}
+
+.nhu-footer-signoff,
+.nhu-footer-service-list a:hover {
+  color: #b95a89 !important;
+}
+
+.nhu-footer-crisp__panel {
+  border-color: rgba(195, 79, 136, .24) !important;
+  background:
+    radial-gradient(circle at 8% 10%, rgba(255, 218, 233, .28), transparent 22%),
+    radial-gradient(circle at 78% 0, rgba(248, 222, 234, .24), transparent 25%),
+    #fff !important;
+  box-shadow: 0 16px 42px -30px rgba(112, 49, 78, .32) !important;
+}
+
+.nhu-footer-crisp__main > section + section {
+  border-color: rgba(195, 79, 136, .25) !important;
+}
+
+.nhu-footer-crisp__column h2,
+.nhu-footer-crisp__map h2 {
+  color: #743b58 !important;
+}
+
+.nhu-footer-crisp__column h2 > .nhu-footer-crisp__icon,
+.nhu-footer-crisp__map h2 > .nhu-footer-crisp__icon {
+  fill: #e1a7c2 !important;
+}
+
+.nhu-footer-crisp__logo {
+  color: #a84475 !important;
+}
+
+.nhu-footer-crisp__logo small,
+.nhu-footer-crisp__socials a,
+.nhu-footer-crisp__service-icon,
+.nhu-footer-crisp__contact > a > .nhu-footer-crisp__icon,
+.nhu-footer-crisp__contact-hours > .nhu-footer-crisp__icon,
+.nhu-footer-crisp__benefits .nhu-footer-crisp__icon {
+  color: #bd5b89 !important;
+}
+
+.nhu-footer-crisp__socials a,
+.nhu-footer-crisp__sleep-pill,
+.nhu-footer-crisp__map-controls,
+.nhu-footer-crisp__map-link,
+.nhu-footer-crisp__benefits {
+  border-color: rgba(195, 79, 136, .2) !important;
+}
+
+.nhu-footer-crisp__service-icon,
+.nhu-footer-crisp__sleep-pill {
+  background: #fff1f6 !important;
+}
+
+.nhu-footer-crisp__booking-note a,
+.nhu-footer-crisp__zalo {
+  background: #c34f88 !important;
+  box-shadow: 0 8px 16px -12px rgba(112, 49, 78, .7) !important;
+}
+
+.nhu-footer-crisp__map-outline path,
+.nhu-footer-crisp__wave path {
+  stroke: #d58bad !important;
+}
+
+.nhu-footer-crisp__service:focus-visible,
+.nhu-footer-crisp__socials a:focus-visible,
+.nhu-footer-crisp__booking-note a:focus-visible,
+.nhu-footer-crisp__contact a:focus-visible,
+.nhu-footer-crisp__map-link:focus-visible,
+.nhu-footer-crisp__map-controls button:focus-visible,
+.nhu-footer-crisp__benefits a:focus-visible {
+  outline-color: #c34f88 !important;
+}
+
+.nhu-footer-booking-cta:hover {
+  box-shadow: 0 22px 36px -16px rgba(195, 79, 136, .78);
+}
+
+#datlich.mew-ticket-section > .mew-booking-ticket {
+  --mew-ticket-border: rgba(195, 79, 136, .16) !important;
+  background: linear-gradient(122deg, #fdf3f7 0%, #fcecf3 42%, #fff4f7 100%) !important;
+  box-shadow: 0 30px 60px -40px rgba(112, 49, 78, .42) !important;
+  filter: drop-shadow(0 18px 22px rgba(112, 49, 78, .09)) !important;
+}
+
+#datlich .mew-ticket-main {
+  background: linear-gradient(118deg, #f2edff 0%, #f7edf9 48%, #fdeaf3 100%) !important;
+}
+
+.mew-ticket-eyebrow,
+.mew-ticket-stub-label,
+a.mew-ticket-meta-value,
+a.mew-ticket-meta-value:visited,
+.mew-ticket-mobile-info a,
+.mew-ticket-mobile-info a:visited {
+  color: #b94e83 !important;
+}
+
+.mew-ticket-rule {
+  border-color: rgba(195, 79, 136, .3) !important;
+}
+
+.mew-ticket-meta-item + .mew-ticket-meta-item,
+.mew-ticket-stub::before {
+  border-color: rgba(195, 79, 136, .18);
+}
+
+.mew-ticket-stub::before {
+  background-image: repeating-linear-gradient(to bottom, rgba(195, 79, 136, .34) 0 9px, transparent 9px 18px) !important;
+}
+
+#datlich .mew-ticket-button {
+  background: #c34f88 !important;
+  box-shadow: 0 18px 30px -16px rgba(195, 79, 136, .72) !important;
+}
+
+.manage-appointment-link {
+  border-color: rgba(195, 79, 136, .22) !important;
+  color: #843d60 !important;
+  box-shadow: 0 14px 34px -20px rgba(112, 49, 78, .5) !important;
+}
+
+.manage-appointment-link:hover,
+.booking-modal__close:hover {
+  background: #fceaf2 !important;
+}
+
+.booking-modal__close {
+  border-color: rgba(195, 79, 136, .16) !important;
+}
+
+button[data-filter],
+button[data-mfilter] {
+  border-color: rgba(195, 79, 136, .18) !important;
+}
+
+button[data-filter]:hover,
+button[data-mfilter]:hover {
+  border-color: rgba(195, 79, 136, .3) !important;
+  background: #fff2f7 !important;
+  color: #9d456e !important;
+}
+
+button[data-filter][style*="background:#7A5AD0"],
+button[data-filter][style*="background: #7A5AD0"],
+button[data-filter][style*="background: rgb(122, 90, 208)"],
+button[data-mfilter][style*="background:#7A5AD0"],
+button[data-mfilter][style*="background: #7A5AD0"],
+button[data-mfilter][style*="background: rgb(122, 90, 208)"] {
+  border-color: #c34f88 !important;
+  background: #c34f88 !important;
+  color: #fff !important;
+  box-shadow: 0 10px 22px -14px rgba(195, 79, 136, .62) !important;
+}
+
+a[href="#datlich"][style*="background:#7A5AD0"],
+a[href="#datlich"][style*="background: #7A5AD0"],
+#mewBookBtn {
+  background: #c34f88 !important;
+  box-shadow: 0 18px 36px -16px rgba(195, 79, 136, .7) !important;
+}
+
+.mew-booking-dialog {
+  background: #fffbfa !important;
+  box-shadow: 0 42px 100px -38px rgba(112, 49, 78, .46) !important;
+}
+
+.mew-booking-dialog [style*="background:#7A5AD0"],
+.mew-booking-dialog [style*="background: #7A5AD0"],
+.mew-booking-dialog [style*="background: rgb(122, 90, 208)"] {
+  background: #c34f88 !important;
+}
+
+.mew-booking-dialog [style*="color:#7A5AD0"],
+.mew-booking-dialog [style*="color: #7A5AD0"],
+.mew-booking-dialog [style*="color: rgb(122, 90, 208)"],
+.mew-booking-dialog [style*="color:#8A66D8"] {
+  color: #b94e83 !important;
+}
+
+.mew-booking-dialog [style*="border-color:#7A5AD0"],
+.mew-booking-dialog [style*="border-color: #7A5AD0"],
+.mew-booking-dialog [style*="border:1px solid #7A5AD0"],
+.mew-booking-dialog [style*="border: 1px solid #7A5AD0"] {
+  border-color: #c34f88 !important;
+}
+
+.mew-booking-dialog [style*="rgba(122,90,208"],
+.mew-booking-dialog [style*="rgba(122, 90, 208"] {
+  border-color: rgba(195, 79, 136, .18) !important;
+}
+
+.mew-booking-dialog [style*="background:#F1ECFE"],
+.mew-booking-dialog [style*="background:#F3EFFB"],
+.mew-booking-dialog [style*="background:#F6F2FE"],
+.mew-booking-dialog [style*="background:#F6F2FF"] {
+  background: #fceaf2 !important;
+}
+
+.mew-booking-dialog [style*="linear-gradient(120deg,#F6F2FE"],
+.mew-booking-dialog [style*="linear-gradient(135deg,#F6F2FE"] {
+  background: linear-gradient(120deg, #fceaf2, #fdebf2) !important;
+}
+
+.mew-booking-dialog input:focus,
+.mew-booking-dialog textarea:focus {
+  border-color: #c34f88 !important;
+  box-shadow: 0 0 0 4px rgba(195, 79, 136, .1) !important;
+}
+
+.mew-booking-dialog [stroke="#7A5AD0"],
+[stroke="#7A5AD0"] {
+  stroke: #c34f88 !important;
+}
+
+.mew-booking-dialog [fill="#7A5AD0"],
+[fill="#8A66D8"] {
+  fill: #c34f88 !important;
+}
+
+.page-shell h1 span {
+  background: linear-gradient(96deg, #b94e83, #d16a9b 67%, #e0885f) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+
+.page-shell .primary {
+  background: #c34f88 !important;
+  box-shadow: 0 18px 32px -20px rgba(195, 79, 136, .75) !important;
+}
+
+.page-shell .primary:hover:not(:disabled) {
+  background: #ad3f76 !important;
+  box-shadow: 0 22px 36px -20px rgba(195, 79, 136, .82) !important;
+}
+
+.page-shell input:focus {
+  border-color: #c34f88 !important;
+  box-shadow: 0 0 0 4px rgba(195, 79, 136, .1) !important;
+}
+
+@media (max-width: 767px) {
+  .nhu-major-surface {
+    border-color: rgba(195, 79, 136, .11) !important;
+  }
+
+  #datlich.mew-ticket-section > .mew-booking-ticket {
+    background: linear-gradient(160deg, #fdf3f7 0%, #fcecf3 48%, #fff4f7 100%) !important;
+  }
+
+  #datlich .mew-ticket-main {
+    background: linear-gradient(155deg, #f2edff 0%, #f7edf9 50%, #fdeaf3 100%) !important;
+  }
+
+  .mew-ticket-stub::before {
+    background-image: repeating-linear-gradient(to right, rgba(195, 79, 136, .34) 0 9px, transparent 9px 18px) !important;
+  }
+}
+
+/* Softer rose pass: keep CTA contrast while removing the dense berry cast. */
+:root {
+  --nhu-purple: #d06c99;
+  --purple: #d06c99;
+  --purple-2: #c26a92;
+  --purple-dark: #82415e;
+  --rose-primary: #d06c99;
+  --rose-primary-strong: #c45a89;
+  --rose-button: linear-gradient(135deg, #dd82ac 0%, #c85e8f 100%);
+  --rose-button-hover: linear-gradient(135deg, #d878a5 0%, #bd527f 100%);
+  --rose-scroll-thumb: #e7a8c3;
+  --rose-scroll-thumb-hover: #d786aa;
+  --rose-scroll-track: rgba(208, 108, 153, .055);
+}
+
+html,
+[data-scroll="mew"] {
+  scrollbar-color: var(--rose-scroll-thumb) var(--rose-scroll-track) !important;
+}
+
+html::-webkit-scrollbar-track,
+[data-scroll="mew"]::-webkit-scrollbar-track,
+[data-om-starter="ios-frame"] div::-webkit-scrollbar-track {
+  background: var(--rose-scroll-track) !important;
+}
+
+html::-webkit-scrollbar-thumb,
+[data-scroll="mew"]::-webkit-scrollbar-thumb,
+[data-om-starter="ios-frame"] div::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #f0bed2, var(--rose-scroll-thumb)) !important;
+  background-clip: padding-box !important;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+[data-scroll="mew"]::-webkit-scrollbar-thumb:hover,
+[data-om-starter="ios-frame"] div::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #e7a8c3, var(--rose-scroll-thumb-hover)) !important;
+  background-clip: padding-box !important;
+}
+
+a[href="#datlich"][style*="background"],
+#mewBookBtn,
+#datlich .mew-ticket-button,
+.nhu-footer-booking-cta,
+.nhu-footer-crisp__booking-note a,
+.page-shell .primary,
+.mew-booking-dialog [style*="background:#7A5AD0"],
+.mew-booking-dialog [style*="background: #7A5AD0"],
+.mew-booking-dialog [style*="background: rgb(122, 90, 208)"],
+.mew-booking-dialog [style*="background:#C34F88"],
+.mew-booking-dialog [style*="background: rgb(195, 79, 136)"],
+.mew-booking-dialog [style*="background:#D06C99"],
+.mew-booking-dialog [style*="background: rgb(208, 108, 153)"] {
+  background: var(--rose-button) !important;
+  color: #fff !important;
+  box-shadow: 0 16px 32px -17px rgba(164, 66, 111, .5) !important;
+}
+
+a[href="#datlich"][style*="background"]:hover,
+#mewBookBtn:hover,
+#datlich .mew-ticket-button:hover,
+.nhu-footer-booking-cta:hover,
+.page-shell .primary:hover:not(:disabled) {
+  background: var(--rose-button-hover) !important;
+  box-shadow: 0 20px 36px -17px rgba(145, 53, 95, .55) !important;
+}
+
+button[data-filter][style*="background:#7A5AD0"],
+button[data-filter][style*="background: #7A5AD0"],
+button[data-filter][style*="background: rgb(122, 90, 208)"],
+button[data-filter][style*="background:#C34F88"],
+button[data-filter][style*="background: rgb(195, 79, 136)"],
+button[data-filter][style*="background:#D06C99"],
+button[data-filter][style*="background: rgb(208, 108, 153)"],
+button[data-mfilter][style*="background:#7A5AD0"],
+button[data-mfilter][style*="background: #7A5AD0"],
+button[data-mfilter][style*="background: rgb(122, 90, 208)"],
+button[data-mfilter][style*="background:#C34F88"],
+button[data-mfilter][style*="background: rgb(195, 79, 136)"],
+button[data-mfilter][style*="background:#D06C99"],
+button[data-mfilter][style*="background: rgb(208, 108, 153)"] {
+  border-color: var(--rose-primary) !important;
+  background: var(--rose-primary) !important;
+  color: #fff !important;
+  box-shadow: 0 9px 20px -14px rgba(164, 66, 111, .44) !important;
+}
+
+/* Service category chips and the featured-service badge have their own
+   inline state, so keep them on the same softer rose palette explicitly. */
+button[data-service-filter] {
+  border-color: rgba(208, 108, 153, .16) !important;
+  background: rgba(255, 255, 255, .94) !important;
+  color: #5f5360 !important;
+}
+
+button[data-service-filter]:hover {
+  border-color: rgba(208, 108, 153, .28) !important;
+  background: #fff3f7 !important;
+  color: #a84d78 !important;
+}
+
+button[data-service-filter][style*="background:#7A5AD0"],
+button[data-service-filter][style*="background: #7A5AD0"],
+button[data-service-filter][style*="background: rgb(122, 90, 208)"],
+button[data-service-filter][style*="background:#C34F88"],
+button[data-service-filter][style*="background: rgb(195, 79, 136)"],
+button[data-service-filter][style*="background:#D06C99"],
+button[data-service-filter][style*="background: rgb(208, 108, 153)"] {
+  border-color: #d983aa !important;
+  background: linear-gradient(135deg, #e19abb 0%, #d477a2 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 9px 20px -14px rgba(164, 66, 111, .38) !important;
+}
+
+.mew-service-badge {
+  background: linear-gradient(135deg, #e19abb 0%, #d477a2 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 18px -13px rgba(164, 66, 111, .36) !important;
+}
+
+/* booking-ticket.css is injected after this sheet, so use a more specific
+   selector to keep the ticket CTA in the rose system as well. */
+body #datlich .mew-ticket-button {
+  background: linear-gradient(135deg, #e08fb4 0%, #ce6d9a 100%) !important;
+  box-shadow: 0 18px 32px -18px rgba(176, 72, 119, .5) !important;
+}
+
+body #datlich .mew-ticket-button:hover {
+  background: linear-gradient(135deg, #da83aa 0%, #c76390 100%) !important;
+  box-shadow: 0 22px 38px -18px rgba(164, 66, 111, .54) !important;
+}
+
+body #datlich .mew-ticket-button:focus-visible {
+  outline: 3px solid rgba(224, 143, 180, .28) !important;
+  outline-offset: 4px !important;
+}
+
+.mew-ticket-eyebrow,
+.mew-ticket-stub-label,
+a.mew-ticket-meta-value,
+a.mew-ticket-meta-value:visited,
+.mew-ticket-mobile-info a,
+.mew-ticket-mobile-info a:visited,
+.mew-booking-dialog [style*="color:#7A5AD0"],
+.mew-booking-dialog [style*="color:#8A66D8"] {
+  color: #bd628d !important;
+}

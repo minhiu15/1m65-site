@@ -2,7 +2,7 @@
   "use strict";
 
   const SELF_URL = document.currentScript && document.currentScript.src;
-  const CSS_URL = SELF_URL ? new URL("booking-ticket.css?v=20260809-6", SELF_URL).href : "booking-ticket.css?v=20260809-6";
+  const CSS_URL = SELF_URL ? new URL("booking-ticket.css?v=20260810-6", SELF_URL).href : "booking-ticket.css?v=20260810-6";
   const CAT_URL = SELF_URL ? new URL("mascot/nhu-nhi-ticket.png?v=20260809-1", SELF_URL).href : "mascot/nhu-nhi-ticket.png?v=20260809-1";
 
   function make(tag, className, text) {
@@ -44,9 +44,6 @@
 
     const ticket = make("div", "mew-booking-ticket");
     ticket.setAttribute("data-reveal", "1");
-    ["tl", "tr", "bl", "br"].forEach(function (corner) {
-      ticket.append(make("span", "mew-ticket-cutout mew-ticket-cutout--" + corner));
-    });
 
     const main = make("div", "mew-ticket-main");
     const topline = make("div", "mew-ticket-topline");
@@ -82,7 +79,7 @@
     const phone = make("a", "", "028 3822 0100");
     phone.href = "tel:+842838220100";
     mobileInfo.append(phone);
-    stub.append(mobileInfo);
+    main.append(mobileInfo);
 
     const cat = make("img", "mew-ticket-cat");
     cat.src = CAT_URL;

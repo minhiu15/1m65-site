@@ -385,15 +385,13 @@
     const cards = Array.from({ length: 3 }, () => {
       const card = node('article', 'appointment appointment-skeleton');
       card.setAttribute('aria-hidden', 'true');
-      const timing = node('div');
-      timing.append(skeletonLine('wide'), skeletonLine('medium'), skeletonLine('short'));
-      const customer = node('div');
-      customer.append(skeletonLine('wide'), skeletonLine('medium'));
-      const service = node('div');
-      service.append(skeletonLine('wide'), skeletonLine('medium'), skeletonLine('short'));
-      const status = node('div', 'status-column');
-      status.append(skeletonLine('badge-shape'), skeletonLine('action-shape'));
-      card.append(timing, customer, service, status);
+      const summary = node('div', 'appointment-summary');
+      const timing = node('div', 'appointment-summary-time');
+      timing.append(skeletonLine('wide'), skeletonLine('medium'));
+      const customer = node('div', 'appointment-summary-main');
+      customer.append(skeletonLine('medium'), skeletonLine('wide'));
+      summary.append(timing, customer, skeletonLine('badge-shape'), skeletonLine('action-shape'));
+      card.append(summary);
       return card;
     });
     elements.appointmentList.replaceChildren(...cards);
@@ -832,33 +830,65 @@
   function appointmentCard(item) {
     const start = timeParts(item.startAt);
     const end = timeParts(item.endAt);
-    const card = node('article', 'appointment');
+    const card = node('article', 'appointment appointment-collapsed');
+    const safeKey = String(item.id || item.reference || Math.random()).replace(/[^a-z0-9_-]/gi, '-');
+    const detailsId = `appointment-details-${safeKey}`;
 
-    const timing = node('div');
+    const summary = node('div', 'appointment-summary');
+    const timing = node('div', 'appointment-summary-time');
     const time = node('time', '', `${start.time} – ${end.time}`);
     time.dateTime = item.startAt;
-    timing.append(time, node('div', 'date', start.date), node('p', 'reference', item.reference));
+    timing.append(time, node('div', 'date', start.date));
 
-    const customer = node('div');
-    customer.append(node('h2', '', item.customerName));
+    const summaryMain = node('div', 'appointment-summary-main');
+    summaryMain.append(
+      node('h2', '', item.customerName),
+      node('p', 'appointment-summary-service', `${item.service} · ${item.durationMinutes} phút`)
+    );
+    const summaryStatus = node('span', `badge appointment-summary-status ${item.status}`, STATUS_LABELS[item.status] || item.status);
+    const toggle = node('button', 'appointment-toggle');
+    toggle.type = 'button';
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-controls', detailsId);
+    const toggleLabel = node('span', 'appointment-toggle-label', 'Xem chi tiết');
+    const toggleIcon = node('span', 'appointment-toggle-icon', '⌄');
+    toggleIcon.setAttribute('aria-hidden', 'true');
+    toggle.append(toggleLabel, toggleIcon);
+    summary.append(timing, summaryMain, summaryStatus, toggle);
+
+    const details = node('div', 'appointment-expanded');
+    details.id = detailsId;
+    details.hidden = true;
+    const detailList = node('dl', 'appointment-detail-grid');
+    const detailItem = (label, value, className = '') => {
+      const group = node('div', className);
+      group.append(node('dt', '', label), node('dd', '', value));
+      return group;
+    };
+    const phoneGroup = node('div');
+    phoneGroup.append(node('dt', '', 'Số điện thoại'));
+    const phoneValue = node('dd');
     const phone = node('a', '', item.customerPhone);
     phone.href = `tel:${String(item.customerPhone).replace(/[^0-9+]/g, '')}`;
-    customer.append(phone);
-    if (item.customerNote) customer.append(node('p', 'note', `Ghi chú: ${item.customerNote}`));
-
-    const service = node('div');
-    service.append(node('h2', '', item.service));
-    service.append(
-      node('p', '', `${item.durationMinutes} phút · ${currency(item.price)}`),
-      node('p', '', `Thợ: ${item.staff || 'Chưa chỉ định'}`)
+    phoneValue.append(phone);
+    phoneGroup.append(phoneValue);
+    detailList.append(
+      detailItem('Mã lịch', item.reference, 'appointment-detail-reference'),
+      phoneGroup,
+      detailItem('Ngày và giờ', `${start.time} – ${end.time} · ${start.date}`),
+      detailItem('Dịch vụ', item.service),
+      detailItem('Thời lượng', `${item.durationMinutes} phút`),
+      detailItem('Tổng tiền', currency(item.price)),
+      detailItem('Thợ thực hiện', item.staff || 'Chưa chỉ định'),
+      detailItem('Ghi chú', item.customerNote || 'Không có ghi chú', 'appointment-detail-note')
     );
 
     const statusColumn = node('div', 'status-column');
-    statusColumn.append(node('span', `badge ${item.status}`, STATUS_LABELS[item.status] || item.status));
+    statusColumn.append(node('p', 'appointment-actions-title', 'Quản lý lịch hẹn'));
     if (item.status === 'confirmed') {
       const reschedule = node('button', 'reschedule-button', 'Dời lịch');
       reschedule.type = 'button';
-      reschedule.addEventListener('click', () => openReschedulePanel(item, card, reschedule));
+      reschedule.addEventListener('click', () => openReschedulePanel(item, details, reschedule));
       statusColumn.append(reschedule);
     }
     if (item.status === 'completed') {
@@ -889,7 +919,18 @@
       }
     }
 
-    card.append(timing, customer, service, statusColumn);
+    details.append(detailList, statusColumn);
+    toggle.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(expanded));
+      toggleLabel.textContent = expanded ? 'Thu gọn' : 'Xem chi tiết';
+      toggleIcon.textContent = expanded ? '⌃' : '⌄';
+      details.hidden = !expanded;
+      card.classList.toggle('is-expanded', expanded);
+      card.classList.toggle('appointment-collapsed', !expanded);
+    });
+
+    card.append(summary, details);
     return card;
   }
 

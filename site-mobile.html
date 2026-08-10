@@ -6,7 +6,8 @@
 <script src="./support.js"></script>
 <script src="./turnstile-config.js?v=20260807a"></script>
 <script src="./turnstile-booking.js?v=20260807a"></script>
-<link rel="stylesheet" href="./visual-system.css?v=20260809footer9">
+<link rel="stylesheet" href="./visual-system.css?v=20260810footer31">
+<link rel="stylesheet" href="./rose-theme.css?v=20260810rose7">
 </head>
 <body>
 <x-dc>
@@ -130,8 +131,8 @@ a[href*="google.com/maps/place/1M65"][style*="position:absolute"],a[href*="googl
 </sc-if>
 
 <sc-if value="{{ bookOpen }}" hint-placeholder-val="{{ false }}">
-<div onClick="{{ closeBookBackdrop }}" style="position:fixed;inset:0;pointer-events:auto;z-index:250;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(43,36,64,.38);backdrop-filter:blur(7px)">
-<div style="position:relative;display:flex;flex-direction:column;width:100%;max-width:none;max-height:calc(100dvh - 28px);border-radius:26px;background:#FFFCF9;box-shadow:0 24px 64px -20px rgba(43,36,64,.52);overflow:hidden">
+<div class="mew-booking-overlay" onClick="{{ closeBookBackdrop }}" style="position:fixed;inset:0;pointer-events:auto;z-index:250;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(43,36,64,.38);backdrop-filter:blur(7px)">
+<div class="mew-booking-dialog" style="position:relative;display:flex;flex-direction:column;width:100%;max-width:none;max-height:calc(100dvh - 28px);border-radius:26px;background:#FFFCF9;box-shadow:0 24px 64px -20px rgba(43,36,64,.52);overflow:hidden">
 <div aria-hidden="true" style="display:none"><span></span></div>
 
 <div style="flex:none;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:18px 18px 14px">
@@ -477,7 +478,7 @@ Xem thư viện móng
 
 <div style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -20px 18px;padding:0 20px 4px">
 <sc-for list="{{ catChips }}" as="c" key="{{ c.id }}" hint-placeholder-count="7">
-<button onClick="{{ c.pick }}" style="padding:9px 15px;border-radius:999px;flex:none;border-style:solid;border-width:1px;font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;transition:none;background:{{ c.bg }};color:{{ c.fg }};border-color:{{ c.bd }};box-shadow:{{ c.sh }}">{{ c.label }}</button>
+<button onClick="{{ c.pick }}" data-service-filter="{{ c.id }}" style="padding:9px 15px;border-radius:999px;flex:none;border-style:solid;border-width:1px;font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;transition:none;background:{{ c.bg }};color:{{ c.fg }};border-color:{{ c.bd }};box-shadow:{{ c.sh }}">{{ c.label }}</button>
 </sc-for>
 </div>
 <sc-if value="{{ isHot }}" hint-placeholder-val="{{ true }}">
@@ -495,7 +496,7 @@ Xem thư viện móng
 </svg>
 </div>
 <div style="position:relative;flex:1">
-<span style="display:inline-block;padding:4px 9px;border-radius:999px;background:#7A5AD0;color:#FFFFFF;font-family:Quicksand,sans-serif;font-weight:700;font-size:9.5px;letter-spacing:.04em;margin-bottom:7px">CHỌN NHIỀU NHẤT</span>
+<span class="mew-service-badge" style="display:inline-block;padding:4px 9px;border-radius:999px;background:#7A5AD0;color:#FFFFFF;font-family:Quicksand,sans-serif;font-weight:700;font-size:9.5px;letter-spacing:.04em;margin-bottom:7px">CHỌN NHIỀU NHẤT</span>
 <h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:19px;letter-spacing:-.02em;color:#2B2440;margin:0 0 8px">Nail design vẽ tay</h3>
 <div style="display:flex;align-items:baseline;gap:9px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:18px;color:#7A5AD0">từ 40.000₫</span><span style="font-size:12.5px;color:#767089">· 90 phút</span></div>
 </div>
@@ -1459,7 +1460,7 @@ class Component extends DCLogic {
   loadVisualSystem() {
     if (window.__nhuBundleLoaded || document.querySelector('script[data-nhu-visual-loader]')) return;
     const script = document.createElement('script');
-    script.src = './visual-system.js?v=20260809footer9';
+    script.src = './visual-system.js?v=20260810footer19';
     script.dataset.nhuVisualLoader = '1';
     document.head.appendChild(script);
   }

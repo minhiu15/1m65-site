@@ -1010,3 +1010,167 @@ input:focus,select:focus,textarea:focus{
   .app-sidebar,.topbar,.creator,.blocker,.filters,.status-column button,.status-column select{display:none}
   .appointment{break-inside:avoid;box-shadow:none}
 }
+
+/* --- Rose admin workspace -------------------------------------------------
+   A single blush/rose system across login, navigation, forms and dashboards. */
+:root{
+  --ink:#3b2933;--ink-2:#55414b;--ink-3:#68545e;
+  --muted:#7d6972;--muted-2:#927d86;--muted-3:#aa929c;--faint:#b8a3ac;
+  --paper:#fff9fb;--surface:#fff;--surface-2:#fff5f8;--surface-3:#fff0f5;--surface-4:#fffbfc;
+  --line:rgba(208,108,153,.11);--line-2:rgba(208,108,153,.18);--line-3:rgba(208,108,153,.09);--line-4:rgba(208,108,153,.22);
+  --rose:#d06c99;--rose-hover:#bd527f;--rose-deep:#87445f;
+  --rose-soft:#fde4ee;--rose-mist:#fff1f6;--rose-line:#efb3cb;--rose-pale:#f9d9e6;
+  --pink:#e99abd;--peach:#e8a17f;
+  --sh-1:0 1px 2px rgba(112,49,78,.04);
+  --sh-2:0 1px 2px rgba(112,49,78,.03),0 12px 30px rgba(112,49,78,.07);
+  --sh-3:0 2px 6px rgba(112,49,78,.06),0 22px 50px rgba(112,49,78,.14);
+  --sh-rose:0 12px 26px rgba(190,76,126,.22);
+  --dotted:repeating-linear-gradient(90deg,rgba(208,108,153,.24) 0 4px,transparent 4px 9px);
+}
+
+html{scrollbar-color:#e8a7c3 rgba(208,108,153,.05)}
+html::-webkit-scrollbar{width:10px;height:10px}
+html::-webkit-scrollbar-track{background:rgba(208,108,153,.05)}
+html::-webkit-scrollbar-thumb{border:3px solid transparent;border-radius:999px;background:#e8a7c3;background-clip:padding-box}
+body{
+  background:
+    radial-gradient(1000px 560px at 2% -8%,rgba(246,203,220,.42) 0,rgba(246,203,220,0) 68%),
+    radial-gradient(880px 520px at 100% 0,rgba(255,226,236,.62) 0,rgba(255,226,236,0) 70%),
+    var(--paper);
+}
+::selection{background:#f7cfdf}
+:focus-visible{outline-color:var(--rose)}
+
+.primary,
+.app-nav a:target,.app-nav a[aria-current=true],
+.overview-action-list a.primary-action,
+.admin-service-tab[aria-selected=true],.service-tab[aria-selected=true],
+.slot-chip.selected,.overview-day.is-today{
+  border-color:transparent;
+  background:linear-gradient(135deg,#df89b0 0%,#c96090 100%);
+  color:#fff;
+  box-shadow:0 10px 24px rgba(176,68,116,.20);
+}
+.primary:hover:not(:disabled),
+.overview-action-list a.primary-action:hover{
+  background:linear-gradient(135deg,#d97da6 0%,#ba527f);
+}
+.primary:disabled{background:#f1e7eb;color:#af9da5;box-shadow:none}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--rose);box-shadow:0 0 0 4px rgba(208,108,153,.12);
+}
+
+.login-card{
+  border-color:var(--line-2);
+  background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(255,244,248,.96));
+  box-shadow:inset 0 1px 0 #fff,0 24px 64px rgba(136,55,91,.12);
+}
+.app-sidebar{
+  border-color:var(--line);background:rgba(255,248,251,.92);
+  box-shadow:8px 0 34px rgba(139,57,94,.05);
+}
+.app-nav a:hover{border-color:var(--line);background:var(--rose-mist);color:var(--rose-deep)}
+.who{border-color:var(--line);background:rgba(255,244,248,.92)}
+.avatar{background:linear-gradient(135deg,#fde1ec,#f8cddd);color:var(--rose-deep)}
+.topbar{border-color:var(--line);background:rgba(255,248,251,.92)}
+.drawer-scrim{background:rgba(74,37,53,.30)}
+
+.admin-view{
+  border-color:var(--line);
+  background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(255,245,249,.88));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.96),0 15px 40px rgba(132,53,89,.075);
+}
+.summary-card,.overview-card,.filters,.blocker-grid>.panel-card{
+  border-color:var(--line);background:rgba(255,255,255,.92);
+  box-shadow:0 10px 28px rgba(136,55,91,.06);
+}
+.note-chip,.overview-operation-stats>div,.empty,.reschedule-panel{
+  border-color:var(--line-2);background:var(--rose-mist);
+}
+.overview-timeline-item,.overview-day,.overview-action-list a{
+  border-color:var(--line);background:var(--surface-4);
+}
+.overview-timeline-item.is-next{
+  border-color:var(--rose-line);background:linear-gradient(110deg,var(--rose-mist),#fff);
+  box-shadow:0 8px 20px rgba(176,68,116,.09);
+}
+.overview-timeline-item.is-next::before{background:var(--rose)}
+.overview-progress progress::-webkit-progress-bar{background:var(--rose-soft)}
+.overview-progress progress::-webkit-progress-value{background:linear-gradient(90deg,#d06c99,#eea4c3)}
+.overview-progress progress::-moz-progress-bar{background:linear-gradient(90deg,#d06c99,#eea4c3)}
+.overview-day.is-today{box-shadow:0 9px 22px rgba(176,68,116,.19)}
+.admin-service-option[aria-pressed=true]{border-color:var(--rose-line);background:#fff0f5;color:var(--rose-deep)}
+.dp-pop{border-color:var(--line-2);box-shadow:0 22px 48px rgba(123,50,83,.15)}
+
+/* Compact appointment rows: summary first, complete management on demand. */
+#sec-schedule #appointment-list{gap:10px;margin-top:18px}
+#sec-schedule .appointment{
+  display:block;min-width:0;padding:0;overflow:hidden;
+  border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.95);
+  box-shadow:0 7px 22px rgba(132,53,89,.045);
+  transform:none;
+}
+#sec-schedule .appointment:hover{
+  transform:none;border-color:var(--rose-line);box-shadow:0 12px 30px rgba(132,53,89,.08);
+}
+.appointment>.appointment-summary{
+  display:grid;grid-template-columns:minmax(140px,.72fr) minmax(230px,2fr) max-content max-content;
+  align-items:center;gap:16px;width:100%;padding:15px 17px;border:0;
+}
+.appointment-summary-time{min-width:0;padding:0;border:0}
+.appointment-summary-time time{font-size:17px;font-weight:800;color:var(--ink)}
+.appointment-summary-time .date{margin-top:3px;font-size:11.5px;color:var(--muted-2)}
+.appointment-summary-main{min-width:0}
+.appointment-summary-main h2{overflow:hidden;font-size:14.5px;font-weight:800;text-overflow:ellipsis;white-space:nowrap}
+.appointment-summary-service{overflow:hidden;margin-top:4px;font-size:12px;color:var(--muted);text-overflow:ellipsis;white-space:nowrap}
+.appointment-summary-status{justify-self:start;flex:none}
+.appointment-toggle{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:38px;padding:0 14px;
+  border:1px solid var(--rose-line);border-radius:999px;background:#fff7fa;color:var(--rose-deep);
+  font-size:12px;font-weight:800;white-space:nowrap;
+}
+.appointment-toggle:hover{border-color:var(--rose);background:var(--rose-mist)}
+.appointment-toggle-icon{font-size:16px;line-height:1;transform:translateY(-1px)}
+.appointment>.appointment-expanded{
+  width:100%;min-width:0;padding:18px;border-top:1px solid var(--line);
+  background:linear-gradient(145deg,#fffafb,#fff3f7);
+}
+.appointment-detail-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0;
+}
+.appointment-detail-grid>div{min-width:0;padding:12px 13px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.86)}
+.appointment-detail-grid dt{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2)}
+.appointment-detail-grid dd{margin:5px 0 0;overflow-wrap:anywhere;font-size:13px;font-weight:700;color:var(--ink-2)}
+.appointment-detail-grid a{color:var(--rose-deep);text-decoration:underline;text-decoration-color:rgba(208,108,153,.34);text-underline-offset:3px}
+.appointment-detail-reference dd{font-family:var(--mono);font-size:11px}
+.appointment-detail-note{grid-column:span 2}
+.appointment-expanded>.status-column{
+  display:flex;width:100%;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);gap:9px;
+}
+.appointment-actions-title{flex:1 1 100%;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2)}
+.appointment-expanded .reschedule-panel{width:100%;margin-top:15px}
+.appointment-skeleton>.appointment-summary{pointer-events:none}
+
+@media (max-width:1100px){
+  .appointment>.appointment-summary{grid-template-columns:minmax(115px,.65fr) minmax(170px,1.6fr) max-content max-content}
+  .appointment-summary-status{justify-self:start}
+  .appointment-toggle{grid-column:auto}
+  .appointment-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:700px){
+  .appointment>.appointment-summary{grid-template-columns:minmax(0,1fr) max-content;gap:10px;padding:14px}
+  .appointment-summary-time{grid-column:1}
+  .appointment-summary-status{grid-column:2;grid-row:1;justify-self:end}
+  .appointment-summary-main{grid-column:1/-1}
+  .appointment-toggle{grid-column:1/-1;width:100%}
+  .appointment>.appointment-expanded{padding:14px}
+  .appointment-detail-grid{grid-template-columns:minmax(0,1fr)}
+  .appointment-detail-note{grid-column:auto}
+  .appointment-expanded>.status-column{align-items:stretch}
+  .appointment-expanded>.status-column select,.appointment-expanded>.status-column button{flex:1 1 100%}
+}
+
+@media print{
+  .appointment-toggle{display:none}
+  .appointment>.appointment-expanded[hidden]{display:block!important}
+}

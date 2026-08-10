@@ -12,30 +12,48 @@
 }
 
 #datlich.mew-ticket-section > .mew-booking-ticket {
+  --mew-ticket-notch: 18px;
+  --mew-ticket-border: rgba(122, 90, 208, 0.18);
+  --mew-ticket-stroke: 0.8px;
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 320px;
+  box-sizing: border-box;
   min-height: 436px;
+  overflow: hidden;
   color: #2b2440;
   background: linear-gradient(122deg, #f7f3fc 0%, #f6f0fe 40%, #fff4f7 100%);
+  border: var(--mew-ticket-stroke) solid var(--mew-ticket-border);
+  border-radius: 0 30px 30px 0;
   box-shadow: 0 30px 60px -40px rgba(74, 58, 128, 0.5);
+  filter: drop-shadow(0 18px 22px rgba(74, 58, 128, 0.1));
   isolation: isolate;
+  -webkit-mask:
+    radial-gradient(circle at 0 0, transparent 0 var(--mew-ticket-notch), #000 calc(var(--mew-ticket-notch) + .5px)) top left / 50% 50% no-repeat,
+    radial-gradient(circle at 0 100%, transparent 0 var(--mew-ticket-notch), #000 calc(var(--mew-ticket-notch) + .5px)) bottom left / 50% 50% no-repeat,
+    linear-gradient(#000 0 0) right / 50.1% 100% no-repeat;
+  mask:
+    radial-gradient(circle at 0 0, transparent 0 var(--mew-ticket-notch), #000 calc(var(--mew-ticket-notch) + .5px)) top left / 50% 50% no-repeat,
+    radial-gradient(circle at 0 100%, transparent 0 var(--mew-ticket-notch), #000 calc(var(--mew-ticket-notch) + .5px)) bottom left / 50% 50% no-repeat,
+    linear-gradient(#000 0 0) right / 50.1% 100% no-repeat;
 }
 
-.mew-ticket-cutout {
+#datlich.mew-ticket-section > .mew-booking-ticket::after {
+  content: "";
   position: absolute;
-  z-index: 6;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #fffcf9;
+  inset: 0;
+  z-index: 7;
+  background:
+    radial-gradient(circle at 0 0,
+      transparent 0 var(--mew-ticket-notch),
+      var(--mew-ticket-border) calc(var(--mew-ticket-notch) + .4px) calc(var(--mew-ticket-notch) + 1.2px),
+      transparent calc(var(--mew-ticket-notch) + 1.6px)) top left / 50% 50% no-repeat,
+    radial-gradient(circle at 0 100%,
+      transparent 0 var(--mew-ticket-notch),
+      var(--mew-ticket-border) calc(var(--mew-ticket-notch) + .4px) calc(var(--mew-ticket-notch) + 1.2px),
+      transparent calc(var(--mew-ticket-notch) + 1.6px)) bottom left / 50% 50% no-repeat;
   pointer-events: none;
 }
-
-.mew-ticket-cutout--tl { top: -18px; left: -18px; }
-.mew-ticket-cutout--tr { top: -18px; right: -18px; }
-.mew-ticket-cutout--bl { bottom: -18px; left: -18px; }
-.mew-ticket-cutout--br { right: -18px; bottom: -18px; }
 
 .mew-ticket-main {
   display: flex;
@@ -306,22 +324,34 @@ a.mew-ticket-meta-value:visited {
   }
 
   #datlich.mew-ticket-section > .mew-booking-ticket {
+    --mew-ticket-notch: 14px;
     display: flex;
     flex-direction: column;
     min-height: 0;
     background: linear-gradient(160deg, #f7f3fc 0%, #f6f0fe 45%, #fff4f7 100%);
+    border-radius: 0 0 24px 24px;
     box-shadow: 0 24px 44px -38px rgba(74, 58, 128, 0.6);
+    -webkit-mask:
+      radial-gradient(circle at 0 0, transparent 0 var(--mew-ticket-notch), #000 calc(var(--mew-ticket-notch) + .5px)) top left / 50% 50% no-repeat,
+      radial-gradient(circle at 100% 0, transparent 0 var(--mew-ticket-notch), #000 calc(var(--mew-ticket-notch) + .5px)) top right / 50% 50% no-repeat,
+      linear-gradient(#000 0 0) bottom / 100% 50.1% no-repeat;
+    mask:
+      radial-gradient(circle at 0 0, transparent 0 var(--mew-ticket-notch), #000 calc(var(--mew-ticket-notch) + .5px)) top left / 50% 50% no-repeat,
+      radial-gradient(circle at 100% 0, transparent 0 var(--mew-ticket-notch), #000 calc(var(--mew-ticket-notch) + .5px)) top right / 50% 50% no-repeat,
+      linear-gradient(#000 0 0) bottom / 100% 50.1% no-repeat;
   }
 
-  .mew-ticket-cutout {
-    width: 28px;
-    height: 28px;
+  #datlich.mew-ticket-section > .mew-booking-ticket::after {
+    background:
+      radial-gradient(circle at 0 0,
+        transparent 0 var(--mew-ticket-notch),
+        var(--mew-ticket-border) calc(var(--mew-ticket-notch) + .4px) calc(var(--mew-ticket-notch) + 1.2px),
+        transparent calc(var(--mew-ticket-notch) + 1.6px)) top left / 50% 50% no-repeat,
+      radial-gradient(circle at 100% 0,
+        transparent 0 var(--mew-ticket-notch),
+        var(--mew-ticket-border) calc(var(--mew-ticket-notch) + .4px) calc(var(--mew-ticket-notch) + 1.2px),
+        transparent calc(var(--mew-ticket-notch) + 1.6px)) top right / 50% 50% no-repeat;
   }
-
-  .mew-ticket-cutout--tl { top: -14px; left: -14px; }
-  .mew-ticket-cutout--tr { top: -14px; right: -14px; }
-  .mew-ticket-cutout--bl { bottom: -14px; left: -14px; }
-  .mew-ticket-cutout--br { right: -14px; bottom: -14px; }
 
   .mew-ticket-main {
     display: flex;
