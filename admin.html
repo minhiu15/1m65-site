@@ -2,23 +2,20 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#FFFCF9">
   <meta name="robots" content="noindex, nofollow, noarchive">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://aomiaszicxqrctcgeoms.supabase.co; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'self'">
   <title>Quản lý lịch · 1M65 Nails</title>
-  <link rel="stylesheet" href="admin.css?v=20260808-7">
+  <link rel="stylesheet" href="admin.css?v=20260809-4">
 </head>
 <body>
   <main class="shell">
 
     <!-- ================= ĐĂNG NHẬP ================= -->
     <section id="login-view" class="login-view" aria-labelledby="login-title">
-      <div class="login-doodles" aria-hidden="true"><span>✦</span><span>✧</span><span>♡</span><span>✦</span></div>
-
       <div class="login-head">
-        <div class="sparkle" aria-hidden="true">✦</div>
-        <!-- Thay khối này bằng <img src="../assets/logo.svg" alt="1M65 Nails"> khi có logo chính thức -->
         <a class="brand-lockup" href="index.html" aria-label="Về trang chủ 1M65 Nails">
           <span class="brand-mark"><span class="one">1</span><span class="rest">M65</span></span>
           <span class="brand-tag">NAILS, EYELASHES, SHAMPOO</span>
@@ -27,7 +24,7 @@
       </div>
 
       <div class="login-card">
-        <h1 id="login-title">Chào bạn trở lại <span class="doodle" aria-hidden="true">♡</span></h1>
+        <h1 id="login-title">Chào bạn trở lại</h1>
         <p class="muted">Đăng nhập để xem lịch hẹn, tạo lịch cho khách và khóa khung giờ.</p>
         <hr class="rule">
         <form id="login-form" method="post" autocomplete="on">
@@ -62,17 +59,17 @@
         <hr class="rule">
 
         <nav class="app-nav" aria-label="Điều hướng quản lý">
-          <a href="#sec-overview"><span class="glyph" aria-hidden="true">♡</span><span class="label">Tổng quan</span></a>
-          <a href="#sec-schedule"><span class="glyph" aria-hidden="true">◷</span><span class="label">Lịch hẹn</span></a>
-          <a href="#sec-create"><span class="glyph" aria-hidden="true">✦</span><span class="label">Tạo lịch</span></a>
-          <a href="#sec-block"><span class="glyph" aria-hidden="true">▣</span><span class="label">Khóa lịch</span></a>
+          <a class="section-link" href="#sec-overview"><span class="label">Tổng quan</span></a>
+          <a class="section-link" href="#sec-schedule"><span class="label">Lịch hẹn</span></a>
+          <a class="section-link" href="#sec-create"><span class="label">Tạo lịch</span></a>
+          <a class="section-link" href="#sec-block"><span class="label">Khóa lịch</span></a>
         </nav>
 
         <div class="sidebar-spacer"></div>
 
         <div class="who">
           <div class="who-row">
-            <span class="avatar" aria-hidden="true">✦</span>
+            <span class="avatar" aria-hidden="true">AD</span>
             <p id="admin-identity" class="muted"></p>
           </div>
           <button id="logout-button" class="btn ghost" type="button">Đăng xuất</button>
@@ -84,29 +81,98 @@
           <button id="drawer-toggle-button" class="drawer-toggle" type="button" aria-controls="admin-sidebar" aria-expanded="false">
             <span aria-hidden="true">☰</span><span>Menu</span>
           </button>
-          <p class="crumb">Studio · <strong>Quản lý lịch</strong></p>
+          <p class="crumb">1M65 Admin · <strong id="topbar-section-label">Tổng quan</strong></p>
           <span class="topbar-spacer"></span>
-          <a class="btn primary compact" href="#sec-create">+ Tạo lịch</a>
+          <a class="btn primary compact section-link" href="#sec-create">Tạo lịch mới</a>
         </div>
+
+        <nav class="mobile-section-tabs" aria-label="Chuyển màn hình quản lý">
+          <a class="section-link" href="#sec-overview">Tổng quan</a>
+          <a class="section-link" href="#sec-schedule">Lịch hẹn</a>
+          <a class="section-link" href="#sec-create">Tạo lịch</a>
+          <a class="section-link" href="#sec-block">Khóa lịch</a>
+        </nav>
 
         <div class="app-body">
           <p id="dashboard-message" class="message" role="status" aria-live="polite"></p>
 
           <!-- ---- Tổng quan ---- -->
-          <section class="panel" id="sec-overview">
+          <section class="panel admin-view" id="sec-overview">
             <div class="panel-head greeting">
               <div>
-                <p class="eyebrow">Tổng quan</p>
-                <h1 id="dashboard-title">Lịch hẹn của studio</h1>
-                <p class="muted">Bốn con số dưới đây tính theo khoảng ngày đang lọc. Dữ liệu lấy trực tiếp từ hệ thống booking.</p>
+                <p class="eyebrow">Bàn điều hành hôm nay</p>
+                <h1 id="dashboard-title">Hôm nay ở 1M65</h1>
+                <p id="overview-date-label" class="muted">Lịch, tiến độ và các việc cần xử lý trong ngày.</p>
               </div>
-              <p class="note-chip"><span class="doodle" aria-hidden="true">✧</span> Trạng thái có cả chữ và ký hiệu, không chỉ dựa vào màu</p>
+              <p id="overview-next-chip" class="note-chip">Đang tải lịch tiếp theo…</p>
             </div>
             <section id="summary" class="summary" aria-label="Tổng quan lịch"></section>
+
+            <div class="overview-dashboard-grid">
+              <section class="overview-card overview-agenda" aria-labelledby="overview-agenda-title">
+                <div class="overview-card-head">
+                  <div>
+                    <p class="eyebrow">Theo giờ</p>
+                    <h2 id="overview-agenda-title">Lịch hôm nay</h2>
+                  </div>
+                  <a class="overview-text-link section-link" href="#sec-schedule">Xem toàn bộ lịch</a>
+                </div>
+                <div id="overview-timeline" class="overview-timeline" aria-live="polite"></div>
+              </section>
+
+              <aside class="overview-side" aria-label="Tiến độ và thao tác nhanh">
+                <section class="overview-card overview-progress" aria-labelledby="overview-progress-title">
+                  <div class="overview-card-head">
+                    <div>
+                      <p class="eyebrow">Trong ngày</p>
+                      <h2 id="overview-progress-title">Tiến độ hôm nay</h2>
+                    </div>
+                    <strong id="overview-progress-percent" class="overview-progress-percent">0%</strong>
+                  </div>
+                  <progress id="overview-progress-bar" max="1" value="0">0%</progress>
+                  <p id="overview-progress-label" class="overview-progress-label">Đang tải tiến độ…</p>
+                  <dl class="overview-operation-stats">
+                    <div>
+                      <dt>Thời lượng đã đặt</dt>
+                      <dd id="overview-duration">—</dd>
+                    </div>
+                    <div>
+                      <dt>Khoảng đang khóa</dt>
+                      <dd id="overview-block-count">—</dd>
+                    </div>
+                  </dl>
+                </section>
+
+                <section class="overview-card overview-quick-actions" aria-labelledby="overview-actions-title">
+                  <div class="overview-card-head">
+                    <div>
+                      <p class="eyebrow">Truy cập nhanh</p>
+                      <h2 id="overview-actions-title">Bạn muốn làm gì?</h2>
+                    </div>
+                  </div>
+                  <div class="overview-action-list">
+                    <a class="section-link primary-action" href="#sec-create"><strong>Tạo lịch cho khách</strong><span>Chọn dịch vụ, ngày và giờ</span></a>
+                    <a class="section-link" href="#sec-block"><strong>Khóa khung giờ</strong><span>Chặn lịch mới khi tiệm bận</span></a>
+                    <a class="section-link" href="#sec-schedule"><strong>Quản lý lịch hẹn</strong><span>Dời lịch hoặc cập nhật trạng thái</span></a>
+                  </div>
+                </section>
+              </aside>
+            </div>
+
+            <section class="overview-card overview-week" aria-labelledby="overview-week-title">
+              <div class="overview-card-head">
+                <div>
+                  <p class="eyebrow">Sắp tới</p>
+                  <h2 id="overview-week-title">7 ngày tới</h2>
+                </div>
+                <p class="muted">Số lịch đang hoạt động mỗi ngày</p>
+              </div>
+              <div id="overview-week-strip" class="overview-week-strip" aria-live="polite"></div>
+            </section>
           </section>
 
           <!-- ---- Lịch hẹn ---- -->
-          <section class="panel" id="sec-schedule" aria-labelledby="schedule-title">
+          <section class="panel admin-view" id="sec-schedule" aria-labelledby="schedule-title" hidden>
             <div class="panel-head">
               <div>
                 <p class="eyebrow">Lịch hẹn</p>
@@ -131,14 +197,14 @@
                   <option value="no_show">Không đến</option>
                 </select>
               </label>
-              <button id="refresh-button" class="btn primary" type="button">↻ Xem lịch</button>
+              <button id="refresh-button" class="btn primary" type="button">Xem lịch</button>
             </section>
 
             <section id="appointment-list" class="appointment-list" aria-live="polite"></section>
           </section>
 
           <!-- ---- Tạo lịch cho khách ---- -->
-          <section class="panel panel-card creator" id="sec-create" aria-labelledby="creator-title">
+          <section class="panel panel-card creator admin-view" id="sec-create" aria-labelledby="creator-title" hidden>
             <div class="section-heading">
               <div>
                 <p class="eyebrow">Khách gọi điện / nhắn tin</p>
@@ -204,7 +270,7 @@
           </section>
 
           <!-- ---- Khóa khung giờ ---- -->
-          <section class="panel blocker" id="sec-block" aria-labelledby="blocker-title">
+          <section class="panel blocker admin-view" id="sec-block" aria-labelledby="blocker-title" hidden>
             <div class="panel-head">
               <div>
                 <p class="eyebrow">Chặn lịch mới</p>
@@ -268,7 +334,7 @@
     </section>
   </main>
 
-  <script src="admin.js?v=20260808-7" defer></script>
-  <script src="admin-datepicker.js?v=20260808-7" defer></script>
+  <script src="admin.js?v=20260809-2" defer></script>
+  <script src="admin-datepicker.js?v=20260809-1" defer></script>
 </body>
 </html>

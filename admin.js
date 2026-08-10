@@ -54,6 +54,16 @@
     drawerToggleButton: document.querySelector('#drawer-toggle-button'),
     drawerCloseButton: document.querySelector('#drawer-close-button'),
     drawerScrim: document.querySelector('#drawer-scrim'),
+    topbarSectionLabel: document.querySelector('#topbar-section-label'),
+    overviewDateLabel: document.querySelector('#overview-date-label'),
+    overviewNextChip: document.querySelector('#overview-next-chip'),
+    overviewTimeline: document.querySelector('#overview-timeline'),
+    overviewProgressPercent: document.querySelector('#overview-progress-percent'),
+    overviewProgressBar: document.querySelector('#overview-progress-bar'),
+    overviewProgressLabel: document.querySelector('#overview-progress-label'),
+    overviewDuration: document.querySelector('#overview-duration'),
+    overviewBlockCount: document.querySelector('#overview-block-count'),
+    overviewWeekStrip: document.querySelector('#overview-week-strip'),
     summary: document.querySelector('#summary'),
     appointmentList: document.querySelector('#appointment-list'),
     adminBookingForm: document.querySelector('#admin-booking-form'),
@@ -77,14 +87,22 @@
     blockMessage: document.querySelector('#block-message'),
     blockList: document.querySelector('#block-list')
   };
+  const sectionLinks = [...document.querySelectorAll('a.section-link[href^="#sec-"]')];
   const navigationLinks = [...document.querySelectorAll('.app-nav a[href^="#sec-"]')];
-  const navigationSections = navigationLinks
-    .map((link) => document.querySelector(link.getAttribute('href')))
-    .filter(Boolean);
+  const navigationSections = [...document.querySelectorAll('.admin-view[id^="sec-"]')];
+  const SECTION_LABELS = {
+    '#sec-overview': 'Tổng quan',
+    '#sec-schedule': 'Lịch hẹn',
+    '#sec-create': 'Tạo lịch',
+    '#sec-block': 'Khóa lịch'
+  };
   const mobileDrawerMedia = window.matchMedia('(max-width: 900px)');
 
   let session = readSession();
   let appointments = [];
+  let overviewAppointments = [];
+  let overviewBlocks = [];
+  let overviewLoading = false;
   let blocks = [];
   let blockDayAppointments = [];
   let selectedBlockSlots = new Set();
@@ -249,30 +267,43 @@
     setDrawerOpen(false, false);
   }
 
-  function updateActiveNavigation(sectionHash) {
+  function updateActiveNavigation(sectionHash, scrollToTop = false) {
     const fallback = '#sec-overview';
-    const activeHash = navigationLinks.some((link) => link.getAttribute('href') === sectionHash)
+    const activeHash = navigationSections.some((section) => `#${section.id}` === sectionHash)
       ? sectionHash : fallback;
-    navigationLinks.forEach((link) => {
+    sectionLinks.forEach((link) => {
       if (link.getAttribute('href') === activeHash) link.setAttribute('aria-current', 'true');
       else link.removeAttribute('aria-current');
     });
+    navigationSections.forEach((section) => {
+      const active = `#${section.id}` === activeHash;
+      section.hidden = !active;
+      section.classList.toggle('is-active', active);
+      section.setAttribute('aria-hidden', String(!active));
+    });
+    if (elements.topbarSectionLabel) {
+      elements.topbarSectionLabel.textContent = SECTION_LABELS[activeHash] || SECTION_LABELS[fallback];
+    }
+    if (scrollToTop) window.scrollTo({ top: 0, behavior: 'auto' });
+    return activeHash;
+  }
+
+  function navigateToSection(sectionHash) {
+    if (window.location.hash !== sectionHash) window.history.pushState(null, '', sectionHash);
+    updateActiveNavigation(sectionHash, true);
+    setDrawerOpen(false);
+    if (sectionHash === '#sec-overview' && session) loadOverview();
   }
 
   function initializeSectionNavigation() {
-    navigationLinks.forEach((link) => link.addEventListener('click', () => {
-      updateActiveNavigation(link.getAttribute('href'));
-      setDrawerOpen(false);
+    sectionLinks.forEach((link) => link.addEventListener('click', (event) => {
+      event.preventDefault();
+      navigateToSection(link.getAttribute('href'));
     }));
-    window.addEventListener('hashchange', () => updateActiveNavigation(window.location.hash));
-    if (!('IntersectionObserver' in window)) return;
-    const observer = new IntersectionObserver((entries) => {
-      const visible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (visible?.target?.id) updateActiveNavigation(`#${visible.target.id}`);
-    }, { rootMargin: '-18% 0px -65% 0px', threshold: [0, 0.15, 0.4] });
-    navigationSections.forEach((section) => observer.observe(section));
+    const restoreSection = () => updateActiveNavigation(window.location.hash || '#sec-overview', true);
+    window.addEventListener('hashchange', restoreSection);
+    window.addEventListener('popstate', restoreSection);
+    updateActiveNavigation(window.location.hash || '#sec-overview');
   }
 
   function initializeMobileDrawer() {
@@ -374,6 +405,18 @@
       card.setAttribute('aria-hidden', 'true');
       card.append(skeletonLine('summary-number'), skeletonLine('summary-label'));
       return card;
+    }));
+    elements.overviewTimeline.replaceChildren(...Array.from({ length: 3 }, () => {
+      const row = node('div', 'overview-timeline-item overview-timeline-skeleton');
+      row.setAttribute('aria-hidden', 'true');
+      row.append(skeletonLine('short'), skeletonLine('wide'), skeletonLine('medium'));
+      return row;
+    }));
+    elements.overviewWeekStrip.replaceChildren(...Array.from({ length: 7 }, () => {
+      const day = node('div', 'overview-day overview-day-skeleton');
+      day.setAttribute('aria-hidden', 'true');
+      day.append(skeletonLine('medium'), skeletonLine('summary-number'));
+      return day;
     }));
   }
 
@@ -591,7 +634,7 @@
         setDateValue(elements.fromDate, date);
         setDateValue(elements.toDate, date);
       }
-      await loadAppointments();
+      await Promise.all([loadAppointments(), loadOverview()]);
       setMessage(elements.adminBookingMessage, `Đã tạo lịch ${reference}.`, true);
     } catch (error) {
       setMessage(elements.adminBookingMessage, errorMessage(error.message));
@@ -602,15 +645,44 @@
     }
   }
 
-  function renderSummary() {
-    const counts = appointments.reduce((result, item) => {
+  function activeOverviewAppointment(item) {
+    return item.status !== 'cancelled' && item.status !== 'no_show';
+  }
+
+  function overviewTodayAppointments() {
+    const today = dateInTimeZone();
+    return overviewAppointments.filter((item) => dateInTimeZone(new Date(item.startAt)) === today);
+  }
+
+  function formatDuration(minutes) {
+    const value = Math.max(0, Number(minutes || 0));
+    const hours = Math.floor(value / 60);
+    const remainder = value % 60;
+    if (!hours) return `${remainder} phút`;
+    if (!remainder) return `${hours} giờ`;
+    return `${hours} giờ ${remainder} phút`;
+  }
+
+  function overviewDateTitle(dateText) {
+    return new Intl.DateTimeFormat('vi-VN', {
+      timeZone: TIME_ZONE, weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'
+    }).format(new Date(`${dateText}T12:00:00+07:00`));
+  }
+
+  function renderOverviewSummary() {
+    const now = Date.now();
+    const todayAppointments = overviewTodayAppointments();
+    const counts = todayAppointments.reduce((result, item) => {
       result[item.status] = (result[item.status] || 0) + 1;
       return result;
     }, {});
+    const remaining = todayAppointments.filter((item) => activeOverviewAppointment(item)
+      && item.status !== 'completed'
+      && new Date(item.endAt).getTime() > now).length;
     const cards = [
-      ['Tổng lịch', appointments.length],
-      ['Đã xác nhận', counts.confirmed || 0],
-      ['Hoàn thành', counts.completed || 0],
+      ['Tổng lịch hôm nay', todayAppointments.length],
+      ['Đã hoàn thành', counts.completed || 0],
+      ['Còn lại trong ngày', remaining],
       ['Đã hủy / không đến', (counts.cancelled || 0) + (counts.no_show || 0)]
     ];
     elements.summary.replaceChildren(...cards.map(([label, value]) => {
@@ -618,6 +690,143 @@
       card.append(node('strong', '', String(value)), node('span', '', label));
       return card;
     }));
+  }
+
+  function nextOverviewAppointment() {
+    const now = Date.now();
+    return overviewTodayAppointments()
+      .filter((item) => item.status === 'confirmed' && new Date(item.startAt).getTime() >= now)
+      .sort((a, b) => new Date(a.startAt) - new Date(b.startAt))[0] || null;
+  }
+
+  function overviewTimelineItems() {
+    const ordered = overviewTodayAppointments().sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
+    if (ordered.length <= 6) return ordered;
+    const next = nextOverviewAppointment();
+    if (!next) return ordered.slice(-6);
+    const nextIndex = ordered.findIndex((item) => item.id === next.id);
+    const start = Math.max(0, Math.min(nextIndex - 2, ordered.length - 6));
+    return ordered.slice(start, start + 6);
+  }
+
+  function renderOverviewTimeline() {
+    const next = nextOverviewAppointment();
+    if (!overviewTodayAppointments().length) {
+      const empty = node('div', 'overview-empty');
+      empty.append(
+        node('strong', '', 'Hôm nay chưa có lịch hẹn'),
+        node('p', '', 'Bạn có thể tạo lịch mới ngay khi khách gọi hoặc nhắn tin.')
+      );
+      const action = node('button', 'btn primary compact', 'Tạo lịch cho khách');
+      action.type = 'button';
+      action.addEventListener('click', () => navigateToSection('#sec-create'));
+      empty.append(action);
+      elements.overviewTimeline.replaceChildren(empty);
+      return;
+    }
+
+    elements.overviewTimeline.replaceChildren(...overviewTimelineItems().map((item) => {
+      const start = timeParts(item.startAt);
+      const row = node('article', 'overview-timeline-item');
+      const isNext = next?.id === item.id;
+      row.classList.toggle('is-next', isNext);
+      const timing = node('div', 'overview-timeline-time');
+      timing.append(node('strong', '', start.time), node('span', '', `${item.durationMinutes} phút`));
+      const details = node('div', 'overview-timeline-details');
+      details.append(node('strong', '', item.customerName), node('span', '', item.service));
+      const status = node('span', `badge ${item.status}`, STATUS_LABELS[item.status] || item.status);
+      if (isNext) status.setAttribute('aria-label', `Lịch tiếp theo · ${STATUS_LABELS[item.status] || item.status}`);
+      row.append(timing, details, status);
+      return row;
+    }));
+  }
+
+  function renderOverviewProgress() {
+    const active = overviewTodayAppointments().filter(activeOverviewAppointment);
+    const completed = active.filter((item) => item.status === 'completed').length;
+    const progress = active.length ? completed / active.length : 0;
+    const duration = active.reduce((total, item) => total + Number(item.durationMinutes || 0), 0);
+    elements.overviewProgressBar.max = Math.max(active.length, 1);
+    elements.overviewProgressBar.value = completed;
+    elements.overviewProgressPercent.textContent = `${Math.round(progress * 100)}%`;
+    elements.overviewProgressLabel.textContent = active.length
+      ? `${completed}/${active.length} lịch hoạt động đã hoàn thành`
+      : 'Hôm nay chưa có lịch hoạt động.';
+    elements.overviewDuration.textContent = formatDuration(duration);
+    elements.overviewBlockCount.textContent = `${overviewBlocks.length} khoảng`;
+  }
+
+  function renderOverviewWeek() {
+    const today = dateInTimeZone();
+    const countByDate = overviewAppointments.reduce((result, item) => {
+      if (!activeOverviewAppointment(item)) return result;
+      const date = dateInTimeZone(new Date(item.startAt));
+      result[date] = (result[date] || 0) + 1;
+      return result;
+    }, {});
+    const days = Array.from({ length: 7 }, (_, index) => addDays(today, index));
+    elements.overviewWeekStrip.replaceChildren(...days.map((date, index) => {
+      const dateObject = new Date(`${date}T12:00:00+07:00`);
+      const card = node('article', 'overview-day');
+      if (index === 0) card.classList.add('is-today');
+      card.append(
+        node('span', 'overview-day-weekday', index === 0 ? 'Hôm nay' : new Intl.DateTimeFormat('vi-VN', {
+          timeZone: TIME_ZONE, weekday: 'short'
+        }).format(dateObject)),
+        node('strong', '', new Intl.DateTimeFormat('vi-VN', {
+          timeZone: TIME_ZONE, day: '2-digit', month: '2-digit'
+        }).format(dateObject)),
+        node('span', 'overview-day-count', `${countByDate[date] || 0} lịch`)
+      );
+      return card;
+    }));
+  }
+
+  function renderOverview() {
+    const today = dateInTimeZone();
+    const next = nextOverviewAppointment();
+    elements.overviewDateLabel.textContent = `${overviewDateTitle(today)} · Lịch, tiến độ và các việc cần xử lý trong ngày.`;
+    elements.overviewNextChip.textContent = next
+      ? `Lịch tiếp theo ${timeParts(next.startAt).time} · ${next.customerName}`
+      : 'Không còn lịch sắp tới hôm nay';
+    renderOverviewSummary();
+    renderOverviewTimeline();
+    renderOverviewProgress();
+    renderOverviewWeek();
+  }
+
+  async function loadOverview() {
+    if (!session || overviewLoading) return;
+    overviewLoading = true;
+    renderSummarySkeletons();
+    elements.overviewNextChip.textContent = 'Đang cập nhật lịch hôm nay…';
+    const today = dateInTimeZone();
+    const tomorrow = addDays(today, 1);
+    try {
+      const [appointmentData, blockData] = await Promise.all([
+        adminRequest({
+          action: 'admin_list',
+          from: `${today}T00:00:00+07:00`,
+          to: `${addDays(today, 7)}T00:00:00+07:00`,
+          status: null
+        }),
+        adminRequest({
+          action: 'admin_list_blocks',
+          from: `${today}T00:00:00+07:00`,
+          to: `${tomorrow}T00:00:00+07:00`
+        })
+      ]);
+      overviewAppointments = Array.isArray(appointmentData.appointments) ? appointmentData.appointments : [];
+      overviewBlocks = Array.isArray(blockData.blocks) ? blockData.blocks : [];
+      renderOverview();
+    } catch (error) {
+      elements.summary.replaceChildren(node('div', 'empty error-empty', 'Không tải được tổng quan hôm nay.'));
+      elements.overviewTimeline.replaceChildren(node('div', 'overview-empty', 'Vui lòng thử tải lại trang.'));
+      elements.overviewWeekStrip.replaceChildren();
+      elements.overviewNextChip.textContent = errorMessage(error.message);
+    } finally {
+      overviewLoading = false;
+    }
   }
 
   function appointmentCard(item) {
@@ -802,7 +1011,7 @@
           appointmentId: item.id,
           startAt: selectedStartAt
         });
-        await loadAppointments();
+        await Promise.all([loadAppointments(), loadOverview()]);
         setMessage(elements.dashboardMessage, `Đã dời lịch ${item.reference}.`, true);
       } catch (error) {
         setMessage(message, errorMessage(error.message));
@@ -816,7 +1025,6 @@
   }
 
   function renderAppointments() {
-    renderSummary();
     if (!appointments.length) {
       elements.appointmentList.replaceChildren(node('div', 'empty', 'Không có lịch hẹn trong khoảng ngày này.'));
       return;
@@ -835,7 +1043,6 @@
     elements.refreshButton.textContent = 'Đang tải…';
     elements.appointmentList.setAttribute('aria-busy', 'true');
     renderAppointmentSkeletons();
-    if (!appointments.length) renderSummarySkeletons();
     setMessage(elements.dashboardMessage, 'Đang tải lịch…');
     try {
       const data = await adminRequest({
@@ -853,12 +1060,11 @@
         showLogin(errorMessage(error.message));
         return;
       }
-      renderSummary();
       elements.appointmentList.replaceChildren(node('div', 'empty error-empty', 'Không tải được lịch hẹn. Vui lòng thử lại.'));
       setMessage(elements.dashboardMessage, errorMessage(error.message));
     } finally {
       elements.refreshButton.disabled = false;
-      elements.refreshButton.textContent = '↻ Xem lịch';
+      elements.refreshButton.textContent = 'Xem lịch';
       elements.appointmentList.removeAttribute('aria-busy');
     }
   }
@@ -878,7 +1084,7 @@
         status
       });
       setMessage(elements.dashboardMessage, `Đã cập nhật ${item.reference}.`, true);
-      await loadAppointments();
+      await Promise.all([loadAppointments(), loadOverview()]);
     } catch (error) {
       setMessage(elements.dashboardMessage, errorMessage(error.message));
       button.disabled = false;
@@ -905,7 +1111,7 @@
         status
       });
       setMessage(elements.dashboardMessage, successMessage, true);
-      await loadAppointments();
+      await Promise.all([loadAppointments(), loadOverview()]);
     } catch (error) {
       setMessage(elements.dashboardMessage, errorMessage(error.message));
       button.disabled = false;
@@ -1105,7 +1311,7 @@
       blockWholeDay = false;
       elements.blockReason.value = '';
       updateBlockSelection();
-      await loadBlocks();
+      await Promise.all([loadBlocks(), loadOverview()]);
       setMessage(elements.blockMessage, 'Đã khóa lịch. Website sẽ loại các giờ bị ảnh hưởng.', true);
     } catch (error) {
       setMessage(elements.blockMessage, errorMessage(error.message));
@@ -1118,7 +1324,7 @@
     button.disabled = true;
     try {
       await adminRequest({ action: 'admin_delete_block', blockId: block.id });
-      await loadBlocks();
+      await Promise.all([loadBlocks(), loadOverview()]);
       setMessage(elements.blockMessage, 'Đã mở khóa lịch.', true);
     } catch (error) {
       setMessage(elements.blockMessage, errorMessage(error.message));
@@ -1140,7 +1346,7 @@
       });
       storeSession(data.session);
       showDashboard();
-      await Promise.all([loadAppointments(), loadBlocks(), loadAdminBookingConfig()]);
+      await Promise.all([loadOverview(), loadAppointments(), loadBlocks(), loadAdminBookingConfig()]);
     } catch (error) {
       storeSession(null);
       setMessage(elements.loginMessage, errorMessage(error.message));
@@ -1191,7 +1397,7 @@
 
   if (session) {
     showDashboard();
-    Promise.all([loadAppointments(), loadBlocks(), loadAdminBookingConfig()]);
+    Promise.all([loadOverview(), loadAppointments(), loadBlocks(), loadAdminBookingConfig()]);
   } else {
     showLogin();
   }
