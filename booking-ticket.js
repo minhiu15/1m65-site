@@ -60,8 +60,8 @@
 
     const meta = make("div", "mew-ticket-meta");
     meta.append(metaItem("Giờ mở cửa", "9:00 – 18:00", "cả tuần, kể cả chủ nhật"));
-    meta.append(metaItem("Tiệm ở", "Thủ Đức, TP.HCM", "có chỗ để xe ngay trước tiệm"));
-    meta.append(metaItem("Gọi hoặc Zalo", "028 3822 0100", "trả lời trong 5 phút", "tel:+842838220100"));
+    meta.append(metaItem("Tiệm ở", "Đại Phước, Đồng Nai", "có chỗ để xe ngay trước tiệm"));
+    meta.append(metaItem("Gọi hoặc Zalo", "0946 712 911", "trả lời trong 5 phút", "tel:0946712911"));
     main.append(meta);
 
     const stub = make("div", "mew-ticket-stub");
@@ -76,8 +76,8 @@
 
     const mobileInfo = make("div", "mew-ticket-mobile-info");
     mobileInfo.append(make("span", "", "9:00 – 18:00 cả tuần"));
-    const phone = make("a", "", "028 3822 0100");
-    phone.href = "tel:+842838220100";
+    const phone = make("a", "", "0946 712 911");
+    phone.href = "tel:0946712911";
     mobileInfo.append(phone);
     main.append(mobileInfo);
 

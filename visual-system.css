@@ -687,18 +687,34 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
   background-image: linear-gradient(145deg, rgba(244,184,207,.14), rgba(255,255,255,.9) 56%, rgba(223,238,250,.12)) !important;
 }
 
+#vechungminh .nhu-about-gallery > .nhu-about-photo-card.nhu-editorial--has-image,
+#vechungminh .nhu-about-photo-card.nhu-editorial--has-image {
+  overflow: hidden !important;
+  border: 1px solid rgba(122,90,208,.1) !important;
+  background: #f8f5f2 !important;
+  box-shadow:
+    0 26px 48px -20px rgba(69,50,103,.38),
+    0 10px 22px -10px rgba(69,50,103,.26) !important;
+}
+
+#vechungminh .nhu-about-photo--technician {
+  object-fit: cover !important;
+  object-position: 50% 0% !important;
+  transform: scale(1.09);
+}
+
 @media (min-width: 768px) {
   #vechungminh .nhu-about-gallery > .nhu-editorial:nth-child(1) {
     transform: translateY(-10px) rotate(-1.5deg) scale(1.085) !important;
     transform-origin: 50% 50%;
     position: relative;
-    z-index: 1;
+    z-index: 3;
   }
   #vechungminh .nhu-about-gallery > .nhu-editorial:nth-child(2) {
     transform: translateY(-10px) rotate(1.5deg) scale(1.085) !important;
     transform-origin: 50% 50%;
     position: relative;
-    z-index: 2;
+    z-index: 1;
     margin-left: -18px !important;
   }
   #vechungminh .nhu-about-gallery > .nhu-editorial:nth-child(1):hover {
@@ -1540,7 +1556,7 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>section:first-child{padding-top:2px}
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>section+section{border-top:1px dashed rgba(190,150,216,.46)}
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__column h2,.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map h2{min-height:30px;margin:0 0 14px;font-size:16px}
-  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand{min-height:305px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand{min-height:355px}
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo strong{font-size:35px}
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo small{font-size:9.5px}
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo-paw{width:40px;height:40px}
@@ -1612,10 +1628,10 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-cat{right:calc(50% - 152px)}
 }
 
-/* Equal desktop footer columns and a shared left edge for the map heading. */
+/* Desktop footer columns leave more room for the approved map. */
 @media (min-width:1051px){
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main{
-    grid-template-columns:repeat(4,minmax(0,1fr));
+    grid-template-columns:1.04fr .92fr 1.08fr 1.32fr;
   }
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>section,
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>section:first-child,
@@ -1669,10 +1685,10 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
 }
 .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-viewport iframe{
   position:absolute;
-  top:-48px;
+  top:-88px;
   left:0;
   width:100%;
-  height:calc(100% + 96px);
+  height:calc(100% + 176px);
   margin:0;
   border-radius:0;
 }
@@ -1700,9 +1716,9 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
   .nhu-footer-crisp__contact-hours>.nhu-footer-crisp__icon{width:21px;height:21px}
   .nhu-footer-crisp__contact-hours strong{font-size:15px}
   .nhu-footer-crisp__contact-hours small{font-size:11.5px}
-  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-frame{width:min(100%,318px)}
-  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map h2{width:min(100%,318px);margin:0 auto 8px}
-  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-cat{right:calc(50% - 166px)}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-frame{width:min(100%,356px);aspect-ratio:1.12/1}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map h2{width:min(100%,356px);margin:0 auto 8px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-cat{right:calc(50% - 185px)}
   .nhu-footer-crisp__separator{height:14px}
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__bottom{min-height:40px;font-size:10.5px}
   .nhu-footer-crisp__thanks{font-size:16px}
@@ -1829,7 +1845,251 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
   .nhu-footer-crisp__thanks-flourish{width:70px;height:18px;translate:-5px 1px}
 }
 @media (min-width:1051px){
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-cat{
+    right:calc(50% - 185px);
+  }
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__separator{
     margin-top:40px;
   }
+}
+/* Footer asset sheet: exact doodle icons and placements from the approved reference. */
+.nhu-footer-asset{
+  display:block;
+  flex:none;
+  background-color:transparent;
+  background-image:url("./footer-doodle-asset-sheet.png?v=20260810footer-assets1")!important;
+  background-repeat:no-repeat;
+  filter:none;
+  pointer-events:none;
+}
+.nhu-footer-asset--logo-paw{background-size:601.905% 601.905%;background-position:3.321% 4.269%}
+.nhu-footer-asset--heading-paw{background-size:902.857% 902.857%;background-position:22.687% 7.562%}
+.nhu-footer-asset--phone{background-size:871.724% 871.724%;background-position:46.023% 7.149%}
+.nhu-footer-asset--instagram{background-size:871.724% 871.724%;background-position:60.322% 7.149%}
+.nhu-footer-asset--zalo{background-size:871.724% 871.724%;background-position:74.620% 7.149%}
+.nhu-footer-asset--location{background-size:1090.435% 964.615%;background-position:84.724% 8.007%}
+.nhu-footer-asset--clock{background-size:871.724% 871.724%;background-position:96.068% 7.149%}
+.nhu-footer-asset--social-instagram{background-size:766.061% 766.061%;background-position:3.640% 22.293%}
+.nhu-footer-asset--social-facebook{background-size:766.061% 766.061%;background-position:17.288% 22.293%}
+.nhu-footer-asset--social-tiktok{background-size:766.061% 766.061%;background-position:30.937% 22.293%}
+.nhu-footer-asset--social-location{background-size:766.061% 766.061%;background-position:44.586% 22.293%}
+.nhu-footer-asset--polish{background-size:702.222% 702.222%;background-position:2.768% 37.362%}
+.nhu-footer-asset--heart{background-size:836% 836%;background-position:18.569% 38.043%}
+.nhu-footer-asset--cat{background-size:702.222% 702.222%;background-position:32.749% 37.362%}
+.nhu-footer-asset--bow{background-size:702.222% 702.222%;background-position:47.048% 37.362%}
+.nhu-footer-asset--flower{background-size:702.222% 702.222%;background-position:60.886% 37.362%}
+.nhu-footer-asset--bubbles{background-size:702.222% 702.222%;background-position:76.107% 37.362%}
+.nhu-footer-asset--hearts{background-size:597.143% 836%;background-position:98.659% 22.192%}
+.nhu-footer-asset--map-heart{background-size:1045% 836%;background-position:88.624% 22.192%}
+.nhu-footer-asset--sparkle{background-size:1404.444% 1053.333%;background-position:71.550% 21.853%}
+.nhu-footer-asset--map-pin{background-size:696.667% 627%;background-position:2.793% 54.08%}
+.nhu-footer-asset--plane{background-size:902.857% 902.857%;background-position:18.683% 51.157%}
+.nhu-footer-asset--button-heart{background-size:871.724% 871.724%;background-position:31.278% 51.832%}
+.nhu-footer-asset--zoom{background-size:790.000% 601.905%;background-position:44.384% 53.131%}
+.nhu-footer-asset--brand-scene{
+  background-image:url("./footer-brand-mascot.png?v=20260810footer-brand1")!important;
+  background-size:131% 171%;
+  background-position:57% 59%;
+}
+.nhu-footer-asset--map-scene{background-size:263.333% 371.765%;background-position:92.474% 79.004%}
+.nhu-footer-asset--bottom-right{background-size:488.031% 972.308%;background-position:100% 94.797%}
+
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo{gap:12px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo-paw{width:45px;height:45px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo-paw .nhu-footer-asset{width:45px;height:45px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__column h2>.nhu-footer-asset,
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map h2>.nhu-footer-asset{width:26px;height:26px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__socials a{
+  overflow:visible;
+  border:0;
+  background:transparent;
+  box-shadow:none;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__socials .nhu-footer-asset{width:100%;height:100%}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__service-icon{
+  width:30px;
+  height:30px;
+  background:transparent!important;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__service-icon .nhu-footer-asset{width:27px;height:27px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact>a>.nhu-footer-asset,
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact-hours>.nhu-footer-asset{width:28px;height:28px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand>p>.nhu-footer-asset{
+  display:inline-block;
+  width:17px;
+  height:17px;
+  margin-left:2px;
+  vertical-align:-4px;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-art{
+  width:300px;
+  height:205px;
+  left:calc(50% + 8px);
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact-hearts{
+  right:auto;
+  left:44%;
+  bottom:17px;
+  width:60px;
+  height:43px;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background-color:transparent;
+  box-shadow:none;
+  opacity:1;
+  rotate:0deg;
+  background-size:597.143% 836%!important;
+  background-position:98.659% 22.192%!important;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-heart{
+  right:10px;
+  top:-8px;
+  width:43px;
+  height:54px;
+  opacity:1;
+  rotate:0deg;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-pin{
+  position:absolute;
+  z-index:5;
+  left:50%;
+  top:50%;
+  width:58px;
+  height:65px;
+  translate:-50% -100%;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__column h2,
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map h2{
+  gap:0;
+  color:#171419!important;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact>a>.nhu-footer-asset--location{
+  width:25px;
+  height:28px;
+}
+@media (min-width:768px){
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-art{
+    left:calc(50% + 30px);
+    width:270px;
+    height:190px;
+  }
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-star{
+  z-index:8;
+  top:auto;
+  right:auto;
+  bottom:-11px;
+  left:58%;
+  width:25px;
+  height:33px;
+  opacity:1;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-controls{
+  width:54px;
+  height:72px;
+  grid-template-rows:repeat(2,minmax(0,1fr));
+  overflow:visible;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-controls>.nhu-footer-asset{
+  position:absolute;
+  z-index:0;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-controls button{
+  position:relative;
+  z-index:1;
+  width:100%;
+  height:auto;
+  border:0!important;
+  background:transparent!important;
+  color:transparent;
+  box-shadow:none;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-link{
+  top:auto;
+  bottom:24px;
+  left:50%;
+  translate:-50% 0;
+  gap:4px;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-link>.nhu-footer-asset{
+  width:19px;
+  height:19px;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-cat{
+  width:150px;
+  height:106px;
+}
+.nhu-footer-crisp__map-cat-heart{display:none!important}
+.nhu-footer-crisp__separator-mark>.nhu-footer-asset{
+  position:static;
+  width:27px;
+  height:27px;
+  translate:0;
+  background-color:transparent;
+  background-size:902.857% 902.857%!important;
+  background-position:22.687% 7.562%!important;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__copyright{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__copyright>.nhu-footer-asset{width:17px;height:17px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__thanks>.nhu-footer-asset--bottom-right{
+  width:166px;
+  height:65px;
+  margin:-18px 140px -17px -8px;
+}
+.nhu-footer-crisp__bottom::before{content:none}
+
+@media (max-width:767px){
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo{gap:10px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo-paw,
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo-paw .nhu-footer-asset{width:40px;height:40px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-art{width:300px;height:205px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact-hearts{right:auto;left:52%;bottom:10px;width:52px;height:37px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-heart{right:7px;top:4px;width:45px;height:50px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-pin{width:48px;height:59px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-controls{width:52px;height:69px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-cat{
+    right:calc(50% - 148px);
+    bottom:-2px;
+    width:112px;
+    height:79px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__thanks>.nhu-footer-asset--bottom-right{
+    width:110px;
+    height:43px;
+    margin:-7px auto -11px;
+    translate:-18px 0;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__thanks{
+    align-self:stretch;
+    flex-direction:column;
+    gap:0;
+  }
+}
+
+/* Center the footer brand mascot and feather its floor shadow into the panel. */
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-art{
+  left:50%;
+  width:248px;
+  height:176px;
+  background-position:50% 59%;
+  -webkit-mask-image:radial-gradient(ellipse 70% 59% at 50% 48%,#000 0 76%,rgba(0,0,0,.86) 84%,rgba(0,0,0,.34) 93%,transparent 100%);
+  mask-image:radial-gradient(ellipse 70% 59% at 50% 48%,#000 0 76%,rgba(0,0,0,.86) 84%,rgba(0,0,0,.34) 93%,transparent 100%);
+}
+@media (max-width:1050px) and (min-width:768px){
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-art{left:50%;width:242px;height:172px}
+}
+@media (max-width:767px){
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-art{left:50%;width:270px;height:186px}
 }
