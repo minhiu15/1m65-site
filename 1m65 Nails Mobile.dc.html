@@ -6,7 +6,7 @@
 <script src="./support.js"></script>
 <script src="./turnstile-config.js?v=20260807a"></script>
 <script src="./turnstile-booking.js?v=20260807a"></script>
-<link rel="stylesheet" href="./visual-system.css?v=20260811mapanchor1">
+<link rel="stylesheet" href="./visual-system.css?v=20260811mobileabout41">
 <link rel="stylesheet" href="./rose-theme.css?v=20260810rose7">
 </head>
 <body>
@@ -1329,7 +1329,7 @@ class Component extends DCLogic {
   loadVisualSystem() {
     if (window.__nhuBundleLoaded || document.querySelector('script[data-nhu-visual-loader]')) return;
     const script = document.createElement('script');
-    script.src = './visual-system.js?v=20260811mapoutline1';
+    script.src = './visual-system.js?v=20260811mobileabout41';
     script.dataset.nhuVisualLoader = '1';
     document.head.appendChild(script);
   }

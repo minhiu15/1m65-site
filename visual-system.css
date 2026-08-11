@@ -1,3 +1,5 @@
+@import url("./leaflet.css");
+
 :root {
   --nhu-ink: #393244;
   --nhu-cream: #fffaf5;
@@ -1623,7 +1625,7 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
 @media (max-width:767px){
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__service:last-child{grid-column:auto}
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-frame{width:min(100%,292px)}
-  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-link{top:18px;left:18px;min-height:36px;font-size:10.5px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-link{top:18px;left:26px;min-height:36px;font-size:10.5px}
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-controls{top:18px;right:18px}
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-cat{right:calc(50% - 152px)}
 }
@@ -1895,6 +1897,14 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
 .nhu-footer-asset--bottom-right{background-size:488.031% 972.308%;background-position:100% 94.797%}
 
 .nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo{gap:12px}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo-paw{display:none}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo strong{color:#2f2d33}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__service-icon>.nhu-footer-asset,
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact>a>.nhu-footer-asset,
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact-hours>.nhu-footer-asset,
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__socials .nhu-footer-asset{
+  filter:hue-rotate(54deg) saturate(.82) brightness(1.04);
+}
 .nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo-paw{width:45px;height:45px}
 .nhu-footer-crisp__panel--reference .nhu-footer-crisp__logo-paw .nhu-footer-asset{width:45px;height:45px}
 .nhu-footer-crisp__panel--reference .nhu-footer-crisp__column h2>.nhu-footer-asset,
@@ -1979,7 +1989,7 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
   z-index:8;
   top:auto;
   right:auto;
-  bottom:-11px;
+  bottom:2px;
   left:58%;
   width:25px;
   height:33px;
@@ -2020,8 +2030,8 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
   gap:4px;
 }
 .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-link>.nhu-footer-asset{
-  width:19px;
-  height:19px;
+  width:23px;
+  height:23px;
 }
 .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-cat{
   width:150px;
@@ -2092,4 +2102,454 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
 }
 @media (max-width:767px){
   .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-art{left:50%;width:270px;height:186px}
+}
+/* Keep the custom salon marker attached to its geographic coordinate while panning. */
+.nhu-footer-crisp__map-viewport{
+  z-index:1;
+}
+.nhu-footer-crisp__map-live{
+  width:100%;
+  height:100%;
+  background:#f7f2fb;
+  cursor:grab;
+}
+.nhu-footer-crisp__map-live:active{
+  cursor:grabbing;
+}
+.nhu-footer-crisp__map-live .leaflet-tile-pane{
+  filter:saturate(.68) contrast(.9) brightness(1.08) hue-rotate(330deg);
+}
+.nhu-footer-crisp__geo-marker{
+  border:0!important;
+  background:transparent!important;
+  pointer-events:none!important;
+}
+.nhu-footer-crisp__geo-marker .nhu-footer-crisp__map-pin{
+  position:static!important;
+  display:block;
+  left:auto!important;
+  top:auto!important;
+  width:100%!important;
+  height:100%!important;
+  translate:none!important;
+}
+/* Mobile contact and map share one compact row. */
+@media (max-width:767px){
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    column-gap:0;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand,
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__services{
+    grid-column:1/-1;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact{
+    grid-column:1;
+    padding:20px 12px 22px 4px!important;
+    border-top:1px dashed rgba(190,150,216,.46);
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>.nhu-footer-crisp__map{
+    grid-column:2;
+    min-width:0;
+    padding:20px 4px 22px 12px;
+    border-top:1px dashed rgba(190,150,216,.46);
+    border-left:1px dashed rgba(190,150,216,.46)!important;
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:auto auto;
+    align-content:start;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__column h2,
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map h2{
+    min-height:24px;
+    margin:0 0 10px;
+    font-size:14px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact>a{
+    gap:8px;
+    min-height:38px;
+    font-size:11px;
+    line-height:1.35;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact>a>.nhu-footer-crisp__icon,
+  .nhu-footer-crisp__contact-hours>.nhu-footer-crisp__icon{
+    width:19px;
+    height:19px;
+  }
+  .nhu-footer-crisp__contact-hours{
+    gap:8px;
+    margin-top:8px!important;
+  }
+  .nhu-footer-crisp__contact-hours strong{font-size:13px}
+  .nhu-footer-crisp__contact-hours small{font-size:10px}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact-hearts{
+    right:2px;
+    left:auto;
+    bottom:8px;
+    width:35px;
+    height:25px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map h2{
+    grid-column:1;
+    grid-row:1;
+    width:100%;
+    margin-left:0;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-frame{
+    grid-column:1;
+    grid-row:2;
+    width:100%;
+    max-width:none;
+    overflow:visible!important;
+    clip-path:none;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-link{
+    top:18px;
+    left:26px;
+    width:32px;
+    min-width:32px;
+    height:32px;
+    min-height:32px;
+    padding:0;
+    gap:0;
+    overflow:hidden;
+    border-radius:50%;
+    color:transparent!important;
+    font-size:0;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-link>.nhu-footer-asset--plane{
+    display:block;
+    width:24px;
+    height:24px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-link>.nhu-footer-asset--button-heart{
+    display:none;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-controls{
+    top:14px;
+    right:14px;
+    width:34px;
+    height:54px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-controls>.nhu-footer-asset{display:none}
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-controls button{
+    width:34px;
+    height:27px;
+    font-size:17px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-heart{
+    right:2px;
+    top:3px;
+    width:31px;
+    height:35px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-cat{
+    position:relative;
+    grid-column:1;
+    grid-row:2;
+    align-self:end;
+    justify-self:end;
+    right:auto;
+    bottom:auto;
+    width:78px;
+    height:58px;
+    translate:8px 10px;
+  }
+}
+
+/* Use the hand-drawn heart flourish from the asset sheet and pin it to the map corner. */
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-heart{
+  width:56px;
+  height:43px;
+  overflow:visible;
+  background:none!important;
+  rotate:0deg;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-heart-body{
+  fill:#ffdbe8!important;
+  fill-opacity:.88;
+  stroke:#f087b3!important;
+  stroke-width:2.4!important;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  vector-effect:non-scaling-stroke;
+}
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-heart-tail{
+  fill:none!important;
+  stroke:#f087b3!important;
+  stroke-width:2.4!important;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  vector-effect:non-scaling-stroke;
+}
+@media (min-width:1051px){
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-heart{
+    position:relative;
+    z-index:8;
+    grid-column:1;
+    grid-row:2;
+    align-self:start;
+    justify-self:end;
+    top:auto;
+    right:auto;
+    translate:9px -13px;
+  }
+}
+@media (max-width:767px){
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-heart{
+    position:relative;
+    z-index:8;
+    grid-column:1;
+    grid-row:2;
+    align-self:start;
+    justify-self:end;
+    top:auto;
+    right:auto;
+    width:46px;
+    height:36px;
+    translate:15px -19px;
+  }
+}
+
+/* Give the map mascot sprite enough transparent breathing room for its sparkle. */
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-cat{
+  width:160px;
+  height:112px;
+}
+.nhu-footer-asset--map-scene{
+  background-size:246.875% 351.786%!important;
+  background-position:92.34% 80.7%!important;
+}
+@media (max-width:767px){
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-cat{
+    width:100px;
+    height:76px;
+    translate:20px 25px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-star{
+    bottom:2px;
+    width:14px;
+    height:18px;
+  }
+  .nhu-footer-asset--map-scene{
+    background-size:244.5% 336.9%!important;
+    background-position:92.8% 82.2%!important;
+  }
+}
+/* Final desktop footer proportions and right-aligned thank-you lockup. */
+@media (min-width:1051px){
+  .nhu-footer-crisp__panel--reference{
+    padding-top:28px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main{
+    grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.32fr);
+    column-gap:0;
+    min-height:240px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>section,
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>section:first-child,
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__main>.nhu-footer-crisp__map{
+    padding-right:24px;
+    padding-left:24px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-scene{
+    bottom:0;
+    width:190px;
+    height:135px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__service-list{
+    gap:2px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__service{
+    min-height:31px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact>a{
+    min-height:36px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__contact-hours{
+    margin-top:4px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-scene::after{
+    content:"";
+    position:absolute;
+    z-index:0;
+    right:10%;
+    bottom:5px;
+    left:10%;
+    height:14px;
+    border-radius:50%;
+    background:radial-gradient(ellipse at center,rgba(110,73,118,.14) 0,rgba(110,73,118,.07) 42%,transparent 76%);
+    filter:blur(4px);
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-art{
+    z-index:1;
+    left:50%;
+    bottom:-6px;
+    width:190px;
+    height:135px;
+    background-size:110% auto!important;
+    background-position:50% 60%;
+    -webkit-mask-image:linear-gradient(to bottom,#000 0 88%,rgba(0,0,0,.92) 92%,rgba(0,0,0,.48) 97%,transparent 100%);
+    mask-image:linear-gradient(to bottom,#000 0 88%,rgba(0,0,0,.92) 92%,rgba(0,0,0,.48) 97%,transparent 100%);
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-frame{
+    grid-column:1;
+    grid-row:2;
+    width:100%;
+    max-width:none;
+    aspect-ratio:1.3/1;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map{
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:auto auto;
+    align-content:start;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map h2{
+    grid-column:1;
+    grid-row:1;
+    width:100%;
+    max-width:none;
+    margin-right:0;
+    margin-left:0;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-link{
+    top:18px;
+    right:auto;
+    bottom:auto;
+    left:18px;
+    translate:0;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__map-cat{
+    position:relative;
+    grid-column:1;
+    grid-row:2;
+    align-self:end;
+    justify-self:end;
+    right:auto;
+    bottom:auto;
+    translate:18px 38px;
+  }
+  .nhu-footer-crisp__separator{
+    height:12px;
+    margin-top:16px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__bottom{
+    position:relative;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;
+    justify-content:flex-start;
+    min-height:42px;
+    padding:0 0 2px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__thanks{
+    position:relative;
+    top:auto;
+    left:auto;
+    grid-column:2;
+    grid-row:1;
+    align-self:center;
+    justify-content:flex-end;
+    justify-self:end;
+    gap:3px;
+    margin:0;
+    overflow:visible;
+    font-size:13px;
+    color:#df82aa!important;
+    white-space:nowrap;
+    translate:0;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__copyright{
+    grid-column:1;
+    grid-row:1;
+    justify-self:start;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__thanks>.nhu-footer-asset--bottom-right{
+    display:block;
+    width:66px;
+    height:26px;
+    margin:0 -2px 0 0;
+    translate:0;
+  }
+}
+
+/* Mobile footer brand: keep Nhu Nhi beside the copy and clear of the divider. */
+@media (max-width:767px){
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__thanks{
+    align-items:center;
+    justify-content:center;
+    color:#df82aa!important;
+    text-align:center;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand{
+    min-height:245px;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand>p{
+    max-width:56%;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-scene{
+    top:50px;
+    right:-2px;
+    bottom:auto;
+    left:auto;
+    width:clamp(148px,42vw,190px);
+    height:clamp(105px,30vw,135px);
+    translate:0;
+    overflow:visible;
+    clip-path:none;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__brand-art{
+    top:auto;
+    bottom:0;
+    left:50%;
+    width:100%;
+    height:100%;
+    translate:-50% 0;
+    background-size:110% auto!important;
+    background-position:50% 60%;
+    -webkit-mask-image:linear-gradient(to bottom,#000 0 88%,rgba(0,0,0,.92) 92%,rgba(0,0,0,.48) 97%,transparent 100%);
+    mask-image:linear-gradient(to bottom,#000 0 88%,rgba(0,0,0,.92) 92%,rgba(0,0,0,.48) 97%,transparent 100%);
+  }
+}
+
+/* Mobile about photos: equal cards, opened like a small two-card fan. */
+@media (max-width:767px){
+  #vechungminh .nhu-about-photo-card{
+    flex:1 1 0!important;
+    min-width:0;
+    margin-top:0!important;
+    aspect-ratio:4 / 5!important;
+    transform-origin:50% 88%;
+  }
+  #vechungminh .nhu-about-photo-card[data-about-photo="salon"]{
+    z-index:2;
+    transform:translateX(4px) rotate(-2.2deg)!important;
+  }
+  #vechungminh .nhu-about-photo-card[data-about-photo="technician"]{
+    z-index:1;
+    transform:translateX(-4px) rotate(2.2deg)!important;
+  }
+}
+
+.nhu-footer-crisp__panel--reference .nhu-footer-crisp__thanks>.nhu-footer-asset--bottom-right{
+  filter:hue-rotate(38deg) saturate(1.12) brightness(1.04);
+}
+
+/* Keep the mobile thank-you lockup compact and optically centered. */
+@media (max-width:767px){
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__thanks{
+    width:100%;
+    align-self:center;
+    justify-self:center;
+    margin-inline:auto;
+    font-size:13px;
+    text-align:center;
+  }
+  .nhu-footer-crisp__panel--reference .nhu-footer-crisp__thanks>.nhu-footer-asset--bottom-right{
+    width:82px;
+    height:32px;
+    margin:-5px auto -8px;
+    translate:0;
+  }
 }
