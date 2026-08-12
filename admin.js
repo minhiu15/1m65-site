@@ -186,6 +186,7 @@
       invalid_service_selection: 'Vui lòng chọn ít nhất một dịch vụ.',
       too_many_services: 'Mỗi lịch được chọn tối đa 8 dịch vụ.',
       service_not_found: 'Một dịch vụ không còn hoạt động. Vui lòng chọn lại.',
+      invalid_original_price: 'Giá gốc phải là số nguyên không âm.',
       invalid_discount_percent: 'Phần trăm giảm giá phải là số nguyên từ 0 đến 100.',
       service_selection_too_long: 'Tổng thời lượng dịch vụ quá dài.',
       request_failed: 'Không thể kết nối máy chủ. Vui lòng thử lại.'
@@ -358,6 +359,12 @@
     const number = Number(value);
     if (!Number.isFinite(number)) return 0;
     return Math.min(100, Math.max(0, Math.round(number)));
+  }
+
+  function normalizeOriginalPriceInput(value) {
+    const number = Number(value);
+    if (!Number.isFinite(number)) return 0;
+    return Math.min(2_000_000_000, Math.max(0, Math.round(number)));
   }
 
   function timeParts(value) {
@@ -552,12 +559,15 @@
       return;
     }
     elements.discountServiceList.replaceChildren(...visibleServices.map((service) => {
-      const originalPrice = serviceOriginalPrice(service);
+      const savedOriginalPrice = serviceOriginalPrice(service);
       const savedPercent = normalizeDiscountInput(service.discountPercent);
-      const draftPercent = discountDrafts.has(service.id)
-        ? discountDrafts.get(service.id) : savedPercent;
-      const previewPrice = discountedPrice(originalPrice, draftPercent);
-      const changed = draftPercent !== savedPercent;
+      const draft = discountDrafts.get(service.id) || {};
+      const draftOriginalPrice = draft.originalPrice == null
+        ? savedOriginalPrice : normalizeOriginalPriceInput(draft.originalPrice);
+      const draftPercent = draft.discountPercent == null
+        ? savedPercent : normalizeDiscountInput(draft.discountPercent);
+      const previewPrice = discountedPrice(draftOriginalPrice, draftPercent);
+      const changed = draftPercent !== savedPercent || draftOriginalPrice !== savedOriginalPrice;
       const saving = discountSavingIds.has(service.id);
       const card = node('article', 'discount-service-card');
       card.classList.toggle('has-active-sale', savedPercent > 0);
@@ -566,6 +576,22 @@
       identity.append(node('strong', '', service.name));
       identity.append(node('span', '', `${service.durationMinutes} phút`));
       if (savedPercent > 0) identity.append(node('span', 'discount-active-badge', `Đang giảm ${savedPercent}%`));
+
+      const pricingControls = node('div', 'discount-pricing-controls');
+      const priceControl = node('label', 'discount-input-label discount-price-label');
+      priceControl.append(node('span', '', 'Giá gốc'));
+      const priceShell = node('span', 'discount-price-input-shell');
+      const priceInput = node('input', 'discount-original-input');
+      priceInput.type = 'number';
+      priceInput.min = '0';
+      priceInput.max = '2000000000';
+      priceInput.step = '1000';
+      priceInput.inputMode = 'numeric';
+      priceInput.value = String(draftOriginalPrice);
+      priceInput.setAttribute('aria-label', `Giá gốc của ${service.name}`);
+      priceInput.disabled = saving;
+      priceShell.append(priceInput, node('b', '', 'đ'));
+      priceControl.append(priceShell);
 
       const control = node('label', 'discount-input-label');
       control.append(node('span', '', 'Giảm giá'));
@@ -581,48 +607,58 @@
       input.disabled = saving;
       inputShell.append(input, node('b', '', '%'));
       control.append(inputShell);
+      pricingControls.append(priceControl, control);
 
       const preview = node('div', 'discount-price-preview');
       const previewLabel = node('span', 'discount-preview-label', draftPercent > 0 ? 'Giá sau giảm' : 'Giá hiện tại');
       const previewValue = node('strong', 'discount-preview-price', currency(previewPrice));
-      const originalValue = node('span', `discount-original-price${draftPercent > 0 ? ' is-crossed' : ''}`, `Giá gốc ${currency(originalPrice)}`);
+      const originalValue = node('span', `discount-original-price${draftPercent > 0 ? ' is-crossed' : ''}`, `Giá gốc ${currency(draftOriginalPrice)}`);
       preview.append(previewLabel, previewValue, originalValue);
 
       const confirmButton = node('button', 'btn primary discount-confirm', saving ? 'Đang lưu…' : 'Xác nhận');
       confirmButton.type = 'button';
       confirmButton.disabled = saving || !changed;
 
-      input.addEventListener('input', () => {
-        if (input.value === '') {
+      const updateDraftPreview = () => {
+        if (input.value === '' || priceInput.value === '') {
           confirmButton.disabled = true;
           return;
         }
         const percent = normalizeDiscountInput(input.value);
+        const originalPrice = normalizeOriginalPriceInput(priceInput.value);
         if (Number(input.value) !== percent) input.value = String(percent);
-        discountDrafts.set(service.id, percent);
+        if (Number(priceInput.value) !== originalPrice) priceInput.value = String(originalPrice);
+        discountDrafts.set(service.id, { discountPercent: percent, originalPrice });
         previewLabel.textContent = percent > 0 ? 'Giá sau giảm' : 'Giá hiện tại';
         previewValue.textContent = currency(discountedPrice(originalPrice, percent));
+        originalValue.textContent = `Giá gốc ${currency(originalPrice)}`;
         originalValue.classList.toggle('is-crossed', percent > 0);
-        confirmButton.disabled = saving || percent === savedPercent;
-      });
-      confirmButton.addEventListener('click', () => saveServiceDiscount(service.id));
-      card.append(identity, control, preview, confirmButton);
+        confirmButton.disabled = saving || (
+          percent === savedPercent && originalPrice === savedOriginalPrice
+        );
+      };
+      input.addEventListener('input', updateDraftPreview);
+      priceInput.addEventListener('input', updateDraftPreview);
+      confirmButton.addEventListener('click', () => saveServicePricing(service.id));
+      card.append(identity, pricingControls, preview, confirmButton);
       return card;
     }));
   }
 
-  async function saveServiceDiscount(serviceId) {
+  async function saveServicePricing(serviceId) {
     const service = (bookingConfig?.services || []).find((item) => item.id === serviceId);
     if (!service || discountSavingIds.has(serviceId)) return;
-    const discountPercent = discountDrafts.has(serviceId)
-      ? normalizeDiscountInput(discountDrafts.get(serviceId))
-      : normalizeDiscountInput(service.discountPercent);
+    const draft = discountDrafts.get(serviceId) || {};
+    const originalPrice = draft.originalPrice == null
+      ? serviceOriginalPrice(service) : normalizeOriginalPriceInput(draft.originalPrice);
+    const discountPercent = draft.discountPercent == null
+      ? normalizeDiscountInput(service.discountPercent) : normalizeDiscountInput(draft.discountPercent);
     discountSavingIds.add(serviceId);
     setMessage(elements.discountMessage, 'Đang cập nhật ưu đãi…');
     renderDiscountServices();
     try {
       const data = await adminRequest({
-        action: 'admin_update_service_discount', serviceId, discountPercent
+        action: 'admin_update_service_pricing', serviceId, originalPrice, discountPercent
       });
       const updated = data.service || {};
       bookingConfig.services = bookingConfig.services.map((item) => (
@@ -632,8 +668,8 @@
       setMessage(
         elements.discountMessage,
         discountPercent > 0
-          ? `Đã áp dụng giảm ${discountPercent}% cho ${service.name}.`
-          : `Đã tắt ưu đãi của ${service.name}; website sẽ hiển thị giá gốc.`,
+          ? `Đã cập nhật giá gốc và áp dụng giảm ${discountPercent}% cho ${service.name}.`
+          : `Đã cập nhật giá gốc của ${service.name}; website không hiển thị giao diện sale.`,
         true
       );
       renderAdminServices();
