@@ -917,7 +917,6 @@ class Component extends DCLogic {
     { id: 'sticker', name: 'Sticker', price: '5.000₫', dur: '10 phút' },
     { id: 've', name: 'Vẽ tay', price: '15.000₫', dur: '25 phút' },
     { id: 'xacu', name: 'Ẩn xà cừ / Kim tuyến', price: '10.000₫', dur: '15 phút' },
-    { id: 'combo-foot', name: 'Combo Foot trọn gói', price: '200.000₫', dur: '60 phút' },
     { id: 'uon-mi', name: 'Uốn mi Collagen', price: '145.000₫', dur: '60 phút' },
     { id: 'uon-mi-den', name: 'Uốn mi Collagen + phủ đen', price: '165.000₫', dur: '70 phút' },
     { id: 'mi-classic', name: 'Nối mi Classic', price: '150.000₫', dur: '90 phút' },
@@ -964,16 +963,6 @@ class Component extends DCLogic {
         { name: 'Vẽ tay', sub: 'Tuỳ độ chi tiết', price: '5.000 – 15.000₫', svc: 've' },
         { name: 'Ẩn xà cừ / Kim tuyến', sub: 'Ánh nhẹ dưới lớp gel', price: '5.000 – 10.000₫', svc: 'xacu' },
         { name: 'Giấy bạc / Phụ kiện', sub: 'Báo giá theo mẫu', price: 'liên hệ' }
-      ] },
-    { id: 'foot', label: 'Combo Foot', svc: 'han', tone: '#EFF6FC', ink: '#4A8FB8', bg: 'linear-gradient(150deg,#F6FAFE,#FFFFFF)',
-      title: 'Combo Foot — 200.000₫', note: 'Sáu bước liền mạch trong một buổi, khoảng 60 phút.',
-      items: [
-        { name: 'Cắt da chân', sub: 'Bước 1', price: 'trong combo', svc: 'combo-foot' },
-        { name: 'Ngâm chân thảo dược', sub: 'Bước 2', price: 'trong combo', svc: 'combo-foot' },
-        { name: 'Tẩy tế bào chết', sub: 'Bước 3', price: 'trong combo', svc: 'combo-foot' },
-        { name: 'Chà gót chân', sub: 'Bước 4', price: 'trong combo', svc: 'combo-foot' },
-        { name: 'Massage chân', sub: 'Bước 5', price: 'trong combo', svc: 'combo-foot' },
-        { name: 'Dưỡng ẩm', sub: 'Bước 6', price: 'trong combo', svc: 'combo-foot' }
       ] },
     { id: 'mi', label: 'Mi', svc: 'spa', tone: '#F7F4FC', ink: '#7A5AD0', bg: 'linear-gradient(150deg,#FDFCFF,#FFFFFF)',
       title: 'Mi — uốn và nối', note: 'Tháo mi miễn phí nếu bộ mi cũ do 1M65 làm.',
@@ -1022,9 +1011,6 @@ class Component extends DCLogic {
       { id: 'sticker', name: 'Sticker', price: 5000, dur: 10 },
       { id: 've', name: 'Vẽ tay', price: 15000, dur: 25, note: '5.000 – 15.000₫' },
       { id: 'xacu', name: 'Ẩn xà cừ / Kim tuyến', price: 10000, dur: 15, note: '5.000 – 10.000₫' }
-    ] },
-    { id: 'foot', label: 'Combo Foot', hint: 'Sáu bước liền mạch trong một buổi', items: [
-      { id: 'combo-foot', name: 'Combo Foot trọn gói', price: 200000, dur: 60, note: 'Ngâm, tẩy da chết, chà gót, massage, dưỡng ẩm' }
     ] },
     { id: 'mi', label: 'Mi', hint: 'Tháo mi miễn phí nếu bộ cũ do 1M65 làm', items: [
       { id: 'uon-mi', name: 'Uốn mi Collagen', price: 145000, dur: 60 },
@@ -1289,8 +1275,8 @@ class Component extends DCLogic {
   }
 
   mapSvc(id) {
-    const alias = { meo: 've', gel: 'gel-hn', french: 'noi-gel', nhat: 'noi-bot', han: 'combo-foot', spa: 'mi-classic', goi: 'goi-duongsinh',
-      design: 've', gelhn: 'gel-hn', noigel: 'noi-gel', noibot: 'noi-bot', foot: 'combo-foot', mi: 'mi-classic' };
+    const alias = { meo: 've', gel: 'gel-hn', french: 'noi-gel', nhat: 'noi-bot', spa: 'mi-classic', goi: 'goi-duongsinh',
+      design: 've', gelhn: 'gel-hn', noigel: 'noi-gel', noibot: 'noi-bot', mi: 'mi-classic' };
     const target = alias[id] || id;
     return this.allBookItems().some(x => x.id === target) ? [target] : [];
   }

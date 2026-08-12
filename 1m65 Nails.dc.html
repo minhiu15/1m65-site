@@ -309,15 +309,6 @@ Xem thư viện móng
 <div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#7A5AD0">150.000₫</span><span style="font-size:13px;color:#767089">· 100 phút</span></div>
 </div>
 
-<div data-tilt="1" data-reveal="1" data-cursor="link" style="position:relative;padding:26px;border-radius:32px;background:#FFFFFF;border:1px solid rgba(122,90,208,.1);transition:transform .4s cubic-bezier(.2,.9,.3,1),box-shadow .4s ease" style-hover="box-shadow:0 30px 54px -30px rgba(122,90,208,.45)">
-<div style="width:64px;height:64px;border-radius:20px;background:#F7F4FC;display:grid;place-items:center;margin-bottom:16px;animation:mewFloatSm 6.4s ease-in-out .8s infinite">
-<svg width="40" height="40" viewBox="0 0 60 60" aria-hidden="true"><path d="M11 33h38v6a12 12 0 01-12 12H23a12 12 0 01-12-12z" fill="#FFFFFF" stroke="#3B3350" stroke-width="3" stroke-linejoin="round"></path><path d="M11 33h38" stroke="#3B3350" stroke-width="3" stroke-linecap="round"></path><ellipse cx="30" cy="39" rx="13" ry="3.2" fill="#EFF6FC"></ellipse><path d="M21 25c0-4 3-5.6 3-8.6M30 23c0-4 3-5.6 3-8.6M39 25c0-4 3-5.6 3-8.6" stroke="#3B3350" stroke-width="2.8" stroke-linecap="round" fill="none"></path></svg>
-</div>
-<h3 style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#2B2440;margin:0 0 6px">Combo Foot</h3>
-<p style="margin:0 0 16px;font-size:14.5px;line-height:1.55;color:#6B6580">Ngâm thảo dược, tẩy tế bào chết, chà gót, massage, dưỡng ẩm.</p>
-<div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;color:#7A5AD0">200.000₫</span><span style="font-size:13px;color:#767089">· 60 phút</span></div>
-</div>
-
 <div data-tilt="1" data-reveal="1" data-cursor="link" style="position:relative;padding:26px;border-radius:32px;background:linear-gradient(150deg,#FEF9F3,#FCEEE6);border:1px solid rgba(224,136,95,.14);transition:transform .4s cubic-bezier(.2,.9,.3,1),box-shadow .4s ease" style-hover="box-shadow:0 30px 54px -30px rgba(224,136,95,.5)">
 <div style="width:64px;height:64px;border-radius:20px;background:rgba(255,255,255,.75);display:grid;place-items:center;margin-bottom:16px;animation:mewFloatSm 5.9s ease-in-out 1.5s infinite">
 <svg width="40" height="40" viewBox="0 0 60 60" aria-hidden="true"><path d="M9 37c7-12 14-18 21-18s14 6 21 18z" fill="#FFFFFF" stroke="#3B3350" stroke-width="3" stroke-linejoin="round"></path><circle cx="30" cy="31" r="6.4" fill="#DDD4F3" stroke="#3B3350" stroke-width="3"></circle><path d="M14 26l-5-5M22 20l-3-7M30 17V9M38 20l3-7M46 26l5-5" stroke="#3B3350" stroke-width="3" stroke-linecap="round"></path></svg>
@@ -1065,7 +1056,6 @@ class Component extends DCLogic {
     { id: 'sticker', name: 'Sticker', price: '5.000₫', dur: '10 phút' },
     { id: 've', name: 'Vẽ tay', price: '15.000₫', dur: '25 phút' },
     { id: 'xacu', name: 'Ẩn xà cừ / Kim tuyến', price: '10.000₫', dur: '15 phút' },
-    { id: 'combo-foot', name: 'Combo Foot trọn gói', price: '200.000₫', dur: '60 phút' },
     { id: 'uon-mi', name: 'Uốn mi Collagen', price: '145.000₫', dur: '60 phút' },
     { id: 'uon-mi-den', name: 'Uốn mi Collagen + phủ đen', price: '165.000₫', dur: '70 phút' },
     { id: 'mi-classic', name: 'Nối mi Classic', price: '150.000₫', dur: '90 phút' },
@@ -1112,16 +1102,6 @@ class Component extends DCLogic {
         { name: 'Vẽ tay', sub: 'Tuỳ độ chi tiết', price: '5.000 – 15.000₫', svc: 've' },
         { name: 'Ẩn xà cừ / Kim tuyến', sub: 'Ánh nhẹ dưới lớp gel', price: '5.000 – 10.000₫', svc: 'xacu' },
         { name: 'Giấy bạc / Phụ kiện', sub: 'Báo giá theo mẫu', price: 'liên hệ' }
-      ] },
-    { id: 'foot', label: 'Combo Foot', svc: 'han', tone: '#EFF6FC', ink: '#4A8FB8', bg: 'linear-gradient(150deg,#F6FAFE,#FFFFFF)',
-      title: 'Combo Foot — 200.000₫', note: 'Sáu bước liền mạch trong một buổi, khoảng 60 phút.',
-      items: [
-        { name: 'Cắt da chân', sub: 'Bước 1', price: 'trong combo', svc: 'combo-foot' },
-        { name: 'Ngâm chân thảo dược', sub: 'Bước 2', price: 'trong combo', svc: 'combo-foot' },
-        { name: 'Tẩy tế bào chết', sub: 'Bước 3', price: 'trong combo', svc: 'combo-foot' },
-        { name: 'Chà gót chân', sub: 'Bước 4', price: 'trong combo', svc: 'combo-foot' },
-        { name: 'Massage chân', sub: 'Bước 5', price: 'trong combo', svc: 'combo-foot' },
-        { name: 'Dưỡng ẩm', sub: 'Bước 6', price: 'trong combo', svc: 'combo-foot' }
       ] },
     { id: 'mi', label: 'Mi', svc: 'spa', tone: '#F7F4FC', ink: '#7A5AD0', bg: 'linear-gradient(150deg,#FDFCFF,#FFFFFF)',
       title: 'Mi — uốn và nối', note: 'Tháo mi miễn phí nếu bộ mi cũ do 1M65 làm.',
@@ -1170,9 +1150,6 @@ class Component extends DCLogic {
       { id: 'sticker', name: 'Sticker', price: 5000, dur: 10 },
       { id: 've', name: 'Vẽ tay', price: 15000, dur: 25, note: '5.000 – 15.000₫' },
       { id: 'xacu', name: 'Ẩn xà cừ / Kim tuyến', price: 10000, dur: 15, note: '5.000 – 10.000₫' }
-    ] },
-    { id: 'foot', label: 'Combo Foot', hint: 'Sáu bước liền mạch trong một buổi', items: [
-      { id: 'combo-foot', name: 'Combo Foot trọn gói', price: 200000, dur: 60, note: 'Ngâm, tẩy da chết, chà gót, massage, dưỡng ẩm' }
     ] },
     { id: 'mi', label: 'Mi', hint: 'Tháo mi miễn phí nếu bộ cũ do 1M65 làm', items: [
       { id: 'uon-mi', name: 'Uốn mi Collagen', price: 145000, dur: 60 },
@@ -1293,7 +1270,6 @@ class Component extends DCLogic {
       'Sơn gel Hàn / Nhật': 'gel-hn',
       'Nối móng đắp Gel': 'noi-gel',
       'Nối móng đắp bột': 'noi-bot',
-      'Combo Foot': 'combo-foot',
       'Nối mi Classic': 'mi-classic',
       'Gội đầu dưỡng sinh': 'goi-duongsinh'
     };
@@ -1510,8 +1486,8 @@ class Component extends DCLogic {
   }
 
   mapSvc(id) {
-    const alias = { meo: 've', gel: 'gel-hn', french: 'noi-gel', nhat: 'noi-bot', han: 'combo-foot', spa: 'mi-classic', goi: 'goi-duongsinh',
-      design: 've', gelhn: 'gel-hn', noigel: 'noi-gel', noibot: 'noi-bot', foot: 'combo-foot', mi: 'mi-classic' };
+    const alias = { meo: 've', gel: 'gel-hn', french: 'noi-gel', nhat: 'noi-bot', spa: 'mi-classic', goi: 'goi-duongsinh',
+      design: 've', gelhn: 'gel-hn', noigel: 'noi-gel', noibot: 'noi-bot', mi: 'mi-classic' };
     const target = alias[id] || id;
     return this.allBookItems().some(x => x.id === target) ? [target] : [];
   }

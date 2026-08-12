@@ -4,6 +4,7 @@
   const API_URL = 'https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api';
   const SESSION_KEY = '1m65-admin-session';
   const TIME_ZONE = 'Asia/Ho_Chi_Minh';
+  const REMOVED_SERVICE_IDS = new Set(['combo-foot']);
   const STATUS_LABELS = {
     confirmed: 'Đã xác nhận',
     completed: 'Hoàn thành',
@@ -22,10 +23,6 @@
     {
       id: 'design', label: 'Design', hint: 'Cộng thêm vào bộ móng — tính trọn bàn',
       serviceIds: ['flash', 'matmeo', 'guong', 'ombre', 'da', 'charm', 'sticker', 've', 'xacu']
-    },
-    {
-      id: 'foot', label: 'Combo Foot', hint: 'Sáu bước liền mạch trong một buổi',
-      serviceIds: ['combo-foot']
     },
     {
       id: 'mi', label: 'Mi', hint: 'Tháo mi miễn phí nếu bộ cũ do 1M65 làm',
@@ -718,6 +715,9 @@
     try {
       const data = await adminRequest({ action: 'config' });
       bookingConfig = data.config || null;
+      if (Array.isArray(bookingConfig?.services)) {
+        bookingConfig.services = bookingConfig.services.filter((service) => !REMOVED_SERVICE_IDS.has(service.id));
+      }
       const today = dateInTimeZone();
       elements.adminBookingDate.min = today;
       elements.adminBookingDate.max = addDays(today, Number(bookingConfig?.advanceBookingDays || 30));
