@@ -85,7 +85,10 @@
     blockSelection: document.querySelector('#block-selection'),
     createBlockButton: document.querySelector('#create-block-button'),
     blockMessage: document.querySelector('#block-message'),
-    blockList: document.querySelector('#block-list')
+    blockList: document.querySelector('#block-list'),
+    discountSearch: document.querySelector('#discount-search'),
+    discountServiceList: document.querySelector('#discount-service-list'),
+    discountMessage: document.querySelector('#discount-message')
   };
   const sectionLinks = [...document.querySelectorAll('a.section-link[href^="#sec-"]')];
   const navigationLinks = [...document.querySelectorAll('.app-nav a[href^="#sec-"]')];
@@ -94,7 +97,8 @@
     '#sec-overview': 'Tổng quan',
     '#sec-schedule': 'Lịch hẹn',
     '#sec-create': 'Tạo lịch',
-    '#sec-block': 'Khóa lịch'
+    '#sec-block': 'Khóa lịch',
+    '#sec-discounts': 'Ưu đãi dịch vụ'
   };
   const mobileDrawerMedia = window.matchMedia('(max-width: 900px)');
 
@@ -117,6 +121,8 @@
   let adminConfigLoading = true;
   let adminCreatePending = false;
   let adminAvailabilityRequestId = 0;
+  const discountDrafts = new Map();
+  const discountSavingIds = new Set();
 
   function readSession() {
     try {
@@ -180,6 +186,7 @@
       invalid_service_selection: 'Vui lòng chọn ít nhất một dịch vụ.',
       too_many_services: 'Mỗi lịch được chọn tối đa 8 dịch vụ.',
       service_not_found: 'Một dịch vụ không còn hoạt động. Vui lòng chọn lại.',
+      invalid_discount_percent: 'Phần trăm giảm giá phải là số nguyên từ 0 đến 100.',
       service_selection_too_long: 'Tổng thời lượng dịch vụ quá dài.',
       request_failed: 'Không thể kết nối máy chủ. Vui lòng thử lại.'
     };
@@ -336,6 +343,21 @@
 
   function currency(value) {
     return `${new Intl.NumberFormat('vi-VN').format(Number(value || 0))}đ`;
+  }
+
+  function serviceOriginalPrice(service) {
+    return Number(service?.originalPrice ?? service?.price ?? 0);
+  }
+
+  function discountedPrice(originalPrice, discountPercent) {
+    const percent = Math.min(100, Math.max(0, Number(discountPercent || 0)));
+    return Math.round(Number(originalPrice || 0) * (100 - percent) / 100);
+  }
+
+  function normalizeDiscountInput(value) {
+    const number = Number(value);
+    if (!Number.isFinite(number)) return 0;
+    return Math.min(100, Math.max(0, Math.round(number)));
   }
 
   function timeParts(value) {
@@ -512,6 +534,117 @@
     renderAdminServiceSummary();
   }
 
+  function renderDiscountServices() {
+    if (!elements.discountServiceList) return;
+    const services = Array.isArray(bookingConfig?.services) ? bookingConfig.services : [];
+    const query = String(elements.discountSearch?.value || '').trim().toLocaleLowerCase('vi-VN');
+    const visibleServices = services.filter((service) => (
+      !query || String(service.name || '').toLocaleLowerCase('vi-VN').includes(query)
+    ));
+    if (!services.length) {
+      elements.discountServiceList.replaceChildren(node(
+        'p', 'admin-slot-empty', adminConfigLoading ? 'Đang tải danh sách dịch vụ…' : 'Chưa tải được danh sách dịch vụ.'
+      ));
+      return;
+    }
+    if (!visibleServices.length) {
+      elements.discountServiceList.replaceChildren(node('p', 'admin-slot-empty', 'Không tìm thấy dịch vụ phù hợp.'));
+      return;
+    }
+    elements.discountServiceList.replaceChildren(...visibleServices.map((service) => {
+      const originalPrice = serviceOriginalPrice(service);
+      const savedPercent = normalizeDiscountInput(service.discountPercent);
+      const draftPercent = discountDrafts.has(service.id)
+        ? discountDrafts.get(service.id) : savedPercent;
+      const previewPrice = discountedPrice(originalPrice, draftPercent);
+      const changed = draftPercent !== savedPercent;
+      const saving = discountSavingIds.has(service.id);
+      const card = node('article', 'discount-service-card');
+      card.classList.toggle('has-active-sale', savedPercent > 0);
+
+      const identity = node('div', 'discount-service-identity');
+      identity.append(node('strong', '', service.name));
+      identity.append(node('span', '', `${service.durationMinutes} phút`));
+      if (savedPercent > 0) identity.append(node('span', 'discount-active-badge', `Đang giảm ${savedPercent}%`));
+
+      const control = node('label', 'discount-input-label');
+      control.append(node('span', '', 'Giảm giá'));
+      const inputShell = node('span', 'discount-input-shell');
+      const input = node('input', 'discount-percent-input');
+      input.type = 'number';
+      input.min = '0';
+      input.max = '100';
+      input.step = '1';
+      input.inputMode = 'numeric';
+      input.value = String(draftPercent);
+      input.setAttribute('aria-label', `Phần trăm giảm cho ${service.name}`);
+      input.disabled = saving;
+      inputShell.append(input, node('b', '', '%'));
+      control.append(inputShell);
+
+      const preview = node('div', 'discount-price-preview');
+      const previewLabel = node('span', 'discount-preview-label', draftPercent > 0 ? 'Giá sau giảm' : 'Giá hiện tại');
+      const previewValue = node('strong', 'discount-preview-price', currency(previewPrice));
+      const originalValue = node('span', `discount-original-price${draftPercent > 0 ? ' is-crossed' : ''}`, `Giá gốc ${currency(originalPrice)}`);
+      preview.append(previewLabel, previewValue, originalValue);
+
+      const confirmButton = node('button', 'btn primary discount-confirm', saving ? 'Đang lưu…' : 'Xác nhận');
+      confirmButton.type = 'button';
+      confirmButton.disabled = saving || !changed;
+
+      input.addEventListener('input', () => {
+        if (input.value === '') {
+          confirmButton.disabled = true;
+          return;
+        }
+        const percent = normalizeDiscountInput(input.value);
+        if (Number(input.value) !== percent) input.value = String(percent);
+        discountDrafts.set(service.id, percent);
+        previewLabel.textContent = percent > 0 ? 'Giá sau giảm' : 'Giá hiện tại';
+        previewValue.textContent = currency(discountedPrice(originalPrice, percent));
+        originalValue.classList.toggle('is-crossed', percent > 0);
+        confirmButton.disabled = saving || percent === savedPercent;
+      });
+      confirmButton.addEventListener('click', () => saveServiceDiscount(service.id));
+      card.append(identity, control, preview, confirmButton);
+      return card;
+    }));
+  }
+
+  async function saveServiceDiscount(serviceId) {
+    const service = (bookingConfig?.services || []).find((item) => item.id === serviceId);
+    if (!service || discountSavingIds.has(serviceId)) return;
+    const discountPercent = discountDrafts.has(serviceId)
+      ? normalizeDiscountInput(discountDrafts.get(serviceId))
+      : normalizeDiscountInput(service.discountPercent);
+    discountSavingIds.add(serviceId);
+    setMessage(elements.discountMessage, 'Đang cập nhật ưu đãi…');
+    renderDiscountServices();
+    try {
+      const data = await adminRequest({
+        action: 'admin_update_service_discount', serviceId, discountPercent
+      });
+      const updated = data.service || {};
+      bookingConfig.services = bookingConfig.services.map((item) => (
+        item.id === serviceId ? { ...item, ...updated } : item
+      ));
+      discountDrafts.delete(serviceId);
+      setMessage(
+        elements.discountMessage,
+        discountPercent > 0
+          ? `Đã áp dụng giảm ${discountPercent}% cho ${service.name}.`
+          : `Đã tắt ưu đãi của ${service.name}; website sẽ hiển thị giá gốc.`,
+        true
+      );
+      renderAdminServices();
+    } catch (error) {
+      setMessage(elements.discountMessage, errorMessage(error.message));
+    } finally {
+      discountSavingIds.delete(serviceId);
+      renderDiscountServices();
+    }
+  }
+
   function renderAdminSlots() {
     if (adminAvailabilityLoading) {
       elements.adminBookingSlotGrid.replaceChildren(node('p', 'admin-slot-empty', 'Đang tải giờ trống…'));
@@ -557,6 +690,7 @@
     } finally {
       adminConfigLoading = false;
       renderAdminServices();
+      renderDiscountServices();
       renderAdminSlots();
     }
   }
@@ -1399,6 +1533,7 @@
 
   elements.refreshButton.addEventListener('click', loadAppointments);
   elements.statusFilter.addEventListener('change', loadAppointments);
+  elements.discountSearch?.addEventListener('input', renderDiscountServices);
   elements.adminBookingDate.addEventListener('change', loadAdminAvailability);
   elements.adminCustomerPhone.addEventListener('input', () => {
     elements.adminCustomerPhone.value = elements.adminCustomerPhone.value.replace(/\D/g, '').slice(0, 10);
@@ -1432,6 +1567,7 @@
   initializeSectionNavigation();
   initializeMobileDrawer();
   renderAdminServices();
+  renderDiscountServices();
   renderAdminSlots();
   createSlotButtons();
   updateBlockSelection();

@@ -6,7 +6,7 @@
 <script src="./support.js"></script>
 <script src="./turnstile-config.js?v=20260807a"></script>
 <script src="./turnstile-booking.js?v=20260807a"></script>
-<link rel="stylesheet" href="./visual-system.css?v=20260811mobileabout41">
+<link rel="stylesheet" href="./visual-system.css?v=20260812discount42">
 <link rel="stylesheet" href="./rose-theme.css?v=20260810rose7">
 </head>
 <body>
@@ -163,7 +163,7 @@ a[href*="google.com/maps/place/1M65"][style*="position:absolute"],a[href*="googl
 <span style="font-size:11px;color:#6B6580">{{ s.meta }}</span>
 </span>
 <span style="display:flex;align-items:center;gap:9px;flex:none">
-<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:13.5px;color:#7A5AD0;white-space:nowrap">{{ s.price }}</span>
+<span class="mew-booking-price" data-sale="{{ s.onSale }}"><sc-if value="{{ s.onSale }}" hint-placeholder-val="{{ false }}"><span class="mew-booking-sale">-{{ s.discountPercent }}%</span><span class="mew-booking-original">{{ s.originalPrice }}</span></sc-if><strong>{{ s.price }}</strong></span>
 <span style="{{ s.dotStyle }}"><sc-if value="{{ s.on }}" hint-placeholder-val="{{ false }}"><svg width="11" height="9" viewBox="0 0 11 9" aria-hidden="true"><path d="M1.4 4.6l2.8 2.8L9.6 1.6" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg></sc-if></span>
 </span>
 </button>
@@ -577,7 +577,7 @@ Xem thư viện móng
 <div style="margin-top:2px;font-size:11.5px;line-height:1.45;color:#6B6580">{{ i.sub }}</div>
 </div>
 <span style="flex:1"></span>
-<span style="font-family:Quicksand,sans-serif;font-weight:700;font-size:14px;color:#7A5AD0;white-space:nowrap">{{ i.price }}</span>
+<span class="mew-service-price" data-sale="{{ i.onSale }}"><sc-if value="{{ i.onSale }}" hint-placeholder-val="{{ false }}"><span class="mew-service-sale-badge">-{{ i.discountPercent }}%</span><span class="mew-service-original-price">{{ i.originalPrice }}</span></sc-if><strong>{{ i.price }}</strong></span>
 </div>
 </sc-for>
 </div>
@@ -1109,6 +1109,81 @@ class Component extends DCLogic {
     return body;
   }
 
+  async loadBookingConfig() {
+    try {
+      const body = await this.bookingRequest('config');
+      const services = Array.isArray(body.config && body.config.services) ? body.config.services : [];
+      if (!services.length) return;
+      this._discountServices = services;
+      const byId = new Map(services.map(service => [service.id, service]));
+      this.bookCats.forEach(group => group.items.forEach(item => {
+        const service = byId.get(item.id);
+        if (!service) return;
+        item.price = Number(service.price || 0);
+        item.originalPrice = Number(service.originalPrice == null ? service.price : service.originalPrice) || 0;
+        item.discountPercent = Number(service.discountPercent || 0);
+      }));
+      this.priceGroups.forEach(group => (group.items || []).forEach(item => {
+        const service = byId.get(item.svc);
+        if (!service) return;
+        if (!/\d/.test(String(item.price || ''))) return;
+        const price = Number(service.price || 0);
+        const originalPrice = Number(service.originalPrice == null ? service.price : service.originalPrice) || 0;
+        item.price = price.toLocaleString('vi-VN') + '₫';
+        item.originalPrice = originalPrice.toLocaleString('vi-VN') + '₫';
+        item.discountPercent = Number(service.discountPercent || 0);
+      }));
+      this._flat = null;
+      this.setState({}, () => this.scheduleHotServiceSales());
+    } catch (error) {
+      console.warn('Chưa tải được ưu đãi dịch vụ:', error && error.message);
+    }
+  }
+
+  decorateHotServiceSales(services) {
+    const serviceByHeading = {
+      'Sơn gel Hàn / Nhật': 'gel-hn',
+      'Nối móng đắp Gel': 'noi-gel',
+      'Nối móng đắp bột': 'noi-bot',
+      'Nối mi Classic': 'mi-classic',
+      'Gội đầu dưỡng sinh': 'goi-duongsinh'
+    };
+    const byId = new Map(services.map(service => [service.id, service]));
+    document.querySelectorAll('#dichvu h3').forEach(heading => {
+      const service = byId.get(serviceByHeading[heading.textContent.trim()]);
+      const card = heading.closest('[data-svc], [data-tilt]');
+      if (!service || !card) return;
+      card.querySelectorAll('.mew-live-sale').forEach(item => item.remove());
+      const originalPrice = Number(service.originalPrice == null ? service.price : service.originalPrice) || 0;
+      const discountPercent = Number(service.discountPercent || 0);
+      const priceNode = [...card.querySelectorAll('span')].find(item => {
+        const digits = Number(String(item.textContent || '').replace(/[^\d]/g, ''));
+        return digits === originalPrice && item.children.length === 0;
+      });
+      if (!priceNode) return;
+      priceNode.textContent = Number(service.price || 0).toLocaleString('vi-VN') + '₫';
+      if (discountPercent <= 0) return;
+      const sale = document.createElement('span');
+      sale.className = 'mew-live-sale';
+      const badge = document.createElement('span');
+      badge.className = 'mew-live-sale__badge';
+      badge.textContent = '-' + discountPercent + '%';
+      const original = document.createElement('span');
+      original.className = 'mew-live-sale__original';
+      original.textContent = originalPrice.toLocaleString('vi-VN') + '₫';
+      sale.append(badge, original);
+      priceNode.before(sale);
+    });
+  }
+
+  scheduleHotServiceSales() {
+    if (!this._discountServices || this._saleDecorationFrame) return;
+    this._saleDecorationFrame = requestAnimationFrame(() => {
+      this._saleDecorationFrame = 0;
+      this.decorateHotServiceSales(this._discountServices);
+    });
+  }
+
   async loadAvailability(preferredSlot) {
     const requestId = (this.availabilityRequestId || 0) + 1;
     this.availabilityRequestId = requestId;
@@ -1404,6 +1479,7 @@ class Component extends DCLogic {
   componentDidUpdate2() {
     this.lockScroll(this.state.bookOpen || this.state.mobileOpen || this.state.moreOpen);
     this.applyGalleryTone();
+    this.scheduleHotServiceSales();
     if (this.state.bookOpen && this.state.step === 3) this.resizeNoteField();
     if (this.state.moreOpen) {
       this.syncModalChips();
@@ -1460,7 +1536,7 @@ class Component extends DCLogic {
   loadVisualSystem() {
     if (window.__nhuBundleLoaded || document.querySelector('script[data-nhu-visual-loader]')) return;
     const script = document.createElement('script');
-    script.src = './visual-system.js?v=20260811mobileabout41';
+    script.src = './visual-system.js?v=20260812discount42';
     script.dataset.nhuVisualLoader = '1';
     document.head.appendChild(script);
   }
@@ -1468,6 +1544,7 @@ class Component extends DCLogic {
   componentDidMount() {
     this.loadVisualSystem();
     this.loadGoogleReviews();
+    this.loadBookingConfig();
     this.on(document, 'click', e => {
       if (this.state.bookOpen || this.state.mobileOpen || this.state.moreOpen) return;
       const t = e.target;
@@ -1828,6 +1905,9 @@ class Component extends DCLogic {
       name: it.name,
       sub: it.sub,
       price: it.price,
+      originalPrice: it.originalPrice || it.price,
+      discountPercent: Number(it.discountPercent || 0),
+      onSale: Number(it.discountPercent || 0) > 0,
       line: n >= (cur.items || []).length - 1 ? 'transparent' : 'rgba(122,90,208,.13)'
     }));
 
@@ -1952,6 +2032,9 @@ class Component extends DCLogic {
           name: x.name,
           meta: (x.dur || 0) + ' phút' + (x.note ? ' · ' + x.note : ''),
           price: (x.price || 0).toLocaleString('vi-VN') + '₫',
+          originalPrice: (x.originalPrice || x.price || 0).toLocaleString('vi-VN') + '₫',
+          discountPercent: Number(x.discountPercent || 0),
+          onSale: Number(x.discountPercent || 0) > 0,
           style: 'display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;padding:12px 13px;border-radius:16px;cursor:pointer;transition:border-color .2s ease,background .2s ease;border:1.5px solid ' + (on ? '#7A5AD0' : 'rgba(122,90,208,.14)') + ';background:' + (on ? '#F6F2FF' : '#FFFFFF'),
           dotStyle: 'flex:none;display:grid;place-items:center;width:21px;height:21px;border-radius:7px;border:2px solid ' + (on ? '#7A5AD0' : 'rgba(122,90,208,.25)') + ';background:' + (on ? '#7A5AD0' : '#FFFFFF'),
           on: on,
