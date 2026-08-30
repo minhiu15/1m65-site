@@ -932,17 +932,24 @@ button:disabled {
   }
 }
 
-/* Preserve the dedicated Gallery CTA shell without stretching or a color underlay. */
+/* Preserve the dedicated Gallery CTA shell and match the locked layout geometry. */
 .gallery-more {
-  width: min(360px, 100%);
+  width: min(394px, 28%);
   min-width: 0;
   min-height: 0;
-  aspect-ratio: 1420 / 301;
+  aspect-ratio: 394 / 93;
   background-color: transparent;
 }
 
 @media (max-width: 600px) {
   .gallery-more {
-    width: min(300px, 100%);
+    width: min(394px, 42%);
+    font-size: clamp(15px, 4.2vw, 18px);
+  }
+
+  .gallery-more span {
+    width: clamp(16px, 4.2vw, 18px);
+    height: clamp(16px, 4.2vw, 18px);
+    margin-left: 5px;
   }
 }
