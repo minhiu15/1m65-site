@@ -73,41 +73,14 @@ body.is-embedded{background:#fcf3ee}
   .lookup-card,.appointment-list-view,.appointment-view{border-radius:22px}
 }
 
-/* Match every booking-manager action to the locked Gallery pink tab family. */
+/* Reserve the Gallery watercolor shell for actions that were already primary/pink. */
 :root{
-  --button-shell-idle:url("assets/gallery/ui_shells/gallery_tab_disabled_LOCKED.png");
-  --button-shell-active:url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.png");
+  --button-shell-primary:url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.png");
 }
-.button.secondary,
-.button.danger,
-.date-trigger,
-.calendar-nav,
-.calendar-day,
-.slot-button,
-.appointment-list-item{
+.button.primary{
   border-color:transparent;
-  background-color:#fdeee2;
-  background-image:var(--button-shell-idle);
-  background-position:center;
-  background-size:100% 100%;
-  background-repeat:no-repeat;
-  color:#6a4133;
-  box-shadow:none;
-}
-.button.primary,
-.button.secondary:hover:not(:disabled),
-.button.danger:hover:not(:disabled),
-.date-trigger:hover,
-.calendar-nav:hover,
-.calendar-day:hover:not(:disabled),
-.calendar-day[aria-selected=true],
-.slot-button:hover,
-.slot-button[aria-pressed=true],
-.appointment-list-item:hover,
-.appointment-list-item[aria-pressed=true]{
-  border-color:transparent;
-  background-color:#f2789b;
-  background-image:var(--button-shell-active);
+  background-color:transparent;
+  background-image:var(--button-shell-primary);
   background-position:center;
   background-size:100% 100%;
   background-repeat:no-repeat;
@@ -115,10 +88,3 @@ body.is-embedded{background:#fcf3ee}
   box-shadow:none;
 }
 .button.primary:hover:not(:disabled){filter:brightness(1.025) saturate(1.05)}
-.appointment-list-item:hover *,
-.appointment-list-item[aria-pressed=true] *{color:inherit}
-button:disabled{filter:saturate(.55);opacity:.48}
-@media(prefers-reduced-motion:reduce){
-  .button,.date-trigger,.calendar-nav,.calendar-day,.slot-button,.appointment-list-item{transition:none}
-}
-
