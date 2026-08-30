@@ -8,7 +8,7 @@
   <meta name="description" content="Bản xem trước giao diện mới của 1M65 Nails, Eyelashes, Shampoo.">
   <title>1M65 Nails · V2 Preview</title>
   <link rel="icon" href="../favicon.svg">
-  <link rel="stylesheet" href="styles.css?v=20260830-10">
+  <link rel="stylesheet" href="styles.css?v=20260830-11">
   <script src="../turnstile-config.js?v=20260807a"></script>
   <script src="../turnstile-booking.js?v=20260807a"></script>
   <script type="module" src="app.js?v=20260830-3"></script>
@@ -19,19 +19,17 @@
   <header class="site-header" id="top">
     <div class="header-inner paper-width">
       <a class="brand" href="#top" aria-label="1M65 Nails — về đầu trang">
-        <span class="brand-mark">1M65</span>
-        <img src="assets/home/header/logo_cat.png" alt="" aria-hidden="true">
-        <span class="brand-sub">Nails, Eyelashes, Shampoo</span>
+        <svg class="brand-paw" width="30" height="30" viewBox="0 0 40 40" aria-hidden="true"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="currentColor" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="currentColor"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="currentColor"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="currentColor" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="currentColor"></path></g></svg>
+        <span class="brand-copy"><span class="brand-mark">1M65</span><span class="brand-sub">Nails, Eyelashes, Shampoo</span></span>
       </a>
       <nav class="desktop-nav" aria-label="Điều hướng chính">
-        <a class="is-active" href="#top"><img src="assets/home/nav/home.png" alt="">Trang chủ</a>
-        <a href="#dichvu"><img src="assets/home/nav/services.png" alt="">Dịch vụ</a>
-        <a href="#thuvien"><img src="assets/home/nav/gallery.png" alt="">Thư viện</a>
-        <a href="#vechungminh"><img src="assets/home/nav/about.png" alt="">Về chúng mình</a>
-        <a href="#danhgia"><img src="assets/home/nav/reviews.png" alt="">Đánh giá</a>
-        <a href="#lienhe"><img src="assets/home/nav/contact.png" alt="">Liên hệ</a>
+        <a href="#dichvu">Dịch vụ</a>
+        <a href="#thuvien">Thư viện</a>
+        <a href="#vechungminh">Về chúng mình</a>
+        <a href="#danhgia">Đánh giá</a>
+        <a href="#lienhe">Liên hệ</a>
       </nav>
-      <button class="header-book button-primary" type="button" data-open-booking><img src="assets/home/booking/booking_calendar_icon.png" alt="" aria-hidden="true">Đặt lịch ngay</button>
+      <button class="header-book button-primary" type="button" data-open-booking>Đặt hẹn <svg class="header-paw" width="17" height="17" viewBox="0 0 40 40" aria-hidden="true"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="currentColor" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="currentColor"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="currentColor"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="currentColor" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="currentColor"></path></g></svg></button>
       <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Mở menu">
         <span></span><span></span><span></span>
       </button>
@@ -39,8 +37,7 @@
     <div class="mobile-drawer" id="mobile-drawer" hidden>
       <div class="drawer-backdrop" data-close-drawer></div>
       <nav class="drawer-panel" aria-label="Điều hướng di động">
-        <div class="drawer-head"><strong>Đi đâu nè?</strong><button type="button" data-close-drawer aria-label="Đóng menu">×</button></div>
-        <a href="#top" data-drawer-link>Trang chủ <span>→</span></a>
+        <div class="drawer-head"><strong>Menu</strong><button type="button" data-close-drawer aria-label="Đóng menu">×</button></div>
         <a href="#dichvu" data-drawer-link>Dịch vụ <span>→</span></a>
         <a href="#thuvien" data-drawer-link>Thư viện <span>→</span></a>
         <a href="#vechungminh" data-drawer-link>Về chúng mình <span>→</span></a>
