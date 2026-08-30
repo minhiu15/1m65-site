@@ -813,6 +813,17 @@ main,
   filter: brightness(1.025) saturate(1.05);
   transform: translateY(-1px);
 }
+/* Home CTA matches the rounded-rectangle geometry of its secondary neighbor. */
+.home-actions .button-primary {
+  border: 1px solid #e96b8c;
+  border-radius: 18px;
+  background-color: #eb6689;
+  background-image:
+    radial-gradient(ellipse at 18% 24%, rgba(255,255,255,.38) 0 8%, rgba(255,255,255,0) 34%),
+    radial-gradient(ellipse at 78% 82%, rgba(255,185,205,.46), transparent 38%),
+    linear-gradient(135deg, #f991aa 0%, #ef7496 50%, #df557d 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 8px 18px -14px rgba(217,71,109,.75);
+}
 /* Preserve the dedicated Gallery CTA shell and match the locked layout geometry. */
 .gallery-more {
   width: min(394px, 28%);
