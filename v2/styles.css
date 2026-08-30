@@ -826,7 +826,6 @@ main,
 
 .button-primary,
 .header-book,
-.gallery-more,
 .booking-main-cta,
 .manage-fab,
 .site-footer > button,
@@ -878,7 +877,6 @@ main,
 }
 
 .button-primary:hover,
-.gallery-more:hover,
 .booking-main-cta:hover,
 .manage-fab:hover,
 .site-footer > button:hover,
@@ -931,5 +929,20 @@ button:disabled {
   .modal-close,
   .lightbox-nav {
     transition: none;
+  }
+}
+
+/* Preserve the dedicated Gallery CTA shell without stretching or a color underlay. */
+.gallery-more {
+  width: min(360px, 100%);
+  min-width: 0;
+  min-height: 0;
+  aspect-ratio: 1420 / 301;
+  background-color: transparent;
+}
+
+@media (max-width: 600px) {
+  .gallery-more {
+    width: min(300px, 100%);
   }
 }
