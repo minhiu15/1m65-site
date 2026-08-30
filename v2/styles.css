@@ -149,10 +149,10 @@ a{color:inherit;text-decoration:none}
 @media(max-width:600px){.gallery-section,.about-section,.reviews-section,.booking-faq-section,.contact-section{padding-block:50px}.gallery-shell{padding:24px 12px;border-radius:28px}.gallery-heading-row{gap:4px}.gallery-camera{width:65px}.gallery-title-lockup img{height:75px}.gallery-title-lockup p{font-size:11px}.gallery-filters{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;margin-inline:4px;scrollbar-width:none}.gallery-filters button{flex:none;padding-inline:15px}.gallery-grid{grid-template-columns:repeat(2,1fr);gap:9px}.gallery-more{min-width:210px}.about-grid{display:flex;flex-direction:column}.about-intro{padding:30px 25px}.about-photo--main{min-height:260px}.about-story{padding:26px 23px}.about-info-rail{grid-template-columns:repeat(3,1fr);padding:14px 2px}.about-info-rail article{display:flex;flex-direction:column;padding:6px 7px;text-align:center}.about-info-rail img{width:34px;height:34px}.about-info-rail span{font-size:8px}.about-info-rail strong{font-size:12px}.about-info-rail p{font-size:7.5px}.about-journey{padding:17px 12px}.about-journey>div{grid-template-columns:repeat(2,1fr)}.about-journey article{grid-template-columns:30px 48px 1fr;padding:8px 4px;border-right:0}.about-journey img{width:42px}.about-journey h4{font-size:11px}.review-grid{grid-template-columns:1fr}.review-stats article{padding:11px 12px}.review-stats strong{font-size:16px}.review-stats img{width:32px;height:32px}.booking-main-cta{min-width:100%}.booking-heart{left:2%}.booking-flower{right:0}.faq-list{grid-template-columns:1fr}.contact-copy{padding:30px 24px}.site-footer{flex-direction:column;text-align:center}.manage-fab{right:12px;bottom:12px}.modal{padding:10px}.modal-panel,.gallery-modal-panel,.booking-modal-panel,.manager-modal-panel{max-height:calc(100dvh - 20px);height:calc(100dvh - 20px);border-radius:25px}.modal-header{padding:19px 18px 14px}.modal-header h2{font-size:22px}.modal-close{width:42px;height:42px}.modal-footer{padding:12px 16px}.gallery-modal-filters{margin:12px 16px 3px}.gallery-modal-grid{grid-template-columns:repeat(2,1fr);padding:10px 16px 18px}.booking-modal-body{padding:17px}.booking-footer{display:grid;grid-template-columns:auto 1fr auto}.booking-footer [data-booking-summary]{display:none}.booking-service-grid{grid-template-columns:1fr}.booking-dates{grid-template-columns:repeat(4,1fr)}.booking-slots{grid-template-columns:repeat(3,1fr)}.booking-form{grid-template-columns:1fr}.booking-form label:last-child{grid-column:auto}.booking-confirm-card{flex-direction:column}.manager-close{right:17px;top:17px}}
 @media(prefers-reduced-motion:reduce){.gallery-tile img,.faq-list button span,.modal-panel{transition:none;animation:none}}
 
-/* One continuous pastel paper canvas for the whole V2 page. */
+/* One continuous light Paper A2 canvas matching the first Home reference. */
 :root{
-  --paper:#fbf3ee;
-  --paper-2:#fffaf7;
+  --paper:#fff9f7;
+  --paper-2:#fffdfb;
 }
 html,
 body{
@@ -160,9 +160,9 @@ body{
   background-color:var(--paper);
 }
 body{
-  background-image:
-    repeating-linear-gradient(0deg,rgba(126,86,70,.022) 0 1px,transparent 1px 5px),
-    repeating-linear-gradient(90deg,rgba(255,255,255,.16) 0 1px,transparent 1px 7px);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3' seed='12' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 .045'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)' opacity='.14'/%3E%3C/svg%3E");
+  background-size:180px 180px;
+  background-repeat:repeat;
   background-attachment:fixed;
 }
 main,
@@ -182,8 +182,8 @@ main,
   --font-signature-body:Nunito,system-ui,sans-serif;
   --content:1700px;
   --header:112px;
-  --paper:#fcf3ee;
-  --paper-2:#fff9f7;
+  --paper:#fff9f7;
+  --paper-2:#fffdfb;
   --cocoa:#4f2f2e;
   --ink:#4f382e;
   --muted:#826b62;
