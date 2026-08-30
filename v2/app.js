@@ -134,6 +134,7 @@ function renderSignature() {
         <img class="signature-cat signature-cat--mobile" src="assets/services/signature-mobile/cats/header_cat_waving_bow.png" alt="Mèo Nhu Nhi vẫy tay">
         <div class="signature-copy">
           <img class="signature-wordmark" src="assets/services/signature-web/signature_wordmark/SIGNATURE_WORDMARK_FINAL_CLEAN_SAFE.png" alt="Signature">
+          <strong class="signature-mobile-title">SIGNATURE</strong>
           <span class="signature-ribbon">DỊCH VỤ NỔI BẬT TẠI 1M65 NAIL ROOM</span>
           <p>Từng chi tiết nhỏ, tạo nên sự khác biệt lớn ♡</p>
         </div>
