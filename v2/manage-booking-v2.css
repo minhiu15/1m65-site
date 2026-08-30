@@ -1,0 +1,75 @@
+:root{
+  --ink:#4f382e;
+  --ink-soft:#654d43;
+  --muted:#806c63;
+  --muted-2:#8d776e;
+  --paper:#fcf3ee;
+  --purple:#d9476d;
+  --purple-2:#e86786;
+  --purple-dark:#aa3658;
+  --lavender:#e9def7;
+  --lavender-soft:#f3ecfa;
+  --pink:#d9476d;
+  --pink-soft:#fde8ed;
+  --peach:#df8c69;
+  --peach-soft:#fce9df;
+  --blue-soft:#f6edf8;
+  --green:#42755d;
+  --green-soft:#eaf5ef;
+  --red:#a63f55;
+  --red-soft:#fff0f2;
+  --line:rgba(151,96,78,.16);
+  --shadow:0 24px 64px -44px rgba(79,56,46,.48);
+}
+body{
+  background:
+    radial-gradient(45rem 25rem at 0 0,rgba(232,103,134,.13),transparent 68%),
+    radial-gradient(42rem 25rem at 100% 5%,rgba(211,191,239,.25),transparent 66%),
+    repeating-linear-gradient(0deg,rgba(151,96,78,.018) 0 1px,transparent 1px 5px),
+    #fcf3ee;
+}
+:focus-visible{outline-color:rgba(217,71,109,.38)}
+.brand-paw{background:#fde8ed}.brand-paw svg{fill:#d9476d}
+.brand-copy small,.eyebrow,.card-kicker{color:#b74061}
+.back-link{border-radius:13px;color:#a33758}
+.intro h1{color:#4f382e}.intro h1 span{color:#df5d7f}
+.intro-note,.lookup-card,.appointment-list-view,.appointment-view{
+  border-color:rgba(151,96,78,.18);
+  background:rgba(255,253,250,.9);
+  box-shadow:0 28px 70px -50px rgba(79,56,46,.55);
+}
+.lookup-card,.appointment-list-view,.appointment-view{border-radius:27px}
+.lookup-card::after{background:rgba(232,103,134,.1)}
+.step-bubble{background:linear-gradient(135deg,#ef7793,#d9476d);color:#fff}
+.phone-field,input,.date-trigger,.calendar-popover{
+  border-color:rgba(151,96,78,.2);
+  background:#fffdfb;
+}
+.button.primary{
+  border-radius:12px;
+  background:linear-gradient(135deg,#ec718f,#d9476d);
+  box-shadow:0 18px 32px -20px rgba(217,71,109,.8);
+}
+.button.secondary{border-color:#e7b7c2;color:#a33758;background:#fff8f7}
+.appointment-list-item,.reschedule-card,.cancel-card{
+  border-color:rgba(151,96,78,.16);
+  background:#fffdfb;
+}
+.appointment-list-item:hover{border-color:#df7c94;background:#fff5f6}
+.status-badge{background:#f3ecfa;color:#805cad}
+.appointment-details div{border-color:rgba(151,96,78,.13);background:#fff9f7}
+.action-title>span{background:#fde8ed;color:#b74061}
+.slot-button{border-color:rgba(151,96,78,.18);background:#fff}
+.slot-button:hover,.slot-button.selected{border-color:#d9476d;background:#fde8ed;color:#a33758}
+.cancel-card{background:linear-gradient(120deg,#fffdfb,#fff2f4)}
+body.is-embedded{background:#fcf3ee}
+.is-embedded .page-shell{width:min(980px,calc(100% - 48px));padding:38px 0 30px}
+.is-embedded .intro{margin-bottom:22px}
+.is-embedded .intro h1{font-size:clamp(2rem,4.2vw,3.5rem)}
+.is-embedded .intro-note{transform:rotate(1.5deg)}
+@media(max-width:560px){
+  .is-embedded .page-shell{width:min(100% - 24px,480px);padding:24px 0 18px}
+  .is-embedded .intro{margin-bottom:18px}
+  .lookup-card,.appointment-list-view,.appointment-view{border-radius:22px}
+}
+

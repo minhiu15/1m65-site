@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://aomiaszicxqrctcgeoms.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; script-src 'self' https://challenges.cloudflare.com; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'self'">
+  <title>Quản lý lịch hẹn · 1M65 Nails</title>
+  <link rel="icon" href="../favicon.svg">
+  <link rel="stylesheet" href="../manage-booking.css?v=20260809-12">
+  <link rel="stylesheet" href="../rose-theme.css?v=20260810rose7">
+  <link rel="stylesheet" href="manage-booking-v2.css?v=20260830-1">
+  <script src="../turnstile-config.js?v=20260807a"></script>
+  <script src="../turnstile-booking.js?v=20260807a"></script>
+  <script src="../manage-booking.js?v=20260809-4" defer></script>
+</head>
+<body>
+  <div class="ambient-doodles" aria-hidden="true">
+    <img class="doodle doodle-star" src="../doodles/star-lavender.png" alt="">
+    <img class="doodle doodle-peach" src="../doodles/star-peach.png" alt="">
+    <img class="doodle doodle-envelope" src="../doodles/heart-envelope.png" alt="">
+  </div>
+  <main class="page-shell">
+    <header class="page-header">
+      <a class="brand" href="./" aria-label="Về trang chủ 1M65 Nails V2">
+        <span class="brand-paw" aria-hidden="true">
+          <svg viewBox="0 0 40 40"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z"></path></g></svg>
+        </span>
+        <span class="brand-copy"><strong>1M65</strong><small>Nails, Eyelashes, Shampoo</small></span>
+      </a>
+      <a class="back-link" href="./"><span aria-hidden="true">←</span> Về trang chủ</a>
+    </header>
+
+    <section class="intro" aria-labelledby="page-title">
+      <div class="intro-copy">
+        <p class="eyebrow"><span aria-hidden="true">♡</span> Lịch hẹn của bạn</p>
+        <h1 id="page-title">Hẹn với tiệm,<br><span>mình cùng xem lại nha.</span></h1>
+        <p>Chỉ cần nhập số điện thoại đã đặt, tiệm sẽ tìm tất cả lịch hẹn đang có của bạn để mình xem, dời hoặc hủy lịch.</p>
+      </div>
+      <div class="intro-note" aria-hidden="true">
+        <img src="../doodles/cat-stamp.png" alt="">
+        <p>Mọi thay đổi đều được<br>gửi ngay về cho tiệm.</p>
+      </div>
+    </section>
+
+    <section class="lookup-card" aria-labelledby="lookup-title">
+      <div class="card-title-row">
+        <span class="step-bubble" aria-hidden="true">1</span>
+        <div><p class="card-kicker">Tra cứu nhanh</p><h2 id="lookup-title">Nhập số điện thoại của bạn</h2></div>
+      </div>
+      <form id="lookup-form" autocomplete="off">
+        <label for="booking-phone">Số điện thoại đã đặt</label>
+        <div class="phone-field">
+          <span class="phone-field-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M7.2 3.5 9.8 8c.3.6.2 1.2-.3 1.6l-1.3 1.1c1.1 2.2 2.9 4 5.1 5.1l1.1-1.3c.4-.5 1.1-.6 1.6-.3l4.5 2.6c.6.3.8 1 .5 1.6l-.7 1.5c-.4.8-1.2 1.3-2.1 1.3C9.7 20.8 3.2 14.3 2.8 5.8c0-.9.5-1.7 1.3-2.1L5.6 3c.6-.3 1.3-.1 1.6.5Z"></path></svg>
+          </span>
+          <input id="booking-phone" name="phone" type="tel" inputmode="numeric" pattern="0[0-9]{9}" maxlength="10" placeholder="Nhập số điện thoại" autocomplete="tel" required>
+        </div>
+        <button id="lookup-button" class="button primary" type="submit">Tìm lịch của bạn</button>
+      </form>
+      <p id="lookup-message" class="message" role="alert" aria-live="polite"></p>
+    </section>
+
+    <section id="appointment-list-view" class="appointment-list-view" aria-labelledby="appointment-list-title" hidden>
+      <div class="appointment-list-heading">
+        <div>
+          <p class="eyebrow"><span aria-hidden="true">♡</span> Lịch đang đặt</p>
+          <h2 id="appointment-list-title">Chọn lịch bạn muốn xem</h2>
+        </div>
+        <p id="appointment-list-count" class="appointment-list-count"></p>
+      </div>
+      <div id="appointment-list" class="appointment-list"></div>
+    </section>
+
+    <section id="appointment-view" class="appointment-view" aria-labelledby="appointment-title" hidden>
+      <div class="appointment-heading">
+        <div>
+          <p class="eyebrow"><span aria-hidden="true">✦</span> Thông tin đã xác thực</p>
+          <h2 id="appointment-title">Lịch <span id="appointment-reference"></span></h2>
+        </div>
+        <span id="appointment-status" class="status-badge"></span>
+      </div>
+
+      <dl class="appointment-details">
+        <div><dt>Khách hàng</dt><dd id="appointment-customer"></dd></div>
+        <div><dt>Ngày và giờ</dt><dd id="appointment-time"></dd></div>
+        <div><dt>Dịch vụ</dt><dd id="appointment-services"></dd></div>
+        <div><dt>Thời lượng</dt><dd id="appointment-duration"></dd></div>
+        <div><dt>Tổng tiền</dt><dd id="appointment-price"></dd></div>
+        <div><dt>Ghi chú</dt><dd id="appointment-note"></dd></div>
+      </dl>
+
+      <p id="manage-notice" class="manage-notice"></p>
+
+      <div id="manage-actions" class="manage-actions">
+        <section class="reschedule-card" aria-labelledby="reschedule-title">
+          <div class="action-title"><span aria-hidden="true">↻</span><div><h3 id="reschedule-title">Dời sang giờ khác</h3><p>Chọn ngày mới để xem những khung giờ còn trống.</p></div></div>
+          <div class="date-row">
+            <label id="reschedule-date-label" for="reschedule-date-trigger">Ngày mới</label>
+            <div id="reschedule-date-picker" class="date-picker">
+              <input id="reschedule-date" type="hidden">
+              <button id="reschedule-date-trigger" class="date-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="reschedule-calendar">
+                <span class="date-trigger-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 9h16M5.5 5h13A1.5 1.5 0 0 1 20 6.5v12a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5Z"></path></svg>
+                </span>
+                <span id="reschedule-date-display">Chọn ngày mới</span>
+                <svg class="date-trigger-chevron" viewBox="0 0 12 8" aria-hidden="true"><path d="m1 1 5 5 5-5"></path></svg>
+              </button>
+              <div id="reschedule-calendar" class="calendar-popover" role="dialog" aria-modal="false" aria-labelledby="calendar-month-label" hidden>
+                <div class="calendar-header">
+                  <button id="calendar-prev-month" class="calendar-nav" type="button" aria-label="Tháng trước">‹</button>
+                  <strong id="calendar-month-label"></strong>
+                  <button id="calendar-next-month" class="calendar-nav" type="button" aria-label="Tháng sau">›</button>
+                </div>
+                <div class="calendar-weekdays" aria-hidden="true"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div>
+                <div id="calendar-days" class="calendar-days" role="group" aria-label="Ngày trong tháng"></div>
+              </div>
+            </div>
+            <button id="load-slots-button" class="button secondary" type="button">Xem giờ trống</button>
+          </div>
+          <div id="reschedule-slots" class="slot-grid" aria-label="Khung giờ còn trống"></div>
+          <p id="reschedule-message" class="message" role="status" aria-live="polite"></p>
+          <button id="confirm-reschedule-button" class="button primary" type="button" disabled>Xác nhận dời lịch</button>
+        </section>
+
+        <section class="cancel-card" aria-labelledby="cancel-title">
+          <div>
+            <p class="card-kicker">Tiệm hiểu mà</p>
+            <h3 id="cancel-title">Bạn không thể đến?</h3>
+            <p>Hủy lịch sẽ mở lại khung giờ này cho khách khác.</p>
+          </div>
+          <button id="cancel-button" class="button danger" type="button">Hủy lịch hẹn</button>
+        </section>
+      </div>
+    </section>
+
+    <footer class="support-footer"><span aria-hidden="true">♡</span> Cần tiệm hỗ trợ? Liên hệ trực tiếp với 1M65 Nails để tụi mình xử lý giúp nha.</footer>
+  </main>
+</body>
+</html>
