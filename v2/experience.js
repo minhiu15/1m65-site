@@ -32,6 +32,8 @@ const fallbackReviews = [
 ["Gội đầu dưỡng sinh xong mình ngủ quên mất hai mươi phút. Chị Hạnh để yên cho mình ngủ, không đánh thức.","Bảo Trâm","Gội đầu dưỡng sinh"]
 ];
 let galleryFilter = "all";
+let galleryVisible = matchMedia("(max-width: 600px)").matches ? 6 : 10;
+let lightboxIndex = 0;
 let activeModal = null;
 let returnFocus = null;
 let toastTimer = 0;
@@ -70,8 +72,11 @@ function toast(message) {
 }
 window.__v2Experience = { openModal: openModal, closeModal: closeModal, toast: toast, esc: esc };
 
-function tile(item) {
-  return '<figure class="gallery-tile" data-badge="'+esc(item[3])+'"><img src="'+esc(item[1])+'" alt="'+esc(item[2])+'" loading="lazy"><figcaption class="sr-only">'+esc(item[2])+'</figcaption></figure>';
+function initialGalleryCount() {
+  return matchMedia("(max-width: 600px)").matches ? 6 : 10;
+}
+function tile(item, index) {
+  return '<button type="button" class="gallery-tile" data-gallery-index="'+index+'" data-badge="'+esc(item[3])+'" aria-label="Xem lớn: '+esc(item[2])+'"><img src="'+esc(item[1])+'" alt="" loading="lazy"><span class="sr-only">'+esc(item[2])+'</span></button>';
 }
 function filteredGallery() {
   return gallery.filter(function(item){return galleryFilter === "all" || item[0] === galleryFilter;});
@@ -82,21 +87,39 @@ function renderGallery() {
     button.classList.toggle("is-active",active);
     button.setAttribute("aria-pressed",String(active));
   });
-  const count = matchMedia("(max-width: 600px)").matches ? 6 : 10;
+  const items = filteredGallery();
+  galleryVisible = Math.max(galleryVisible, initialGalleryCount());
   const main = document.querySelector("[data-gallery-grid]");
-  const full = document.querySelector("[data-gallery-modal-grid]");
-  const chips = document.querySelector("[data-gallery-modal-filters]");
-  if (main) main.innerHTML = filteredGallery().slice(0,count).map(tile).join("");
-  if (full) full.innerHTML = filteredGallery().map(tile).join("");
-  if (chips) chips.innerHTML = filters.map(function(item){const active=item[0]===galleryFilter;return '<button class="'+(active?"is-active":"")+'" type="button" data-gallery-modal-filter="'+item[0]+'" aria-pressed="'+active+'">'+item[1]+'</button>';}).join("");
+  const more = document.querySelector("[data-gallery-more]");
+  if (main) main.innerHTML = items.slice(0,galleryVisible).map(tile).join("");
+  if (more) more.hidden = galleryVisible >= items.length;
+}
+function updateLightbox(index) {
+  const items = filteredGallery();
+  if (!items.length) return;
+  lightboxIndex = (index + items.length) % items.length;
+  const item = items[lightboxIndex];
+  const image = document.querySelector("[data-lightbox-image]");
+  const caption = document.querySelector("[data-lightbox-caption]");
+  if (image) { image.src = item[1]; image.alt = item[2]; }
+  if (caption) caption.textContent = item[2];
+}
+function openLightbox(index, trigger) {
+  updateLightbox(index);
+  openModal(document.querySelector("#gallery-lightbox"), trigger);
 }
 function renderReviews(reviews) {
   const grid = document.querySelector("[data-review-grid]");
   if (!grid) return;
+  const quoteAssets = [
+    "assets/reviews/05_quote_pink_LOCKED_CLEAN.png",
+    "assets/reviews/06_quote_lavender_TEMP_LOCKED.png",
+    "assets/reviews/07_quote_peach_LOCKED_CLEAN.png",
+    "assets/reviews/06_quote_lavender_TEMP_LOCKED.png",
+  ];
   grid.innerHTML = reviews.slice(0,4).map(function(review,index){
-    const quote = index%2 ? "assets/reviews/07_quote_peach_LOCKED_CLEAN.png" : "assets/reviews/05_quote_pink_LOCKED_CLEAN.png";
     const stars = new Array(5).fill('<img src="assets/reviews/08_rating_star_filled_LOCKED_CLEAN.png" alt="">').join("");
-    return '<article class="review-card"><img src="'+quote+'" alt="" aria-hidden="true"><blockquote>“'+esc(review[0])+'”</blockquote><div class="stars" aria-label="5 trên 5 sao">'+stars+'</div><cite>'+esc(review[1])+' · '+esc(review[2])+'</cite></article>';
+    return '<article class="review-card"><img class="review-card__quote" src="'+quoteAssets[index]+'" alt="" aria-hidden="true"><p class="review-card__text">“'+esc(review[0])+'”</p><div class="review-card__rating stars" aria-label="5 trên 5 sao">'+stars+'</div><p class="review-card__author">— '+esc(review[1])+'<small>'+esc(review[2])+'</small></p></article>';
   }).join("");
 }
 async function loadReviews() {
@@ -143,9 +166,12 @@ window.__v2Experience.openManager = openManager;
 document.addEventListener("click",function(event){
   const target=event.target;
   const close=target.closest("[data-close-modal]");if(close)return closeModal(close.closest(".modal"));
-  const openGallery=target.closest("[data-open-gallery]");if(openGallery){renderGallery();openModal(document.querySelector("#gallery-modal"),openGallery);return;}
-  const filter=target.closest("[data-gallery-filter],[data-gallery-modal-filter]");if(filter){galleryFilter=filter.dataset.galleryFilter||filter.dataset.galleryModalFilter;renderGallery();return;}
-  if(target.closest("[data-gallery-book]")){closeModal(document.querySelector("#gallery-modal"),false);window.__v2Booking.open({},target.closest("[data-gallery-book]"));return;}
+  const more=target.closest("[data-gallery-more]");if(more){galleryVisible+=initialGalleryCount();renderGallery();return;}
+  const filter=target.closest("[data-gallery-filter]");if(filter){galleryFilter=filter.dataset.galleryFilter;galleryVisible=initialGalleryCount();renderGallery();return;}
+  const galleryTile=target.closest("[data-gallery-index]");if(galleryTile){openLightbox(Number(galleryTile.dataset.galleryIndex),galleryTile);return;}
+  if(target.closest("[data-lightbox-prev]")){updateLightbox(lightboxIndex-1);return;}
+  if(target.closest("[data-lightbox-next]")){updateLightbox(lightboxIndex+1);return;}
+  if(target.closest("[data-lightbox-book]")){closeModal(document.querySelector("#gallery-lightbox"),false);window.__v2Booking.open({},target.closest("[data-lightbox-book]"));return;}
   const faq=target.closest("[data-faq-list] button");if(faq){const expanded=faq.getAttribute("aria-expanded")==="true";faq.setAttribute("aria-expanded",String(!expanded));const answer=faq.closest("article").querySelector(".faq-answer");if(answer)answer.hidden=expanded;return;}
   const manager=target.closest("[data-open-manager]");if(manager)openManager("",manager);
 });
@@ -155,6 +181,7 @@ document.addEventListener("keydown",function(event){
   const drawer=document.querySelector("#mobile-drawer");
   const root=activeModal||(drawer&&!drawer.hidden?drawer.querySelector(".drawer-panel"):null);
   if(event.key==="Tab"&&root){const items=focusables(root);if(!items.length)return;const first=items[0],last=items[items.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}}
+  if(activeModal&&activeModal.id==="gallery-lightbox"&&["ArrowLeft","ArrowRight"].includes(event.key)){event.preventDefault();updateLightbox(lightboxIndex+(event.key==="ArrowRight"?1:-1));return;}
   const tab=event.target.closest&&event.target.closest("[role='tab'][data-service-tab]");
   if(tab&&["ArrowLeft","ArrowRight","Home","End"].includes(event.key)){const tabs=Array.from(document.querySelectorAll("[role='tab'][data-service-tab]"));let index=tabs.indexOf(tab);if(event.key==="Home")index=0;else if(event.key==="End")index=tabs.length-1;else index=(index+(event.key==="ArrowRight"?1:-1)+tabs.length)%tabs.length;event.preventDefault();tabs[index].focus();tabs[index].click();}
 });

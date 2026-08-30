@@ -8,11 +8,11 @@
   <meta name="description" content="Bản xem trước giao diện mới của 1M65 Nails, Eyelashes, Shampoo.">
   <title>1M65 Nails · V2 Preview</title>
   <link rel="icon" href="../favicon.svg">
-  <link rel="stylesheet" href="styles.css?v=20260830-2">
+  <link rel="stylesheet" href="styles.css?v=20260830-3">
   <script src="../turnstile-config.js?v=20260807a"></script>
   <script src="../turnstile-booking.js?v=20260807a"></script>
-  <script type="module" src="app.js?v=20260830-2"></script>
-  <script type="module" src="experience.js?v=20260830-1"></script>
+  <script type="module" src="app.js?v=20260830-3"></script>
+  <script type="module" src="experience.js?v=20260830-3"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
@@ -31,7 +31,7 @@
         <a href="#danhgia"><img src="assets/home/nav/reviews.png" alt="">Đánh giá</a>
         <a href="#lienhe"><img src="assets/home/nav/contact.png" alt="">Liên hệ</a>
       </nav>
-      <button class="header-book button-primary" type="button" data-open-booking>Đặt lịch hẹn</button>
+      <button class="header-book button-primary" type="button" data-open-booking><img src="assets/home/booking/booking_calendar_icon.png" alt="" aria-hidden="true">Đặt lịch ngay</button>
       <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Mở menu">
         <span></span><span></span><span></span>
       </button>
@@ -53,22 +53,26 @@
 
   <main id="main-content">
     <section class="home-section paper-section" aria-labelledby="home-title">
+      <img class="home-doodle home-doodle--heart" src="assets/home/decor/heart_pink.png" alt="" aria-hidden="true">
+      <img class="home-doodle home-doodle--flower-pink" src="assets/home/decor/flower_pink.png" alt="" aria-hidden="true">
+      <img class="home-doodle home-doodle--flower-lavender" src="assets/home/decor/flower_lavender.png" alt="" aria-hidden="true">
+      <img class="home-doodle home-doodle--bow" src="assets/home/decor/bow_pink.png" alt="" aria-hidden="true">
       <div class="home-grid paper-width">
         <div class="home-copy reveal">
           <p class="taped-kicker"><span>Nail xinh · Mood xịn · Mỗi ngày thêm chill ♡</span></p>
           <h1 id="home-title">Một bộ nail <em>xinh</em><br>Một ngày thêm <em>happy</em></h1>
           <div class="home-actions">
-            <button class="button-primary" type="button" data-open-booking><span aria-hidden="true">▣</span> Đặt hẹn ngay</button>
-            <a class="button-secondary" href="#thuvien"><span aria-hidden="true">▧</span> Xem thư viện móng</a>
+            <button class="button-primary" type="button" data-open-booking><img src="assets/home/booking/booking_calendar_icon.png" alt="" aria-hidden="true">Đặt hẹn ngay</button>
+            <a class="button-secondary" href="#thuvien"><img src="assets/home/nav/gallery.png" alt="" aria-hidden="true">Xem thư viện móng</a>
           </div>
-          <blockquote>
-            “Chiếc mood này sẽ duyệt từng bộ móng trước khi bạn ra về. Bằng cách nhìn mặt cái rồi ngủ tiếp.”
-            <cite>NHU NHI · QUẢN LÝ TIỆM</cite>
-          </blockquote>
         </div>
         <div class="home-art reveal" aria-hidden="true">
           <img src="assets/home/hero/main_hero.png" alt="">
         </div>
+        <blockquote class="home-quote reveal">
+          “Chiếc móng này sẽ duyệt từng bộ móng trước khi bạn ra về. Bằng cách nhìn một cái rồi ngủ tiếp.”
+          <cite>NHU NHI · QUẢN LÝ TIỆM</cite>
+        </blockquote>
         <aside class="today-card reveal" aria-labelledby="today-title">
           <div class="today-head"><h2 id="today-title"><img src="assets/home/schedule/bell.png" alt="">Lịch hôm nay</h2><time data-today></time></div>
           <div class="slot-grid" data-home-slots></div>
@@ -89,6 +93,12 @@
         <img class="services-subtitle" src="assets/services/header/services_subtitle_pill.png" alt="Chăm chút từng chi tiết nhỏ — để đôi tay luôn xinh">
         <img class="services-cluster" src="assets/services/header/services_hero_cluster.png" alt="Bộ sơn móng và dụng cụ làm móng">
       </div>
+        <img class="services-decor services-decor--heart" src="assets/services/header/decor_heart_pink.png" alt="" aria-hidden="true">
+        <img class="services-decor services-decor--flower-pink" src="assets/services/header/decor_flower_pink.png" alt="" aria-hidden="true">
+        <img class="services-decor services-decor--flower-lavender" src="assets/services/header/decor_flower_lavender.png" alt="" aria-hidden="true">
+        <img class="services-decor services-decor--sparkle-orange" src="assets/services/header/decor_sparkle_orange.png" alt="" aria-hidden="true">
+        <img class="services-decor services-decor--sparkle-purple" src="assets/services/header/decor_sparkle_purple.png" alt="" aria-hidden="true">
+        <img class="services-decor services-decor--swirl" src="assets/services/header/decor_swirl_pink.png" alt="" aria-hidden="true">
       <div class="services-content paper-width reveal">
         <div class="service-tabs" role="tablist" aria-label="Nhóm dịch vụ" data-service-tabs></div>
         <div class="service-panel" data-service-panel aria-live="polite"></div>
@@ -113,17 +123,22 @@
         </div>
         <div class="gallery-grid" data-gallery-grid></div>
         <div class="gallery-more-wrap">
-          <button class="gallery-more" type="button" data-open-gallery>Xem thêm <span aria-hidden="true">›</span></button>
-          <p>Bấm ảnh để xem mẫu rõ hơn trong thư viện đầy đủ ♡</p>
+          <button class="gallery-more" type="button" data-gallery-more>Xem thêm <span aria-hidden="true">›</span></button>
+          <p>Bấm ảnh để xem lớn ♡</p>
         </div>
       </div>
     </section>
 
     <section class="about-section paper-section" id="vechungminh" aria-labelledby="about-heading">
+      <img class="about-floating about-floating--flower-pink" src="assets/about/decor/about_flower_pink_with_leaves_EXACT.png" alt="" aria-hidden="true">
+      <img class="about-floating about-floating--flower-lavender" src="assets/about/decor/about_flower_lavender_with_leaves_EXACT.png" alt="" aria-hidden="true">
+      <img class="about-floating about-floating--sparkle" src="assets/about/decor/about_sparkle_orange_EXACT.png" alt="" aria-hidden="true">
+      <img class="about-floating about-floating--tape" src="assets/about/decor/about_tape_lavender_LOCKED.png" alt="" aria-hidden="true">
       <div class="about-grid paper-width reveal">
         <article class="about-intro paper-card">
           <span class="section-label">Về chúng mình</span>
           <h2 id="about-heading">Xin chào,<br>chúng mình là <em>1M65</em></h2>
+          <img class="about-bow-divider" src="assets/about/decor/about_bow_divider_EXACT.png" alt="" aria-hidden="true">
           <p>Một tiệm nhỏ xinh dành cho những ai yêu cái đẹp, thích được chăm chút và muốn tìm một nơi để thư giãn thật sự.</p>
           <img class="about-tape" src="assets/about/decor/about_tape_pink_LOCKED.png" alt="" aria-hidden="true">
         </article>
@@ -142,6 +157,7 @@
         </div>
         <div class="about-journey" aria-label="Một buổi ở 1M65">
           <h3>Một buổi ở 1M65</h3>
+          <img class="about-cat" src="assets/about/cats/about_cat_peeking_LOCKED.png" alt="" aria-hidden="true">
           <div>
             <article><b>01</b><img src="assets/about/journey/about_journey_01_choose_TEMP_LOCKED.png" alt=""><h4>Chọn dịch vụ</h4><p>Tư vấn nhẹ nhàng, gợi ý phù hợp với bạn nhất.</p></article>
             <article><b>02</b><img src="assets/about/journey/about_journey_02_care_TEMP_LOCKED.png" alt=""><h4>Chăm chút tỉ mỉ</h4><p>Từng bước thực hiện cẩn thận và sạch sẽ.</p></article>
@@ -153,20 +169,29 @@
     </section>
 
     <section class="reviews-section paper-section" id="danhgia" aria-labelledby="reviews-heading">
-      <div class="reviews-shell paper-width reveal">
-        <header class="section-heading centered-heading">
-          <h2 id="reviews-heading">Đánh giá <span aria-hidden="true">♡</span></h2>
-          <p>Cảm ơn các nàng đã tin yêu và đồng hành cùng 1M65.<br>Những lời khen là động lực để chúng mình tốt hơn mỗi ngày!</p>
+      <div class="reviews-inner reviews-shell reveal">
+        <header class="reviews-header">
+          <h2 class="reviews-title" id="reviews-heading">Đánh giá <span class="reviews-title-bubble" aria-hidden="true">♡</span></h2>
+          <p class="reviews-subtitle">Cảm ơn các nàng đã tin yêu và đồng hành cùng 1M65.<br>Những lời khen là động lực để chúng mình mỗi ngày tốt hơn!</p>
+          <div class="reviews-header-decor" aria-hidden="true">
+            <span class="reviews-header-decor__line"></span>
+            <span>♡</span>
+            <span class="reviews-header-decor__line"></span>
+          </div>
         </header>
-        <div class="review-stats">
-          <article><img src="assets/reviews/01_stat_star_LOCKED.png" alt=""><strong data-review-average>4.9<small>/5</small></strong><span>Đánh giá trung bình</span></article>
-          <article><img src="assets/reviews/02_stat_heart_LOCKED.png" alt=""><strong data-review-total>500+</strong><span>Khách hàng hài lòng</span></article>
-          <article><img src="assets/reviews/03_stat_chat_LOCKED_CLEAN.png" alt=""><strong>100%</strong><span>Phản hồi tích cực</span></article>
-          <article><img src="assets/reviews/04_stat_sparkle_LOCKED_CLEAN.png" alt=""><strong>Nhiều năm</strong><span>Đồng hành cùng khách yêu</span></article>
+        <div class="reviews-stats review-stats">
+          <article class="reviews-stat"><img class="reviews-stat__icon" src="assets/reviews/01_stat_star_LOCKED.png" alt=""><div><strong class="reviews-stat__value" data-review-average>4.9<small>/5</small></strong><span class="reviews-stat__label">Đánh giá trung bình</span></div></article>
+          <article class="reviews-stat"><img class="reviews-stat__icon" src="assets/reviews/02_stat_heart_LOCKED.png" alt=""><div><strong class="reviews-stat__value" data-review-total>500+</strong><span class="reviews-stat__label">Khách hàng hài lòng</span></div></article>
+          <article class="reviews-stat"><img class="reviews-stat__icon" src="assets/reviews/03_stat_chat_LOCKED_CLEAN.png" alt=""><div><strong class="reviews-stat__value">100%</strong><span class="reviews-stat__label">Phản hồi tích cực</span></div></article>
+          <article class="reviews-stat"><img class="reviews-stat__icon" src="assets/reviews/04_stat_sparkle_LOCKED_CLEAN.png" alt=""><div><strong class="reviews-stat__value">Nhiều năm</strong><span class="reviews-stat__label">Đồng hành cùng khách yêu</span></div></article>
         </div>
-        <h3 class="review-list-title">♡ &nbsp; LỜI KHEN TỪ KHÁCH YÊU &nbsp; ♡</h3>
-        <div class="review-grid" data-review-grid></div>
-        <div class="reviews-wave" aria-hidden="true"><img src="assets/reviews/10_micro_heart_LOCKED_CLEAN.png" alt=""></div>
+        <h3 class="reviews-kicker review-list-title">♡ &nbsp; LỜI KHEN TỪ KHÁCH YÊU &nbsp; ♡</h3>
+        <div class="reviews-grid review-grid" data-review-grid></div>
+        <div class="reviews-bottom" aria-hidden="true">
+          <span class="reviews-bottom__wave"></span>
+          <img class="reviews-bottom__heart" src="assets/reviews/10_micro_heart_LOCKED_CLEAN.png" alt="">
+          <span class="reviews-bottom__wave"></span>
+        </div>
       </div>
     </section>
 
@@ -175,6 +200,7 @@
         <img class="booking-heart" src="assets/booking/booking_heart_outline_pink.png" alt="" aria-hidden="true">
         <img class="booking-sparkle" src="assets/booking/booking_sparkle_peach.png" alt="" aria-hidden="true">
         <img class="booking-flower" src="assets/booking/booking_flower_outline_pink.png" alt="" aria-hidden="true">
+        <img class="booking-loop" src="assets/booking/booking_dotted_loop_pink.png" alt="" aria-hidden="true">
         <span class="booking-eyebrow">♡ &nbsp; Đặt lịch cùng 1M65</span>
         <h2 id="booking-cta-heading">Một chút <em>xinh</em><br>đang chờ bạn</h2>
         <p>Chọn thời gian phù hợp, tụi mình sẽ chăm chút phần còn lại.</p>
@@ -214,13 +240,17 @@
 
     <button class="manage-fab" type="button" data-open-manager>Xem lịch của bạn</button>
 
-    <section class="modal" id="gallery-modal" role="dialog" aria-modal="true" aria-labelledby="gallery-modal-title" hidden>
+    <section class="modal" id="gallery-lightbox" role="dialog" aria-modal="true" aria-labelledby="gallery-lightbox-title" hidden>
       <div class="modal-backdrop" data-close-modal></div>
-      <div class="modal-panel gallery-modal-panel" role="document">
-        <header class="modal-header"><div><span>Thư viện đầy đủ</span><h2 id="gallery-modal-title">Tất cả khoảnh khắc xinh</h2></div><button type="button" class="modal-close" data-close-modal aria-label="Đóng">×</button></header>
-        <div class="gallery-filters gallery-modal-filters" role="group" aria-label="Lọc thư viện đầy đủ" data-gallery-modal-filters></div>
-        <div class="gallery-modal-grid" data-gallery-modal-grid></div>
-        <footer class="modal-footer"><p>Thích mẫu nào thì lưu lại mang tới tiệm nhé ♡</p><button class="button-primary" type="button" data-gallery-book>Đặt hẹn</button></footer>
+      <div class="modal-panel gallery-lightbox-panel" role="document">
+        <button type="button" class="modal-close lightbox-close" data-close-modal aria-label="Đóng ảnh">×</button>
+        <button type="button" class="lightbox-nav lightbox-nav--prev" data-lightbox-prev aria-label="Ảnh trước">‹</button>
+        <figure class="lightbox-figure">
+          <img data-lightbox-image src="" alt="">
+          <figcaption id="gallery-lightbox-title" data-lightbox-caption></figcaption>
+        </figure>
+        <button type="button" class="lightbox-nav lightbox-nav--next" data-lightbox-next aria-label="Ảnh tiếp theo">›</button>
+        <button class="button-primary lightbox-book" type="button" data-lightbox-book>Đặt hẹn theo mẫu này</button>
       </div>
     </section>
 

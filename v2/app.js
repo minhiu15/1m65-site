@@ -51,6 +51,36 @@ const groupDefs = {
   goi: { title: "SHAMPOO", note: "Một khoảng nghỉ êm cho tóc, da đầu và đôi vai được thả lỏng.", ids: ["goi-thao", "goi-thuong", "goi-phuchoi", "goi-duongsinh"] },
 };
 
+const nailCareDescriptions = {
+  "ct-tay": "Làm sạch và loại bỏ da chết vùng quanh móng tay.",
+  "ct-chan": "Loại bỏ da chết, giúp vùng móng chân sạch sẽ, gọn gàng.",
+  "thao-gel": "Tháo sơn gel nhẹ nhàng, không làm hư tổn móng thật.",
+  "thao-up": "Tháo móng úp hoặc nail box an toàn, không đau rát.",
+  "thao-bot": "Tháo gel/bột chuyên sâu, giữ móng thật luôn khỏe mạnh.",
+  "noi-up": "Kỹ thuật nối móng úp Xgel bền đẹp, tự nhiên và chắc chắn.",
+  "noi-gel": "Đắp gel tạo độ cứng và form móng chuẩn đẹp.",
+  "noi-bot": "Đắp bột giúp móng cứng chắc, độ bền cao.",
+};
+const nailCareNotes = [
+  "Giá trên chưa bao gồm sơn.",
+  "Mẫu càng chi tiết, tụi mình báo giá trước khi làm.",
+  "Tụi mình luôn lắng nghe để mang đến dịch vụ phù hợp nhất với bạn!",
+];
+const signatureIcons = {
+  "gel-hn": "assets/services/signature-shared/service_icons/son_gel_han_nhat.png",
+  "noi-gel": "assets/services/signature-shared/service_icons/noi_mong_dap_gel.png",
+  "noi-bot": "assets/services/signature-shared/service_icons/noi_mong_dap_bot.png",
+  "mi-classic": "assets/services/signature-shared/service_icons/noi_mi_classic.png",
+};
+
+fallbackServices.forEach((service) => {
+  if (!groupDefs.nail.ids.includes(service.id)) return;
+  service.description = nailCareDescriptions[service.id] || service.description;
+  service.originalPrice = service.price;
+  service.discountPercent = 10;
+  service.price = Math.round(service.originalPrice * 0.9);
+});
+
 const state = { activeTab: "signature", services: fallbackServices };
 window.__v2Services = { get services() { return state.services; } };
 const money = (value) => `${Number(value || 0).toLocaleString("vi-VN")}₫`;
@@ -58,39 +88,85 @@ const serviceById = (id) => state.services.find((item) => item.id === id);
 
 function renderPrice(service) {
   const discount = Number(service.discountPercent || 0);
-  if (discount <= 0) return `<strong>${money(service.price)}</strong>`;
-  return `<span class="sale-badge">-${discount}%</span><del>${money(service.originalPrice)}</del><strong>${money(service.price)}</strong>`;
+  const original = Number(service.originalPrice || service.price || 0);
+  if (discount <= 0 || original <= Number(service.price || 0)) return `<strong>${money(service.price)}</strong>`;
+  return `<span class="sale-badge">-${discount}%</span><span class="price-stack"><del>${money(original)}</del><strong>${money(service.price)}</strong></span>`;
 }
 
-function serviceCard(service, className = "") {
-  return `<article class="service-card ${className}">
-    <div class="service-card-copy"><h3>${service.name}</h3><p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p><div class="service-meta"><span>${service.durationMinutes} phút</span><span class="service-price">${renderPrice(service)}</span></div><button type="button" data-book-service="${service.id}">Đặt dịch vụ này</button></div>
-    <img src="${service.image}" alt="${service.name}" loading="lazy">
+function serviceCard(service, className = "", variant = "standard") {
+  const icon = variant === "signature" ? signatureIcons[service.id] : "";
+  const featured = className.includes("service-card--featured");
+  return `<article class="service-card ${className}" data-card-variant="${variant}">
+    ${featured ? '<span class="featured-badge">ĐƯỢC CHỌN<br>NHIỀU NHẤT</span>' : ""}
+    <div class="service-card-copy">
+      ${icon ? `<img class="service-icon" src="${icon}" alt="" aria-hidden="true">` : ""}
+      <h3>${service.name}</h3>
+      <p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p>
+      <div class="service-meta"><span class="service-duration">~${service.durationMinutes} phút</span><span class="service-price">${renderPrice(service)}</span></div>
+      <button type="button" data-book-service="${service.id}">Đặt hẹn <span aria-hidden="true">→</span></button>
+    </div>
+    <div class="service-photo-wrap">
+      <img src="${service.image}" alt="${service.name}" loading="lazy">
+      ${featured ? '<img class="featured-cat-sticker" src="assets/services/signature-shared/cats/featured_photo_cat_sticker.png" alt="" aria-hidden="true">' : ""}
+    </div>
   </article>`;
+}
+
+function renderServiceNote(lines) {
+  return `<aside class="service-note">
+    <img class="service-note-cat" src="assets/services/signature-shared/cats/note_cat_peeking.png" alt="" aria-hidden="true">
+    <div class="service-note-label"><strong>Lưu ý nhé</strong><span aria-hidden="true">♡</span></div>
+    <ul>${lines.map((line, index) => `<li data-note-tone="${index % 3}">${line}</li>`).join("")}</ul>
+  </aside>`;
 }
 
 function renderSignature() {
   const ids = ["ve", "gel-hn", "noi-gel", "noi-bot", "mi-classic", "goi-duongsinh"];
-  const list = ids.map(serviceById).filter(Boolean);
-  const [featured, ...rest] = list;
+  const [featured, ...rest] = ids.map(serviceById).filter(Boolean);
   return `<div class="signature-layout">
-    <div class="signature-intro">
-      <img class="signature-cat" src="assets/services/signature-web/cats/signature_raised_paw_LOCKED.png" alt="Mèo Nhu Nhi vẫy tay">
-      <div><img class="signature-wordmark" src="assets/services/signature-web/signature_wordmark/SIGNATURE_WORDMARK_FINAL_CLEAN_SAFE.png" alt="Signature"><p>Dịch vụ nổi bật tại 1M65 Nail Room</p></div>
+    <div class="signature-hero-row">
+      <div class="signature-intro">
+        <img class="signature-tape" src="assets/services/signature-shared/decor/top_gingham_tape.png" alt="" aria-hidden="true">
+        <img class="signature-doodle signature-doodle--heart" src="assets/services/signature-shared/doodles/header_heart_outline.png" alt="" aria-hidden="true">
+        <img class="signature-doodle signature-doodle--crown" src="assets/services/signature-shared/doodles/signature_crown.png" alt="" aria-hidden="true">
+        <img class="signature-doodle signature-doodle--sparkle" src="assets/services/signature-shared/doodles/sparkle_orange.png" alt="" aria-hidden="true">
+        <img class="signature-cat signature-cat--web" src="assets/services/signature-web/cats/signature_raised_paw_LOCKED.png" alt="Mèo Nhu Nhi vẫy tay">
+        <img class="signature-cat signature-cat--mobile" src="assets/services/signature-mobile/cats/header_cat_waving_bow.png" alt="Mèo Nhu Nhi vẫy tay">
+        <div class="signature-copy">
+          <img class="signature-wordmark" src="assets/services/signature-web/signature_wordmark/SIGNATURE_WORDMARK_FINAL_CLEAN_SAFE.png" alt="Signature">
+          <span class="signature-ribbon">DỊCH VỤ NỔI BẬT TẠI 1M65 NAIL ROOM</span>
+          <p>Từng chi tiết nhỏ, tạo nên sự khác biệt lớn ♡</p>
+        </div>
+      </div>
+      ${featured ? serviceCard(featured, "service-card--featured", "signature") : ""}
     </div>
-    ${featured ? serviceCard(featured, "service-card--featured") : ""}
-    <div class="signature-grid">${rest.map((item) => serviceCard(item)).join("")}</div>
-    <aside class="service-note"><img src="assets/services/signature-shared/cats/note_cat_peeking.png" alt=""><div><strong>Lưu ý nhé</strong><p>Giá trên chưa bao gồm sơn. Mẫu càng chi tiết, tụi mình báo giá trước khi làm.</p></div></aside>
+    <div class="signature-grid signature-grid--top">${rest.slice(0, 3).map((item) => serviceCard(item, "", "signature")).join("")}</div>
+    <div class="signature-lower">
+      <img class="signature-outside signature-outside--drink" src="assets/services/signature-shared/doodles/bottom_drink.png" alt="" aria-hidden="true">
+      ${rest.slice(3).map((item) => serviceCard(item, "", "signature")).join("")}
+      <img class="signature-outside signature-outside--bath-cat" src="assets/services/signature-shared/cats/shampoo_bath_cat_scene.png" alt="" aria-hidden="true">
+    </div>
+    ${renderServiceNote(nailCareNotes)}
   </div>`;
 }
 
 function renderSharedGroup(id) {
   const group = groupDefs[id];
   const services = group.ids.map(serviceById).filter(Boolean);
-  return `<div class="shared-service-layout" data-template="nail-care">
-    <header class="shared-service-title"><img src="assets/services/signature-shared/cats/note_cat_peeking.png" alt=""><div><h2>${group.title}</h2><p>${group.note}</p></div></header>
-    <div class="shared-service-grid">${services.map((item) => serviceCard(item)).join("")}</div>
-    <aside class="service-note"><img src="assets/services/signature-shared/cats/note_cat_peeking.png" alt=""><div><strong>Lưu ý nhé</strong><p>Giá có thể thay đổi theo độ dài và tình trạng thực tế. Tiệm luôn báo trước khi làm.</p></div></aside>
+  const isNailCare = id === "nail";
+  const note = isNailCare ? nailCareNotes : [
+    "Giá có thể thay đổi theo độ dài và tình trạng thực tế.",
+    "Tụi mình luôn báo giá trước khi làm.",
+    "Bạn cứ mang ảnh mẫu để được tư vấn sát gu nhất nhé!",
+  ];
+  return `<div class="shared-service-layout shared-service-layout--${id}" data-template="nail-care" data-service-group="${id}">
+    <header class="shared-service-title">
+      <span class="shared-service-kicker">${isNailCare ? "CHĂM SÓC MÓNG" : "DỊCH VỤ 1M65"}</span>
+      <h2>${group.title}</h2>
+      <p>${group.note}</p>
+    </header>
+    <div class="shared-service-grid ${isNailCare ? "nail-care-grid" : ""}">${services.map((item) => serviceCard(item, isNailCare ? "nail-care-card" : "", isNailCare ? "nailcare" : "standard")).join("")}</div>
+    ${renderServiceNote(note)}
   </div>`;
 }
 
@@ -104,7 +180,6 @@ function renderServices() {
   panel.setAttribute("aria-labelledby", `tab-${state.activeTab}`);
   panel.innerHTML = state.activeTab === "signature" ? renderSignature() : renderSharedGroup(state.activeTab);
 }
-
 async function loadLiveServices() {
   try {
     const response = await fetch(BOOKING_ENDPOINT, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ action: "config" }) });
