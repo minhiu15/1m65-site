@@ -182,12 +182,12 @@ body{
   --paper-glow-radius:clamp(300px,29vw,560px);
   background-image:
     radial-gradient(circle var(--paper-glow-radius) at 3% 6%,rgba(235,223,255,.44) 0,rgba(235,223,255,.2) 38%,transparent 73%),
-    radial-gradient(circle var(--paper-glow-radius) at 97% 15%,rgba(255,220,232,.48) 0,rgba(255,220,232,.2) 40%,transparent 74%),
+    radial-gradient(circle var(--paper-glow-radius) at 97% 15%,rgba(218,242,230,.46) 0,rgba(218,242,230,.19) 40%,transparent 74%),
     radial-gradient(circle var(--paper-glow-radius) at 5% 29%,rgba(222,239,255,.4) 0,rgba(222,239,255,.17) 42%,transparent 74%),
     radial-gradient(circle var(--paper-glow-radius) at 96% 43%,rgba(247,227,255,.42) 0,rgba(247,227,255,.18) 40%,transparent 74%),
     radial-gradient(circle var(--paper-glow-radius) at 4% 57%,rgba(255,226,215,.42) 0,rgba(255,226,215,.17) 41%,transparent 74%),
-    radial-gradient(circle var(--paper-glow-radius) at 97% 70%,rgba(255,221,234,.44) 0,rgba(255,221,234,.18) 40%,transparent 74%),
-    radial-gradient(circle var(--paper-glow-radius) at 5% 83%,rgba(229,224,255,.4) 0,rgba(229,224,255,.16) 42%,transparent 74%),
+    radial-gradient(circle var(--paper-glow-radius) at 97% 70%,rgba(255,226,236,.32) 0,rgba(255,226,236,.13) 40%,transparent 74%),
+    radial-gradient(circle var(--paper-glow-radius) at 5% 83%,rgba(255,241,196,.34) 0,rgba(255,241,196,.14) 42%,transparent 74%),
     radial-gradient(circle var(--paper-glow-radius) at 96% 95%,rgba(221,240,255,.38) 0,rgba(221,240,255,.15) 42%,transparent 74%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3' seed='12' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 .12'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)' opacity='.22'/%3E%3C/svg%3E");
   background-size:auto,auto,auto,auto,auto,auto,auto,auto,180px 180px;
@@ -1007,3 +1007,111 @@ main,
     margin-left: 5px;
   }
 }
+
+/* Multi-pastel rebalance: pink remains primary, supporting surfaces rotate hues. */
+:root {
+  --pastel-rose: #fff0f4;
+  --pastel-peach: #fff1e7;
+  --pastel-yellow: #fff8e2;
+  --pastel-mint: #eff8f3;
+  --pastel-blue: #eef7fd;
+  --pastel-lavender: #f4effc;
+  --line: rgba(133, 120, 158, .22);
+}
+
+.header-inner {
+  border-color: rgba(159, 142, 184, .22);
+  background: rgba(255, 253, 248, .86);
+}
+.desktop-nav a:hover,
+.desktop-nav a.is-active {
+  background: var(--pastel-blue);
+}
+
+.taped-kicker {
+  border-color: rgba(172, 148, 205, .28);
+  background: linear-gradient(135deg, var(--pastel-lavender), rgba(255, 253, 248, .82));
+}
+.home-quote {
+  border-color: rgba(141, 194, 220, .38);
+  background: rgba(238, 247, 253, .76);
+}
+.today-card {
+  border-color: rgba(231, 178, 139, .34);
+  background: rgba(255, 241, 231, .72);
+}
+.slot-grid button:nth-child(3n + 1) { background: var(--pastel-rose); }
+.slot-grid button:nth-child(3n + 2) { background: var(--pastel-blue); }
+.slot-grid button:nth-child(3n) { background: var(--pastel-lavender); }
+.benefit-grid {
+  border-color: rgba(149, 137, 170, .28);
+  background: rgba(255, 253, 248, .62);
+}
+.benefit-grid article { border-right-color: rgba(149, 137, 170, .2); }
+.benefit-grid article:nth-child(1) { background: var(--pastel-rose); }
+.benefit-grid article:nth-child(2) { background: var(--pastel-blue); }
+.benefit-grid article:nth-child(3) { background: var(--pastel-lavender); }
+.benefit-grid article:nth-child(4) { background: var(--pastel-mint); }
+
+.service-tabs {
+  border-color: rgba(159, 142, 184, .24);
+  background: rgba(244, 239, 252, .58);
+}
+.service-tabs button { border-right-color: rgba(159, 142, 184, .2); }
+.service-tabs button:not(.is-active):hover { background: var(--pastel-blue); }
+.service-card {
+  border-color: rgba(149, 137, 170, .2);
+}
+.service-card:nth-child(4n + 1) { background: var(--pastel-blue); }
+.service-card:nth-child(4n + 2) { background: var(--pastel-peach); }
+.service-card:nth-child(4n + 3) { background: var(--pastel-lavender); }
+.service-card:nth-child(4n) { background: var(--pastel-mint); }
+.signature-grid--top .service-card--featured { background: var(--pastel-rose); }
+.service-icon { border-color: rgba(149, 137, 170, .2); }
+.service-note {
+  border-color: rgba(125, 178, 154, .26);
+  background: rgba(239, 248, 243, .72);
+}
+.service-note-label {
+  border-color: rgba(172, 148, 205, .24);
+  background: rgba(236, 226, 250, .72);
+}
+.shared-service-title {
+  border-color: rgba(141, 194, 220, .3);
+  background: linear-gradient(135deg, var(--pastel-blue), var(--pastel-lavender));
+}
+
+.gallery-shell {
+  border-color: rgba(159, 142, 184, .24);
+  background: linear-gradient(145deg, rgba(238, 247, 253, .54), rgba(255, 248, 226, .42), rgba(244, 239, 252, .5));
+}
+.gallery-tile:nth-child(4n + 1) { border-color: rgba(235, 151, 174, .3); background: var(--pastel-rose); }
+.gallery-tile:nth-child(4n + 2) { border-color: rgba(164, 145, 198, .3); background: var(--pastel-lavender); }
+.gallery-tile:nth-child(4n + 3) { border-color: rgba(125, 178, 154, .3); background: var(--pastel-mint); }
+.gallery-tile:nth-child(4n) { border-color: rgba(231, 178, 139, .3); background: var(--pastel-peach); }
+
+.section-label { border-color: rgba(218, 184, 107, .28); background: var(--pastel-yellow); }
+.about-photo--main { border-color: rgba(141, 194, 220, .3); background: var(--pastel-blue); }
+.about-story { border-color: rgba(231, 178, 139, .3); background: var(--pastel-peach); }
+.about-photo--detail { border-color: rgba(125, 178, 154, .3); background: var(--pastel-mint); }
+.about-note { border-color: rgba(164, 145, 198, .3); background: var(--pastel-lavender); }
+.about-info-rail {
+  border-color: rgba(141, 194, 220, .26);
+  background: linear-gradient(90deg, var(--pastel-blue), var(--pastel-mint), var(--pastel-lavender));
+}
+.about-info-rail article { border-right-color: rgba(149, 137, 170, .2); }
+.about-journey { border-color: rgba(218, 184, 107, .26); background: var(--pastel-yellow); }
+.about-journey article { border-right-color: rgba(149, 137, 170, .2); }
+
+.reviews-stat { border-right-color: rgba(149, 137, 170, .26); }
+.review-card:nth-child(4n + 1) { border-color: rgba(235, 151, 174, .24); background: var(--pastel-rose); }
+.review-card:nth-child(4n + 2) { border-color: rgba(141, 194, 220, .26); background: var(--pastel-blue); }
+.review-card:nth-child(4n + 3) { border-color: rgba(164, 145, 198, .26); background: var(--pastel-lavender); }
+.review-card:nth-child(4n) { border-color: rgba(125, 178, 154, .26); background: var(--pastel-mint); }
+
+.faq-list article:nth-child(4n + 1) { border-color: rgba(235, 151, 174, .26); background: var(--pastel-rose); }
+.faq-list article:nth-child(4n + 2) { border-color: rgba(141, 194, 220, .28); background: var(--pastel-blue); }
+.faq-list article:nth-child(4n + 3) { border-color: rgba(164, 145, 198, .28); background: var(--pastel-lavender); }
+.faq-list article:nth-child(4n) { border-color: rgba(125, 178, 154, .28); background: var(--pastel-mint); }
+.contact-copy { border-color: rgba(164, 145, 198, .28); background: var(--pastel-lavender); }
+.map-card { border-color: rgba(125, 178, 154, .28); background: var(--pastel-mint); }
