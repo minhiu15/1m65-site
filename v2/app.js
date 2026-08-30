@@ -235,8 +235,6 @@ function setupInteractions() {
     if (booking) document.dispatchEvent(new CustomEvent("1m65:v2:open-booking", { detail: { serviceId: booking.dataset.bookService || "", slot: booking.dataset.prefillSlot || "" } }));
   });
   document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeDrawer(); });
-  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => entry.target.classList.toggle("is-visible", entry.isIntersecting)), { threshold: 0.12 });
-  document.querySelectorAll(".reveal").forEach((node) => observer.observe(node));
 }
 
 renderHomeSchedule();
