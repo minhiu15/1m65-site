@@ -791,3 +791,145 @@ main,
   grid-column: 1 / -1;
 }
 }
+
+/* One pink button family, derived from the locked Gallery tab shells. */
+:root {
+  --button-shell-idle: url("assets/gallery/ui_shells/gallery_tab_disabled_LOCKED.png");
+  --button-shell-active: url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.png");
+  --button-ink: #6a4133;
+}
+
+.button-secondary,
+.menu-button,
+.drawer-head button,
+.slot-grid button,
+.service-tabs button,
+.gallery-filters button,
+.booking-categories button,
+.booking-service-option,
+.booking-picked button,
+.booking-date,
+.booking-slot,
+.faq-list button,
+.modal-close,
+.lightbox-nav {
+  border-color: transparent;
+  background-color: #fdeee2;
+  background-image: var(--button-shell-idle);
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  color: var(--button-ink);
+  box-shadow: none;
+  transition: transform 180ms ease, filter 180ms ease, color 180ms ease;
+}
+
+.button-primary,
+.header-book,
+.gallery-more,
+.booking-main-cta,
+.manage-fab,
+.site-footer > button,
+.service-card:not([data-card-variant="signature"]) button,
+.lightbox-book {
+  border-color: transparent;
+  background-color: #f2789b;
+  background-image: var(--button-shell-active);
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  color: #fff;
+  box-shadow: none;
+}
+
+.service-tabs button.is-active,
+.gallery-filters button.is-active,
+.booking-categories button.is-active,
+.booking-service-option.is-selected,
+.booking-date.is-active,
+.booking-slot.is-active,
+.faq-list button[aria-expanded="true"] {
+  border-color: transparent;
+  background-color: #f2789b;
+  background-image: var(--button-shell-active);
+  color: #fff;
+  box-shadow: none;
+}
+
+.button-secondary:hover,
+.menu-button:hover,
+.drawer-head button:hover,
+.slot-grid button:hover,
+.service-tabs button:hover,
+.gallery-filters button:hover,
+.booking-categories button:hover,
+.booking-service-option:hover,
+.booking-picked button:hover,
+.booking-date:hover,
+.booking-slot:not(:disabled):hover,
+.faq-list button:hover,
+.modal-close:hover,
+.lightbox-nav:hover {
+  background-color: #f2789b;
+  background-image: var(--button-shell-active);
+  color: #fff;
+  filter: saturate(1.04);
+  transform: translateY(-1px);
+}
+
+.button-primary:hover,
+.gallery-more:hover,
+.booking-main-cta:hover,
+.manage-fab:hover,
+.site-footer > button:hover,
+.service-card:not([data-card-variant="signature"]) button:hover,
+.lightbox-book:hover {
+  color: #fff;
+  filter: brightness(1.025) saturate(1.05);
+  transform: translateY(-1px);
+}
+
+.booking-service-option.is-selected *,
+.booking-service-option:hover *,
+.booking-date.is-active small,
+.booking-slot.is-active small,
+.faq-list button[aria-expanded="true"] span,
+.faq-list button:hover span {
+  color: inherit !important;
+}
+
+.menu-button:hover span {
+  background: #fff;
+}
+
+.menu-button,
+.drawer-head button,
+.modal-close,
+.lightbox-nav {
+  color: #d9476d;
+}
+
+button:disabled {
+  filter: saturate(.55);
+  opacity: .48;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button-primary,
+  .button-secondary,
+  .menu-button,
+  .drawer-head button,
+  .slot-grid button,
+  .service-tabs button,
+  .gallery-filters button,
+  .booking-categories button,
+  .booking-service-option,
+  .booking-picked button,
+  .booking-date,
+  .booking-slot,
+  .faq-list button,
+  .modal-close,
+  .lightbox-nav {
+    transition: none;
+  }
+}
