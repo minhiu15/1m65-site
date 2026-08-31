@@ -918,23 +918,22 @@ main,
 }
 }
 
-/* Primary pink actions reuse the exact two Gallery watercolor-paper shells. */
+/* Primary pink actions share Gallery paper through pill and generated rectangular shells. */
 :root {
   --button-shell-pill: url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.png");
-  --button-shell-wide: url("assets/gallery/ui_shells/gallery_button_xem_them_shell_LOCKED.png");
-  --button-paper-inset: inset 0 0 0 2px rgba(255, 255, 255, .2), inset 0 2px 5px rgba(255, 255, 255, .16);
+  --button-shell-rect: url("assets/gallery/ui_shells/primary_button_rounded_rect_paper_v1.png");
 }
 
 .button-primary {
-  --button-shell-shape: var(--button-shell-wide);
+  --button-shell-shape: var(--button-shell-rect);
   border-color: transparent;
-  background-color: #f28baa;
+  background-color: transparent;
   background-image: var(--button-shell-shape);
   background-position: center;
   background-size: 100% 100%;
   background-repeat: no-repeat;
   color: #fff;
-  box-shadow: var(--button-paper-inset);
+  box-shadow: none;
 }
 
 .button-primary:hover {
@@ -950,14 +949,14 @@ main,
 
 /* Home CTA keeps the rounded-rectangle geometry of its secondary neighbor. */
 .home-actions .button-primary {
-  --button-shell-shape: var(--button-shell-wide);
+  --button-shell-shape: var(--button-shell-rect);
   border: 0;
   border-radius: 18px;
 }
 
 /* Contact phone CTA matches the rounded rectangle beside it. */
 .contact-actions .button-primary {
-  --button-shell-shape: var(--button-shell-wide);
+  --button-shell-shape: var(--button-shell-rect);
   border: 0;
   border-radius: 15px;
 }
@@ -968,21 +967,21 @@ main,
 .booking-footer .button-primary,
 .booking-result-actions .button-primary,
 .booking-main-cta.button-primary {
-  --button-shell-shape: var(--button-shell-wide);
+  --button-shell-shape: var(--button-shell-rect);
   border: 0;
   border-radius: 18px;
 }
 
-/* The pink story label uses the same long paper shell, without becoming a button. */
+/* The pink story label uses the same rectangular paper shell, without becoming a button. */
 .story-pill {
   border: 0;
   border-radius: 16px;
-  background-color: #f28baa;
-  background-image: var(--button-shell-wide);
+  background-color: transparent;
+  background-image: var(--button-shell-rect);
   background-position: center;
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  box-shadow: var(--button-paper-inset);
+  box-shadow: none;
 }
 /* Preserve the dedicated Gallery CTA shell and match the locked layout geometry. */
 .gallery-more {

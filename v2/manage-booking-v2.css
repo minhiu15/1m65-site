@@ -73,20 +73,19 @@ body.is-embedded{background:#fcf3ee}
   .lookup-card,.appointment-list-view,.appointment-view{border-radius:22px}
 }
 
-/* Primary actions use the exact long Gallery watercolor-paper shell. */
+/* Primary actions use the generated transparent rounded-rectangle paper shell. */
 :root{
   --button-shell-pill:url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.png");
-  --button-shell-wide:url("assets/gallery/ui_shells/gallery_button_xem_them_shell_LOCKED.png");
-  --button-paper-inset:inset 0 0 0 2px rgba(255,255,255,.2),inset 0 2px 5px rgba(255,255,255,.16);
+  --button-shell-rect:url("assets/gallery/ui_shells/primary_button_rounded_rect_paper_v1.png");
 }
 .button.primary{
   border-color:transparent;
-  background-color:#f28baa;
-  background-image:var(--button-shell-wide);
+  background-color:transparent;
+  background-image:var(--button-shell-rect);
   background-position:center;
   background-size:100% 100%;
   background-repeat:no-repeat;
   color:#fff;
-  box-shadow:var(--button-paper-inset);
+  box-shadow:none;
 }
 .button.primary:hover:not(:disabled){filter:brightness(1.025) saturate(1.05)}
