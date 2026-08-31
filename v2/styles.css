@@ -979,6 +979,25 @@ main,
   border-radius: 18px;
 }
 
+/* Booking CTA stays close to the generated shell's native 4:1 proportions. */
+.booking-main-cta.button-primary {
+  width: min(440px, calc(100% - 32px));
+  min-width: 0;
+  min-height: 0;
+  aspect-ratio: 4 / 1;
+  padding-inline: 36px;
+  font-size: clamp(22px, 2vw, 27px);
+}
+
+@media (max-width: 600px) {
+  .booking-main-cta.button-primary {
+    width: min(360px, 100%);
+    aspect-ratio: 4 / 1;
+    padding-inline: 24px;
+    font-size: 20px;
+  }
+}
+
 /* The pink story label uses the same rectangular paper shell, without becoming a button. */
 .story-pill {
   border: 0;
