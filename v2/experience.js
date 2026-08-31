@@ -131,9 +131,10 @@ function renderReviews(reviews) {
     "assets/reviews/07_quote_peach_LOCKED_CLEAN.png",
     "assets/reviews/06_quote_lavender_TEMP_LOCKED.png",
   ];
+  const quoteTones = ["pink", "lavender", "peach", "lavender"];
   grid.innerHTML = reviews.slice(0,4).map(function(review,index){
     const stars = new Array(5).fill('<img src="assets/reviews/08_rating_star_filled_LOCKED_CLEAN.png" alt="">').join("");
-    return '<article class="review-card"><img class="review-card__quote" src="'+quoteAssets[index]+'" alt="" aria-hidden="true"><p class="review-card__text">“'+esc(review[0])+'”</p><div class="review-card__rating stars" aria-label="5 trên 5 sao">'+stars+'</div><p class="review-card__author">— '+esc(review[1])+'<small>'+esc(review[2])+'</small></p></article>';
+    return '<article class="review-card"><img class="review-card__quote review-card__quote--'+quoteTones[index]+'" src="'+quoteAssets[index]+'" alt="" aria-hidden="true"><p class="review-card__text">“'+esc(review[0])+'”</p><div class="review-card__rating stars" aria-label="5 trên 5 sao">'+stars+'</div><p class="review-card__author">— '+esc(review[1])+'<small>'+esc(review[2])+'</small></p></article>';
   }).join("");
 }
 async function loadReviews() {
