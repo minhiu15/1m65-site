@@ -154,6 +154,7 @@ a{color:inherit;text-decoration:none}
   --highlight-pink:#f36f9a;
   --highlight-wave:#f58eae;
 }
+
 .home-copy h1 .pink-highlight,
 .about-intro h2 .pink-highlight,
 .booking-cta h2 .pink-highlight{
@@ -1456,4 +1457,126 @@ main,
     padding: 20px 12px 26px;
     border-radius: 24px;
   }
+}
+
+/* Final cascade: user-owned Paper doodles replace generic decorative accents. */
+.home-doodle,
+.chapter-divider__decor,
+.signature-doodle,
+.signature-outside--drink,
+.about-floating,
+.review-doodle,
+.reviews-title-bubble,
+.reviews-bottom__heart,
+.booking-heart,
+.booking-sparkle,
+.booking-flower,
+.booking-loop,
+.contact-doodle {
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  filter: none;
+}
+
+.home-grid,
+.benefit-grid,
+.services-content,
+.gallery-shell,
+.about-grid,
+.reviews-inner,
+.booking-cta,
+.faq-layout,
+.contact-grid,
+.site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+.home-doodle { display: block; z-index: 0; opacity: .96; }
+.home-doodle--heart { left: 2.2%; top: 43%; width: clamp(54px, 5.2vw, 92px); }
+.home-doodle--flower-pink { right: 1.5%; top: 29%; width: clamp(78px, 7vw, 126px); }
+.home-doodle--flower-lavender { right: 7%; bottom: 6%; width: clamp(76px, 6.4vw, 116px); }
+.home-doodle--bow { right: 1%; top: 61%; width: clamp(82px, 7vw, 126px); }
+
+.chapter-divider__decor--service-tape { display: block; left: 1.2%; top: 17%; width: clamp(82px, 9vw, 150px); transform: rotate(-10deg); }
+.chapter-divider__decor--service-sparkle { display: block; right: 2.5%; top: 57%; width: clamp(44px, 4.2vw, 72px); transform: rotate(8deg); }
+.chapter-divider__decor--gallery-flower { display: block; left: 2.5%; top: 30%; width: clamp(130px, 13vw, 220px); transform: rotate(-5deg); }
+.chapter-divider__decor--gallery-heart { display: block; right: 5%; top: 20%; width: clamp(76px, 7vw, 118px); transform: rotate(5deg); }
+.chapter-divider__decor--gallery-sparkle { display: block; right: 17%; bottom: 16%; width: clamp(38px, 3.8vw, 64px); transform: rotate(-6deg); }
+
+.signature-doodle--heart { left: 2%; top: 18%; width: clamp(54px, 5vw, 84px); }
+.signature-doodle--crown { right: 14%; top: 9%; width: clamp(64px, 6vw, 96px); transform: rotate(9deg); }
+.signature-doodle--sparkle { right: 2%; top: 34%; width: clamp(38px, 3.8vw, 62px); }
+.signature-outside--drink { width: min(100%, 190px); max-height: 190px; justify-self: center; transform: rotate(-4deg); }
+
+.about-floating { display: block; z-index: 0; opacity: .96; }
+.about-floating--flower-pink { left: 1.5%; top: 13%; width: clamp(88px, 8vw, 138px); transform: rotate(-8deg); }
+.about-floating--flower-lavender { right: 2%; bottom: 8%; width: clamp(92px, 9vw, 150px); transform: rotate(7deg); }
+.about-floating--sparkle { left: 3%; top: 53%; width: clamp(42px, 4vw, 68px); }
+.about-floating--tape { right: 3%; top: 9%; width: clamp(92px, 8vw, 140px); transform: rotate(8deg); }
+
+.review-doodle,
+.contact-doodle { position: absolute; z-index: 0; }
+.review-doodle--flower { left: 2.5%; top: 16%; width: clamp(82px, 7vw, 122px); transform: rotate(-8deg); }
+.review-doodle--star { right: 4%; bottom: 10%; width: clamp(52px, 4.6vw, 78px); transform: rotate(8deg); }
+.reviews-title-bubble { display: inline-block; width: clamp(62px, 5.8vw, 88px); height: clamp(62px, 5.8vw, 88px); margin-left: 12px; border: 0; border-radius: 0; vertical-align: middle; }
+.reviews-bottom__heart { width: clamp(42px, 4vw, 64px); }
+
+.booking-heart { left: -10%; top: -3%; width: clamp(86px, 8vw, 132px); transform: rotate(-12deg); }
+.booking-sparkle { right: -7%; top: 5%; width: clamp(48px, 4.5vw, 76px); }
+.booking-flower { display: block; right: -16%; bottom: -4%; width: clamp(92px, 9vw, 146px); transform: rotate(7deg); }
+.booking-loop { left: -18%; bottom: -7%; width: clamp(150px, 18vw, 290px); transform: rotate(-6deg); }
+
+.contact-doodle--yarn { left: 1.2%; bottom: 2%; width: clamp(94px, 9vw, 150px); transform: rotate(-7deg); }
+.contact-doodle--stamp { right: 1.5%; bottom: 3%; width: clamp(84px, 8vw, 136px); transform: rotate(8deg); }
+.contact-doodle--gems { right: 3%; top: 6%; width: clamp(74px, 7vw, 118px); transform: rotate(6deg); }
+
+@media (max-width: 900px) {
+  .home-doodle--flower-pink,
+  .home-doodle--bow,
+  .about-floating--flower-lavender,
+  .booking-flower,
+  .contact-doodle--gems { display: none; }
+
+  .home-doodle--heart { left: 2%; top: 45%; width: 48px; }
+  .home-doodle--flower-lavender { right: 2%; bottom: 3%; width: 62px; }
+  .chapter-divider__decor--service-tape { left: 1%; top: 20%; width: 72px; }
+  .chapter-divider__decor--service-sparkle { right: 2%; top: 62%; width: 42px; }
+  .chapter-divider__decor--gallery-flower { left: 2%; top: 34%; width: 100px; }
+  .chapter-divider__decor--gallery-heart { right: 3%; top: 25%; width: 68px; }
+  .chapter-divider__decor--gallery-sparkle { right: 16%; bottom: 10%; width: 38px; }
+  .about-floating--flower-pink { left: -1%; top: 9%; width: 78px; }
+  .about-floating--sparkle { left: 2%; top: 56%; width: 42px; }
+  .about-floating--tape { right: -1%; top: 8%; width: 78px; }
+  .review-doodle--flower { left: -1%; top: 21%; width: 68px; }
+  .review-doodle--star { right: 1%; bottom: 6%; width: 46px; }
+  .booking-heart { left: -2%; top: -8%; width: 76px; }
+  .booking-sparkle { right: 0; top: 8%; width: 45px; }
+  .booking-loop { left: -7%; bottom: -2%; width: 128px; }
+  .contact-doodle--yarn { left: -2%; bottom: 1%; width: 86px; }
+  .contact-doodle--stamp { right: -2%; bottom: 2%; width: 82px; }
+}
+
+@media (max-width: 600px) {
+  .home-doodle--heart { top: 40%; width: 40px; }
+  .home-doodle--flower-lavender { width: 52px; }
+  .chapter-divider__decor--service-tape { width: 58px; }
+  .chapter-divider__decor--service-sparkle { width: 34px; }
+  .chapter-divider__decor--gallery-flower { width: 78px; }
+  .chapter-divider__decor--gallery-heart { width: 54px; }
+  .chapter-divider__decor--gallery-sparkle { width: 30px; }
+  .signature-doodle--heart { width: 42px; }
+  .signature-doodle--crown { width: 54px; }
+  .signature-doodle--sparkle { width: 34px; }
+  .about-floating--flower-pink { width: 64px; }
+  .about-floating--tape { width: 66px; }
+  .review-doodle--flower { width: 56px; }
+  .review-doodle--star { width: 38px; }
+  .reviews-title-bubble { width: 54px; height: 54px; }
+  .booking-heart { width: 62px; }
+  .booking-sparkle { width: 38px; }
+  .booking-loop { width: 104px; }
+  .contact-doodle--yarn { width: 70px; }
+  .contact-doodle--stamp { width: 68px; }
 }
