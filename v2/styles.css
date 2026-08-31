@@ -941,6 +941,12 @@ main,
   filter: brightness(1.025) saturate(1.05);
   transform: translateY(-1px);
 }
+
+/* Pointer-closed overlays return focus without leaving a keyboard-only ring behind. */
+.is-pointer-focus-return:focus-visible {
+  outline: none;
+}
+
 /* Compact header action uses the shorter Gallery tab shell. */
 .header-book.button-primary {
   --button-shell-shape: var(--button-shell-pill);

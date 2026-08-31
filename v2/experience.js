@@ -36,7 +36,14 @@ let galleryVisible = matchMedia("(max-width: 600px)").matches ? 6 : 10;
 let lightboxIndex = 0;
 let activeModal = null;
 let returnFocus = null;
+let lastInputWasPointer = false;
 let toastTimer = 0;
+
+document.addEventListener("pointerdown",function(){lastInputWasPointer=true;},true);
+document.addEventListener("keydown",function(){
+  lastInputWasPointer=false;
+  document.querySelectorAll(".is-pointer-focus-return").forEach(function(node){node.classList.remove("is-pointer-focus-return");});
+},true);
 
 function esc(value) {
   return String(value == null ? "" : value).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
@@ -59,7 +66,14 @@ function closeModal(modal, restore) {
   target.hidden = true;
   if (target === activeModal) activeModal = null;
   document.body.classList.remove("has-overlay");
-  if (restore !== false && returnFocus && returnFocus.isConnected) returnFocus.focus();
+  if (restore !== false && returnFocus && returnFocus.isConnected) {
+    const focusTarget=returnFocus;
+    if(lastInputWasPointer){
+      focusTarget.classList.add("is-pointer-focus-return");
+      focusTarget.addEventListener("blur",function(){focusTarget.classList.remove("is-pointer-focus-return");},{once:true});
+    }
+    focusTarget.focus();
+  }
   returnFocus = null;
 }
 function toast(message) {
@@ -189,4 +203,3 @@ addEventListener("resize",renderGallery);
 renderGallery();
 loadReviews();
 loadHomeAvailability();
-
