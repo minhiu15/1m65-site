@@ -918,20 +918,23 @@ main,
 }
 }
 
-/* Reserve the Gallery watercolor shell for actions that were already primary/pink. */
+/* Primary pink actions reuse the exact two Gallery watercolor-paper shells. */
 :root {
-  --button-shell-primary: url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.png");
+  --button-shell-pill: url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.png");
+  --button-shell-wide: url("assets/gallery/ui_shells/gallery_button_xem_them_shell_LOCKED.png");
+  --button-paper-inset: inset 0 0 0 2px rgba(255, 255, 255, .2), inset 0 2px 5px rgba(255, 255, 255, .16);
 }
 
 .button-primary {
+  --button-shell-shape: var(--button-shell-wide);
   border-color: transparent;
-  background-color: transparent;
-  background-image: var(--button-shell-primary);
+  background-color: #f28baa;
+  background-image: var(--button-shell-shape);
   background-position: center;
   background-size: 100% 100%;
   background-repeat: no-repeat;
   color: #fff;
-  box-shadow: none;
+  box-shadow: var(--button-paper-inset);
 }
 
 .button-primary:hover {
@@ -939,52 +942,47 @@ main,
   filter: brightness(1.025) saturate(1.05);
   transform: translateY(-1px);
 }
-/* Home CTA matches the rounded-rectangle geometry of its secondary neighbor. */
+/* Compact header action uses the shorter Gallery tab shell. */
+.header-book.button-primary {
+  --button-shell-shape: var(--button-shell-pill);
+  border-radius: 999px;
+}
+
+/* Home CTA keeps the rounded-rectangle geometry of its secondary neighbor. */
 .home-actions .button-primary {
-  border: 1px solid #e96b8c;
+  --button-shell-shape: var(--button-shell-wide);
+  border: 0;
   border-radius: 18px;
-  background-color: #eb6689;
-  background-image:
-    radial-gradient(ellipse at 18% 24%, rgba(255,255,255,.38) 0 8%, rgba(255,255,255,0) 34%),
-    radial-gradient(ellipse at 78% 82%, rgba(255,185,205,.46), transparent 38%),
-    linear-gradient(135deg, #f991aa 0%, #ef7496 50%, #df557d 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 8px 18px -14px rgba(217,71,109,.75);
 }
 
 /* Contact phone CTA matches the rounded rectangle beside it. */
 .contact-actions .button-primary {
-  border: 1px solid #e96b8c;
+  --button-shell-shape: var(--button-shell-wide);
+  border: 0;
   border-radius: 15px;
-  background-color: #eb6689;
-  background-image:
-    radial-gradient(ellipse at 18% 24%, rgba(255,255,255,.38) 0 8%, rgba(255,255,255,0) 34%),
-    radial-gradient(ellipse at 78% 82%, rgba(255,185,205,.46), transparent 38%),
-    linear-gradient(135deg, #f991aa 0%, #ef7496 50%, #df557d 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 8px 18px -14px rgba(217,71,109,.75);
 }
 
-/* Booking CTA keeps the locked wide rectangle instead of stretching a pill raster. */
+/* Wide actions preserve their existing geometry while sharing Gallery paper. */
+.drawer-book.button-primary,
+.lightbox-book.button-primary,
+.booking-footer .button-primary,
+.booking-result-actions .button-primary,
 .booking-main-cta.button-primary {
-  border: 1px solid #df557d;
+  --button-shell-shape: var(--button-shell-wide);
+  border: 0;
   border-radius: 18px;
-  background-color: #e45b7e;
-  background-image:
-    radial-gradient(ellipse at 17% 22%, rgba(255,255,255,.32) 0 8%, rgba(255,255,255,0) 34%),
-    radial-gradient(ellipse at 80% 82%, rgba(255,169,195,.35), transparent 40%),
-    linear-gradient(135deg, #eb6a8d 0%, #e45b7e 52%, #d9476d 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 12px 24px -20px rgba(217,71,109,.75);
 }
 
-/* About story label follows the same rounded-rectangle pink language. */
+/* The pink story label uses the same long paper shell, without becoming a button. */
 .story-pill {
-  border: 1px solid #e96b8c;
+  border: 0;
   border-radius: 16px;
-  background-color: #eb6689;
-  background-image:
-    radial-gradient(ellipse at 18% 24%, rgba(255,255,255,.34) 0 8%, rgba(255,255,255,0) 34%),
-    radial-gradient(ellipse at 80% 82%, rgba(255,185,205,.4), transparent 38%),
-    linear-gradient(135deg, #f27c98 0%, #eb6689 52%, #df557d 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.48), 0 8px 18px -16px rgba(217,71,109,.72);
+  background-color: #f28baa;
+  background-image: var(--button-shell-wide);
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: var(--button-paper-inset);
 }
 /* Preserve the dedicated Gallery CTA shell and match the locked layout geometry. */
 .gallery-more {
