@@ -2478,7 +2478,7 @@ main,
 .service-tabs button.is-active:hover {
   margin: 7px;
   min-height: 70px;
-  border-color: rgba(232, 94, 124, .38);
+  border-color: transparent;
   border-radius: 18px;
   background: url("assets/services/shared/services_web_tab_active_shell.png") center / 100% 100% no-repeat;
   box-shadow: 0 7px 16px -13px rgba(177, 64, 92, .58);
@@ -2490,7 +2490,7 @@ main,
 
 .service-tabs button:not(.is-active):hover {
   border-radius: 18px;
-  background: rgba(240, 231, 249, .62);
+  background: rgba(255, 224, 233, .72);
 }
 
 .service-panel { margin-top: 24px; }
