@@ -76,7 +76,7 @@ a{color:inherit;text-decoration:none}
 .services-content{margin-top:20px}
 .service-tabs{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;padding:7px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.7);box-shadow:var(--shadow)}
 .service-tabs button{min-width:0;min-height:58px;display:flex;align-items:center;justify-content:center;gap:7px;padding:8px;border:1px solid transparent;border-radius:14px;background:transparent;font:700 13px Quicksand;cursor:pointer;transition:.2s ease}
-.service-tabs button img{width:24px;height:24px;object-fit:contain}.service-tabs button:hover{background:#fff}.service-tabs button.is-active{border-color:#ee97aa;background:linear-gradient(135deg,#ef7390,var(--pink));color:#fff;box-shadow:0 14px 26px -17px rgba(217,71,109,.8)}
+.service-tabs button:hover{background:#fff}.service-tabs button.is-active{border-color:#ee97aa;background:linear-gradient(135deg,#ef7390,var(--pink));color:#fff;box-shadow:0 14px 26px -17px rgba(217,71,109,.8)}
 .service-panel{margin-top:22px;min-height:560px}
 .signature-layout{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .signature-intro{display:flex;align-items:center;min-height:250px;padding:18px 30px;border:1px solid var(--line);border-radius:var(--radius-lg);background:linear-gradient(135deg,#fffaf8,#fff0f4);overflow:hidden}
@@ -108,7 +108,6 @@ a{color:inherit;text-decoration:none}
 .gallery-tile:hover img{transform:scale(1.035)}
 .gallery-more-wrap{display:grid;justify-items:center;margin-top:28px;text-align:center}
 .gallery-more{min-width:245px;min-height:57px;padding:0 28px;border:0;border-radius:999px;background:linear-gradient(135deg,#f27c98,#df4f73);color:#fff;font:700 19px Quicksand;box-shadow:0 18px 34px -20px rgba(217,71,109,.85);cursor:pointer}
-.gallery-more span{display:inline-grid;place-items:center;width:24px;height:24px;margin-left:7px;border:1px solid rgba(255,255,255,.7);border-radius:50%}
 .gallery-more-wrap p{margin:10px 0 0;color:var(--muted);font-size:12px}
 .about-section{padding:70px 0;background:linear-gradient(180deg,var(--paper),#fffaf7)}
 .about-grid{display:grid;grid-template-columns:1.02fr 1fr .85fr;grid-template-areas:"intro main story" "detail note story" "info info info" "journey journey journey";gap:17px}
@@ -329,7 +328,6 @@ main,
   font:700 clamp(15px,1.05vw,20px) var(--font-signature-display);
 }
 .service-tabs button:last-child{border-right:0}
-.service-tabs button img{width:43px;height:43px}
 .service-tabs button:not(.is-active):hover{
   background:rgba(232,94,124,.045);
 }
@@ -562,7 +560,7 @@ main,
 .booking-faq-section{padding:70px 0 64px}
 .booking-faq-grid{display:grid;grid-template-columns:minmax(0,.45fr) minmax(0,.55fr);align-items:center;gap:clamp(56px,6vw,104px)}
 .booking-cta{align-self:center;width:100%;max-width:none;padding:28px clamp(54px,5vw,82px) 34px}
-.booking-eyebrow{padding:14px 32px;border-color:#e05a78;font-size:18px}
+.booking-eyebrow{width:min(260px,100%);justify-content:center;padding:14px 32px;border-color:#e05a78;font-size:18px}
 .booking-cta h2{margin:28px 0 18px;font:700 clamp(54px,4vw,76px)/.98 var(--font-signature-display)}
 .booking-cta>p{max-width:590px;font-size:20px;line-height:1.5;color:#5b4037}
 .booking-main-cta{width:min(440px,100%);min-height:0;margin-top:30px;border-radius:18px;background:#e05a78;font-size:27px;box-shadow:none}
@@ -597,7 +595,7 @@ main,
   :root{--content:1080px}
   .home-grid{height:auto;grid-template-columns:1fr 1fr;grid-template-areas:"copy art" "quote art" "schedule schedule";grid-template-rows:auto auto auto}
   .home-art{min-height:560px}.home-art img{transform:none}.home-quote,.today-card{height:auto;min-height:auto}.today-card{transform:none}.benefit-grid{margin-top:44px}
-  .service-tabs button{min-height:78px;padding-inline:9px}.service-tabs button img{width:34px;height:34px}
+  .service-tabs button{min-height:78px;padding-inline:9px}
   .signature-hero-row{grid-template-columns:1fr}.signature-intro{min-height:330px}
   .signature-grid--top{grid-template-columns:repeat(2,1fr)}
   .signature-lower{grid-template-columns:1fr 1fr}.signature-outside{display:none}
@@ -638,7 +636,7 @@ main,
   .benefit-grid{margin-top:30px;min-height:0}.benefit-grid article{padding:18px 8px}.benefit-grid img{width:62px;height:56px}.benefit-grid h3{font-size:13px}.benefit-grid p{font-size:9px}
   .services-section{padding:52px 0 70px}.services-hero{aspect-ratio:1024/700}
   .services-decor{display:none}
-  .service-tabs button{flex-basis:142px;font-size:14px}.service-tabs button img{width:30px;height:30px}
+  .service-tabs button{flex-basis:142px;font-size:14px}
   .signature-intro{grid-template-columns:42% 1fr;min-height:260px;padding-inline:5px}.signature-cat--web{display:none}.signature-cat--mobile{display:block}.signature-wordmark{max-height:100px}.signature-ribbon{font-size:9px;padding:7px}.signature-copy p{font-size:11px}
   .signature-doodle--crown{width:45px}.signature-doodle--heart{width:34px}
   .signature-grid--top,.signature-lower{grid-template-columns:1fr}
@@ -724,19 +722,19 @@ main,
 .desktop-nav a:hover,.desktop-nav a.is-active{color:var(--pink-strong);background:#fff7f8}
 .desktop-nav a.is-active::after{display:none}
 .header-book{
+  min-width:118px;
   min-height:46px;
   padding-inline:20px;
   border-radius:999px;
   font-size:14.5px;
   white-space:nowrap;
 }
-.header-paw{width:17px;height:17px;flex:none;color:#fff}
 
 @media(max-width:1180px){
   .header-inner{gap:8px;padding-left:14px}
   .brand-paw{width:26px;height:26px}.brand-mark{font-size:19px}.brand-sub{font-size:10px}
   .desktop-nav a{padding-inline:8px;font-size:12.5px}
-  .header-book{padding-inline:16px;font-size:13px}
+  .header-book{min-width:104px;padding-inline:16px;font-size:13px}
 }
 @media(max-width:900px){
   :root{--header:82px}
@@ -988,8 +986,7 @@ main,
   pointer-events: none;
 }
 
-.header-book__label,
-.header-book .header-paw {
+.header-book__label {
   position: relative;
   z-index: 1;
 }
@@ -1100,11 +1097,6 @@ main,
     font-size: clamp(15px, 4.2vw, 18px);
   }
 
-  .gallery-more span {
-    width: clamp(16px, 4.2vw, 18px);
-    height: clamp(16px, 4.2vw, 18px);
-    margin-left: 5px;
-  }
 }
 
 /* Multi-pastel rebalance: pink remains primary, supporting surfaces rotate hues. */

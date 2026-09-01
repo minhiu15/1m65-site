@@ -1,12 +1,12 @@
 const BOOKING_ENDPOINT = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 
 const tabDefs = [
-  { id: "signature", label: "Signature", icon: "assets/services/signature-shared/tab_icons/signature_star_active.png" },
-  { id: "nail", label: "Nail Care", icon: "assets/services/signature-shared/tab_icons/nailcare_polish_inactive.png" },
-  { id: "classic", label: "Classic", icon: "assets/services/signature-shared/tab_icons/classic_heart_inactive.png" },
-  { id: "design", label: "Design", icon: "assets/services/signature-shared/tab_icons/design_flower_inactive.png" },
-  { id: "mi", label: "Eyelashes", icon: "assets/services/signature-shared/tab_icons/eyelashes_eye_inactive.png" },
-  { id: "goi", label: "Shampoo", icon: "assets/services/signature-shared/tab_icons/shampoo_cat_inactive.png" },
+  { id: "signature", label: "Signature" },
+  { id: "nail", label: "Nail Care" },
+  { id: "classic", label: "Classic" },
+  { id: "design", label: "Design" },
+  { id: "mi", label: "Eyelashes" },
+  { id: "goi", label: "Shampoo" },
 ];
 
 const fallbackServices = [
@@ -175,7 +175,7 @@ function renderServices() {
   const tabs = document.querySelector("[data-service-tabs]");
   const panel = document.querySelector("[data-service-panel]");
   if (!tabs || !panel) return;
-  tabs.innerHTML = tabDefs.map((tab) => `<button type="button" role="tab" id="tab-${tab.id}" aria-controls="service-panel" aria-selected="${tab.id === state.activeTab}" class="${tab.id === state.activeTab ? "is-active" : ""}" data-service-tab="${tab.id}"><img src="${tab.icon}" alt=""><span>${tab.label}</span></button>`).join("");
+  tabs.innerHTML = tabDefs.map((tab) => `<button type="button" role="tab" id="tab-${tab.id}" aria-controls="service-panel" aria-selected="${tab.id === state.activeTab}" class="${tab.id === state.activeTab ? "is-active" : ""}" data-service-tab="${tab.id}"><span>${tab.label}</span></button>`).join("");
   panel.id = "service-panel";
   panel.setAttribute("role", "tabpanel");
   panel.setAttribute("aria-labelledby", `tab-${state.activeTab}`);

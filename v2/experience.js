@@ -2,7 +2,6 @@ import "./booking-v2.js";
 
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
-const filters = [["all","✦ Tất cả"],["nail","▯ Nail"],["mi","◉ Mi"],["goi","♨ Gội"],["khac","☆ Khác"]];
 const gallery = [
 ["nail","assets/services/nail-care/service_photos/cat_da_tay.jpg","Chăm sóc da tay","♡"],
 ["nail","assets/services/nail-care/service_photos/noi_mong_dap_gel.jpg","Nối móng gel","✦"],
