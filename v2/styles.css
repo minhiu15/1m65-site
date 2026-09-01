@@ -956,10 +956,34 @@ main,
 }
 
 /* Home CTA keeps the rounded-rectangle geometry of its secondary neighbor. */
+.home-actions > .button-primary,
+.home-actions > .button-secondary {
+  flex: 0 0 272px;
+  width: 272px;
+  min-width: 0;
+  height: 68px;
+  min-height: 68px;
+  box-sizing: border-box;
+  border-radius: 18px;
+}
+
 .home-actions .button-primary {
   --button-shell-shape: var(--button-shell-rect);
   border: 0;
   border-radius: 18px;
+  /* Compensate for the transparent alpha gutter baked into the Paper PNG. */
+  background-size: 104% 115%;
+}
+
+@media (max-width: 600px) {
+  .home-actions > .button-primary,
+  .home-actions > .button-secondary {
+    flex: 1 1 0;
+    width: 0;
+    height: 56px;
+    min-height: 56px;
+    padding-inline: 10px;
+  }
 }
 
 /* Contact phone CTA matches the rounded rectangle beside it. */
