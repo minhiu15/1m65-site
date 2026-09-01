@@ -1,13 +1,15 @@
 const BOOKING_ENDPOINT = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 
 const tabDefs = [
-  { id: "signature", label: "Signature" },
-  { id: "nail", label: "Nail Care" },
-  { id: "classic", label: "Classic" },
-  { id: "design", label: "Design" },
-  { id: "mi", label: "Eyelashes" },
-  { id: "goi", label: "Shampoo" },
+  { id: "signature", label: "Signature", icon: "assets/services/signature-shared/tab_icons/signature_star_active.png" },
+  { id: "nail", label: "Nail Care", icon: "assets/services/signature-shared/tab_icons/nailcare_polish_inactive.png" },
+  { id: "classic", label: "Classic", icon: "assets/services/signature-shared/tab_icons/classic_heart_inactive.png" },
+  { id: "design", label: "Design", icon: "assets/services/signature-shared/tab_icons/design_flower_inactive.png" },
+  { id: "mi", label: "Eyelashes", icon: "assets/services/signature-shared/tab_icons/eyelashes_eye_inactive.png" },
+  { id: "goi", label: "Shampoo", icon: "assets/services/signature-shared/tab_icons/shampoo_cat_inactive.png" },
 ];
+
+const SIGNATURE_PLACEHOLDER_IMAGE = "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg";
 
 const fallbackServices = [
   ["ct-tay", "Cắt da tay", 20000, 20, "Gọn viền móng tay", "assets/services/nail-care/service_photos/cat_da_tay.jpg"],
@@ -97,10 +99,12 @@ const nailCareNotes = [
   "Tụi mình luôn lắng nghe để mang đến dịch vụ phù hợp nhất với bạn!",
 ];
 const signatureIcons = {
+  "ve": "assets/services/signature-shared/tab_icons/design_flower_inactive.png",
   "gel-hn": "assets/services/signature-shared/service_icons/son_gel_han_nhat.png",
   "noi-gel": "assets/services/signature-shared/service_icons/noi_mong_dap_gel.png",
   "noi-bot": "assets/services/signature-shared/service_icons/noi_mong_dap_bot.png",
   "mi-classic": "assets/services/signature-shared/service_icons/noi_mi_classic.png",
+  "goi-duongsinh": "assets/services/signature-shared/tab_icons/shampoo_cat_inactive.png",
 };
 
 fallbackServices.forEach((service) => {
@@ -126,8 +130,9 @@ function renderPrice(service) {
 function serviceCard(service, className = "", variant = "standard") {
   const icon = variant === "signature" ? signatureIcons[service.id] : "";
   const featured = className.includes("service-card--featured");
+  const image = variant === "signature" ? SIGNATURE_PLACEHOLDER_IMAGE : service.image;
   return `<article class="service-card ${className}" data-card-variant="${variant}">
-    ${featured ? '<span class="featured-badge">ĐƯỢC CHỌN<br>NHIỀU NHẤT</span>' : ""}
+    ${featured ? '<span class="featured-badge"><span>ĐƯỢC CHỌN</span><strong>NHIỀU NHẤT</strong></span>' : ""}
     <div class="service-card-copy">
       ${icon ? `<img class="service-icon" src="${icon}" alt="" aria-hidden="true">` : ""}
       <h3>${service.name}</h3>
@@ -136,7 +141,7 @@ function serviceCard(service, className = "", variant = "standard") {
       <button type="button" data-book-service="${service.id}">Đặt hẹn <span aria-hidden="true">→</span></button>
     </div>
     <div class="service-photo-wrap">
-      <img src="${service.image}" alt="${service.name}" loading="lazy">
+      <img src="${image}" alt="Ảnh mẫu tạm cho ${service.name}" loading="lazy">
       ${featured ? '<img class="featured-cat-sticker" src="assets/services/signature-shared/cats/featured_photo_cat_sticker.png" alt="" aria-hidden="true">' : ""}
     </div>
   </article>`;
@@ -152,19 +157,21 @@ function renderServiceNote(lines) {
 
 function renderSignature() {
   const ids = ["ve", "gel-hn", "noi-gel", "noi-bot", "mi-classic", "goi-duongsinh"];
-  const [featured, ...rest] = ids.map(serviceById).filter(Boolean);
+  const [featuredSource, ...rest] = ids.map(serviceById).filter(Boolean);
+  const featured = featuredSource ? {
+    ...featuredSource,
+    name: "Nail design vẽ tay",
+    description: "Mắt mèo, tráng gương, ombre, flash – vẽ tay từng ngón theo mood của bạn.",
+  } : null;
   return `<div class="signature-layout">
     <div class="signature-hero-row">
       <div class="signature-intro">
         <img class="signature-tape" src="assets/services/signature-shared/decor/top_gingham_tape.png" alt="" aria-hidden="true">
-        <img class="paper-doodle paper-doodle--floating paper-doodle--signature-hearts" src="../doodles/hearts.png" alt="" aria-hidden="true">
-        <img class="paper-doodle paper-doodle--floating paper-doodle--signature-brush" src="../doodles/polish-brush.png" alt="" aria-hidden="true">
-        <img class="paper-doodle paper-doodle--floating paper-doodle--signature-star" src="../doodles/star-pink.png" alt="" aria-hidden="true">
-        <img class="signature-cat signature-cat--web" src="assets/services/signature-web/cats/signature_raised_paw_LOCKED.png" alt="Mèo Nhu Nhi vẫy tay">
-        <img class="signature-cat signature-cat--mobile" src="assets/services/signature-mobile/cats/header_cat_waving_bow.png" alt="Mèo Nhu Nhi vẫy tay">
+        <img class="signature-ref-doodle signature-ref-doodle--heart" src="assets/services/signature-shared/doodles/header_heart_outline.png" alt="" aria-hidden="true">
+        <img class="signature-ref-doodle signature-ref-doodle--sparkle" src="assets/services/signature-shared/doodles/sparkle_orange.png" alt="" aria-hidden="true">
+        <img class="signature-cat" src="assets/services/signature-shared/cats/signature_raised_paw_OPTICAL_V1.png" alt="Mèo Nhu Nhi vẫy tay">
         <div class="signature-copy">
-          <img class="signature-wordmark" src="assets/services/signature-web/signature_wordmark/SIGNATURE_WORDMARK_FINAL_CLEAN_SAFE.png" alt="Signature">
-          <strong class="signature-mobile-title">SIGNATURE</strong>
+          <img class="signature-wordmark" src="assets/services/signature-shared/signature_wordmark/SIGNATURE_WORDMARK_UNIFIED_PAPER_V1.png" alt="Signature">
           <span class="signature-ribbon">DỊCH VỤ NỔI BẬT TẠI 1M65 NAIL ROOM</span>
           <p>Từng chi tiết nhỏ, tạo nên sự khác biệt lớn ♡</p>
         </div>
@@ -173,9 +180,9 @@ function renderSignature() {
     </div>
     <div class="signature-grid signature-grid--top">${rest.slice(0, 3).map((item) => serviceCard(item, "", "signature")).join("")}</div>
     <div class="signature-lower">
-      <img class="signature-outside paper-doodle paper-doodle--signature-teacup" src="../doodles/teacup.png" alt="" aria-hidden="true">
+      <img class="signature-outside signature-outside--drink" src="assets/services/signature-shared/doodles/bottom_drink.png" alt="" aria-hidden="true">
       ${rest.slice(3).map((item) => serviceCard(item, "", "signature")).join("")}
-      <img class="signature-outside signature-outside--bath-cat" src="assets/services/signature-shared/cats/shampoo_bath_cat_scene.png" alt="" aria-hidden="true">
+      <img class="signature-outside signature-outside--bath-cat" src="assets/services/signature-shared/cats/shampoo_bath_cat_OPTICAL_V1.png" alt="" aria-hidden="true">
     </div>
     ${renderServiceNote(nailCareNotes)}
   </div>`;
@@ -236,7 +243,7 @@ function renderServices() {
   const tabs = document.querySelector("[data-service-tabs]");
   const panel = document.querySelector("[data-service-panel]");
   if (!tabs || !panel) return;
-  tabs.innerHTML = tabDefs.map((tab) => `<button type="button" role="tab" id="tab-${tab.id}" aria-controls="service-panel" aria-selected="${tab.id === state.activeTab}" class="${tab.id === state.activeTab ? "is-active" : ""}" data-service-tab="${tab.id}"><span>${tab.label}</span></button>`).join("");
+  tabs.innerHTML = tabDefs.map((tab) => `<button type="button" role="tab" id="tab-${tab.id}" aria-controls="service-panel" aria-selected="${tab.id === state.activeTab}" class="${tab.id === state.activeTab ? "is-active" : ""}" data-service-tab="${tab.id}"><img src="${tab.icon}" alt="" aria-hidden="true"><span>${tab.label}</span></button>`).join("");
   panel.id = "service-panel";
   panel.setAttribute("role", "tabpanel");
   panel.setAttribute("aria-labelledby", `tab-${state.activeTab}`);
