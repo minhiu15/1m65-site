@@ -952,7 +952,11 @@ main,
 /* Compact header action uses the shorter Gallery tab shell. */
 .header-book.button-primary {
   --button-shell-shape: var(--button-shell-pill);
+  height: 46px;
+  min-height: 46px;
   border-radius: 999px;
+  /* Fill the control after compensating for the pill PNG's transparent gutter. */
+  background-size: 106% 117%;
 }
 
 /* Home CTA keeps the rounded-rectangle geometry of its secondary neighbor. */
