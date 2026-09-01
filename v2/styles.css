@@ -549,8 +549,8 @@ main,
 
 /* Booking CTA + FAQ */
 .booking-faq-section{padding:92px 0 86px}
-.booking-faq-grid{display:grid;grid-template-columns:minmax(0,.45fr) minmax(0,.55fr);align-items:start;gap:clamp(56px,6vw,104px)}
-.booking-cta{align-self:start;width:100%;max-width:none;padding:28px clamp(54px,5vw,82px) 34px}
+.booking-faq-grid{display:grid;grid-template-columns:minmax(0,.45fr) minmax(0,.55fr);align-items:center;gap:clamp(56px,6vw,104px)}
+.booking-cta{align-self:center;width:100%;max-width:none;padding:28px clamp(54px,5vw,82px) 34px}
 .booking-eyebrow{padding:14px 32px;border-color:#e05a78;font-size:18px}
 .booking-cta h2{margin:28px 0 18px;font:700 clamp(54px,4vw,76px)/.98 var(--font-signature-display)}
 .booking-cta>p{max-width:590px;font-size:20px;line-height:1.5;color:#5b4037}
@@ -559,7 +559,7 @@ main,
 .booking-heart{left:-12%;top:0;width:64px}.booking-sparkle{right:-8%;top:4%;width:52px}.booking-flower{right:-18%;bottom:4%;width:72px}
 .booking-loop{left:-20%;bottom:-5%;width:clamp(180px,22vw,360px)}
 .faq-layout{display:block;margin:0}
-.faq-heading{padding:0 0 22px;text-align:left}.faq-heading h3{margin:0;font:700 46px/1.05 var(--font-signature-display)}.faq-heading img{width:180px;height:auto;margin:8px 0}.faq-heading p{margin:0;font-size:16px;line-height:1.5;color:#5d463d}
+.faq-heading{padding:0 0 22px;text-align:center}.faq-heading h3{margin:0;font:700 46px/1.05 var(--font-signature-display)}.faq-heading img{width:180px;height:auto;margin:8px auto}.faq-heading p{margin:0;font-size:16px;line-height:1.5;color:#5d463d}
 .faq-list{grid-template-columns:1fr;grid-template-rows:none;grid-auto-flow:row;gap:12px}
 .faq-list article{border-color:#f3d2d2;border-radius:16px;background:rgba(255,249,247,.3)}
 .faq-list button{min-height:76px;padding:0 26px;font-size:18px}.faq-list button span{font-size:32px}
