@@ -44,11 +44,41 @@ const fallbackServices = [
 ].map(([id, name, price, durationMinutes, description, image]) => ({ id, name, price, durationMinutes, description, image, originalPrice: price, discountPercent: 0 }));
 
 const groupDefs = {
-  nail: { title: "NAIL CARE", note: "Chăm sóc móng và da tay chân khoẻ đẹp, để bạn luôn tự tin toả sáng mỗi ngày.", ids: ["ct-tay", "ct-chan", "thao-gel", "thao-up", "thao-bot", "noi-up", "noi-gel", "noi-bot"] },
-  classic: { title: "CLASSIC", note: "Màu trơn trong trẻo, bóng căng và dịu dàng theo đúng gu của bạn.", ids: ["son-cung", "gel-hn", "gel-thach"] },
-  design: { title: "DESIGN", note: "Thêm một chút lấp lánh, một nét vẽ nhỏ và thật nhiều cá tính.", ids: ["flash", "matmeo", "guong", "ombre", "da", "charm", "sticker", "ve", "xacu"] },
-  mi: { title: "EYELASHES", note: "Uốn và nối mi theo dáng mắt, nhẹ nhàng nhưng vẫn thật có điểm nhấn.", ids: ["uon-mi", "uon-mi-den", "mi-classic", "mi-tho", "mi-volume", "mi-sole", "mi-duoi"] },
-  goi: { title: "SHAMPOO", note: "Một khoảng nghỉ êm cho tóc, da đầu và đôi vai được thả lỏng.", ids: ["goi-thao", "goi-thuong", "goi-phuchoi", "goi-duongsinh"] },
+  nail: {
+    title: "NAIL CARE",
+    kicker: "CHĂM SÓC MÓNG",
+    note: "Chăm sóc móng và da tay chân khoẻ đẹp, để bạn luôn tự tin toả sáng mỗi ngày.",
+    accent: "../doodles/polish-bottle.png",
+    ids: ["ct-tay", "ct-chan", "thao-gel", "thao-up", "thao-bot", "noi-up", "noi-gel", "noi-bot"],
+  },
+  classic: {
+    title: "CLASSIC",
+    kicker: "MÀU SƠN DỊU DÀNG",
+    note: "Màu trơn trong trẻo, bóng căng và dịu dàng theo đúng gu của bạn.",
+    accent: "../doodles/hearts.png",
+    ids: ["son-cung", "gel-hn", "gel-thach"],
+  },
+  design: {
+    title: "DESIGN",
+    kicker: "NÉT NHỎ CÓ GU",
+    note: "Thêm một chút lấp lánh, một nét vẽ nhỏ và thật nhiều cá tính.",
+    accent: "../doodles/flower.png",
+    ids: ["flash", "matmeo", "guong", "ombre", "da", "charm", "sticker", "ve", "xacu"],
+  },
+  mi: {
+    title: "EYELASHES",
+    kicker: "NHẸ MẮT · XINH TỰ NHIÊN",
+    note: "Uốn và nối mi theo dáng mắt, nhẹ nhàng nhưng vẫn thật có điểm nhấn.",
+    accent: "../doodles/star-lavender.png",
+    ids: ["uon-mi", "uon-mi-den", "mi-classic", "mi-tho", "mi-volume", "mi-sole", "mi-duoi"],
+  },
+  goi: {
+    title: "SHAMPOO",
+    kicker: "MỘT CHÚT THƯ GIÃN",
+    note: "Một khoảng nghỉ êm cho tóc, da đầu và đôi vai được thả lỏng.",
+    accent: "../doodles/yarn-ball.png",
+    ids: ["goi-thao", "goi-thuong", "goi-phuchoi", "goi-duongsinh"],
+  },
 };
 
 const nailCareDescriptions = {
@@ -151,22 +181,53 @@ function renderSignature() {
   </div>`;
 }
 
+function sharedServiceRow(service, index, group) {
+  const discount = Number(service.discountPercent || 0);
+  const original = Number(service.originalPrice || service.price || 0);
+  const hasDiscount = discount > 0 && original > Number(service.price || 0);
+  const icon = signatureIcons[service.id] || group.accent;
+  return `<article class="shared-service-row" style="--service-row-index:${index}" data-card-variant="shared-list">
+    <button class="shared-service-row__booking" type="button" data-book-service="${service.id}" aria-label="Đặt hẹn dịch vụ ${service.name}"><span class="sr-only">Đặt hẹn dịch vụ ${service.name}</span></button>
+    <div class="shared-service-row__icon" aria-hidden="true">
+      <img src="${icon}" alt="">
+      <span>${String(index + 1).padStart(2, "0")}</span>
+    </div>
+    <div class="shared-service-row__copy">
+      <h3>${service.name}</h3>
+      <p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p>
+    </div>
+    <div class="shared-service-row__offer ${hasDiscount ? "" : "is-plain"}">
+      ${hasDiscount ? `<span>-${discount}%</span>` : "<span>Giá dịch vụ</span>"}
+    </div>
+    <div class="shared-service-row__pricing">
+      ${hasDiscount ? `<del>${money(original)}</del>` : ""}
+      <strong>${money(service.price)}</strong>
+      <small>~${service.durationMinutes} phút</small>
+    </div>
+    <div class="shared-service-row__photo"><img src="${service.image}" alt="${service.name}" loading="lazy"></div>
+  </article>`;
+}
+
 function renderSharedGroup(id) {
   const group = groupDefs[id];
   const services = group.ids.map(serviceById).filter(Boolean);
-  const isNailCare = id === "nail";
-  const note = isNailCare ? nailCareNotes : [
+  const note = id === "nail" ? nailCareNotes : [
     "Giá có thể thay đổi theo độ dài và tình trạng thực tế.",
     "Tụi mình luôn báo giá trước khi làm.",
     "Bạn cứ mang ảnh mẫu để được tư vấn sát gu nhất nhé!",
   ];
-  return `<div class="shared-service-layout shared-service-layout--${id}" data-template="nail-care" data-service-group="${id}">
+  return `<div class="shared-service-layout shared-service-layout--${id}" data-template="shared-service-list" data-service-group="${id}">
     <header class="shared-service-title">
-      <span class="shared-service-kicker">${isNailCare ? "CHĂM SÓC MÓNG" : "DỊCH VỤ 1M65"}</span>
-      <h2>${group.title}</h2>
-      <p>${group.note}</p>
+      <img class="shared-service-title__tape" src="assets/services/signature-shared/decor/top_gingham_tape.png" alt="" aria-hidden="true">
+      <img class="shared-service-title__cat" src="assets/services/signature-mobile/cats/header_cat_waving_bow.png" alt="" aria-hidden="true">
+      <div class="shared-service-title__paper">
+        <span class="shared-service-kicker">${group.kicker}</span>
+        <h2>${group.title}</h2>
+        <p>${group.note}</p>
+      </div>
+      <span class="shared-service-title__accent" aria-hidden="true"><img src="${group.accent}" alt=""></span>
     </header>
-    <div class="shared-service-grid ${isNailCare ? "nail-care-grid" : ""}">${services.map((item) => serviceCard(item, isNailCare ? "nail-care-card" : "", isNailCare ? "nailcare" : "standard")).join("")}</div>
+    <div class="shared-service-list">${services.map((item, index) => sharedServiceRow(item, index, group)).join("")}</div>
     ${renderServiceNote(note)}
   </div>`;
 }
