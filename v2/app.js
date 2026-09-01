@@ -48,37 +48,32 @@ const fallbackServices = [
 const groupDefs = {
   nail: {
     title: "NAIL CARE",
-    kicker: "CHĂM SÓC MÓNG",
     note: "Chăm sóc móng và da tay chân khoẻ đẹp, để bạn luôn tự tin toả sáng mỗi ngày.",
-    accent: "../doodles/polish-bottle.png",
+    accent: "assets/services/nail-care/decor/header_polish_doodle.png",
     ids: ["ct-tay", "ct-chan", "thao-gel", "thao-up", "thao-bot", "noi-up", "noi-gel", "noi-bot"],
   },
   classic: {
     title: "CLASSIC",
-    kicker: "MÀU SƠN DỊU DÀNG",
     note: "Màu trơn trong trẻo, bóng căng và dịu dàng theo đúng gu của bạn.",
     accent: "../doodles/hearts.png",
     ids: ["son-cung", "gel-hn", "gel-thach"],
   },
   design: {
     title: "DESIGN",
-    kicker: "NÉT NHỎ CÓ GU",
     note: "Thêm một chút lấp lánh, một nét vẽ nhỏ và thật nhiều cá tính.",
-    accent: "../doodles/flower.png",
+    accent: "assets/services/nail-care/doodles/header_flower.png",
     ids: ["flash", "matmeo", "guong", "ombre", "da", "charm", "sticker", "ve", "xacu"],
   },
   mi: {
     title: "EYELASHES",
-    kicker: "NHẸ MẮT · XINH TỰ NHIÊN",
     note: "Uốn và nối mi theo dáng mắt, nhẹ nhàng nhưng vẫn thật có điểm nhấn.",
-    accent: "../doodles/star-lavender.png",
+    accent: "../doodles/hand-mirror.png",
     ids: ["uon-mi", "uon-mi-den", "mi-classic", "mi-tho", "mi-volume", "mi-sole", "mi-duoi"],
   },
   goi: {
     title: "SHAMPOO",
-    kicker: "MỘT CHÚT THƯ GIÃN",
     note: "Một khoảng nghỉ êm cho tóc, da đầu và đôi vai được thả lỏng.",
-    accent: "../doodles/yarn-ball.png",
+    accent: "../doodles/teacup.png",
     ids: ["goi-thao", "goi-thuong", "goi-phuchoi", "goi-duongsinh"],
   },
 };
@@ -105,6 +100,16 @@ const signatureIcons = {
   "noi-bot": "assets/services/signature-shared/service_icons/noi_mong_dap_bot.png",
   "mi-classic": "assets/services/signature-shared/service_icons/noi_mi_classic.png",
   "goi-duongsinh": "assets/services/signature-shared/tab_icons/shampoo_cat_inactive.png",
+};
+const nailCareIcons = {
+  "ct-tay": "assets/services/nail-care/service_icons/cat_da_tay.png",
+  "ct-chan": "assets/services/nail-care/service_icons/cat_da_chan.png",
+  "thao-gel": "assets/services/nail-care/service_icons/thao_son_gel.png",
+  "thao-up": "assets/services/nail-care/service_icons/thao_mong_up_nail_box.png",
+  "thao-bot": "assets/services/nail-care/service_icons/thao_gel_bot.png",
+  "noi-up": "assets/services/nail-care/service_icons/noi_mong_up_xgel.png",
+  "noi-gel": "assets/services/nail-care/service_icons/noi_mong_dap_gel.png",
+  "noi-bot": "assets/services/nail-care/service_icons/noi_mong_dap_bot.png",
 };
 
 fallbackServices.forEach((service) => {
@@ -147,9 +152,11 @@ function serviceCard(service, className = "", variant = "standard") {
   </article>`;
 }
 
-function renderServiceNote(lines) {
-  return `<aside class="service-note">
-    <img class="service-note-cat" src="assets/services/signature-shared/cats/note_cat_peeking.png" alt="" aria-hidden="true">
+function renderServiceNote(lines, variant = "signature") {
+  const isShared = variant === "shared";
+  const cat = isShared ? "assets/services/nail-care/cats/note_cat_peeking.png" : "assets/services/signature-shared/cats/note_cat_peeking.png";
+  return `<aside class="service-note ${isShared ? "service-note--shared" : ""}">
+    <img class="service-note-cat" src="${cat}" alt="" aria-hidden="true">
     <div class="service-note-label"><strong>Lưu ý nhé</strong><span aria-hidden="true">♡</span></div>
     <ul>${lines.map((line, index) => `<li data-note-tone="${index % 3}">${line}</li>`).join("")}</ul>
   </aside>`;
@@ -192,24 +199,22 @@ function sharedServiceRow(service, index, group) {
   const discount = Number(service.discountPercent || 0);
   const original = Number(service.originalPrice || service.price || 0);
   const hasDiscount = discount > 0 && original > Number(service.price || 0);
-  const icon = signatureIcons[service.id] || group.accent;
+  const icon = nailCareIcons[service.id] || signatureIcons[service.id] || group.accent;
   return `<article class="shared-service-row" style="--service-row-index:${index}" data-card-variant="shared-list">
     <button class="shared-service-row__booking" type="button" data-book-service="${service.id}" aria-label="Đặt hẹn dịch vụ ${service.name}"><span class="sr-only">Đặt hẹn dịch vụ ${service.name}</span></button>
     <div class="shared-service-row__icon" aria-hidden="true">
       <img src="${icon}" alt="">
-      <span>${String(index + 1).padStart(2, "0")}</span>
     </div>
     <div class="shared-service-row__copy">
       <h3>${service.name}</h3>
       <p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p>
     </div>
-    <div class="shared-service-row__offer ${hasDiscount ? "" : "is-plain"}">
-      ${hasDiscount ? `<span>-${discount}%</span>` : "<span>Giá dịch vụ</span>"}
+    <div class="shared-service-row__offer ${hasDiscount ? "" : "is-empty"}" aria-hidden="${hasDiscount ? "false" : "true"}">
+      ${hasDiscount ? `<span>-${discount}%</span>` : ""}
     </div>
     <div class="shared-service-row__pricing">
       ${hasDiscount ? `<del>${money(original)}</del>` : ""}
       <strong>${money(service.price)}</strong>
-      <small>~${service.durationMinutes} phút</small>
     </div>
     <div class="shared-service-row__photo"><img src="${service.image}" alt="${service.name}" loading="lazy"></div>
   </article>`;
@@ -225,17 +230,20 @@ function renderSharedGroup(id) {
   ];
   return `<div class="shared-service-layout shared-service-layout--${id}" data-template="shared-service-list" data-service-group="${id}">
     <header class="shared-service-title">
-      <img class="shared-service-title__tape" src="assets/services/signature-shared/decor/top_gingham_tape.png" alt="" aria-hidden="true">
-      <img class="shared-service-title__cat" src="assets/services/signature-mobile/cats/header_cat_waving_bow.png" alt="" aria-hidden="true">
+      <img class="shared-service-title__tape" src="assets/services/nail-care/decor/header_gingham_tape.png" alt="" aria-hidden="true">
+      <img class="shared-service-title__cat" src="assets/services/nail-care/cats/header_cat_peeking.png" alt="" aria-hidden="true">
+      <img class="shared-service-title__heart" src="assets/services/nail-care/doodles/header_heart_bubble.png" alt="" aria-hidden="true">
       <div class="shared-service-title__paper">
-        <span class="shared-service-kicker">${group.kicker}</span>
+        <img class="shared-service-title__lavender-tape" src="assets/services/nail-care/decor/header_lavender_tape.png" alt="" aria-hidden="true">
         <h2>${group.title}</h2>
         <p>${group.note}</p>
       </div>
       <span class="shared-service-title__accent" aria-hidden="true"><img src="${group.accent}" alt=""></span>
+      <img class="shared-service-title__flower" src="assets/services/nail-care/doodles/header_flower.png" alt="" aria-hidden="true">
+      <img class="shared-service-title__sparkle" src="assets/services/nail-care/doodles/sparkle_orange.png" alt="" aria-hidden="true">
     </header>
     <div class="shared-service-list">${services.map((item, index) => sharedServiceRow(item, index, group)).join("")}</div>
-    ${renderServiceNote(note)}
+    ${renderServiceNote(note, "shared")}
   </div>`;
 }
 
@@ -258,7 +266,10 @@ async function loadLiveServices() {
     if (!live.length) return;
     state.services = fallbackServices.map((fallback) => {
       const source = live.find((item) => item.id === fallback.id);
-      return source ? { ...fallback, ...source, description: fallback.description, image: fallback.image } : fallback;
+      const merged = source ? { ...fallback, ...source, description: fallback.description, image: fallback.image } : fallback;
+      if (!groupDefs.nail.ids.includes(fallback.id)) return merged;
+      const originalPrice = Number(source?.price ?? fallback.originalPrice ?? fallback.price);
+      return { ...merged, originalPrice, discountPercent: 10, price: Math.round(originalPrice * .9) };
     });
     renderServices();
   } catch { /* Keep the reviewed local fallback. */ }
