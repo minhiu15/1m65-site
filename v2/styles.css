@@ -2491,8 +2491,8 @@ main,
   margin: 0;
   min-height: 70px;
   border-color: transparent;
-  border-radius: 999px;
-  background: url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.png") center / auto 100% no-repeat;
+  border-radius: 18px;
+  background: url("assets/services/shared/services_web_tab_active_shell.png") center / 100% 100% no-repeat;
   box-shadow: none;
 }
 
