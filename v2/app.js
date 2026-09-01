@@ -115,12 +115,23 @@ const nailCareIcons = {
 fallbackServices.forEach((service) => {
   if (!groupDefs.nail.ids.includes(service.id)) return;
   service.description = nailCareDescriptions[service.id] || service.description;
-  service.originalPrice = service.price;
-  service.discountPercent = 10;
-  service.price = Math.round(service.originalPrice * 0.9);
 });
 
-const state = { activeTab: "signature", services: fallbackServices };
+function normalizeServicePricing(service) {
+  const price = Math.max(0, Number(service.price || 0));
+  const rawOriginal = Math.max(0, Number(service.originalPrice || price));
+  const originalPrice = Math.max(rawOriginal, price);
+  const discountPercent = Math.min(100, Math.max(0, Number(service.discountPercent || 0)));
+  const onSale = discountPercent > 0 && originalPrice > price;
+  return {
+    ...service,
+    price: onSale ? price : originalPrice,
+    originalPrice,
+    discountPercent: onSale ? discountPercent : 0,
+  };
+}
+
+const state = { activeTab: "signature", services: fallbackServices.map(normalizeServicePricing) };
 window.__v2Services = { get services() { return state.services; } };
 const money = (value) => `${Number(value || 0).toLocaleString("vi-VN")}₫`;
 const serviceById = (id) => state.services.find((item) => item.id === id);
@@ -267,9 +278,7 @@ async function loadLiveServices() {
     state.services = fallbackServices.map((fallback) => {
       const source = live.find((item) => item.id === fallback.id);
       const merged = source ? { ...fallback, ...source, description: fallback.description, image: fallback.image } : fallback;
-      if (!groupDefs.nail.ids.includes(fallback.id)) return merged;
-      const originalPrice = Number(source?.price ?? fallback.originalPrice ?? fallback.price);
-      return { ...merged, originalPrice, discountPercent: 10, price: Math.round(originalPrice * .9) };
+      return normalizeServicePricing(merged);
     });
     renderServices();
   } catch { /* Keep the reviewed local fallback. */ }
