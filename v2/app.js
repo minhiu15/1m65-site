@@ -127,9 +127,9 @@ function renderSignature() {
     <div class="signature-hero-row">
       <div class="signature-intro">
         <img class="signature-tape" src="assets/services/signature-shared/decor/top_gingham_tape.png" alt="" aria-hidden="true">
-        <img class="signature-doodle signature-doodle--heart" src="../doodles/hearts.png" alt="" aria-hidden="true">
-        <img class="signature-doodle signature-doodle--crown" src="../doodles/polish-brush.png" alt="" aria-hidden="true">
-        <img class="signature-doodle signature-doodle--sparkle" src="../doodles/star-pink.png" alt="" aria-hidden="true">
+        <img class="paper-doodle paper-doodle--floating paper-doodle--signature-hearts" src="../doodles/hearts.png" alt="" aria-hidden="true">
+        <img class="paper-doodle paper-doodle--floating paper-doodle--signature-brush" src="../doodles/polish-brush.png" alt="" aria-hidden="true">
+        <img class="paper-doodle paper-doodle--floating paper-doodle--signature-star" src="../doodles/star-pink.png" alt="" aria-hidden="true">
         <img class="signature-cat signature-cat--web" src="assets/services/signature-web/cats/signature_raised_paw_LOCKED.png" alt="Mèo Nhu Nhi vẫy tay">
         <img class="signature-cat signature-cat--mobile" src="assets/services/signature-mobile/cats/header_cat_waving_bow.png" alt="Mèo Nhu Nhi vẫy tay">
         <div class="signature-copy">
@@ -143,7 +143,7 @@ function renderSignature() {
     </div>
     <div class="signature-grid signature-grid--top">${rest.slice(0, 3).map((item) => serviceCard(item, "", "signature")).join("")}</div>
     <div class="signature-lower">
-      <img class="signature-outside signature-outside--drink" src="../doodles/teacup.png" alt="" aria-hidden="true">
+      <img class="signature-outside paper-doodle paper-doodle--signature-teacup" src="../doodles/teacup.png" alt="" aria-hidden="true">
       ${rest.slice(3).map((item) => serviceCard(item, "", "signature")).join("")}
       <img class="signature-outside signature-outside--bath-cat" src="assets/services/signature-shared/cats/shampoo_bath_cat_scene.png" alt="" aria-hidden="true">
     </div>
