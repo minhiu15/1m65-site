@@ -8,7 +8,7 @@
   <meta name="description" content="Bản xem trước giao diện mới của 1M65 Nails, Eyelashes, Shampoo.">
   <title>1M65 Nails · V2 Preview</title>
   <link rel="icon" href="../favicon.svg">
-  <link rel="stylesheet" href="styles.css?v=20260901-35">
+  <link rel="stylesheet" href="styles.css?v=20260901-36">
   <script src="../turnstile-config.js?v=20260807a"></script>
   <script src="../turnstile-booking.js?v=20260807a"></script>
   <script type="module" src="app.js?v=20260901-7"></script>
@@ -29,7 +29,7 @@
         <a href="#danhgia">Đánh giá</a>
         <a href="#lienhe">Liên hệ</a>
       </nav>
-      <button class="header-book button-primary" type="button" data-open-booking>Đặt hẹn <svg class="header-paw" width="17" height="17" viewBox="0 0 40 40" aria-hidden="true"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="currentColor" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="currentColor"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="currentColor"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="currentColor" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="currentColor"></path></g></svg></button>
+      <button class="header-book button-primary" type="button" data-open-booking><span class="header-book__label">Đặt hẹn</span> <svg class="header-paw" width="17" height="17" viewBox="0 0 40 40" aria-hidden="true"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" fill="currentColor" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4" fill="currentColor"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4" fill="currentColor"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" fill="currentColor" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z" fill="currentColor"></path></g></svg></button>
       <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Mở menu">
         <span></span><span></span><span></span>
       </button>
@@ -64,7 +64,7 @@
           </div>
         </div>
         <div class="home-art reveal" aria-hidden="true">
-          <img src="assets/home/hero/main_hero.png" alt="">
+          <img src="assets/home/hero/main_hero_optical.png" alt="">
         </div>
         <blockquote class="home-quote reveal">
           “Chiếc móng này sẽ duyệt từng bộ móng trước khi bạn ra về. Bằng cách nhìn một cái rồi ngủ tiếp.”
@@ -105,7 +105,7 @@
       </div>
     </section>
 
-    <section class="gallery-section paper-section" id="thuvien" aria-labelledby="gallery-heading">
+    <section class="gallery-section paper-section" id="thuvien" aria-labelledby="gallery-chapter-title">
       <header class="chapter-divider chapter-divider--gallery" aria-labelledby="gallery-chapter-title">
         <div class="chapter-divider__inner paper-width">
           <p class="chapter-divider__label"><img src="assets/gallery/gallery_camera_LOCKED.png" alt="" aria-hidden="true">Thư viện</p>
@@ -116,13 +116,7 @@
         </div>
       </header>
       <div class="gallery-shell paper-width reveal">
-        <div class="gallery-heading-row">
-          <div class="gallery-title-lockup">
-            <img src="assets/gallery/gallery_title_LOCKED.png" alt="Thư viện" id="gallery-heading">
-            <p>Những mẫu xinh và khoảnh khắc tụi mình đã làm</p>
-          </div>
-          <img class="gallery-camera" src="assets/gallery/gallery_camera_LOCKED.png" alt="" aria-hidden="true">
-        </div>
+        <p class="gallery-intro">Những mẫu xinh và khoảnh khắc tụi mình đã làm</p>
         <div class="gallery-content-panel">
           <div class="gallery-filters" role="group" aria-label="Lọc thư viện" data-gallery-filters>
             <button class="is-active" type="button" data-gallery-filter="all">✦ Tất cả</button>
@@ -184,7 +178,7 @@
       <img class="paper-doodle paper-doodle--floating paper-doodle--reviews-star" src="../doodles/star-pink.png" alt="" aria-hidden="true">
       <div class="reviews-inner reviews-shell reveal">
         <header class="reviews-header">
-          <h2 class="reviews-title" id="reviews-heading">Đánh giá <img class="paper-doodle paper-doodle--reviews-envelope reviews-title-bubble" src="../doodles/heart-envelope.png" alt="" aria-hidden="true"></h2>
+          <h2 class="sr-only" id="reviews-heading">Đánh giá</h2>
           <p class="reviews-subtitle">Cảm ơn các nàng đã tin yêu và đồng hành cùng 1M65.<br>Những lời khen là động lực để chúng mình mỗi ngày tốt hơn!</p>
           <div class="reviews-header-decor" aria-hidden="true">
             <span class="reviews-header-decor__line"></span>
