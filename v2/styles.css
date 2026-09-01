@@ -2429,7 +2429,8 @@ main,
 /* Final Signature reference alignment. */
 .service-tabs {
   min-height: 86px;
-  padding: 0 7px;
+  box-sizing: border-box;
+  padding: 7px;
   overflow: hidden;
   border: 1px solid rgba(232, 94, 124, .24);
   border-radius: 24px;
@@ -2440,8 +2441,10 @@ main,
   position: relative;
   z-index: 1;
   display: flex;
+  align-self: center;
+  height: 70px;
   min-height: 70px;
-  margin-block: 7px;
+  margin: 0;
   padding: 8px 14px;
   overflow: hidden;
   border: 1px solid transparent;
@@ -2476,12 +2479,13 @@ main,
 
 .service-tabs button.is-active,
 .service-tabs button.is-active:hover {
-  margin: 7px;
+  height: 70px;
+  margin: 0;
   min-height: 70px;
   border-color: transparent;
-  border-radius: 18px;
-  background: url("assets/services/shared/services_web_tab_active_shell.png") center / 100% 100% no-repeat;
-  box-shadow: 0 7px 16px -13px rgba(177, 64, 92, .58);
+  border-radius: 999px;
+  background: url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.png") center / 100% 100% no-repeat;
+  box-shadow: none;
 }
 
 .service-tabs button.is-active img {
@@ -2794,9 +2798,9 @@ main,
 
 @media (max-width: 1180px) {
   .service-tabs { min-height: 80px; border-radius: 22px; }
-  .service-tabs button { min-height: 64px; padding-inline: 9px; font-size: 15px; }
+  .service-tabs button { height: 64px; min-height: 64px; padding-inline: 9px; font-size: 15px; }
   .service-tabs button.is-active,
-  .service-tabs button.is-active:hover { min-height: 64px; }
+  .service-tabs button.is-active:hover { height: 64px; min-height: 64px; }
   .service-tabs button img { width: 28px; height: 30px; }
 
   .signature-hero-row { grid-template-columns: 1fr; gap: 14px; }
@@ -2817,15 +2821,15 @@ main,
   .service-tabs {
     display: flex;
     min-height: 76px;
-    padding-inline: 5px;
+    padding: 7px;
     overflow-x: auto;
     overflow-y: hidden;
     border-radius: 20px;
     scrollbar-width: none;
   }
-  .service-tabs button { flex: 0 0 158px; min-height: 60px; margin-block: 7px; }
+  .service-tabs button { flex: 0 0 158px; height: 60px; min-height: 60px; margin: 0; }
   .service-tabs button.is-active,
-  .service-tabs button.is-active:hover { min-height: 60px; margin: 7px 5px; }
+  .service-tabs button.is-active:hover { height: 60px; min-height: 60px; margin: 0; }
   .service-tabs button::after { top: 16px; bottom: 16px; }
   .service-tabs button img { width: 26px; height: 28px; }
 }
