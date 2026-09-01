@@ -202,7 +202,7 @@ function renderHomeSchedule() {
   if (today) today.textContent = new Intl.DateTimeFormat("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).format(now);
   const grid = document.querySelector("[data-home-slots]");
   if (!grid) return;
-  grid.innerHTML = ["09:00", "10:30", "12:00", "13:30", "15:00", "16:30"].map((time, index) => `<button type="button" data-open-booking data-prefill-slot="${time}"><img src="assets/home/schedule/${["pin_pink.png", "pin_peach.png", "pin_lavender.png"][index % 3]}" alt=""><strong>${time}</strong><small>${index % 3 === 1 ? "Còn chỗ" : "Chọn giờ"}</small></button>`).join("");
+  grid.innerHTML = ["09:00", "10:30", "12:00", "13:30", "15:00", "16:30"].map((time, index) => `<button type="button" data-open-booking data-prefill-slot="${time}" style="--slot-tilt:${[-2.2, 1.7, 1.2, -1.5, 1.4, -1.8][index]}deg"><strong>${time}</strong><small>${index % 3 === 1 ? "Còn chỗ" : "Chọn giờ"}</small></button>`).join("");
 }
 
 function openDrawer() {

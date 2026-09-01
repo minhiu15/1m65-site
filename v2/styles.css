@@ -1107,6 +1107,115 @@ main,
 .slot-grid button:nth-child(3n + 1) { background: var(--pastel-rose); }
 .slot-grid button:nth-child(3n + 2) { background: var(--pastel-blue); }
 .slot-grid button:nth-child(3n) { background: var(--pastel-lavender); }
+
+/* Restore the original V1 hero pinboard for today's live availability. */
+.today-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-height: 0;
+  padding: 15px 14px 13px;
+  border: 6px solid #fffcf9;
+  border-radius: 28px;
+  background: #faedf3;
+  box-shadow: 0 22px 44px -30px rgba(43, 36, 64, .5);
+  rotate: 1.2deg;
+  transform-origin: center;
+}
+.today-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0;
+}
+.today-head h2 {
+  margin: 0;
+  color: #2b2440;
+  font: 700 16px/1.2 Quicksand, sans-serif;
+}
+.today-head time {
+  color: #7a5ad0;
+  font: 600 10px/1 ui-monospace, Menlo, monospace;
+  letter-spacing: .1em;
+}
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px 7px;
+  padding-top: 5px;
+}
+.slot-grid button,
+.slot-grid button:nth-child(3n + 1),
+.slot-grid button:nth-child(3n + 2),
+.slot-grid button:nth-child(3n) {
+  appearance: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: 58px;
+  padding: 13px 5px 8px;
+  border: 0;
+  border-radius: 0;
+  background: #fde9d9;
+  box-shadow: 0 12px 24px -14px rgba(224, 136, 95, .7);
+  color: #5c3a2d;
+  text-align: left;
+  rotate: var(--slot-tilt, 0deg);
+}
+.slot-grid button::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  margin-left: -4.5px;
+  border-radius: 50%;
+  background: #e0885f;
+  box-shadow: 0 3px 5px rgba(43, 36, 64, .3);
+}
+.slot-grid button strong {
+  color: #7d4b39;
+  font: 600 10.5px/1 ui-monospace, Menlo, monospace;
+}
+.slot-grid button small {
+  color: #5c3a2d;
+  font: 700 12.5px/1.05 Quicksand, sans-serif;
+  white-space: nowrap;
+}
+.slot-grid button:disabled {
+  background: #fff;
+  box-shadow: 0 10px 20px -15px rgba(43, 36, 64, .45);
+  color: #6b6580;
+  cursor: default;
+}
+.slot-grid button:disabled::before { background: #b29ae8; }
+.slot-grid button:disabled strong { color: #78718d; }
+.slot-grid button:disabled small {
+  color: #6b6580;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+.today-note {
+  margin: 0;
+  padding-top: 9px;
+  border-top: 1px dashed rgba(122, 90, 208, .28);
+  color: #5c566f;
+  font-size: 12px;
+  line-height: 1.42;
+}
+@media (max-width: 600px) {
+  .today-card { padding: 14px 12px 12px; rotate: .6deg; }
+  .slot-grid button { min-height: 58px; }
+  .today-note { font-size: 11px; }
+}
 .benefit-grid {
   border-color: rgba(149, 137, 170, .28);
   background: rgba(255, 253, 248, .62);
