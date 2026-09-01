@@ -150,20 +150,37 @@ a{color:inherit;text-decoration:none}
 :root{
   --highlight-pink:#f36f9a;
   --highlight-wave:#f58eae;
+  --highlight-wave-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 8'%3E%3Cpath d='M0 4 Q5.5 0 11 4 T22 4' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
 .home-copy h1 .pink-highlight,
 .about-intro h2 .pink-highlight,
 .booking-cta h2 .pink-highlight{
   display:inline-block;
+  position:relative;
   color:var(--highlight-pink);
   font-style:normal;
-  text-decoration-line:underline;
-  text-decoration-style:wavy;
-  text-decoration-color:var(--highlight-wave);
-  text-decoration-thickness:.045em;
-  text-underline-offset:.17em;
-  text-decoration-skip-ink:none;
+  text-decoration:none;
+}
+.home-copy h1 .pink-highlight::after,
+.about-intro h2 .pink-highlight::after,
+.booking-cta h2 .pink-highlight::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-.08em;
+  height:.11em;
+  background:var(--highlight-wave);
+  pointer-events:none;
+  -webkit-mask-image:var(--highlight-wave-mask);
+  mask-image:var(--highlight-wave-mask);
+  -webkit-mask-position:left center;
+  mask-position:left center;
+  -webkit-mask-repeat:repeat-x;
+  mask-repeat:repeat-x;
+  -webkit-mask-size:.27em .10em;
+  mask-size:.27em .10em;
 }
 
 /* One continuous light Paper A2 canvas matching the first Home reference. */
@@ -257,7 +274,7 @@ main,
 .home-art{grid-area:art;align-self:stretch;display:grid;place-items:end start;min-height:0}
 .home-art::after{display:none}
 .home-art img{width:min(90%,720px);height:auto;max-height:100%;object-fit:contain;object-position:left bottom;filter:none;transform:translateY(clamp(2px,.25vw,4px))}
-.today-card{grid-area:schedule;align-self:stretch;height:100%;min-height:0;box-sizing:border-box;margin:0;border-color:rgba(232,94,124,.3);border-radius:20px;background:rgba(255,249,247,.42);box-shadow:none}
+.today-card{grid-area:schedule;align-self:start;height:100%;min-height:0;box-sizing:border-box;margin:0;border-color:rgba(232,94,124,.3);border-radius:20px;background:rgba(255,249,247,.42);box-shadow:none;transform:translateY(-72px)}
 .today-head{margin-bottom:18px}
 .today-head h2{font-size:17px}.today-head h2 img{width:28px;height:28px}.today-head time{font-size:13px}
 .slot-grid{grid-template-columns:repeat(3,1fr);gap:12px}
@@ -579,7 +596,7 @@ main,
 @media(max-width:1180px){
   :root{--content:1080px}
   .home-grid{height:auto;grid-template-columns:1fr 1fr;grid-template-areas:"copy art" "quote art" "schedule schedule";grid-template-rows:auto auto auto}
-  .home-art{min-height:560px}.home-quote,.today-card{height:auto;min-height:auto}.benefit-grid{margin-top:44px}
+  .home-art{min-height:560px}.home-quote,.today-card{height:auto;min-height:auto}.today-card{transform:none}.benefit-grid{margin-top:44px}
   .service-tabs button{min-height:78px;padding-inline:9px}.service-tabs button img{width:34px;height:34px}
   .signature-hero-row{grid-template-columns:1fr}.signature-intro{min-height:330px}
   .signature-grid--top{grid-template-columns:repeat(2,1fr)}
@@ -1639,6 +1656,7 @@ main,
   --paper-doodle-medium: 64px;
   --paper-doodle-accent: 84px;
   --paper-doodle-wide: 112px;
+  --doodle-edge-safe: clamp(28px, 4.5vw, 86px);
 }
 
 .paper-doodle {
@@ -1684,22 +1702,22 @@ main,
   --doodle-size: var(--paper-doodle-small);
   --doodle-opacity: .78;
   --doodle-rotate: -8deg;
-  left: -6px;
-  top: 43%;
+  left: var(--doodle-edge-safe);
+  top: 62%;
 }
 .paper-doodle--home-polish {
   --doodle-size: 68px;
   --doodle-opacity: .8;
   --doodle-rotate: 7deg;
-  right: -10px;
-  top: 29%;
+  right: var(--doodle-edge-safe);
+  top: 12%;
 }
 .paper-doodle--home-bow {
   --doodle-size: 60px;
   --doodle-opacity: .78;
   --doodle-rotate: -5deg;
-  right: 4px;
-  top: 61%;
+  right: calc(var(--doodle-edge-safe) + 8px);
+  top: 68%;
 }
 .paper-doodle--home-flower { display: none; }
 
@@ -1708,7 +1726,7 @@ main,
   --doodle-size: 70px;
   --doodle-opacity: .78;
   --doodle-rotate: -9deg;
-  left: clamp(6px, 1.8vw, 28px);
+  left: 44%;
   top: auto;
   bottom: 20px;
 }
@@ -1716,7 +1734,7 @@ main,
   --doodle-size: 30px;
   --doodle-opacity: .78;
   --doodle-rotate: 8deg;
-  right: clamp(12px, 2.2vw, 34px);
+  right: 40px;
   top: 24px;
 }
 .paper-doodle--signature-hearts {
@@ -1754,7 +1772,7 @@ main,
   --doodle-size: var(--paper-doodle-wide);
   --doodle-opacity: .78;
   --doodle-rotate: -4deg;
-  left: 12px;
+  left: 40px;
   top: auto;
   bottom: 18px;
 }
@@ -1762,7 +1780,7 @@ main,
   --doodle-size: 48px;
   --doodle-opacity: .8;
   --doodle-rotate: 5deg;
-  right: 18px;
+  right: 40px;
   top: 28px;
 }
 .paper-doodle--gallery-star {
@@ -1779,27 +1797,28 @@ main,
   --doodle-size: var(--paper-doodle-medium);
   --doodle-opacity: .76;
   --doodle-rotate: -8deg;
-  left: -8px;
+  left: max(24px, calc((100% - var(--content)) / 2 - var(--doodle-size) - 12px));
   top: 13%;
 }
 .paper-doodle--about-stamp {
   --doodle-size: 68px;
   --doodle-opacity: .76;
   --doodle-rotate: 7deg;
-  right: -8px;
+  right: max(24px, calc((100% - var(--content)) / 2 - var(--doodle-size) - 12px));
   bottom: 10%;
 }
 .paper-doodle--about-star {
   --doodle-size: var(--paper-doodle-micro);
   --doodle-opacity: .72;
-  left: 10px;
+  display: none;
+  left: 24px;
   top: 54%;
 }
 .paper-doodle--about-flower {
   --doodle-size: 56px;
   --doodle-opacity: .76;
   --doodle-rotate: 7deg;
-  right: 12px;
+  right: max(24px, calc((100% - var(--content)) / 2 - var(--doodle-size) - 12px));
   top: 8%;
 }
 
@@ -1808,14 +1827,14 @@ main,
   --doodle-size: 52px;
   --doodle-opacity: .76;
   --doodle-rotate: -7deg;
-  left: 8px;
+  left: var(--doodle-edge-safe);
   top: 18%;
 }
 .paper-doodle--reviews-star {
   --doodle-size: 30px;
   --doodle-opacity: .74;
   --doodle-rotate: 8deg;
-  right: 14px;
+  right: var(--doodle-edge-safe);
   bottom: 10%;
 }
 .paper-doodle--reviews-divider {
@@ -1830,27 +1849,27 @@ main,
   --doodle-size: var(--paper-doodle-medium);
   --doodle-opacity: .76;
   --doodle-rotate: -11deg;
-  left: 0;
+  left: 24px;
   top: 18px;
 }
 .paper-doodle--booking-star {
   --doodle-size: var(--paper-doodle-micro);
   --doodle-opacity: .76;
-  right: 0;
+  right: 24px;
   top: 18px;
 }
 .paper-doodle--booking-teacup {
   --doodle-size: 68px;
   --doodle-opacity: .76;
   --doodle-rotate: 7deg;
-  right: 0;
+  right: 24px;
   bottom: 8px;
 }
 .paper-doodle--booking-paws {
   --doodle-size: 96px;
   --doodle-opacity: .62;
   --doodle-rotate: -6deg;
-  left: 0;
+  left: 24px;
   bottom: 8px;
 }
 
@@ -1859,64 +1878,93 @@ main,
   --doodle-size: 68px;
   --doodle-opacity: .74;
   --doodle-rotate: -7deg;
-  left: -8px;
+  left: max(24px, calc((100% - var(--content)) / 2 - var(--doodle-size) - 12px));
   bottom: 24px;
 }
 .paper-doodle--contact-stamp {
   --doodle-size: var(--paper-doodle-medium);
   --doodle-opacity: .74;
   --doodle-rotate: 7deg;
-  right: -6px;
+  right: max(24px, calc((100% - var(--content)) / 2 - var(--doodle-size) - 12px));
   bottom: 24px;
 }
 .paper-doodle--contact-gems {
   --doodle-size: var(--paper-doodle-small);
   --doodle-opacity: .72;
   --doodle-rotate: 6deg;
-  right: 12px;
+  right: max(24px, calc((100% - var(--content)) / 2 - var(--doodle-size) - 12px));
   top: 16px;
+}
+
+@media (max-width: 1900px) {
+  .paper-doodle--about-star,
+  .paper-doodle--about-flower,
+  .paper-doodle--contact-gems { display: none; }
+
+  .paper-doodle--about-mirror,
+  .paper-doodle--about-stamp,
+  .paper-doodle--contact-yarn,
+  .paper-doodle--contact-stamp { --doodle-size: 40px; }
+
+  .paper-doodle--about-mirror,
+  .paper-doodle--contact-yarn { left: 16px; }
+
+  .paper-doodle--about-stamp,
+  .paper-doodle--contact-stamp { right: 16px; }
+}
+
+@media (max-width: 1500px) {
+  .paper-doodle--about-mirror,
+  .paper-doodle--about-stamp,
+  .paper-doodle--about-star,
+  .paper-doodle--about-flower,
+  .paper-doodle--contact-yarn,
+  .paper-doodle--contact-stamp,
+  .paper-doodle--contact-gems { display: none; }
 }
 
 @media (max-width: 900px) {
   .paper-doodle--home-polish,
   .paper-doodle--home-bow,
   .paper-doodle--gallery-star,
+  .paper-doodle--about-mirror,
   .paper-doodle--about-stamp,
   .paper-doodle--about-star,
+  .paper-doodle--about-flower,
   .paper-doodle--booking-teacup,
+  .paper-doodle--contact-yarn,
+  .paper-doodle--contact-stamp,
   .paper-doodle--contact-gems { display: none; }
 
-  .paper-doodle--home-star { --doodle-size: 36px; left: -4px; top: 41%; }
+  .paper-doodle--home-star { --doodle-size: 36px; left: 18px; top: 52%; }
   .paper-doodle--home-flower {
     --doodle-size: var(--paper-doodle-small);
     --doodle-opacity: .72;
     --doodle-rotate: 6deg;
     display: block;
-    right: 8px;
+    right: 18px;
     bottom: 4%;
   }
-  .paper-doodle--services-brush { --doodle-size: 56px; left: 8px; bottom: 12px; }
-  .paper-doodle--services-star { --doodle-size: 26px; right: 12px; top: 18px; }
+  .paper-doodle--services-brush { --doodle-size: 56px; left: 36%; bottom: 12px; }
+  .paper-doodle--services-star { --doodle-size: 26px; right: 24px; top: 18px; }
   .paper-doodle--signature-hearts { --doodle-size: 38px; }
   .paper-doodle--signature-brush { --doodle-size: var(--paper-doodle-small); }
   .paper-doodle--signature-star { --doodle-size: 24px; }
   .paper-doodle--signature-teacup { --doodle-size: 68px; max-height: 68px; }
-  .paper-doodle--gallery-pearls { --doodle-size: 90px; left: 8px; bottom: 10px; }
-  .paper-doodle--gallery-hearts { --doodle-size: 40px; right: 10px; top: 18px; }
-  .paper-doodle--about-mirror { --doodle-size: 52px; left: -6px; top: 10%; }
-  .paper-doodle--about-flower { --doodle-size: 48px; right: -4px; top: 8%; }
-  .paper-doodle--reviews-flower { --doodle-size: var(--paper-doodle-small); left: -4px; }
-  .paper-doodle--reviews-star { --doodle-size: var(--paper-doodle-micro); right: 4px; }
-  .paper-doodle--booking-scissors { --doodle-size: 52px; left: -4px; top: 2px; }
-  .paper-doodle--booking-star { --doodle-size: 26px; right: 2px; top: 8px; }
-  .paper-doodle--booking-paws { --doodle-size: 80px; left: -8px; bottom: -2px; }
-  .paper-doodle--contact-yarn { --doodle-size: 54px; left: -6px; bottom: 12px; }
-  .paper-doodle--contact-stamp { --doodle-size: 52px; right: -6px; bottom: 12px; }
+  .paper-doodle--gallery-pearls { --doodle-size: 90px; left: 24px; bottom: 10px; }
+  .paper-doodle--gallery-hearts { --doodle-size: 40px; right: 24px; top: 18px; }
+  .paper-doodle--reviews-flower { --doodle-size: var(--paper-doodle-small); left: 18px; }
+  .paper-doodle--reviews-star { --doodle-size: var(--paper-doodle-micro); right: 18px; }
+  .paper-doodle--booking-scissors { --doodle-size: 52px; left: 18px; top: 8px; }
+  .paper-doodle--booking-star { --doodle-size: 26px; right: 18px; top: 12px; }
+  .paper-doodle--booking-paws { --doodle-size: 80px; left: 18px; bottom: 12px; }
 }
 
 @media (max-width: 600px) {
-  .paper-doodle--reviews-star { display: none; }
-  .paper-doodle--home-star { --doodle-size: 32px; }
+  .paper-doodle--home-star,
+  .paper-doodle--reviews-flower,
+  .paper-doodle--reviews-star,
+  .paper-doodle--booking-paws { display: none; }
   .paper-doodle--home-flower { --doodle-size: 40px; }
   .paper-doodle--services-brush { --doodle-size: 48px; }
   .paper-doodle--services-star { --doodle-size: 24px; }
@@ -1925,13 +1973,7 @@ main,
   .paper-doodle--signature-star { --doodle-size: 22px; }
   .paper-doodle--gallery-pearls { --doodle-size: 78px; }
   .paper-doodle--gallery-hearts { --doodle-size: 38px; }
-  .paper-doodle--about-mirror { --doodle-size: var(--paper-doodle-small); }
-  .paper-doodle--about-flower { --doodle-size: 40px; }
-  .paper-doodle--reviews-flower { --doodle-size: 40px; }
   .paper-doodle--reviews-divider { --doodle-size: var(--paper-doodle-micro); }
   .paper-doodle--booking-scissors { --doodle-size: var(--paper-doodle-small); }
   .paper-doodle--booking-star { --doodle-size: 24px; }
-  .paper-doodle--booking-paws { --doodle-size: 72px; --doodle-opacity: .54; }
-  .paper-doodle--contact-yarn,
-  .paper-doodle--contact-stamp { --doodle-size: 46px; }
 }
