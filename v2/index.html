@@ -8,10 +8,10 @@
   <meta name="description" content="Bản xem trước giao diện mới của 1M65 Nails, Eyelashes, Shampoo.">
   <title>1M65 Nails · V2 Preview</title>
   <link rel="icon" href="../favicon.svg">
-  <link rel="stylesheet" href="styles.css?v=20260902-56">
+  <link rel="stylesheet" href="styles.css?v=20260902-57">
   <script src="../turnstile-config.js?v=20260807a"></script>
   <script src="../turnstile-booking.js?v=20260807a"></script>
-  <script type="module" src="app.js?v=20260902-56"></script>
+  <script type="module" src="app.js?v=20260902-57"></script>
   <script type="module" src="experience.js?v=20260901-41"></script>
 </head>
 <body>
@@ -30,6 +30,7 @@
         <a href="#lienhe">Liên hệ</a>
       </nav>
       <button class="header-book button-primary" type="button" data-open-booking><span class="header-book__label">Đặt hẹn</span></button>
+      <img class="header-sparkle" src="assets/home/relayout/decor_sparkle_pastel_optical.png" alt="" aria-hidden="true">
       <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Mở menu">
         <span></span><span></span><span></span>
       </button>
@@ -50,38 +51,58 @@
 
   <main id="main-content">
     <section class="home-section paper-section" aria-labelledby="home-title">
-      <img class="paper-doodle paper-doodle--floating paper-doodle--home-star" src="../doodles/star-lavender.png" alt="" aria-hidden="true">
-      <img class="paper-doodle paper-doodle--floating paper-doodle--home-polish" src="../doodles/polish-bottle.png" alt="" aria-hidden="true">
-      <img class="paper-doodle paper-doodle--floating paper-doodle--home-flower" src="../doodles/flower.png" alt="" aria-hidden="true">
-      <img class="paper-doodle paper-doodle--floating paper-doodle--home-bow" src="../doodles/bow.png" alt="" aria-hidden="true">
       <div class="home-grid paper-width">
         <div class="home-copy reveal">
-          <p class="taped-kicker"><span>Nail xinh · Mood xịn · Mỗi ngày thêm chill ♡</span></p>
+          <p class="taped-kicker">
+            <span class="home-kicker-paw" aria-hidden="true">
+              <svg viewBox="0 0 40 40"><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z"></path></svg>
+            </span>
+            <span>Nail xinh · Mood xịn · Mỗi ngày thêm chill ♡</span>
+          </p>
           <h1 id="home-title">Một bộ nail <em class="pink-highlight">xinh</em><br>Một ngày thêm <em class="pink-highlight">happy</em></h1>
-          <p class="home-lede">Nơi từng đầu ngón tay được chăm chút thật chậm, thật êm. Bạn ngồi xuống, nhắm mắt một chút — Nhu Nhi sẽ trông chừng giúp bạn.</p>
+          <p class="home-lede">Nơi từng đầu ngón tay được chăm chút thật chậm, thật êm.<br>Bạn ngồi xuống, nhắm mắt một chút — Nhu Nhi sẽ trông chừng để bạn chỉ việc đẹp và thư giãn.</p>
           <div class="home-actions">
-            <button class="button-primary" type="button" data-open-booking>Đặt hẹn ngay</button>
-            <a class="button-secondary" href="#thuvien">Xem thư viện móng</a>
+            <button class="button-primary" type="button" data-open-booking>
+              <span>Đặt hẹn ngay</span>
+              <svg class="home-action-paw" viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z"></path></svg>
+            </button>
+            <a class="button-secondary" href="#thuvien"><span>Xem thư viện móng</span><img src="assets/home/relayout/decor_sparkle_pastel_optical.png" alt="" aria-hidden="true"></a>
           </div>
         </div>
         <div class="home-art reveal" aria-hidden="true">
-          <img src="assets/home/hero/main_hero_optical.png" alt="">
+          <img class="home-art__hero" src="assets/home/hero/main_hero_optical.png" alt="">
+          <img class="home-art__badge" src="assets/home/relayout/badge_nail_xinh_mood_xin_optical.png" alt="">
+          <img class="paper-doodle paper-doodle--home-bow home-art__bow" src="assets/home/relayout/decor_bow_lavender_optical.png" alt="">
+          <img class="paper-doodle paper-doodle--home-sparkle home-art__sparkle" src="assets/home/relayout/decor_sparkle_pastel_optical.png" alt="">
+          <img class="paper-doodle paper-doodle--home-flower home-art__flower" src="assets/home/relayout/decor_flower_pink_optical.png" alt="">
         </div>
-        <blockquote class="home-quote reveal">
-          “Chiếc móng này sẽ duyệt từng bộ móng trước khi bạn ra về. Bằng cách nhìn một cái rồi ngủ tiếp.”
-          <cite>NHU NHI · QUẢN LÝ TIỆM</cite>
-        </blockquote>
-        <aside class="today-card reveal" aria-labelledby="today-title">
-          <div class="today-head"><h2 id="today-title">Lịch hôm nay</h2><time data-today></time></div>
-          <div class="slot-grid" data-home-slots></div>
-          <p class="today-note">Giấy cam còn chỗ — chọn nhanh trước khi Nhu Nhi ngủ đè lên lịch.</p>
-        </aside>
-      </div>
-      <div class="benefit-grid paper-width reveal" aria-label="Điểm nhỏ đáng yêu ở 1M65">
-        <article><img src="assets/home/benefits/product_quality.png" alt=""><h3>Sản phẩm chất lượng</h3><p>Sơn xịn, an toàn cho móng.</p></article>
-        <article><img src="assets/home/benefits/nail_technician.png" alt=""><h3>Thợ nail tỉ mỉ</h3><p>Từng chi tiết đều được chăm chút.</p></article>
-        <article><img src="assets/home/benefits/cute_space.png" alt=""><h3>Không gian dễ thương</h3><p>Thư giãn, nhẹ nhàng và xinh xắn.</p></article>
-        <article><img src="assets/home/benefits/easy_booking.png" alt=""><h3>Đặt lịch dễ dàng</h3><p>Chọn giờ nhanh, giữ chỗ tiện lợi.</p></article>
+        <div class="home-support">
+          <blockquote class="home-quote reveal">
+            <div class="home-quote__top" aria-hidden="true"><span class="home-quote__mark">“</span><span class="home-quote__stars">★★★★★</span></div>
+            <p>“Chiếc móng này sẽ duyệt từng bộ móng trước khi bạn ra về. Bằng cách nhìn một cái rồi ngủ tiếp.”</p>
+            <footer class="home-quote__footer">
+              <span class="home-quote__avatar-slot"><img src="assets/home/relayout/photo_nhu_nhi_avatar.jpg" alt="Nhu Nhi"></span>
+              <cite><strong>NHU NHI · QUẢN LÝ TIỆM</strong><span>1M65 Nails</span></cite>
+            </footer>
+            <img class="home-quote__bow" src="assets/home/relayout/decor_bow_lavender_optical.png" alt="" aria-hidden="true">
+          </blockquote>
+          <aside class="today-card reveal" aria-labelledby="today-title">
+            <div class="today-head"><h2 id="today-title">Lịch hôm nay</h2><time data-today></time></div>
+            <div class="slot-grid" data-home-slots></div>
+            <p class="today-note">Giấy cam còn chỗ — chọn nhanh trước khi Nhu Nhi ngủ đè lên lịch.</p>
+          </aside>
+        </div>
+        <div class="home-bottom">
+          <div class="benefit-grid reveal" aria-label="Điểm nhỏ đáng yêu ở 1M65">
+            <article><img src="assets/home/relayout/icon_shield_lavender_optical.png" alt=""><span><h3>Sạch sẽ · An toàn</h3><p>Dụng cụ vô trùng, đảm bảo vệ sinh</p></span></article>
+            <article><img src="assets/home/relayout/icon_heart_check_pink_optical.png" alt=""><span><h3>Sơn xịn · Lên màu chuẩn</h3><p>Sản phẩm chính hãng, bền màu</p></span></article>
+            <article><img src="assets/home/relayout/icon_paw_heart_badge_optical.png" alt=""><span><h3>Chăm sóc tận tâm</h3><p>Tư vấn nhẹ nhàng, hợp style của bạn</p></span></article>
+          </div>
+          <aside class="home-love-note reveal">
+            <img src="assets/home/relayout/decor_bow_lavender_optical.png" alt="" aria-hidden="true">
+            <p>Yêu bản thân<br>bắt đầu từ<br>đầu ngón tay <span aria-hidden="true">♥</span></p>
+          </aside>
+        </div>
       </div>
     </section>
 
