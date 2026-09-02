@@ -3505,13 +3505,19 @@ main,
   transform: translate(-1.5%, -1.5%);
 }
 
-.home-art__badge {
+.home-art > .home-art__badge {
   position: absolute;
   z-index: 3;
   top: 1%;
   right: -1%;
   width: clamp(86px, 7.6vw, 126px);
   height: auto;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  object-position: center;
+  filter: none;
+  transform: none;
 }
 
 .home-art .paper-doodle {
@@ -3533,6 +3539,15 @@ main,
   gap: clamp(12px, 1.3vw, 20px);
   min-width: 0;
   min-height: 0;
+}
+
+.home-support > .home-quote,
+.home-support > .today-card {
+  grid-area: auto;
+  grid-column: auto;
+  grid-row: auto;
+  order: initial;
+  min-width: 0;
 }
 
 .home-quote,
