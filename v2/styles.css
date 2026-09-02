@@ -334,12 +334,12 @@ main,
 }
 .service-tabs button.is-active{
   border-color:transparent;
-  background:url("assets/services/shared/services_web_tab_active_shell.png") center/100% 100% no-repeat;
+  background:url("assets/services/shared/services_web_tab_active_paper_v2.png") center/100% 100% no-repeat;
   color:#fff;
   box-shadow:none;
 }
 .service-tabs button.is-active:hover{
-  background:url("assets/services/shared/services_web_tab_active_shell.png") center/100% 100% no-repeat;
+  background:url("assets/services/shared/services_web_tab_active_paper_v2.png") center/100% 100% no-repeat;
 }
 .service-panel{margin-top:38px;min-height:0}
 .signature-layout{display:block}
@@ -2492,7 +2492,7 @@ main,
   min-height: 70px;
   border-color: transparent;
   border-radius: 18px;
-  background: url("assets/services/shared/services_web_tab_active_shell.png") center / 100% 100% no-repeat;
+  background: url("assets/services/shared/services_web_tab_active_paper_v2.png") center / 100% 100% no-repeat;
   box-shadow: none;
 }
 
