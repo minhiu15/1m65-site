@@ -4474,3 +4474,269 @@ main,
     line-height: 1.55;
   }
 }
+
+
+/* V62 - organic Home backdrop, expanded Signature assets, and balanced service note. */
+.home-art::before { display: none; }
+
+.home-art__backdrop {
+  position: absolute;
+  z-index: -2;
+  inset: -4% -8% -4% -13%;
+  width: 121%;
+  height: 108%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.home-art__backdrop-paper,
+.home-art__backdrop-surface {
+  vector-effect: non-scaling-stroke;
+}
+
+.home-art__backdrop-paper {
+  fill: none;
+  stroke: rgba(255, 255, 255, .94);
+  stroke-linejoin: round;
+  stroke-width: 12;
+}
+
+.home-art__backdrop-surface {
+  fill: url("#home-gingham-pattern");
+  stroke: rgba(241, 192, 207, .72);
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.signature-intro {
+  grid-template-columns: minmax(170px, 34%) minmax(0, 66%);
+}
+
+.signature-wordmark {
+  width: min(100%, 500px);
+  height: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0 auto -2px;
+  object-fit: contain;
+  transform: none;
+}
+
+.service-card--featured[data-card-variant="signature"] .service-card-copy {
+  padding: 20px 0 0 128px;
+}
+
+.featured-badge {
+  top: 18px;
+  left: 18px;
+  width: 118px;
+  height: 148px;
+  padding: 35px 16px 58px;
+  background-image: url("assets/services/signature-shared/decor/featured_most_chosen_badge_paper_v3.png");
+  color: #603b35;
+  filter: drop-shadow(0 7px 10px rgba(218, 91, 124, .18));
+}
+
+.featured-badge span {
+  font-size: 9px;
+  line-height: 1.08;
+}
+
+.featured-badge strong {
+  margin-top: 3px;
+  font-size: 11px;
+  line-height: 1.05;
+}
+
+:is(.shared-service-layout, .signature-layout) > .service-note--shared {
+  width: min(100%, 1320px);
+  grid-template-columns: minmax(130px, 150px) minmax(250px, 270px) minmax(420px, 1fr) 100px;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  margin: 24px auto 0;
+  padding: 8px 18px 0;
+}
+
+.service-note--shared .service-note-cat {
+  width: 150px;
+  height: 100px;
+}
+
+.service-note--shared .service-note-label {
+  width: 100%;
+  min-height: 68px;
+  padding: 12px 22px;
+}
+
+.service-note--shared .service-note-label strong { font-size: 23px; }
+.service-note--shared .service-note-label span { font-size: 23px; }
+
+.service-note--shared ul {
+  align-self: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.service-note--shared li {
+  min-width: 0;
+  padding-left: 26px;
+  font-size: 13.5px;
+  line-height: 1.42;
+}
+
+.service-note-decor {
+  position: relative;
+  align-self: end;
+  justify-self: center;
+  display: block;
+  width: 96px;
+  height: 90px;
+  pointer-events: none;
+}
+
+.service-note-decor img {
+  position: absolute;
+  display: block;
+  object-fit: contain;
+}
+
+.service-note-decor__sparkle {
+  top: 3px;
+  right: 2px;
+  width: 30px;
+  height: 30px;
+  transform: rotate(8deg);
+}
+
+.service-note-decor__flower {
+  left: 2px;
+  bottom: 0;
+  width: 62px;
+  height: 62px;
+  transform: rotate(-7deg);
+}
+
+@media (max-width: 1280px) {
+  .home-art__backdrop {
+    inset: -3% -5% -4%;
+    width: 110%;
+    height: 107%;
+  }
+}
+
+@media (max-width: 1180px) {
+  .signature-intro {
+    grid-template-columns: minmax(180px, 34%) minmax(0, 66%);
+  }
+
+  .signature-wordmark {
+    width: min(100%, 470px);
+    height: auto;
+    max-height: none;
+  }
+
+  :is(.shared-service-layout, .signature-layout) > .service-note--shared {
+    width: 100%;
+    grid-template-columns: 92px 180px minmax(220px, 1fr) 70px;
+    gap: 13px;
+    padding-inline: 4px;
+  }
+
+  .service-note--shared .service-note-cat { width: 90px; height: 70px; }
+  .service-note--shared .service-note-label { min-height: 56px; padding: 9px 12px; }
+  .service-note--shared .service-note-label strong { font-size: 18px; }
+  .service-note--shared .service-note-label span { font-size: 18px; }
+  .service-note--shared li { font-size: 11px; }
+  .service-note-decor { width: 68px; height: 68px; }
+  .service-note-decor__sparkle { width: 23px; height: 23px; }
+  .service-note-decor__flower { width: 48px; height: 48px; }
+}
+
+@media (max-width: 600px) {
+  .home-art__backdrop {
+    inset: 0 -10% -3%;
+    width: 120%;
+    height: 105%;
+  }
+
+  .home-art__backdrop-paper { stroke-width: 9; }
+  .home-art__backdrop-surface { stroke-width: 1.5; }
+
+  .signature-intro {
+    grid-template-columns: 105px minmax(0, 1fr);
+  }
+
+  .signature-wordmark {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    margin-bottom: 0;
+    transform: none;
+  }
+
+  .service-card--featured[data-card-variant="signature"] .service-card-copy {
+    padding: 106px 0 0;
+  }
+
+  .featured-badge {
+    top: 11px;
+    left: 11px;
+    width: 78px;
+    height: 98px;
+    padding: 23px 9px 37px;
+  }
+
+  .featured-badge span { font-size: 7px; }
+  .featured-badge strong { margin-top: 2px; font-size: 8.5px; }
+
+  :is(.shared-service-layout, .signature-layout) > .service-note--shared {
+    width: 100%;
+    grid-template-columns: 70px minmax(0, 1fr) 48px;
+    grid-template-areas:
+      "cat label decor"
+      "notes notes notes";
+    column-gap: 8px;
+    row-gap: 10px;
+    margin-top: 14px;
+    padding: 7px 4px 3px;
+  }
+
+  .service-note--shared .service-note-cat {
+    grid-area: cat;
+    align-self: end;
+    width: 70px;
+    height: 54px;
+  }
+
+  .service-note--shared .service-note-label {
+    grid-area: label;
+    min-height: 46px;
+    padding: 7px 9px;
+  }
+
+  .service-note--shared .service-note-label strong { font-size: 16px; }
+  .service-note--shared .service-note-label span { font-size: 16px; }
+
+  .service-note--shared ul {
+    grid-area: notes;
+    gap: 7px;
+    width: 100%;
+  }
+
+  .service-note--shared li {
+    padding-left: 18px;
+    font-size: 10.5px;
+    line-height: 1.45;
+  }
+
+  .service-note-decor {
+    grid-area: decor;
+    align-self: end;
+    width: 46px;
+    height: 52px;
+  }
+
+  .service-note-decor__sparkle { width: 18px; height: 18px; }
+  .service-note-decor__flower { width: 36px; height: 36px; }
+}

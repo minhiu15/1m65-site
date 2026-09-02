@@ -168,6 +168,10 @@ function renderServiceNote(lines) {
     <img class="service-note-cat" src="assets/services/nail-care/cats/note_cat_peeking.png" alt="" aria-hidden="true">
     <div class="service-note-label"><strong>Lưu ý nhé</strong><span aria-hidden="true">♡</span></div>
     <ul>${lines.map((line, index) => `<li data-note-tone="${index % 3}">${line}</li>`).join("")}</ul>
+    <span class="service-note-decor" aria-hidden="true">
+      <img class="service-note-decor__sparkle" src="assets/services/nail-care/doodles/sparkle_orange.png" alt="">
+      <img class="service-note-decor__flower" src="assets/services/nail-care/doodles/header_flower.png" alt="">
+    </span>
   </aside>`;
 }
 
@@ -187,7 +191,7 @@ function renderSignature() {
         <img class="signature-ref-doodle signature-ref-doodle--sparkle" src="assets/services/signature-shared/doodles/sparkle_orange.png" alt="" aria-hidden="true">
         <img class="signature-cat" src="assets/services/signature-shared/cats/signature_raised_paw_OPTICAL_V1.png" alt="Mèo Nhu Nhi vẫy tay">
         <div class="signature-copy">
-          <img class="signature-wordmark" src="assets/services/signature-shared/signature_wordmark/SIGNATURE_WORDMARK_UNIFIED_PAPER_V2.png" alt="Signature">
+          <img class="signature-wordmark" src="assets/services/signature-shared/signature_wordmark/SIGNATURE_WORDMARK_UNIFIED_PAPER_V3.png" alt="Signature">
           <span class="signature-ribbon">DỊCH VỤ NỔI BẬT TẠI 1M65 NAIL ROOM</span>
           <p>Từng chi tiết nhỏ, tạo nên sự khác biệt lớn ♡</p>
         </div>
