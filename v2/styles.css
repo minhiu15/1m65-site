@@ -3528,9 +3528,19 @@ main,
   opacity: .86;
 }
 
-.home-art__bow { top: 5%; left: -4%; height: clamp(44px, 4.2vw, 68px); transform: rotate(-7deg); }
-.home-art__sparkle { top: 26%; left: 7%; height: clamp(23px, 2vw, 34px); transform: rotate(-4deg); }
-.home-art__flower { right: -2%; bottom: 15%; height: clamp(36px, 3vw, 50px); transform: rotate(5deg); }
+.home-art > .home-art__bow,
+.home-art > .home-art__sparkle,
+.home-art > .home-art__flower {
+  width: auto;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  filter: none;
+}
+
+.home-art > .home-art__bow { top: 5%; left: -4%; height: clamp(44px, 4.2vw, 68px); transform: rotate(-7deg); }
+.home-art > .home-art__sparkle { top: 26%; left: 7%; height: clamp(23px, 2vw, 34px); transform: rotate(-4deg); }
+.home-art > .home-art__flower { right: -2%; bottom: 15%; height: clamp(36px, 3vw, 50px); transform: rotate(5deg); }
 
 .home-support {
   grid-area: support;
@@ -3756,8 +3766,8 @@ main,
   .home-grid { gap: 20px; }
   .home-copy { order: initial; width: 100%; padding: 8px 0 0; }
   .home-art { order: initial; width: 100%; margin: 0 auto; }
-  .home-art__badge { width: 92px; right: 1%; }
-  .home-art__bow { left: 1%; }
+  .home-art > .home-art__badge { width: 92px; right: 1%; }
+  .home-art > .home-art__bow { left: 1%; }
   .home-support { grid-template-columns: minmax(0, 1fr); min-height: 0; }
   .home-quote,
   .home-support .today-card { height: auto; min-height: 184px; }
@@ -3784,10 +3794,10 @@ main,
   .home-art { aspect-ratio: 1256 / 1020; }
   .home-art::before { inset: 0 -10% -2%; border-width: 3px; border-radius: 45% 9% 39% 44% / 15% 9% 17% 19%; background-size: 28px 28px; }
   .home-art .home-art__hero { width: 105%; transform: translateY(-1%); }
-  .home-art__badge { width: 68px; top: 3%; right: -1%; }
-  .home-art__bow { top: 8%; height: 38px; }
-  .home-art__sparkle { display: none; }
-  .home-art__flower { height: 32px; right: 1%; }
+  .home-art > .home-art__badge { width: 68px; top: 3%; right: -1%; }
+  .home-art > .home-art__bow { top: 8%; height: 38px; }
+  .home-art > .home-art__sparkle { display: none; }
+  .home-art > .home-art__flower { height: 32px; right: 1%; }
   .home-quote { min-height: 190px; padding: 15px; font-size: 12px; }
   .home-quote__stars { font-size: 15px; }
   .home-support .today-card { min-height: 0; padding: 12px 10px 10px; }
