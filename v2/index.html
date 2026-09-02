@@ -8,10 +8,10 @@
   <meta name="description" content="Bản xem trước giao diện mới của 1M65 Nails, Eyelashes, Shampoo.">
   <title>1M65 Nails · V2 Preview</title>
   <link rel="icon" href="../favicon.svg">
-  <link rel="stylesheet" href="styles.css?v=20260902-60">
+  <link rel="stylesheet" href="styles.css?v=20260902-61">
   <script src="../turnstile-config.js?v=20260807a"></script>
   <script src="../turnstile-booking.js?v=20260807a"></script>
-  <script type="module" src="app.js?v=20260902-60"></script>
+  <script type="module" src="app.js?v=20260902-61"></script>
   <script type="module" src="experience.js?v=20260901-41"></script>
 </head>
 <body>
@@ -157,39 +157,69 @@
     </section>
 
     <section class="about-section paper-section" id="vechungminh" aria-labelledby="about-heading">
-      <img class="paper-doodle paper-doodle--floating paper-doodle--about-mirror" src="../doodles/hand-mirror.png" alt="" aria-hidden="true">
-      <img class="paper-doodle paper-doodle--floating paper-doodle--about-stamp" src="../doodles/cat-stamp.png" alt="" aria-hidden="true">
-      <img class="paper-doodle paper-doodle--floating paper-doodle--about-star" src="../doodles/star-peach.png" alt="" aria-hidden="true">
-      <img class="paper-doodle paper-doodle--floating paper-doodle--about-flower" src="../doodles/flower.png" alt="" aria-hidden="true">
       <div class="about-grid paper-width reveal">
-        <article class="about-intro paper-card">
-          <span class="section-label">Về chúng mình</span>
-          <h2 id="about-heading">Xin chào,<br>chúng mình là <em class="pink-highlight">1M65</em></h2>
-          <img class="about-bow-divider" src="assets/about/decor/about_bow_divider_EXACT.png" alt="" aria-hidden="true">
-          <p>Một tiệm nhỏ xinh dành cho những ai yêu cái đẹp, thích được chăm chút và muốn tìm một nơi để thư giãn thật sự.</p>
-          <img class="about-tape" src="assets/about/decor/about_tape_pink_LOCKED.png" alt="" aria-hidden="true">
-        </article>
-        <figure class="about-photo about-photo--main"><img src="assets/about/photos/salon-corner.jpg" alt="Góc ngồi màu hồng tại tiệm 1M65" loading="lazy"></figure>
-        <article class="about-story paper-card">
-          <span class="story-pill">♡ Câu chuyện 1M65</span>
-          <p>1M65 bắt đầu từ niềm yêu thích làm đẹp và mong muốn tạo nên một không gian mà ở đó, bạn luôn thấy mình được lắng nghe và chăm sóc bằng tất cả sự chân thành.</p>
-          <p>Từ một góc nhỏ với 4 ghế, từng sản phẩm, từng dịch vụ, từng nụ cười đều được chúng mình chăm chút mỗi ngày.</p>
-        </article>
-        <figure class="about-photo about-photo--detail"><img src="assets/about/photos/nail-technician.jpg" alt="Góc bàn làm nail tại 1M65" loading="lazy"></figure>
-        <article class="about-note paper-card"><strong>Nhu Nhi ✦</strong><p>Mình tin rằng làm đẹp không chỉ là làm cho xinh hơn, mà còn là cách yêu thương bản thân mỗi ngày.</p></article>
-        <div class="about-info-rail" aria-label="Thông tin về 1M65">
-          <article><img src="assets/about/info/about_info_calendar_LOCKED.png" alt=""><span>Từ năm</span><strong>2025</strong><p>Bắt đầu hành trình mang đến trải nghiệm tốt nhất cho bạn.</p></article>
-          <article><img src="assets/about/info/about_info_chair_LOCKED.png" alt=""><span>Không gian nhỏ với</span><strong>4 ghế xinh xắn</strong><p>Đủ ấm cúng để chúng mình chăm sóc thật kỹ.</p></article>
-          <article><img src="assets/about/info/about_info_heart_LOCKED_CLEAN.png" alt=""><span>Được chăm sóc bởi</span><strong>Nhu Nhi</strong><p>Luôn tỉ mỉ, nhẹ nhàng và đặt cái tâm vào từng dịch vụ.</p></article>
+        <div class="about-pair about-pair--hero">
+          <article class="about-intro">
+            <img class="about-decor about-decor--tape about-intro__tape" src="assets/about/decor/about_tape_pink_LOCKED.png" alt="" aria-hidden="true">
+            <img class="about-decor about-decor--flower-pink about-intro__flower" src="assets/about/decor/about_flower_pink_with_leaves_EXACT.png" alt="" aria-hidden="true">
+            <img class="about-decor about-decor--sparkle about-intro__sparkle" src="assets/about/decor/about_sparkle_orange_EXACT.png" alt="" aria-hidden="true">
+            <span class="section-label">Về chúng mình <span aria-hidden="true">♡</span></span>
+            <h2 id="about-heading">Xin chào,<br>chúng mình là <em>1M65</em></h2>
+            <span class="about-divider" aria-hidden="true"><i></i><img src="assets/about/decor/about_bow_divider_EXACT.png" alt=""><i></i></span>
+            <p>Một tiệm nhỏ xinh dành cho những ai yêu cái đẹp, thích được <span class="about-inline-highlight">chăm chút</span> và muốn tìm một nơi để <span class="about-inline-highlight">thư giãn thật sự.</span></p>
+          </article>
+          <figure class="about-photo about-photo--main">
+            <img src="assets/about/photos/salon-corner.jpg" alt="Góc ngồi màu hồng tại tiệm 1M65" loading="lazy">
+            <img class="about-decor about-decor--tape about-photo__tape" src="assets/about/decor/about_tape_pink_LOCKED.png" alt="" aria-hidden="true">
+            <img class="about-decor about-decor--flower-pink about-photo__flower" src="assets/about/decor/about_flower_pink_with_leaves_EXACT.png" alt="" aria-hidden="true">
+            <figcaption class="about-photo-bubble"><span aria-hidden="true">♡</span> Tiệm nhỏ<br>nhiều yêu thương</figcaption>
+          </figure>
         </div>
+
+        <div class="about-pair about-pair--story">
+          <article class="about-story about-panel">
+            <span class="story-pill"><span aria-hidden="true">♡</span> Câu chuyện 1M65</span>
+            <p>1M65 bắt đầu từ <span class="about-inline-highlight">niềm yêu thích</span> làm đẹp và mong muốn tạo nên một không gian mà ở đó, bạn luôn thấy mình được lắng nghe và chăm sóc bằng tất cả sự chân thành.</p>
+            <span class="about-divider about-divider--story" aria-hidden="true"><i></i><img src="assets/about/decor/about_bow_divider_EXACT.png" alt=""><i></i></span>
+            <p>Từ một góc nhỏ với <span class="about-inline-highlight">4 ghế</span>, từng sản phẩm, từng dịch vụ, từng nụ cười đều được chúng mình chăm chút mỗi ngày.</p>
+            <img class="about-decor about-decor--tape about-story__tape" src="assets/about/decor/about_tape_pink_LOCKED.png" alt="" aria-hidden="true">
+          </article>
+          <figure class="about-photo about-photo--detail">
+            <img src="assets/about/photos/nail-technician.jpg" alt="Góc bàn làm nail tại 1M65" loading="lazy">
+            <img class="about-decor about-decor--tape about-photo__tape about-photo__tape--lavender" src="assets/about/decor/about_tape_lavender_LOCKED.png" alt="" aria-hidden="true">
+          </figure>
+        </div>
+
+        <div class="about-info-rail" aria-label="Thông tin về 1M65">
+          <article><img src="assets/about/info/about_info_calendar_LOCKED.png" alt="" aria-hidden="true"><span>Từ năm</span><strong>2025</strong><p>Bắt đầu hành trình mang đến trải nghiệm tốt nhất cho bạn.</p></article>
+          <article><img src="assets/about/info/about_info_chair_LOCKED.png" alt="" aria-hidden="true"><span>Không gian nhỏ với</span><strong>4 ghế xinh xắn</strong><p>Đủ ấm cúng để chúng mình chăm sóc bạn thật kỹ và chu đáo.</p></article>
+          <article><img src="assets/about/info/about_info_heart_LOCKED_CLEAN.png" alt="" aria-hidden="true"><span>Được chăm sóc bởi</span><strong>Nhu Nhi</strong><p>Luôn tỉ mỉ, nhẹ nhàng và đặt cái tâm vào từng dịch vụ.</p></article>
+        </div>
+
+        <div class="about-pair about-pair--owner">
+          <article class="about-note about-panel">
+            <img class="about-paperclip" src="assets/about/decor/about_paperclip_lavender.svg" alt="" aria-hidden="true">
+            <strong>Nhu Nhi <span aria-hidden="true">♡</span></strong>
+            <p>Mình tin rằng làm đẹp không chỉ là làm cho xinh hơn, mà còn là cách yêu thương bản thân mỗi ngày.</p>
+            <p><span class="about-inline-highlight">1M65</span> luôn ở đây, để bạn tỏa sáng theo cách riêng của mình nhé! <span aria-hidden="true">♡</span></p>
+            <img class="about-decor about-decor--flower-lavender about-note__flower" src="assets/about/decor/about_flower_lavender_with_leaves_EXACT.png" alt="" aria-hidden="true">
+          </article>
+          <figure class="about-photo about-photo--note-mobile" aria-hidden="true">
+            <img src="assets/about/photos/nail-technician.jpg" alt="" loading="lazy">
+          </figure>
+        </div>
+
         <div class="about-journey" aria-label="Một buổi ở 1M65">
-          <h3>Một buổi ở 1M65</h3>
-          <img class="about-cat" src="assets/about/cats/about_cat_peeking_LOCKED.png" alt="" aria-hidden="true">
-          <div>
-            <article><b>01</b><img src="assets/about/journey/about_journey_01_choose_TEMP_LOCKED.png" alt=""><h4>Chọn dịch vụ</h4><p>Tư vấn nhẹ nhàng, gợi ý phù hợp với bạn nhất.</p></article>
-            <article><b>02</b><img src="assets/about/journey/about_journey_02_care_TEMP_LOCKED.png" alt=""><h4>Chăm chút tỉ mỉ</h4><p>Từng bước thực hiện cẩn thận và sạch sẽ.</p></article>
-            <article><b>03</b><img src="assets/about/journey/about_journey_03_relax_TEMP_LOCKED.png" alt=""><h4>Thư giãn nhẹ nhàng</h4><p>Thả lỏng cơ thể, thưởng thức không gian êm.</p></article>
-            <article><b>04</b><img src="assets/about/journey/about_journey_04_leave_TEMP_LOCKED.png" alt=""><h4>Rời tiệm xinh hơn</h4><p>Mang theo sự tự tin và năng lượng tích cực.</p></article>
+          <div class="about-journey__heading">
+            <h3>Một buổi ở 1M65 <span aria-hidden="true">♡</span></h3>
+            <img class="about-decor about-decor--flower-pink about-journey__flower" src="assets/about/decor/about_flower_pink_with_leaves_EXACT.png" alt="" aria-hidden="true">
+            <img class="about-cat" src="assets/about/cats/about_cat_peeking_LOCKED.png" alt="" aria-hidden="true">
+          </div>
+          <div class="about-journey-grid">
+            <article><b>01</b><img src="assets/about/journey/about_journey_01_choose_TEMP_LOCKED.png" alt="" aria-hidden="true"><div><h4>Chọn dịch vụ</h4><p>Tư vấn nhẹ nhàng, gợi ý phù hợp với bạn nhất.</p></div></article>
+            <article><b>02</b><img src="assets/about/journey/about_journey_02_care_TEMP_LOCKED.png" alt="" aria-hidden="true"><div><h4>Chăm chút tỉ mỉ</h4><p>Từng bước thực hiện cẩn thận với sản phẩm chất lượng và vệ sinh.</p></div></article>
+            <article><b>03</b><img src="assets/about/journey/about_journey_03_relax_TEMP_LOCKED.png" alt="" aria-hidden="true"><div><h4>Thư giãn nhẹ nhàng</h4><p>Thả lỏng cơ thể, thưởng thức không gian ấm áp và dễ chịu.</p></div></article>
+            <article><b>04</b><img src="assets/about/journey/about_journey_04_leave_TEMP_LOCKED.png" alt="" aria-hidden="true"><div><h4>Rời tiệm xinh hơn</h4><p>Mang theo sự tự tin và năng lượng tích cực cho ngày mới!</p></div></article>
           </div>
         </div>
       </div>

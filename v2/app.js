@@ -1,12 +1,12 @@
 const BOOKING_ENDPOINT = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 
 const tabDefs = [
-  { id: "signature", label: "Signature", icon: "assets/services/signature-shared/tab_icons/signature_star_active.png" },
-  { id: "nail", label: "Nail Care", icon: "assets/services/signature-shared/tab_icons/nailcare_polish_inactive.png" },
-  { id: "classic", label: "Classic", icon: "assets/services/signature-shared/tab_icons/classic_heart_inactive.png" },
-  { id: "design", label: "Design", icon: "assets/services/signature-shared/tab_icons/design_flower_inactive.png" },
-  { id: "mi", label: "Eyelashes", icon: "assets/services/signature-shared/tab_icons/eyelashes_eye_inactive.png" },
-  { id: "goi", label: "Shampoo", icon: "assets/services/signature-shared/tab_icons/shampoo_cat_inactive.png" },
+  { id: "signature", label: "Signature" },
+  { id: "nail", label: "Nail Care" },
+  { id: "classic", label: "Classic" },
+  { id: "design", label: "Design" },
+  { id: "mi", label: "Eyelashes" },
+  { id: "goi", label: "Shampoo" },
 ];
 
 const SIGNATURE_PLACEHOLDER_IMAGE = "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg";
@@ -163,11 +163,9 @@ function serviceCard(service, className = "", variant = "standard") {
   </article>`;
 }
 
-function renderServiceNote(lines, variant = "signature") {
-  const isShared = variant === "shared";
-  const cat = isShared ? "assets/services/nail-care/cats/note_cat_peeking.png" : "assets/services/signature-shared/cats/note_cat_peeking.png";
-  return `<aside class="service-note ${isShared ? "service-note--shared" : ""}">
-    <img class="service-note-cat" src="${cat}" alt="" aria-hidden="true">
+function renderServiceNote(lines) {
+  return `<aside class="service-note service-note--shared">
+    <img class="service-note-cat" src="assets/services/nail-care/cats/note_cat_peeking.png" alt="" aria-hidden="true">
     <div class="service-note-label"><strong>Lưu ý nhé</strong><span aria-hidden="true">♡</span></div>
     <ul>${lines.map((line, index) => `<li data-note-tone="${index % 3}">${line}</li>`).join("")}</ul>
   </aside>`;
@@ -189,7 +187,7 @@ function renderSignature() {
         <img class="signature-ref-doodle signature-ref-doodle--sparkle" src="assets/services/signature-shared/doodles/sparkle_orange.png" alt="" aria-hidden="true">
         <img class="signature-cat" src="assets/services/signature-shared/cats/signature_raised_paw_OPTICAL_V1.png" alt="Mèo Nhu Nhi vẫy tay">
         <div class="signature-copy">
-          <img class="signature-wordmark" src="assets/services/signature-shared/signature_wordmark/SIGNATURE_WORDMARK_UNIFIED_PAPER_V1.png" alt="Signature">
+          <img class="signature-wordmark" src="assets/services/signature-shared/signature_wordmark/SIGNATURE_WORDMARK_UNIFIED_PAPER_V2.png" alt="Signature">
           <span class="signature-ribbon">DỊCH VỤ NỔI BẬT TẠI 1M65 NAIL ROOM</span>
           <p>Từng chi tiết nhỏ, tạo nên sự khác biệt lớn ♡</p>
         </div>
@@ -254,7 +252,7 @@ function renderSharedGroup(id) {
       <img class="shared-service-title__sparkle" src="assets/services/nail-care/doodles/sparkle_orange.png" alt="" aria-hidden="true">
     </header>
     <div class="shared-service-list">${services.map((item, index) => sharedServiceRow(item, index, group)).join("")}</div>
-    ${renderServiceNote(note, "shared")}
+    ${renderServiceNote(note)}
   </div>`;
 }
 
@@ -262,7 +260,7 @@ function renderServices() {
   const tabs = document.querySelector("[data-service-tabs]");
   const panel = document.querySelector("[data-service-panel]");
   if (!tabs || !panel) return;
-  tabs.innerHTML = tabDefs.map((tab) => `<button type="button" role="tab" id="tab-${tab.id}" aria-controls="service-panel" aria-selected="${tab.id === state.activeTab}" class="${tab.id === state.activeTab ? "is-active" : ""}" data-service-tab="${tab.id}"><img src="${tab.icon}" alt="" aria-hidden="true"><span>${tab.label}</span></button>`).join("");
+  tabs.innerHTML = tabDefs.map((tab) => `<button type="button" role="tab" id="tab-${tab.id}" aria-controls="service-panel" aria-selected="${tab.id === state.activeTab}" class="${tab.id === state.activeTab ? "is-active" : ""}" data-service-tab="${tab.id}"><span>${tab.label}</span></button>`).join("");
   panel.id = "service-panel";
   panel.setAttribute("role", "tabpanel");
   panel.setAttribute("aria-labelledby", `tab-${state.activeTab}`);
