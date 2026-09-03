@@ -1330,87 +1330,78 @@ main,
 .contact-copy { border-color: rgba(164, 145, 198, .28); background: var(--pastel-lavender); }
 .map-card { border-color: rgba(125, 178, 154, .28); background: var(--pastel-mint); }
 
-/* Pastel paw-thread between HomeView and Services; drawn in CSS/SVG, not the old paw badge asset. */
-.home-service-divider {
+/* Original paw runner restored between HomeView and Services; its marks can be swapped later. */
+.home-service-divider.nhu-paw-runner-shell {
   position: relative;
+  display: grid;
+  place-items: center;
   height: clamp(70px, 5.2vw, 86px);
   overflow: hidden;
   background: linear-gradient(180deg, #fff4f2 0%, var(--paper) 100%);
 }
 
-.home-service-divider__track {
+.home-service-divider .nhu-paw-runner-viewport {
   position: relative;
-  height: 100%;
+  width: min(86%, 1120px);
+  height: 34px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
 }
 
-.home-service-divider__track::before {
-  content: "";
+.home-service-divider .nhu-paw-runner-long-line {
   position: absolute;
-  top: 50%;
+  top: 17px;
   right: 0;
   left: 0;
   height: 1px;
   background: repeating-linear-gradient(90deg, rgba(232, 94, 124, .28) 0 8px, transparent 8px 17px);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-  transform: translateY(-50%);
 }
 
-.home-service-divider__runner {
+.home-service-divider .nhu-paw-runner-track {
   position: absolute;
-  inset: 0;
+  top: 3px;
+  left: 0;
   display: flex;
+  width: 200%;
+  animation: mewMarch 32s linear infinite;
+  will-change: transform;
+}
+
+.home-service-divider .nhu-paw-runner-group {
+  display: flex;
+  width: 50%;
   align-items: center;
   justify-content: space-around;
-  gap: clamp(22px, 4vw, 72px);
-  padding-inline: clamp(46px, 6vw, 104px);
+  padding-inline: 20px;
 }
 
-.home-service-paw {
+.home-service-divider .nhu-paw-runner-mark {
   display: block;
-  width: clamp(28px, 1.8vw, 32px);
-  height: auto;
-  overflow: visible;
-  color: #ef94b0;
-  opacity: .42;
-  filter: drop-shadow(0 2px 3px rgba(232, 94, 124, .13));
-  animation: home-service-paw-step 6s ease-in-out infinite;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 3px rgba(92, 70, 127, .14));
 }
 
-.home-service-paw ellipse,
-.home-service-paw path {
-  fill: rgba(255, 250, 248, .94);
-  stroke: currentColor;
-  stroke-width: 2.2px;
-  stroke-linejoin: round;
-}
+.home-service-divider .nhu-paw-runner-mark:nth-child(2n) { width: 25px; height: 25px; transform: rotate(9deg); }
+.home-service-divider .nhu-paw-runner-mark:nth-child(3n) { transform: rotate(-8deg); }
 
-.home-service-paw path { fill: color-mix(in srgb, currentColor 14%, #fffaf8); }
-.home-service-paw--lavender { color: #b99bd6; }
-.home-service-paw--peach { color: #efb28f; }
-.home-service-paw:nth-child(odd) { transform: translateY(-5px) rotate(-9deg); }
-.home-service-paw:nth-child(even) { transform: translateY(3px) rotate(8deg); }
-.home-service-paw:nth-child(2) { animation-delay: -5s; }
-.home-service-paw:nth-child(3) { animation-delay: -4s; }
-.home-service-paw:nth-child(4) { animation-delay: -3s; }
-.home-service-paw:nth-child(5) { animation-delay: -2s; }
-.home-service-paw:nth-child(6) { animation-delay: -1s; }
-
-@keyframes home-service-paw-step {
-  0%, 30%, 100% { opacity: .36; }
-  10% { opacity: 1; }
-  18% { opacity: .68; }
+@keyframes mewMarch {
+  to { transform: translateX(-50%); }
 }
 
 @media (max-width: 600px) {
-  .home-service-divider { height: 58px; }
-  .home-service-divider__runner { gap: 18px; padding-inline: 20px; }
-  .home-service-paw { width: 23px; }
-  .home-service-paw:nth-child(n + 5) { display: none; }
+  .home-service-divider.nhu-paw-runner-shell { height: 58px; }
+  .home-service-divider .nhu-paw-runner-viewport { width: calc(100% - 32px); }
+  .home-service-divider .nhu-paw-runner-group { padding-inline: 8px; }
+  .home-service-divider .nhu-paw-runner-mark { width: 24px; height: 24px; }
+  .home-service-divider .nhu-paw-runner-mark:nth-child(2n) { width: 22px; height: 22px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-service-paw { animation: none; opacity: .72; }
+  .home-service-divider .nhu-paw-runner-track { animation: none; }
 }
 
 /* Paper chapter dividers restored from the original site's section rhythm. */
