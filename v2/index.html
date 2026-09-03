@@ -8,11 +8,11 @@
   <meta name="description" content="Bản xem trước giao diện mới của 1M65 Nails, Eyelashes, Shampoo.">
   <title>1M65 Nails · V2 Preview</title>
   <link rel="icon" href="../favicon.svg">
-  <link rel="stylesheet" href="styles.css?v=20260903-74">
+  <link rel="stylesheet" href="styles.css?v=20260903-102">
   <script src="../turnstile-config.js?v=20260807a"></script>
   <script src="../turnstile-booking.js?v=20260807a"></script>
-  <script type="module" src="app.js?v=20260903-73"></script>
-  <script type="module" src="experience.js?v=20260903-73"></script>
+  <script type="module" src="app.js?v=20260903-74"></script>
+  <script type="module" src="experience.js?v=20260903-74"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
@@ -72,14 +72,19 @@
         <div class="home-art reveal" aria-hidden="true">
           <svg class="home-art__backdrop" viewBox="0 0 1000 820" preserveAspectRatio="none" focusable="false">
             <defs>
-              <pattern id="home-gingham-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
-                <rect width="40" height="40" fill="#ffe8ef" fill-opacity=".7"></rect>
-                <path d="M0 0H40M0 40H40M0 0V40M40 0V40" fill="none" stroke="#dfa2b9" stroke-opacity=".13" stroke-width="2"></path>
-                <path d="M20 0V40M0 20H40" fill="none" stroke="#f4c5d5" stroke-opacity=".2" stroke-width="1"></path>
+              <pattern id="home-gingham-pattern" width="72" height="72" patternUnits="userSpaceOnUse">
+                <rect width="72" height="72" fill="#fff8fa"></rect>
+                <rect width="36" height="72" fill="#f6c7d4" fill-opacity=".11"></rect>
+                <rect width="72" height="36" fill="#f6c7d4" fill-opacity=".11"></rect>
+                <rect width="36" height="36" fill="#efa9bc" fill-opacity=".04"></rect>
               </pattern>
             </defs>
-            <path class="home-art__backdrop-paper" d="M275 0C255 55 203 84 160 137C114 194 104 257 72 322C35 397 9 465 20 540C33 628 103 687 211 716C331 748 410 803 538 790C681 775 779 720 878 712C930 708 972 717 1000 729L1000 0Z"></path>
-            <path class="home-art__backdrop-surface" d="M275 0C255 55 203 84 160 137C114 194 104 257 72 322C35 397 9 465 20 540C33 628 103 687 211 716C331 748 410 803 538 790C681 775 779 720 878 712C930 708 972 717 1000 729L1000 0Z"></path>
+            <path data-backdrop-shape="desktop" class="home-art__backdrop-outline" d="M260 80C309.2 42,375 22.8,440 22C505 21.2,586.7 66.7,650 75C713.3 83.3,765 62.8,820 72C875 81.2,946.7 90.3,980 130C1013.3 169.7,998.3 253.3,1020 310C1041.7 366.7,1100 413.3,1110 470C1120 526.7,1088.3 595,1080 650C1071.7 705,1098.3 771.7,1060 800C1021.7 828.3,918.3 812.5,850 820C781.7 827.5,716.7 845,650 845C583.3 845,515 820.8,450 820C385 819.2,318.3 850,260 840C201.7 830,131.7 803.3,100 760C68.3 716.7,66.7 640,70 580C73.3 520,107.5 455,120 400C132.5 345,121.7 303.3,145 250C168.3 196.7,210.8 118,260 80Z"></path>
+            <path data-backdrop-shape="desktop" class="home-art__backdrop-paper" d="M260 80C309.2 42,375 22.8,440 22C505 21.2,586.7 66.7,650 75C713.3 83.3,765 62.8,820 72C875 81.2,946.7 90.3,980 130C1013.3 169.7,998.3 253.3,1020 310C1041.7 366.7,1100 413.3,1110 470C1120 526.7,1088.3 595,1080 650C1071.7 705,1098.3 771.7,1060 800C1021.7 828.3,918.3 812.5,850 820C781.7 827.5,716.7 845,650 845C583.3 845,515 820.8,450 820C385 819.2,318.3 850,260 840C201.7 830,131.7 803.3,100 760C68.3 716.7,66.7 640,70 580C73.3 520,107.5 455,120 400C132.5 345,121.7 303.3,145 250C168.3 196.7,210.8 118,260 80Z"></path>
+            <path data-backdrop-shape="desktop" class="home-art__backdrop-surface" d="M260 80C309.2 42,375 22.8,440 22C505 21.2,586.7 66.7,650 75C713.3 83.3,765 62.8,820 72C875 81.2,946.7 90.3,980 130C1013.3 169.7,998.3 253.3,1020 310C1041.7 366.7,1100 413.3,1110 470C1120 526.7,1088.3 595,1080 650C1071.7 705,1098.3 771.7,1060 800C1021.7 828.3,918.3 812.5,850 820C781.7 827.5,716.7 845,650 845C583.3 845,515 820.8,450 820C385 819.2,318.3 850,260 840C201.7 830,131.7 803.3,100 760C68.3 716.7,66.7 640,70 580C73.3 520,107.5 455,120 400C132.5 345,121.7 303.3,145 250C168.3 196.7,210.8 118,260 80Z"></path>
+            <path data-backdrop-shape="compact" class="home-art__backdrop-outline" d="M260 80C307.5 48.3,370 32.5,430 30C490 27.5,558.3 60.8,620 65C681.7 69.2,745 47.5,800 55C855 62.5,918.3 72.5,950 110C981.7 147.5,981.7 215,990 280C998.3 345,1003.3 430,1000 500C996.7 570,995 653.3,970 700C945 746.7,903.3 761.7,850 780C796.7 798.3,716.7 807.5,650 810C583.3 812.5,516.7 793.3,450 795C383.3 796.7,308.3 829.2,250 820C191.7 810.8,130 783.3,100 740C70 696.7,68.3 620,70 560C71.7 500,97.5 436.7,110 380C122.5 323.3,120 270,145 220C170 170,212.5 111.7,260 80Z"></path>
+            <path data-backdrop-shape="compact" class="home-art__backdrop-paper" d="M260 80C307.5 48.3,370 32.5,430 30C490 27.5,558.3 60.8,620 65C681.7 69.2,745 47.5,800 55C855 62.5,918.3 72.5,950 110C981.7 147.5,981.7 215,990 280C998.3 345,1003.3 430,1000 500C996.7 570,995 653.3,970 700C945 746.7,903.3 761.7,850 780C796.7 798.3,716.7 807.5,650 810C583.3 812.5,516.7 793.3,450 795C383.3 796.7,308.3 829.2,250 820C191.7 810.8,130 783.3,100 740C70 696.7,68.3 620,70 560C71.7 500,97.5 436.7,110 380C122.5 323.3,120 270,145 220C170 170,212.5 111.7,260 80Z"></path>
+            <path data-backdrop-shape="compact" class="home-art__backdrop-surface" d="M260 80C307.5 48.3,370 32.5,430 30C490 27.5,558.3 60.8,620 65C681.7 69.2,745 47.5,800 55C855 62.5,918.3 72.5,950 110C981.7 147.5,981.7 215,990 280C998.3 345,1003.3 430,1000 500C996.7 570,995 653.3,970 700C945 746.7,903.3 761.7,850 780C796.7 798.3,716.7 807.5,650 810C583.3 812.5,516.7 793.3,450 795C383.3 796.7,308.3 829.2,250 820C191.7 810.8,130 783.3,100 740C70 696.7,68.3 620,70 560C71.7 500,97.5 436.7,110 380C122.5 323.3,120 270,145 220C170 170,212.5 111.7,260 80Z"></path>
           </svg>
           <img class="home-art__hero" src="assets/home/hero/main_hero_optical.webp" alt="" decoding="async" fetchpriority="high">
           <img class="home-art__badge" src="assets/home/relayout/badge_nail_xinh_mood_xin_optical.webp" alt="" decoding="async">
@@ -89,7 +94,7 @@
         </div>
         <div class="home-support">
           <blockquote class="home-quote reveal">
-            <div class="home-quote__top" aria-hidden="true"><span class="home-quote__mark">“</span><span class="home-quote__stars">★★★★★</span></div>
+            <div class="home-quote__top" aria-hidden="true"><img class="home-quote__mark" src="assets/reviews/06_quote_lavender_TEMP_LOCKED.webp" alt="" decoding="async"><span class="home-quote__stars">★★★★★</span></div>
             <p>“Chiếc móng này sẽ duyệt từng bộ móng trước khi bạn ra về. Bằng cách nhìn một cái rồi ngủ tiếp.”</p>
             <footer class="home-quote__footer">
               <span class="home-quote__avatar-slot"><img src="assets/home/relayout/photo_nhu_nhi_avatar.jpg" alt="Nhu Nhi" decoding="async"></span>
@@ -110,7 +115,7 @@
             <article><img src="assets/home/relayout/icon_paw_heart_badge_optical.webp" alt="" decoding="async"><span><h3>Chăm sóc tận tâm</h3><p>Tư vấn nhẹ nhàng, hợp style của bạn</p></span></article>
           </div>
           <aside class="home-love-note reveal">
-            <img src="assets/home/relayout/decor_bow_lavender_optical.webp" alt="" aria-hidden="true" decoding="async">
+            <img src="assets/home/relayout/decor_bow_blush_refined.webp" alt="" aria-hidden="true" decoding="async">
             <p>Yêu bản thân<br>bắt đầu từ<br>đầu ngón tay <span aria-hidden="true">♥</span></p>
           </aside>
         </div>
@@ -184,7 +189,7 @@
           </div>
           <div class="gallery-grid" data-gallery-grid></div>
           <div class="gallery-more-wrap">
-            <button class="gallery-more" type="button" data-gallery-more>Xem thêm</button>
+            <button class="gallery-more" type="button" data-open-gallery>Xem thêm</button>
             <p>Bấm ảnh để xem lớn ♡</p>
           </div>
         </div>
@@ -197,7 +202,6 @@
           <article class="about-intro">
             <img class="about-decor about-decor--tape about-intro__tape" src="assets/about/decor/about_tape_pink_LOCKED.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
             <img class="about-decor about-decor--flower-pink about-intro__flower" src="assets/about/decor/about_flower_pink_with_leaves_EXACT.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
-            <img class="about-decor about-decor--sparkle about-intro__sparkle" src="assets/about/decor/about_sparkle_orange_EXACT.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
             <span class="section-label">Về chúng mình <span aria-hidden="true">♡</span></span>
             <h2 id="about-heading">Xin chào,<br>chúng mình là <em>1M65</em></h2>
             <span class="about-divider" aria-hidden="true"><i></i><img src="assets/about/decor/about_bow_divider_EXACT.webp" alt="" decoding="async" loading="lazy"><i></i></span>
@@ -338,6 +342,25 @@
     </section>
 
     <button class="manage-fab" type="button" data-open-manager>Xem lịch của bạn</button>
+
+    <section class="modal" id="gallery-modal" role="dialog" aria-modal="true" aria-labelledby="gallery-modal-title" hidden>
+      <div class="modal-backdrop" data-close-modal></div>
+      <div class="modal-panel gallery-modal-panel" role="document">
+        <header class="modal-header">
+          <div><span>Thư viện đầy đủ</span><h2 id="gallery-modal-title">Tất cả khoảnh khắc xinh</h2></div>
+          <button type="button" class="modal-close" data-close-modal aria-label="Đóng thư viện">×</button>
+        </header>
+        <div class="gallery-filters gallery-modal-filters" role="group" aria-label="Lọc thư viện đầy đủ" data-gallery-modal-filters>
+          <button class="is-active" type="button" data-gallery-modal-filter="all">Tất cả</button>
+          <button type="button" data-gallery-modal-filter="nail">Nail</button>
+          <button type="button" data-gallery-modal-filter="mi">Mi</button>
+          <button type="button" data-gallery-modal-filter="goi">Gội</button>
+          <button type="button" data-gallery-modal-filter="khac">Khác</button>
+        </div>
+        <div class="gallery-modal-grid" data-gallery-modal-grid></div>
+        <footer class="modal-footer"><p>Thích mẫu nào thì lưu lại mang tới tiệm nhé ♡</p><button class="button-primary" type="button" data-gallery-book>Đặt hẹn</button></footer>
+      </div>
+    </section>
 
     <section class="modal" id="gallery-lightbox" role="dialog" aria-modal="true" aria-labelledby="gallery-lightbox-title" hidden>
       <div class="modal-backdrop" data-close-modal></div>

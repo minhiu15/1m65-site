@@ -31,10 +31,10 @@ const fallbackReviews = [
 ["Gội đầu dưỡng sinh xong mình ngủ quên mất hai mươi phút. Chị Hạnh để yên cho mình ngủ, không đánh thức.","Bảo Trâm","Gội đầu dưỡng sinh"]
 ];
 let galleryFilter = "all";
-let galleryVisible = matchMedia("(max-width: 600px)").matches ? 6 : 10;
 let lightboxIndex = 0;
 let activeModal = null;
 let returnFocus = null;
+const modalStack = [];
 let lastInputWasPointer = false;
 let toastTimer = 0;
 
@@ -50,9 +50,30 @@ function esc(value) {
 function focusables(root) {
   return Array.from(root.querySelectorAll("a[href],button:not([disabled]),input:not([disabled]),textarea:not([disabled]),iframe,[tabindex]:not([tabindex='-1'])")).filter(function(node){return !node.hidden && node.getAttribute("aria-hidden") !== "true";});
 }
-function openModal(modal, trigger) {
+function focusReturnedControl(focusTarget) {
+  if (!focusTarget || !focusTarget.isConnected) return;
+  if (lastInputWasPointer) {
+    const focusOwner = focusTarget.closest(".service-card[data-card-variant='signature']");
+    const suppressed = [focusTarget, focusOwner].filter(Boolean);
+    suppressed.forEach(function(node){node.classList.add("is-pointer-focus-return");});
+    focusTarget.addEventListener("blur",function(){suppressed.forEach(function(node){node.classList.remove("is-pointer-focus-return");});},{once:true});
+  }
+  focusTarget.focus();
+}
+function rootReturnFocus() {
+  return modalStack.length ? modalStack[0].returnFocus : returnFocus;
+}
+function openModal(modal, trigger, options) {
   if (!modal) return;
-  if (activeModal && activeModal !== modal) closeModal(activeModal, false);
+  const stackCurrent = Boolean(options && options.stackCurrent);
+  if (activeModal && activeModal !== modal) {
+    if (stackCurrent) {
+      modalStack.push({ modal: activeModal, returnFocus: returnFocus });
+      activeModal.hidden = true;
+    } else {
+      closeModal(activeModal, false);
+    }
+  }
   activeModal = modal;
   returnFocus = trigger || document.activeElement;
   modal.hidden = false;
@@ -63,16 +84,27 @@ function closeModal(modal, restore) {
   const target = modal || activeModal;
   if (!target) return;
   target.hidden = true;
-  if (target === activeModal) activeModal = null;
-  document.body.classList.remove("has-overlay");
-  if (restore !== false && returnFocus && returnFocus.isConnected) {
-    const focusTarget=returnFocus;
-    if(lastInputWasPointer){
-      focusTarget.classList.add("is-pointer-focus-return");
-      focusTarget.addEventListener("blur",function(){focusTarget.classList.remove("is-pointer-focus-return");},{once:true});
-    }
-    focusTarget.focus();
+  if (target !== activeModal) return;
+  const focusTarget = returnFocus;
+  if (restore !== false && modalStack.length) {
+    const galleryIndex = focusTarget && focusTarget.dataset ? focusTarget.dataset.galleryIndex : "";
+    const previous = modalStack.pop();
+    activeModal = previous.modal;
+    returnFocus = previous.returnFocus;
+    activeModal.hidden = false;
+    document.body.classList.add("has-overlay");
+    const restoredFocus = focusTarget && focusTarget.isConnected
+      ? focusTarget
+      : (galleryIndex ? activeModal.querySelector('[data-gallery-index="'+galleryIndex+'"]') : null);
+    focusReturnedControl(restoredFocus);
+    return;
   }
+  activeModal = null;
+  if (restore === false) {
+    modalStack.splice(0).forEach(function(entry){entry.modal.hidden = true;});
+  }
+  document.body.classList.remove("has-overlay");
+  if (restore !== false) focusReturnedControl(focusTarget);
   returnFocus = null;
 }
 function toast(message) {
@@ -95,17 +127,19 @@ function filteredGallery() {
   return gallery.filter(function(item){return galleryFilter === "all" || item[0] === galleryFilter;});
 }
 function renderGallery() {
-  document.querySelectorAll("[data-gallery-filter]").forEach(function(button){
-    const active = button.dataset.galleryFilter === galleryFilter;
+  document.querySelectorAll("[data-gallery-filter],[data-gallery-modal-filter]").forEach(function(button){
+    const active = (button.dataset.galleryFilter || button.dataset.galleryModalFilter) === galleryFilter;
     button.classList.toggle("is-active",active);
     button.setAttribute("aria-pressed",String(active));
   });
   const items = filteredGallery();
-  galleryVisible = Math.max(galleryVisible, initialGalleryCount());
+  const count = initialGalleryCount();
   const main = document.querySelector("[data-gallery-grid]");
-  const more = document.querySelector("[data-gallery-more]");
-  if (main) main.innerHTML = items.slice(0,galleryVisible).map(tile).join("");
-  if (more) more.hidden = galleryVisible >= items.length;
+  const full = document.querySelector("[data-gallery-modal-grid]");
+  const more = document.querySelector("[data-open-gallery]");
+  if (main) main.innerHTML = items.slice(0,count).map(tile).join("");
+  if (full) full.innerHTML = items.map(tile).join("");
+  if (more) more.hidden = items.length <= count;
 }
 function updateLightbox(index) {
   const items = filteredGallery();
@@ -119,7 +153,7 @@ function updateLightbox(index) {
 }
 function openLightbox(index, trigger) {
   updateLightbox(index);
-  openModal(document.querySelector("#gallery-lightbox"), trigger);
+  openModal(document.querySelector("#gallery-lightbox"), trigger, { stackCurrent: Boolean(trigger && trigger.closest("#gallery-modal")) });
 }
 function renderReviews(reviews) {
   const grid = document.querySelector("[data-review-grid]");
@@ -180,12 +214,13 @@ window.__v2Experience.openManager = openManager;
 document.addEventListener("click",function(event){
   const target=event.target;
   const close=target.closest("[data-close-modal]");if(close)return closeModal(close.closest(".modal"));
-  const more=target.closest("[data-gallery-more]");if(more){galleryVisible+=initialGalleryCount();renderGallery();return;}
-  const filter=target.closest("[data-gallery-filter]");if(filter){galleryFilter=filter.dataset.galleryFilter;galleryVisible=initialGalleryCount();renderGallery();return;}
+  const openGallery=target.closest("[data-open-gallery]");if(openGallery){renderGallery();openModal(document.querySelector("#gallery-modal"),openGallery);return;}
+  const filter=target.closest("[data-gallery-filter],[data-gallery-modal-filter]");if(filter){galleryFilter=filter.dataset.galleryFilter||filter.dataset.galleryModalFilter;renderGallery();return;}
   const galleryTile=target.closest("[data-gallery-index]");if(galleryTile){openLightbox(Number(galleryTile.dataset.galleryIndex),galleryTile);return;}
   if(target.closest("[data-lightbox-prev]")){updateLightbox(lightboxIndex-1);return;}
   if(target.closest("[data-lightbox-next]")){updateLightbox(lightboxIndex+1);return;}
-  if(target.closest("[data-lightbox-book]")){closeModal(document.querySelector("#gallery-lightbox"),false);window.__v2Booking.open({},target.closest("[data-lightbox-book]"));return;}
+  const galleryBook=target.closest("[data-gallery-book]");if(galleryBook){const origin=rootReturnFocus()||galleryBook;closeModal(document.querySelector("#gallery-modal"),false);window.__v2Booking.open({},origin);return;}
+  const lightboxBook=target.closest("[data-lightbox-book]");if(lightboxBook){const origin=rootReturnFocus()||lightboxBook;closeModal(document.querySelector("#gallery-lightbox"),false);window.__v2Booking.open({},origin);return;}
   const faq=target.closest("[data-faq-list] button");if(faq){const expanded=faq.getAttribute("aria-expanded")==="true";faq.setAttribute("aria-expanded",String(!expanded));const answer=faq.closest("article").querySelector(".faq-answer");if(answer)answer.hidden=expanded;return;}
   const manager=target.closest("[data-open-manager]");if(manager)openManager("",manager);
 });

@@ -169,7 +169,6 @@ function renderServiceNote(lines) {
     <div class="service-note-label"><strong>Lưu ý nhé</strong><span aria-hidden="true">♡</span></div>
     <ul>${lines.map((line, index) => `<li data-note-tone="${index % 3}">${line}</li>`).join("")}</ul>
     <span class="service-note-decor" aria-hidden="true">
-      <img class="service-note-decor__sparkle" src="assets/services/nail-care/doodles/sparkle_orange.webp" alt="" decoding="async" loading="lazy">
       <img class="service-note-decor__flower" src="assets/services/nail-care/doodles/header_flower.webp" alt="" decoding="async" loading="lazy">
     </span>
   </aside>`;
@@ -188,7 +187,6 @@ function renderSignature() {
       <div class="signature-intro">
         <img class="signature-tape" src="assets/services/signature-shared/decor/top_gingham_tape.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
         <img class="signature-ref-doodle signature-ref-doodle--heart" src="assets/services/signature-shared/doodles/header_heart_outline.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
-        <img class="signature-ref-doodle signature-ref-doodle--sparkle" src="assets/services/signature-shared/doodles/sparkle_orange.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
         <img class="signature-cat" src="assets/services/signature-shared/cats/signature_raised_paw_OPTICAL_V1.webp" alt="Mèo Nhu Nhi vẫy tay" decoding="async" loading="lazy">
         <div class="signature-copy">
           <img class="signature-wordmark" src="assets/services/signature-shared/signature_wordmark/SIGNATURE_WORDMARK_UNIFIED_PAPER_V10.webp" alt="Signature" decoding="async" loading="lazy">
@@ -253,7 +251,6 @@ function renderSharedGroup(id) {
       </div>
       <span class="shared-service-title__accent" aria-hidden="true"><img src="${group.accent}" alt="" decoding="async" loading="lazy"></span>
       <img class="shared-service-title__flower" src="assets/services/nail-care/doodles/header_flower.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
-      <img class="shared-service-title__sparkle" src="assets/services/nail-care/doodles/sparkle_orange.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
     </header>
     <div class="shared-service-list">${services.map((item, index) => sharedServiceRow(item, index, group)).join("")}</div>
     ${renderServiceNote(note)}
