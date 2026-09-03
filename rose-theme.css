@@ -19,7 +19,7 @@ html.nhu-rose-theme body {
 
 .mew-page.nhu-polished {
   background:
-    url('./doodles/paper-grain.png') 0 0 / 128px 128px repeat,
+    url('./doodles/paper-grain.webp') 0 0 / 128px 128px repeat,
     radial-gradient(circle at 7% 18%, rgba(239, 198, 217, .11), transparent 22%),
     radial-gradient(circle at 94% 42%, rgba(244, 184, 207, .09), transparent 21%),
     radial-gradient(circle at 12% 76%, rgba(246, 214, 227, .08), transparent 22%),

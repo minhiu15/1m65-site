@@ -89,7 +89,7 @@ function initialGalleryCount() {
   return matchMedia("(max-width: 600px)").matches ? 6 : 10;
 }
 function tile(item, index) {
-  return '<button type="button" class="gallery-tile" data-gallery-index="'+index+'" data-badge="'+esc(item[3])+'" aria-label="Xem lớn: '+esc(item[2])+'"><img src="'+esc(item[1])+'" alt="" loading="lazy"><span class="sr-only">'+esc(item[2])+'</span></button>';
+  return '<button type="button" class="gallery-tile" data-gallery-index="'+index+'" data-badge="'+esc(item[3])+'" aria-label="Xem lớn: '+esc(item[2])+'"><img src="'+esc(item[1])+'" alt="" loading="lazy" decoding="async"><span class="sr-only">'+esc(item[2])+'</span></button>';
 }
 function filteredGallery() {
   return gallery.filter(function(item){return galleryFilter === "all" || item[0] === galleryFilter;});
@@ -125,15 +125,15 @@ function renderReviews(reviews) {
   const grid = document.querySelector("[data-review-grid]");
   if (!grid) return;
   const quoteAssets = [
-    "assets/reviews/05_quote_pink_LOCKED_CLEAN.png",
-    "assets/reviews/06_quote_lavender_TEMP_LOCKED.png",
-    "assets/reviews/07_quote_peach_LOCKED_CLEAN.png",
-    "assets/reviews/06_quote_lavender_TEMP_LOCKED.png",
+    "assets/reviews/05_quote_pink_LOCKED_CLEAN.webp",
+    "assets/reviews/06_quote_lavender_TEMP_LOCKED.webp",
+    "assets/reviews/07_quote_peach_LOCKED_CLEAN.webp",
+    "assets/reviews/06_quote_lavender_TEMP_LOCKED.webp",
   ];
   const quoteTones = ["pink", "lavender", "peach", "lavender"];
   grid.innerHTML = reviews.slice(0,4).map(function(review,index){
-    const stars = new Array(5).fill('<img src="assets/reviews/08_rating_star_filled_LOCKED_CLEAN.png" alt="">').join("");
-    return '<article class="review-card"><img class="review-card__quote review-card__quote--'+quoteTones[index]+'" src="'+quoteAssets[index]+'" alt="" aria-hidden="true"><p class="review-card__text">“'+esc(review[0])+'”</p><div class="review-card__rating stars" aria-label="5 trên 5 sao">'+stars+'</div><p class="review-card__author">— '+esc(review[1])+'<small>'+esc(review[2])+'</small></p></article>';
+    const stars = new Array(5).fill('<img src="assets/reviews/08_rating_star_filled_LOCKED_CLEAN.webp" alt="" decoding="async" loading="lazy">').join("");
+    return '<article class="review-card"><img class="review-card__quote review-card__quote--'+quoteTones[index]+'" src="'+quoteAssets[index]+'" alt="" aria-hidden="true" decoding="async" loading="lazy"><p class="review-card__text">“'+esc(review[0])+'”</p><div class="review-card__rating stars" aria-label="5 trên 5 sao">'+stars+'</div><p class="review-card__author">— '+esc(review[1])+'<small>'+esc(review[2])+'</small></p></article>';
   }).join("");
 }
 async function loadReviews() {

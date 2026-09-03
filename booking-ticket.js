@@ -3,7 +3,7 @@
 
   const SELF_URL = document.currentScript && document.currentScript.src;
   const CSS_URL = SELF_URL ? new URL("booking-ticket.css?v=20260810-6", SELF_URL).href : "booking-ticket.css?v=20260810-6";
-  const CAT_URL = SELF_URL ? new URL("mascot/nhu-nhi-ticket.png?v=20260809-1", SELF_URL).href : "mascot/nhu-nhi-ticket.png?v=20260809-1";
+  const CAT_URL = SELF_URL ? new URL("mascot/nhu-nhi-ticket.webp?v=20260809-1", SELF_URL).href : "mascot/nhu-nhi-ticket.webp?v=20260809-1";
 
   function make(tag, className, text) {
     const node = document.createElement(tag);

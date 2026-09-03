@@ -49,31 +49,31 @@ const groupDefs = {
   nail: {
     title: "NAIL CARE",
     note: "Chăm sóc móng và da tay chân khoẻ đẹp, để bạn luôn tự tin toả sáng mỗi ngày.",
-    accent: "assets/services/nail-care/decor/header_polish_doodle.png",
+    accent: "assets/services/nail-care/decor/header_polish_doodle.webp",
     ids: ["ct-tay", "ct-chan", "thao-gel", "thao-up", "thao-bot", "noi-up", "noi-gel", "noi-bot"],
   },
   classic: {
     title: "CLASSIC",
     note: "Màu trơn trong trẻo, bóng căng và dịu dàng theo đúng gu của bạn.",
-    accent: "../doodles/hearts.png",
+    accent: "../doodles/hearts.webp",
     ids: ["son-cung", "gel-hn", "gel-thach"],
   },
   design: {
     title: "DESIGN",
     note: "Thêm một chút lấp lánh, một nét vẽ nhỏ và thật nhiều cá tính.",
-    accent: "assets/services/nail-care/doodles/header_flower.png",
+    accent: "assets/services/nail-care/doodles/header_flower.webp",
     ids: ["flash", "matmeo", "guong", "ombre", "da", "charm", "sticker", "ve", "xacu"],
   },
   mi: {
     title: "EYELASHES",
     note: "Uốn và nối mi theo dáng mắt, nhẹ nhàng nhưng vẫn thật có điểm nhấn.",
-    accent: "../doodles/hand-mirror.png",
+    accent: "../doodles/hand-mirror.webp",
     ids: ["uon-mi", "uon-mi-den", "mi-classic", "mi-tho", "mi-volume", "mi-sole", "mi-duoi"],
   },
   goi: {
     title: "SHAMPOO",
     note: "Một khoảng nghỉ êm cho tóc, da đầu và đôi vai được thả lỏng.",
-    accent: "../doodles/teacup.png",
+    accent: "../doodles/teacup.webp",
     ids: ["goi-thao", "goi-thuong", "goi-phuchoi", "goi-duongsinh"],
   },
 };
@@ -94,22 +94,22 @@ const nailCareNotes = [
   "Tụi mình luôn lắng nghe để mang đến dịch vụ phù hợp nhất với bạn!",
 ];
 const signatureIcons = {
-  "ve": "assets/services/signature-shared/tab_icons/design_flower_inactive.png",
-  "gel-hn": "assets/services/signature-shared/service_icons/son_gel_han_nhat.png",
-  "noi-gel": "assets/services/signature-shared/service_icons/noi_mong_dap_gel.png",
-  "noi-bot": "assets/services/signature-shared/service_icons/noi_mong_dap_bot.png",
-  "mi-classic": "assets/services/signature-shared/service_icons/noi_mi_classic.png",
-  "goi-duongsinh": "assets/services/signature-shared/tab_icons/shampoo_cat_inactive.png",
+  "ve": "assets/services/signature-shared/tab_icons/design_flower_inactive.webp",
+  "gel-hn": "assets/services/signature-shared/service_icons/son_gel_han_nhat.webp",
+  "noi-gel": "assets/services/signature-shared/service_icons/noi_mong_dap_gel.webp",
+  "noi-bot": "assets/services/signature-shared/service_icons/noi_mong_dap_bot.webp",
+  "mi-classic": "assets/services/signature-shared/service_icons/noi_mi_classic.webp",
+  "goi-duongsinh": "assets/services/signature-shared/tab_icons/shampoo_cat_inactive.webp",
 };
 const nailCareIcons = {
-  "ct-tay": "assets/services/nail-care/service_icons/cat_da_tay.png",
-  "ct-chan": "assets/services/nail-care/service_icons/cat_da_chan.png",
-  "thao-gel": "assets/services/nail-care/service_icons/thao_son_gel.png",
-  "thao-up": "assets/services/nail-care/service_icons/thao_mong_up_nail_box.png",
-  "thao-bot": "assets/services/nail-care/service_icons/thao_gel_bot.png",
-  "noi-up": "assets/services/nail-care/service_icons/noi_mong_up_xgel.png",
-  "noi-gel": "assets/services/nail-care/service_icons/noi_mong_dap_gel.png",
-  "noi-bot": "assets/services/nail-care/service_icons/noi_mong_dap_bot.png",
+  "ct-tay": "assets/services/nail-care/service_icons/cat_da_tay.webp",
+  "ct-chan": "assets/services/nail-care/service_icons/cat_da_chan.webp",
+  "thao-gel": "assets/services/nail-care/service_icons/thao_son_gel.webp",
+  "thao-up": "assets/services/nail-care/service_icons/thao_mong_up_nail_box.webp",
+  "thao-bot": "assets/services/nail-care/service_icons/thao_gel_bot.webp",
+  "noi-up": "assets/services/nail-care/service_icons/noi_mong_up_xgel.webp",
+  "noi-gel": "assets/services/nail-care/service_icons/noi_mong_dap_gel.webp",
+  "noi-bot": "assets/services/nail-care/service_icons/noi_mong_dap_bot.webp",
 };
 
 fallbackServices.forEach((service) => {
@@ -150,27 +150,27 @@ function serviceCard(service, className = "", variant = "standard") {
   return `<article class="service-card ${className}" data-card-variant="${variant}">
     ${featured ? '<span class="featured-badge"><span>ĐƯỢC CHỌN</span><strong>NHIỀU NHẤT</strong></span>' : ""}
     <div class="service-card-copy">
-      ${icon ? `<img class="service-icon" src="${icon}" alt="" aria-hidden="true">` : ""}
+      ${icon ? `<img class="service-icon" src="${icon}" alt="" aria-hidden="true" decoding="async" loading="lazy">` : ""}
       <h3>${service.name}</h3>
       <p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p>
       <div class="service-meta"><span class="service-duration">~${service.durationMinutes} phút</span><span class="service-price">${renderPrice(service)}</span></div>
       <button type="button" data-book-service="${service.id}">Đặt hẹn <span aria-hidden="true">→</span></button>
     </div>
     <div class="service-photo-wrap">
-      <img src="${image}" alt="Ảnh mẫu tạm cho ${service.name}" loading="lazy">
-      ${featured ? '<img class="featured-cat-sticker" src="assets/services/signature-shared/cats/featured_photo_cat_sticker.png" alt="" aria-hidden="true">' : ""}
+      <img src="${image}" alt="Ảnh mẫu tạm cho ${service.name}" loading="lazy" decoding="async">
+      ${featured ? '<img class="featured-cat-sticker" src="assets/services/signature-shared/cats/featured_photo_cat_sticker.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
     </div>
   </article>`;
 }
 
 function renderServiceNote(lines) {
   return `<aside class="service-note service-note--shared">
-    <img class="service-note-cat" src="assets/services/nail-care/cats/note_cat_peeking.png" alt="" aria-hidden="true">
+    <img class="service-note-cat" src="assets/services/nail-care/cats/note_cat_peeking.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
     <div class="service-note-label"><strong>Lưu ý nhé</strong><span aria-hidden="true">♡</span></div>
     <ul>${lines.map((line, index) => `<li data-note-tone="${index % 3}">${line}</li>`).join("")}</ul>
     <span class="service-note-decor" aria-hidden="true">
-      <img class="service-note-decor__sparkle" src="assets/services/nail-care/doodles/sparkle_orange.png" alt="">
-      <img class="service-note-decor__flower" src="assets/services/nail-care/doodles/header_flower.png" alt="">
+      <img class="service-note-decor__sparkle" src="assets/services/nail-care/doodles/sparkle_orange.webp" alt="" decoding="async" loading="lazy">
+      <img class="service-note-decor__flower" src="assets/services/nail-care/doodles/header_flower.webp" alt="" decoding="async" loading="lazy">
     </span>
   </aside>`;
 }
@@ -186,12 +186,12 @@ function renderSignature() {
   return `<div class="signature-layout">
     <div class="signature-hero-row">
       <div class="signature-intro">
-        <img class="signature-tape" src="assets/services/signature-shared/decor/top_gingham_tape.png" alt="" aria-hidden="true">
-        <img class="signature-ref-doodle signature-ref-doodle--heart" src="assets/services/signature-shared/doodles/header_heart_outline.png" alt="" aria-hidden="true">
-        <img class="signature-ref-doodle signature-ref-doodle--sparkle" src="assets/services/signature-shared/doodles/sparkle_orange.png" alt="" aria-hidden="true">
-        <img class="signature-cat" src="assets/services/signature-shared/cats/signature_raised_paw_OPTICAL_V1.png" alt="Mèo Nhu Nhi vẫy tay">
+        <img class="signature-tape" src="assets/services/signature-shared/decor/top_gingham_tape.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
+        <img class="signature-ref-doodle signature-ref-doodle--heart" src="assets/services/signature-shared/doodles/header_heart_outline.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
+        <img class="signature-ref-doodle signature-ref-doodle--sparkle" src="assets/services/signature-shared/doodles/sparkle_orange.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
+        <img class="signature-cat" src="assets/services/signature-shared/cats/signature_raised_paw_OPTICAL_V1.webp" alt="Mèo Nhu Nhi vẫy tay" decoding="async" loading="lazy">
         <div class="signature-copy">
-          <img class="signature-wordmark" src="assets/services/signature-shared/signature_wordmark/SIGNATURE_WORDMARK_UNIFIED_PAPER_V10.png" alt="Signature">
+          <img class="signature-wordmark" src="assets/services/signature-shared/signature_wordmark/SIGNATURE_WORDMARK_UNIFIED_PAPER_V10.webp" alt="Signature" decoding="async" loading="lazy">
           <span class="signature-ribbon">DỊCH VỤ NỔI BẬT TẠI 1M65 NAIL ROOM</span>
           <p>Từng chi tiết nhỏ, tạo nên sự khác biệt lớn ♡</p>
         </div>
@@ -200,9 +200,9 @@ function renderSignature() {
     </div>
     <div class="signature-grid signature-grid--top">${rest.slice(0, 3).map((item) => serviceCard(item, "", "signature")).join("")}</div>
     <div class="signature-lower">
-      <img class="signature-outside signature-outside--drink" src="assets/services/signature-shared/doodles/bottom_drink.png" alt="" aria-hidden="true">
+      <img class="signature-outside signature-outside--drink" src="assets/services/signature-shared/doodles/bottom_drink.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
       ${rest.slice(3).map((item) => serviceCard(item, "", "signature")).join("")}
-      <img class="signature-outside signature-outside--bath-cat" src="assets/services/signature-shared/cats/shampoo_bath_cat_OPTICAL_V1.png" alt="" aria-hidden="true">
+      <img class="signature-outside signature-outside--bath-cat" src="assets/services/signature-shared/cats/shampoo_bath_cat_OPTICAL_V1.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
     </div>
     ${renderServiceNote(nailCareNotes)}
   </div>`;
@@ -216,7 +216,7 @@ function sharedServiceRow(service, index, group) {
   return `<article class="shared-service-row" style="--service-row-index:${index}" data-card-variant="shared-list">
     <button class="shared-service-row__booking" type="button" data-book-service="${service.id}" aria-label="Đặt hẹn dịch vụ ${service.name}"><span class="sr-only">Đặt hẹn dịch vụ ${service.name}</span></button>
     <div class="shared-service-row__icon" aria-hidden="true">
-      <img src="${icon}" alt="">
+      <img src="${icon}" alt="" decoding="async" loading="lazy">
     </div>
     <div class="shared-service-row__copy">
       <h3>${service.name}</h3>
@@ -229,7 +229,7 @@ function sharedServiceRow(service, index, group) {
       ${hasDiscount ? `<del>${money(original)}</del>` : ""}
       <strong>${money(service.price)}</strong>
     </div>
-    <div class="shared-service-row__photo"><img src="${service.image}" alt="${service.name}" loading="lazy"></div>
+    <div class="shared-service-row__photo"><img src="${service.image}" alt="${service.name}" loading="lazy" decoding="async"></div>
   </article>`;
 }
 
@@ -243,17 +243,17 @@ function renderSharedGroup(id) {
   ];
   return `<div class="shared-service-layout shared-service-layout--${id}" data-template="shared-service-list" data-service-group="${id}">
     <header class="shared-service-title">
-      <img class="shared-service-title__tape" src="assets/services/nail-care/decor/header_gingham_tape.png" alt="" aria-hidden="true">
-      <img class="shared-service-title__cat" src="assets/services/nail-care/cats/header_cat_peeking.png" alt="" aria-hidden="true">
-      <img class="shared-service-title__heart" src="assets/services/nail-care/doodles/header_heart_bubble.png" alt="" aria-hidden="true">
+      <img class="shared-service-title__tape" src="assets/services/nail-care/decor/header_gingham_tape.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
+      <img class="shared-service-title__cat" src="assets/services/nail-care/cats/header_cat_peeking.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
+      <img class="shared-service-title__heart" src="assets/services/nail-care/doodles/header_heart_bubble.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
       <div class="shared-service-title__paper">
-        <img class="shared-service-title__lavender-tape" src="assets/services/nail-care/decor/header_lavender_tape.png" alt="" aria-hidden="true">
+        <img class="shared-service-title__lavender-tape" src="assets/services/nail-care/decor/header_lavender_tape.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
         <h2>${group.title}</h2>
         <p>${group.note}</p>
       </div>
-      <span class="shared-service-title__accent" aria-hidden="true"><img src="${group.accent}" alt=""></span>
-      <img class="shared-service-title__flower" src="assets/services/nail-care/doodles/header_flower.png" alt="" aria-hidden="true">
-      <img class="shared-service-title__sparkle" src="assets/services/nail-care/doodles/sparkle_orange.png" alt="" aria-hidden="true">
+      <span class="shared-service-title__accent" aria-hidden="true"><img src="${group.accent}" alt="" decoding="async" loading="lazy"></span>
+      <img class="shared-service-title__flower" src="assets/services/nail-care/doodles/header_flower.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
+      <img class="shared-service-title__sparkle" src="assets/services/nail-care/doodles/sparkle_orange.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
     </header>
     <div class="shared-service-list">${services.map((item, index) => sharedServiceRow(item, index, group)).join("")}</div>
     ${renderServiceNote(note)}

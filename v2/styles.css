@@ -46,7 +46,7 @@ a{color:inherit;text-decoration:none}
 .home-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(420px,.98fr);grid-template-areas:"copy art" "quote art" "schedule art";column-gap:42px;align-items:center}
 .home-copy{grid-area:copy;padding:20px 0}
 .taped-kicker{display:inline-flex;position:relative;margin:0 0 20px;padding:10px 22px;border:1px solid rgba(232,94,124,.13);border-radius:8px;background:rgba(255,255,255,.68);font-weight:800;font-size:14px;color:#6d5147;transform:rotate(-1deg)}
-.taped-kicker::before{content:"";position:absolute;left:-16px;top:-12px;width:62px;height:28px;background:url(assets/home/decor/gingham_tape_pink.png) center/contain no-repeat;transform:rotate(-8deg)}
+.taped-kicker::before{content:"";position:absolute;left:-16px;top:-12px;width:62px;height:28px;background:url(assets/home/decor/gingham_tape_pink.webp) center/contain no-repeat;transform:rotate(-8deg)}
 .home-copy h1{margin:0;font:700 clamp(43px,4.35vw,76px)/1.08 Quicksand;letter-spacing:-.045em;color:#382720}
 .home-copy h1 em{color:var(--pink);font-style:normal}
 .home-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
@@ -334,12 +334,12 @@ main,
 }
 .service-tabs button.is-active{
   border-color:transparent;
-  background:url("assets/services/shared/services_web_tab_active_paper_v3.png") center/100% 100% no-repeat;
+  background:url("assets/services/shared/services_web_tab_active_paper_v3.webp") center/100% 100% no-repeat;
   color:#fff;
   box-shadow:none;
 }
 .service-tabs button.is-active:hover{
-  background:url("assets/services/shared/services_web_tab_active_paper_v3.png") center/100% 100% no-repeat;
+  background:url("assets/services/shared/services_web_tab_active_paper_v3.webp") center/100% 100% no-repeat;
 }
 .service-panel{margin-top:38px;min-height:0}
 .signature-layout{display:block}
@@ -468,11 +468,11 @@ main,
   padding:0 28px;
   border:0;
   border-radius:999px;
-  background:url("assets/gallery/ui_shells/gallery_tab_disabled_LOCKED.png") center/100% 100% no-repeat;
+  background:url("assets/gallery/ui_shells/gallery_tab_disabled_LOCKED.webp") center/100% 100% no-repeat;
   font:700 20px var(--font-signature-display);
   color:#6a4133;
 }
-.gallery-filters button.is-active{background:url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.png") center/100% 100% no-repeat;color:#fff;box-shadow:none}
+.gallery-filters button.is-active{background:url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.webp") center/100% 100% no-repeat;color:#fff;box-shadow:none}
 .gallery-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:20px}
 .gallery-tile{display:block;width:100%;aspect-ratio:4/3;padding:7px;border:1px solid rgba(232,94,124,.22);border-radius:20px;background:rgba(255,249,247,.7);box-shadow:none;cursor:pointer}
 .gallery-tile img{border-radius:14px}
@@ -482,7 +482,7 @@ main,
   min-width:360px;
   min-height:82px;
   border:0;
-  background:url("assets/gallery/ui_shells/gallery_button_xem_them_shell_LOCKED.png") center/100% 100% no-repeat;
+  background:url("assets/gallery/ui_shells/gallery_button_xem_them_shell_LOCKED.webp") center/100% 100% no-repeat;
   box-shadow:none;
   font:700 28px var(--font-signature-display);
 }
@@ -937,8 +937,8 @@ main,
 
 /* Primary pink actions share Gallery paper through pill and generated rectangular shells. */
 :root {
-  --button-shell-pill: url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.png");
-  --button-shell-rect: url("assets/gallery/ui_shells/primary_button_rounded_rect_paper_v1.png");
+  --button-shell-pill: url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.webp");
+  --button-shell-rect: url("assets/gallery/ui_shells/primary_button_rounded_rect_paper_v1.webp");
 }
 
 .button-primary {
@@ -1329,6 +1329,89 @@ main,
 .faq-list article:nth-child(4n) { border-color: rgba(125, 178, 154, .28); background: var(--pastel-mint); }
 .contact-copy { border-color: rgba(164, 145, 198, .28); background: var(--pastel-lavender); }
 .map-card { border-color: rgba(125, 178, 154, .28); background: var(--pastel-mint); }
+
+/* Pastel paw-thread between HomeView and Services; drawn in CSS/SVG, not the old paw badge asset. */
+.home-service-divider {
+  position: relative;
+  height: clamp(70px, 5.2vw, 86px);
+  overflow: hidden;
+  background: linear-gradient(180deg, #fff4f2 0%, var(--paper) 100%);
+}
+
+.home-service-divider__track {
+  position: relative;
+  height: 100%;
+}
+
+.home-service-divider__track::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, rgba(232, 94, 124, .28) 0 8px, transparent 8px 17px);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  transform: translateY(-50%);
+}
+
+.home-service-divider__runner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: clamp(22px, 4vw, 72px);
+  padding-inline: clamp(46px, 6vw, 104px);
+}
+
+.home-service-paw {
+  display: block;
+  width: clamp(28px, 1.8vw, 32px);
+  height: auto;
+  overflow: visible;
+  color: #ef94b0;
+  opacity: .42;
+  filter: drop-shadow(0 2px 3px rgba(232, 94, 124, .13));
+  animation: home-service-paw-step 6s ease-in-out infinite;
+}
+
+.home-service-paw ellipse,
+.home-service-paw path {
+  fill: rgba(255, 250, 248, .94);
+  stroke: currentColor;
+  stroke-width: 2.2px;
+  stroke-linejoin: round;
+}
+
+.home-service-paw path { fill: color-mix(in srgb, currentColor 14%, #fffaf8); }
+.home-service-paw--lavender { color: #b99bd6; }
+.home-service-paw--peach { color: #efb28f; }
+.home-service-paw:nth-child(odd) { transform: translateY(-5px) rotate(-9deg); }
+.home-service-paw:nth-child(even) { transform: translateY(3px) rotate(8deg); }
+.home-service-paw:nth-child(2) { animation-delay: -5s; }
+.home-service-paw:nth-child(3) { animation-delay: -4s; }
+.home-service-paw:nth-child(4) { animation-delay: -3s; }
+.home-service-paw:nth-child(5) { animation-delay: -2s; }
+.home-service-paw:nth-child(6) { animation-delay: -1s; }
+
+@keyframes home-service-paw-step {
+  0%, 30%, 100% { opacity: .36; }
+  10% { opacity: 1; }
+  18% { opacity: .68; }
+}
+
+@media (max-width: 600px) {
+  .home-service-divider { height: 58px; }
+  .home-service-divider__runner { gap: 18px; padding-inline: 20px; }
+  .home-service-paw { width: 23px; }
+  .home-service-paw:nth-child(n + 5) { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-service-paw { animation: none; opacity: .72; }
+}
 
 /* Paper chapter dividers restored from the original site's section rhythm. */
 #dichvu,
@@ -2489,7 +2572,7 @@ main,
   min-height: 70px;
   border-color: transparent;
   border-radius: 18px;
-  background: url("assets/services/shared/services_web_tab_active_paper_v3.png") center / 100% 100% no-repeat;
+  background: url("assets/services/shared/services_web_tab_active_paper_v3.webp") center / 100% 100% no-repeat;
   box-shadow: none;
 }
 
@@ -2720,7 +2803,7 @@ main,
   padding: 36px 15px 54px;
   border: 0;
   border-radius: 0;
-  background: url("assets/services/signature-shared/decor/featured_most_chosen_badge_paper_v2.png") center / contain no-repeat;
+  background: url("assets/services/signature-shared/decor/featured_most_chosen_badge_paper_v2.webp") center / contain no-repeat;
   box-shadow: none;
   color: #6b413d;
   text-align: center;
@@ -3349,7 +3432,7 @@ main,
   top: -18px;
   width: 84px;
   height: 38px;
-  background-image: url("assets/home/relayout/decor_washi_tape_pink_gingham_optical.png");
+  background-image: url("assets/home/relayout/decor_washi_tape_pink_gingham_optical.webp");
 }
 
 .home-kicker-paw {
@@ -4530,7 +4613,7 @@ main,
   width: 118px;
   height: 148px;
   padding: 35px 16px 58px;
-  background-image: url("assets/services/signature-shared/decor/featured_most_chosen_badge_paper_v4.png");
+  background-image: url("assets/services/signature-shared/decor/featured_most_chosen_badge_paper_v4.webp");
   color: #603b35;
   filter: drop-shadow(0 7px 10px rgba(218, 91, 124, .18));
 }

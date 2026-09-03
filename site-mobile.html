@@ -6,8 +6,8 @@
 <script src="./support.js"></script>
 <script src="./turnstile-config.js?v=20260807a"></script>
 <script src="./turnstile-booking.js?v=20260807a"></script>
-<link rel="stylesheet" href="./visual-system.css?v=20260812discount42">
-<link rel="stylesheet" href="./rose-theme.css?v=20260810rose7">
+<link rel="stylesheet" href="./visual-system.css?v=20260903webp1">
+<link rel="stylesheet" href="./rose-theme.css?v=20260903webp1">
 </head>
 <body>
 <x-dc>
@@ -443,7 +443,7 @@ Xem thư viện móng
 </div>
 
 <div style="position:relative;display:flex;align-items:flex-start;gap:12px;margin-top:14px;padding:14px 16px;border-radius:22px;background:rgba(255,255,255,.9);border:1px solid rgba(122,90,208,.1);box-shadow:0 16px 34px -26px rgba(122,90,208,.5)">
-<img src="mascot/nhu-nhi-sit-pastel-v1.png" alt="" style="flex:none;width:52px;height:auto;margin-top:1px">
+<img src="mascot/nhu-nhi-sit-pastel-v1.webp" alt="" loading="lazy" decoding="async" style="flex:none;width:52px;height:auto;margin-top:1px">
 <div style="min-width:0">
 <p style="margin:0 0 5px;font-size:13.5px;line-height:1.55;color:#4A4360;text-wrap:pretty">Chiếc mèo này sẽ duyệt từng bộ móng trước khi bạn ra về. Bằng cách nhìn một cái rồi ngủ tiếp.</p>
 <span style="display:block;font-family:Quicksand,sans-serif;font-weight:700;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#7A5AD0;margin-bottom:10px">Nhu Nhi · quản lý tiệm</span>
@@ -1522,7 +1522,7 @@ class Component extends DCLogic {
   loadVisualSystem() {
     if (window.__nhuBundleLoaded || document.querySelector('script[data-nhu-visual-loader]')) return;
     const script = document.createElement('script');
-    script.src = './visual-system.js?v=20260812discount42';
+    script.src = './visual-system.js?v=20260903webp1';
     script.dataset.nhuVisualLoader = '1';
     document.head.appendChild(script);
   }

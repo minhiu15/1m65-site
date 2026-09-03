@@ -75,8 +75,8 @@ body.is-embedded{background:#fcf3ee}
 
 /* Primary actions use the generated transparent rounded-rectangle paper shell. */
 :root{
-  --button-shell-pill:url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.png");
-  --button-shell-rect:url("assets/gallery/ui_shells/primary_button_rounded_rect_paper_v1.png");
+  --button-shell-pill:url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.webp");
+  --button-shell-rect:url("assets/gallery/ui_shells/primary_button_rounded_rect_paper_v1.webp");
 }
 .button.primary{
   border-color:transparent;

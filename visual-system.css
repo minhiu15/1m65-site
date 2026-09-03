@@ -17,7 +17,7 @@
 .mew-page.nhu-polished {
   isolation: isolate;
   background:
-    url('./doodles/paper-grain.png') 0 0 / 128px 128px repeat,
+    url('./doodles/paper-grain.webp') 0 0 / 128px 128px repeat,
     radial-gradient(circle at 7% 18%, rgba(203,185,243,.09), transparent 22%),
     radial-gradient(circle at 94% 42%, rgba(244,184,207,.07), transparent 21%),
     radial-gradient(circle at 12% 76%, rgba(223,238,250,.1), transparent 22%),
@@ -1859,7 +1859,7 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
   display:block;
   flex:none;
   background-color:transparent;
-  background-image:url("./footer-doodle-asset-sheet.png?v=20260810footer-assets1")!important;
+  background-image:url("./footer-doodle-asset-sheet.webp?v=20260810footer-assets1")!important;
   background-repeat:no-repeat;
   filter:none;
   pointer-events:none;
@@ -1889,7 +1889,7 @@ a[data-cursor="link"]:focus-visible, button:focus-visible { outline: 3px solid r
 .nhu-footer-asset--button-heart{background-size:871.724% 871.724%;background-position:31.278% 51.832%}
 .nhu-footer-asset--zoom{background-size:790.000% 601.905%;background-position:44.384% 53.131%}
 .nhu-footer-asset--brand-scene{
-  background-image:url("./footer-brand-mascot.png?v=20260810footer-brand1")!important;
+  background-image:url("./footer-brand-mascot.webp?v=20260810footer-brand1")!important;
   background-size:131% 171%;
   background-position:57% 59%;
 }

@@ -6,8 +6,8 @@
 <script src="./support.js"></script>
 <script src="./turnstile-config.js?v=20260807a"></script>
 <script src="./turnstile-booking.js?v=20260807a"></script>
-<link rel="stylesheet" href="./visual-system.css?v=20260812discount42">
-<link rel="stylesheet" href="./rose-theme.css?v=20260810rose7">
+<link rel="stylesheet" href="./visual-system.css?v=20260903webp1">
+<link rel="stylesheet" href="./rose-theme.css?v=20260903webp1">
 </head>
 <body>
 <x-dc>
@@ -127,7 +127,7 @@ Xem thư viện móng
 </div>
 
 <div data-reveal="1" style="display:flex;align-items:flex-start;gap:16px;margin-top:38px;max-width:520px">
-<img src="mascot/nhu-nhi-sit-pastel-v1.png" alt="" style="flex:none;width:70px;height:auto;margin-top:2px">
+<img src="mascot/nhu-nhi-sit-pastel-v1.webp" alt="" loading="lazy" decoding="async" style="flex:none;width:70px;height:auto;margin-top:2px">
 <div style="min-width:0">
 <p style="margin:0 0 7px;font-size:16px;line-height:1.6;color:#4A4360;text-wrap:pretty">Chiếc mèo này sẽ duyệt từng bộ móng trước khi bạn ra về. Bằng cách nhìn một cái rồi ngủ tiếp.</p>
 <span style="display:block;font-family:Quicksand,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:#7A5AD0;margin-bottom:14px">Nhu Nhi · quản lý tiệm</span>
@@ -172,7 +172,7 @@ Xem thư viện móng
 <button type="button" class="nhu-hero-pin-slot is-disabled" data-live-slot="1" data-slot-disabled="true" aria-disabled="true" style="rotate:-1.8deg"><span data-live-slot-time>...</span><span data-live-slot-status>đang tải</span></button>
 </div>
 <div class="nhu-hero-pinboard__note">Giấy cam còn chỗ — chọn nhanh trước khi Nhu Nhi ngủ đè lên lịch.</div>
-<img class="nhu-doodle nhu-doodle--hero-bow nhu-doodle--hero-pinboard-bow nhu-doodle--mobile-hide" src="./doodles/bow.png" alt="" role="presentation" aria-hidden="true" loading="lazy" decoding="async">
+<img class="nhu-doodle nhu-doodle--hero-bow nhu-doodle--hero-pinboard-bow nhu-doodle--mobile-hide" src="./doodles/bow.webp" alt="" role="presentation" aria-hidden="true" loading="lazy" decoding="async">
 </div>
 </div>
 
@@ -1715,7 +1715,7 @@ class Component extends DCLogic {
   loadVisualSystem() {
     if (window.__nhuBundleLoaded || document.querySelector('script[data-nhu-visual-loader]')) return;
     const script = document.createElement('script');
-    script.src = './visual-system.js?v=20260812discount42';
+    script.src = './visual-system.js?v=20260903webp1';
     script.dataset.nhuVisualLoader = '1';
     document.head.appendChild(script);
   }
