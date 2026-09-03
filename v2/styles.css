@@ -2467,17 +2467,18 @@ main,
   content: "";
   position: absolute;
   top: 19px;
-  right: 0;
+  right: auto;
   bottom: 19px;
+  left: 0;
   width: 2px;
   border-radius: 999px;
   background: rgba(181, 128, 142, .34);
   pointer-events: none;
 }
 
-.service-tabs button:last-child::after,
+.service-tabs button:first-child::after,
 .service-tabs button.is-active::after,
-.service-tabs button:has(+ .is-active)::after { display: none; }
+.service-tabs button.is-active + button::after { display: none; }
 
 .service-tabs button span { position: relative; z-index: 1; }
 
@@ -3803,8 +3804,6 @@ main,
     clamp(180px, 11.5vw, 220px)
     clamp(200px, 11.5vw, 220px);
   gap: clamp(12px, .95vw, 18px);
-  width: min(1840px, calc(100% - clamp(28px, 3.7vw, 72px)));
-  max-width: none;
 }
 
 .about-pair { display: contents; }
@@ -4207,7 +4206,6 @@ main,
     display: flex;
     flex-direction: column;
     gap: 14px;
-    width: min(980px, calc(100% - 28px));
   }
   .about-pair {
     position: relative;
@@ -4307,7 +4305,7 @@ main,
 
 @media (max-width: 600px) {
   .about-section { padding: 24px 0 42px; }
-  .about-grid { width: min(100% - 22px, 520px); gap: 10px; }
+  .about-grid { gap: 10px; }
   .about-pair { border-radius: 22px; }
   .about-pair--hero {
     grid-template-columns: minmax(0, .46fr) minmax(0, .54fr);
@@ -4532,7 +4530,7 @@ main,
   width: 118px;
   height: 148px;
   padding: 35px 16px 58px;
-  background-image: url("assets/services/signature-shared/decor/featured_most_chosen_badge_paper_v3.png");
+  background-image: url("assets/services/signature-shared/decor/featured_most_chosen_badge_paper_v4.png");
   color: #603b35;
   filter: drop-shadow(0 7px 10px rgba(218, 91, 124, .18));
 }
