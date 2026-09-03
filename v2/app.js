@@ -191,7 +191,7 @@ function renderSignature() {
         <img class="signature-ref-doodle signature-ref-doodle--sparkle" src="assets/services/signature-shared/doodles/sparkle_orange.png" alt="" aria-hidden="true">
         <img class="signature-cat" src="assets/services/signature-shared/cats/signature_raised_paw_OPTICAL_V1.png" alt="Mèo Nhu Nhi vẫy tay">
         <div class="signature-copy">
-          <img class="signature-wordmark" src="assets/services/signature-shared/signature_wordmark/SIGNATURE_WORDMARK_UNIFIED_PAPER_V5.png" alt="Signature">
+          <img class="signature-wordmark" src="assets/services/signature-shared/signature_wordmark/SIGNATURE_WORDMARK_UNIFIED_PAPER_V6.png" alt="Signature">
           <span class="signature-ribbon">DỊCH VỤ NỔI BẬT TẠI 1M65 NAIL ROOM</span>
           <p>Từng chi tiết nhỏ, tạo nên sự khác biệt lớn ♡</p>
         </div>
