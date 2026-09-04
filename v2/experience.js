@@ -3,40 +3,52 @@ import "./booking-v2.js";
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
 const gallery = [
-["nail","assets/services/nail-care/service_photos/cat_da_tay.jpg","Chăm sóc da tay","♡"],
-["nail","assets/services/nail-care/service_photos/noi_mong_dap_gel.jpg","Nối móng gel","✦"],
+["nail","assets/gallery/photos/pink-galaxy.jpg","Pink Galaxy","♡"],
+["nail","assets/gallery/photos/hello-kitty-3d-bow.jpg","Hello Kitty 3D","✦"],
+["nail","assets/gallery/photos/hello-kitty-pastel-stars.jpg","Hello Kitty Pastel","☆"],
+["nail","assets/gallery/photos/starlight-glow.jpg","Starlight Glow","♡"],
+["nail","assets/gallery/photos/cute-bear-white.jpg","Cute Bear","✦"],
+["nail","assets/gallery/photos/pink-coquette.jpg","Pink Coquette","☆"],
+["nail","assets/gallery/photos/bold-personality.jpg","Nail cá tính","♡"],
+["nail","assets/gallery/photos/snow-dream.jpg","Snow Dream","✦"],
+["nail","assets/gallery/photos/red-charming.jpg","Red Charming","☆"],
+["nail","assets/gallery/photos/snow-crystal.jpg","Snow Crystal","♡"],
+["nail","assets/gallery/photos/aurora-lilac.jpg","Aurora Lilac","✦"],
+["nail","assets/gallery/photos/pearl-ribbon.jpg","Pearl Ribbon","☆"],
+["nail","assets/gallery/photos/white-starlight.jpg","White Starlight","♡"],
+["nail","assets/gallery/photos/ice-crystal.jpg","Ice Crystal","✦"],
+["nail","assets/gallery/photos/pure-white.jpg","Pure White","☆"],
+["nail","assets/gallery/photos/pearl-glow.jpg","Pearl Glow","♡"],
+["nail","assets/gallery/photos/pink-starlight.jpg","Pink Starlight","✦"],
 ["mi","assets/services/signature-shared/service_photos/noi_mi_classic.jpg","Nối mi Classic","◉"],
-["nail","assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg","Nail design vẽ tay","☆"],
-["goi","assets/services/signature-shared/service_photos/goi_dau_duong_sinh.jpg","Gội đầu dưỡng sinh","♨"],
-["nail","assets/services/nail-care/service_photos/noi_mong_up_xgel.jpg","Nối móng Xgel","♡"],
-["nail","assets/services/signature-shared/service_photos/son_gel_han_nhat.jpg","Sơn gel Hàn Nhật","✦"],
 ["khac","assets/about/photos/salon-corner.jpg","Một góc nhỏ trong tiệm","⌂"],
-["nail","assets/services/nail-care/service_photos/cat_da_chan.jpg","Chăm sóc da chân","♡"],
-["khac","assets/about/photos/nail-technician.jpg","Thợ nail tại 1M65","☺"],
-["nail","assets/services/nail-care/service_photos/noi_mong_dap_bot.jpg","Nối móng đắp bột","✦"],
-["nail","assets/services/nail-care/service_photos/thao_son_gel.jpg","Tháo sơn gel","♡"],
-["nail","assets/services/nail-care/service_photos/thao_mong_up_nail_box.jpg","Tháo nail box","☆"],
-["mi","assets/services/signature-shared/service_photos/noi_mi_classic.jpg","Bộ mi nhẹ tự nhiên","◉"],
-["goi","assets/services/signature-shared/service_photos/goi_dau_duong_sinh.jpg","Khoảng nghỉ cho tóc và vai","♨"],
-["nail","assets/services/nail-care/service_photos/thao_gel_bot.jpg","Tháo gel bột nhẹ tay","♡"],
-["nail","assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg","Mẫu nail cá tính","✦"],
-["khac","assets/about/photos/salon-corner.jpg","Kệ sơn của tiệm","⌂"],
-["nail","assets/services/signature-shared/service_photos/son_gel_han_nhat.jpg","Màu gel trong trẻo","♡"],
-["khac","assets/about/photos/nail-technician.jpg","Chăm chút từng chi tiết","☺"]
+["khac","assets/about/photos/nail-technician.jpg","Thợ nail tại 1M65","☺"]
 ];
 const fallbackReviews = [
 ["Mình sợ nhất là thợ nói nhiều. Ở đây chị ấy chỉ hỏi một câu rồi im lặng làm suốt hai tiếng. Tuyệt vời.","Thu Hà","Nail Hàn trong veo"],
 ["Đặt nail mèo cho ngày cưới. Mẹ mình khóc — không rõ vì cảm động hay vì mười ngón tay mười con mèo.","Minh Châu","Nail mèo · vẽ tay"],
 ["Ba tuần rồi vẫn chưa bong một góc nào. Và Nhu Nhi ngủ trên chân mình cả buổi, tính thêm phí được không?","Lan Vy","Sơn gel cơ bản"],
-["Gội đầu dưỡng sinh xong mình ngủ quên mất hai mươi phút. Chị Hạnh để yên cho mình ngủ, không đánh thức.","Bảo Trâm","Gội đầu dưỡng sinh"]
+["Gội đầu dưỡng sinh xong mình ngủ quên mất hai mươi phút. Chị Hạnh để yên cho mình ngủ, không đánh thức.","Bảo Trâm","Gội đầu dưỡng sinh"],
+["Đi nhiều tiệm rồi mới thấy: ở đây người ta hỏi mình muốn gì trước khi cầm cọ lên. Nhỏ thôi mà quý.","Ngọc Ánh","French tip"]
 ];
 let galleryFilter = "all";
 let lightboxIndex = 0;
+let reviewItems = fallbackReviews;
+let reviewIndex = 0;
+let reviewTimer = 0;
+let reviewWrapTimer = 0;
+let reviewResizeTimer = 0;
+let reviewPaused = false;
+let reviewInView = true;
+let reviewObserver = null;
 let activeModal = null;
 let returnFocus = null;
 const modalStack = [];
 let lastInputWasPointer = false;
 let toastTimer = 0;
+const REVIEW_AUTOPLAY_MS = 4200;
+const REVIEW_TRANSITION_MS = 620;
+const reviewMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
 document.addEventListener("pointerdown",function(){lastInputWasPointer=true;},true);
 document.addEventListener("keydown",function(){
@@ -123,6 +135,9 @@ function initialGalleryCount() {
 function tile(item, index) {
   return '<button type="button" class="gallery-tile" data-gallery-index="'+index+'" data-badge="'+esc(item[3])+'" aria-label="Xem lớn: '+esc(item[2])+'"><img src="'+esc(item[1])+'" alt="" loading="lazy" decoding="async"><span class="sr-only">'+esc(item[2])+'</span></button>';
 }
+function galleryEmptyState() {
+  return '<div class="gallery-empty" role="status"><picture class="gallery-empty__art" aria-hidden="true"><source srcset="assets/gallery/empty/gallery-empty-polaroids.webp" type="image/webp"><img src="assets/gallery/empty/gallery-empty-polaroids.png" alt="" loading="lazy" decoding="async"></picture><h3>Chưa có ảnh ở mục này</h3><p>Tụi mình đang chuẩn bị những khoảnh khắc xinh<br>để chia sẻ cùng bạn. Ghé lại sau nhé ♡</p></div>';
+}
 function filteredGallery() {
   return gallery.filter(function(item){return galleryFilter === "all" || item[0] === galleryFilter;});
 }
@@ -137,9 +152,20 @@ function renderGallery() {
   const main = document.querySelector("[data-gallery-grid]");
   const full = document.querySelector("[data-gallery-modal-grid]");
   const more = document.querySelector("[data-open-gallery]");
-  if (main) main.innerHTML = items.slice(0,count).map(tile).join("");
-  if (full) full.innerHTML = items.map(tile).join("");
+  const hint = document.querySelector("[data-gallery-hint]");
+  const empty = items.length === 0;
+  const emptyMarkup = empty ? galleryEmptyState() : "";
+  if (main) {
+    main.classList.toggle("is-empty",empty);
+    main.innerHTML = empty ? emptyMarkup : items.slice(0,count).map(tile).join("");
+  }
+  if (full) {
+    full.classList.toggle("is-empty",empty);
+    full.innerHTML = empty ? emptyMarkup : items.map(tile).join("");
+  }
   if (more) more.hidden = items.length <= count;
+  if (hint) hint.hidden = items.length === 0;
+  if (more && more.parentElement) more.parentElement.hidden = empty;
 }
 function updateLightbox(index) {
   const items = filteredGallery();
@@ -155,20 +181,78 @@ function openLightbox(index, trigger) {
   updateLightbox(index);
   openModal(document.querySelector("#gallery-lightbox"), trigger, { stackCurrent: Boolean(trigger && trigger.closest("#gallery-modal")) });
 }
+function reviewVisibleCount() {
+  if (innerWidth <= 600) return 1;
+  if (innerWidth <= 1180) return 2;
+  return 4;
+}
+function reviewCard(review, index, clone) {
+  const quoteAsset = "assets/reviews/01_stat_star_LOCKED.webp";
+  const tone = index % 4;
+  const stars = new Array(5).fill('<img src="assets/reviews/08_rating_star_filled_LOCKED_CLEAN.webp" alt="" decoding="async" loading="lazy">').join("");
+  return '<article class="review-card review-card--tone-'+(tone+1)+'" data-review-card role="group" aria-roledescription="slide" aria-label="Đánh giá '+(index+1)+' trên '+reviewItems.length+'"'+(clone?' aria-hidden="true"':'')+'><img class="review-card__quote" src="'+quoteAsset+'" alt="" aria-hidden="true" decoding="async" loading="lazy"><p class="review-card__text">“'+esc(review[0])+'”</p><div class="review-card__rating stars" aria-label="5 trên 5 sao">'+stars+'</div><p class="review-card__author">— '+esc(review[1])+'<small>'+esc(review[2])+'</small></p></article>';
+}
+function positionReviewCarousel(animate) {
+  const track = document.querySelector("[data-review-track]");
+  const card = track && track.querySelector("[data-review-card]");
+  if (!track || !card) return;
+  const computed = getComputedStyle(track);
+  const gap = parseFloat(computed.columnGap || computed.gap) || 0;
+  track.classList.toggle("is-snapping", !animate);
+  track.style.transform = "translate3d("+(-reviewIndex*(card.getBoundingClientRect().width+gap))+"px,0,0)";
+  if (!animate) requestAnimationFrame(function(){track.classList.remove("is-snapping");});
+}
+function advanceReview() {
+  if (reviewItems.length <= reviewVisibleCount()) return;
+  clearTimeout(reviewWrapTimer);
+  reviewIndex += 1;
+  positionReviewCarousel(true);
+  if (reviewIndex >= reviewItems.length) {
+    reviewWrapTimer = setTimeout(function(){
+      reviewIndex = 0;
+      positionReviewCarousel(false);
+    }, REVIEW_TRANSITION_MS + 40);
+  }
+}
+function scheduleReviewAutoplay() {
+  clearTimeout(reviewTimer);
+  if (reviewMotion.matches || reviewPaused || !reviewInView || document.hidden || reviewItems.length <= reviewVisibleCount()) return;
+  reviewTimer = setTimeout(function(){
+    advanceReview();
+    scheduleReviewAutoplay();
+  }, REVIEW_AUTOPLAY_MS);
+}
+function setupReviewCarousel(grid) {
+  if (!grid.dataset.reviewCarouselBound) {
+    grid.dataset.reviewCarouselBound = "true";
+    grid.addEventListener("mouseenter",function(){reviewPaused=true;scheduleReviewAutoplay();});
+    grid.addEventListener("mouseleave",function(){reviewPaused=false;scheduleReviewAutoplay();});
+    grid.addEventListener("focusin",function(){reviewPaused=true;scheduleReviewAutoplay();});
+    grid.addEventListener("focusout",function(event){if(!grid.contains(event.relatedTarget)){reviewPaused=false;scheduleReviewAutoplay();}});
+  }
+  if (!reviewObserver && "IntersectionObserver" in window) {
+    reviewObserver = new IntersectionObserver(function(entries){
+      reviewInView = Boolean(entries[0] && entries[0].isIntersecting);
+      scheduleReviewAutoplay();
+    },{rootMargin:"120px 0px"});
+    reviewObserver.observe(grid);
+  }
+}
 function renderReviews(reviews) {
   const grid = document.querySelector("[data-review-grid]");
   if (!grid) return;
-  const quoteAssets = [
-    "assets/reviews/05_quote_pink_LOCKED_CLEAN.webp",
-    "assets/reviews/06_quote_lavender_TEMP_LOCKED.webp",
-    "assets/reviews/07_quote_peach_LOCKED_CLEAN.webp",
-    "assets/reviews/06_quote_lavender_TEMP_LOCKED.webp",
-  ];
-  const quoteTones = ["pink", "lavender", "peach", "lavender"];
-  grid.innerHTML = reviews.slice(0,4).map(function(review,index){
-    const stars = new Array(5).fill('<img src="assets/reviews/08_rating_star_filled_LOCKED_CLEAN.webp" alt="" decoding="async" loading="lazy">').join("");
-    return '<article class="review-card"><img class="review-card__quote review-card__quote--'+quoteTones[index]+'" src="'+quoteAssets[index]+'" alt="" aria-hidden="true" decoding="async" loading="lazy"><p class="review-card__text">“'+esc(review[0])+'”</p><div class="review-card__rating stars" aria-label="5 trên 5 sao">'+stars+'</div><p class="review-card__author">— '+esc(review[1])+'<small>'+esc(review[2])+'</small></p></article>';
-  }).join("");
+  reviewItems = reviews.length ? reviews : fallbackReviews;
+  reviewIndex = 0;
+  clearTimeout(reviewWrapTimer);
+  const cloneCount = Math.min(4,reviewItems.length);
+  const cards = reviewItems.map(function(review,index){return reviewCard(review,index,false);});
+  const clones = reviewItems.slice(0,cloneCount).map(function(review,index){return reviewCard(review,index,true);});
+  grid.setAttribute("role","region");
+  grid.setAttribute("aria-roledescription","carousel");
+  grid.setAttribute("aria-label","Đánh giá của khách hàng");
+  grid.innerHTML = '<div class="reviews-track is-snapping" data-review-track>'+cards.concat(clones).join("")+'</div>';
+  setupReviewCarousel(grid);
+  requestAnimationFrame(function(){positionReviewCarousel(false);scheduleReviewAutoplay();});
 }
 async function loadReviews() {
   renderReviews(fallbackReviews);
@@ -234,7 +318,13 @@ document.addEventListener("keydown",function(event){
   const tab=event.target.closest&&event.target.closest("[role='tab'][data-service-tab]");
   if(tab&&["ArrowLeft","ArrowRight","Home","End"].includes(event.key)){const tabs=Array.from(document.querySelectorAll("[role='tab'][data-service-tab]"));let index=tabs.indexOf(tab);if(event.key==="Home")index=0;else if(event.key==="End")index=tabs.length-1;else index=(index+(event.key==="ArrowRight"?1:-1)+tabs.length)%tabs.length;event.preventDefault();tabs[index].focus();tabs[index].click();}
 });
-addEventListener("resize",renderGallery);
+addEventListener("resize",function(){
+  renderGallery();
+  clearTimeout(reviewResizeTimer);
+  reviewResizeTimer = setTimeout(function(){positionReviewCarousel(false);scheduleReviewAutoplay();},120);
+});
+document.addEventListener("visibilitychange",scheduleReviewAutoplay);
+if (reviewMotion.addEventListener) reviewMotion.addEventListener("change",scheduleReviewAutoplay);
 renderGallery();
 loadReviews();
 loadHomeAvailability();

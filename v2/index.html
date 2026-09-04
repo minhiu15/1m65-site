@@ -8,11 +8,11 @@
   <meta name="description" content="Bản xem trước giao diện mới của 1M65 Nails, Eyelashes, Shampoo.">
   <title>1M65 Nails · V2 Preview</title>
   <link rel="icon" href="../favicon.svg">
-  <link rel="stylesheet" href="styles.css?v=20260904-106">
+  <link rel="stylesheet" href="styles.css?v=20260904-144">
   <script src="../turnstile-config.js?v=20260807a"></script>
   <script src="../turnstile-booking.js?v=20260807a"></script>
   <script type="module" src="app.js?v=20260903-74"></script>
-  <script type="module" src="experience.js?v=20260903-74"></script>
+  <script type="module" src="experience.js?v=20260904-79"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
@@ -190,7 +190,7 @@
           <div class="gallery-grid" data-gallery-grid></div>
           <div class="gallery-more-wrap">
             <button class="gallery-more" type="button" data-open-gallery>Xem thêm</button>
-            <p>Bấm ảnh để xem lớn ♡</p>
+            <p data-gallery-hint>Bấm ảnh để xem lớn ♡</p>
           </div>
         </div>
       </div>
@@ -210,8 +210,8 @@
           <figure class="about-photo about-photo--main">
             <img src="assets/about/photos/salon-corner.jpg" alt="Góc ngồi màu hồng tại tiệm 1M65" loading="lazy" decoding="async">
             <img class="about-decor about-decor--tape about-photo__tape" src="assets/about/decor/about_tape_pink_LOCKED.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
-            <img class="about-decor about-decor--flower-pink about-photo__flower" src="assets/about/decor/about_flower_pink_with_leaves_EXACT.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
-            <figcaption class="about-photo-bubble"><span aria-hidden="true">♡</span> Tiệm nhỏ<br>nhiều yêu thương</figcaption>
+            <img class="about-decor about-photo__sticker" src="assets/services/signature-shared/cats/featured_photo_cat_sticker.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
+            <figcaption class="about-photo-bubble">Tiệm nhỏ<br>nhiều yêu thương</figcaption>
           </figure>
         </div>
 
@@ -250,8 +250,6 @@
         <div class="about-journey" aria-label="Một buổi ở 1M65">
           <div class="about-journey__heading">
             <h3>Một buổi ở 1M65 <span aria-hidden="true">♡</span></h3>
-            <img class="about-decor about-decor--flower-pink about-journey__flower" src="assets/about/decor/about_flower_pink_with_leaves_EXACT.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
-            <img class="about-cat" src="assets/about/cats/about_cat_peeking_LOCKED.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
           </div>
           <div class="about-journey-grid">
             <article><b>01</b><img src="assets/about/journey/about_journey_01_choose_TEMP_LOCKED.webp" alt="" aria-hidden="true" decoding="async" loading="lazy"><div><h4>Chọn dịch vụ</h4><p>Tư vấn nhẹ nhàng, gợi ý phù hợp với bạn nhất.</p></div></article>
@@ -264,6 +262,7 @@
     </section>
 
     <section class="reviews-section paper-section" id="danhgia" aria-labelledby="reviews-heading">
+      <div class="about-reviews-transition" id="about-reviews-transition" aria-hidden="true"></div>
       <img class="paper-doodle paper-doodle--floating paper-doodle--reviews-flower" src="../doodles/flower.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
       <img class="paper-doodle paper-doodle--floating paper-doodle--reviews-star" src="../doodles/star-pink.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
       <div class="reviews-inner reviews-shell reveal">
@@ -272,7 +271,7 @@
           <p class="reviews-subtitle">Cảm ơn các nàng đã tin yêu và đồng hành cùng 1M65.<br>Những lời khen là động lực để chúng mình mỗi ngày tốt hơn!</p>
           <div class="reviews-header-decor" aria-hidden="true">
             <span class="reviews-header-decor__line"></span>
-            <span>♡</span>
+            <img class="reviews-header-decor__heart" src="assets/about/info/about_info_heart_LOCKED_CLEAN.webp" alt="" decoding="async" loading="lazy">
             <span class="reviews-header-decor__line"></span>
           </div>
         </header>
@@ -282,12 +281,12 @@
           <article class="reviews-stat"><img class="reviews-stat__icon" src="assets/reviews/03_stat_chat_LOCKED_CLEAN.webp" alt="" decoding="async" loading="lazy"><div><strong class="reviews-stat__value">100%</strong><span class="reviews-stat__label">Phản hồi tích cực</span></div></article>
           <article class="reviews-stat"><img class="reviews-stat__icon" src="assets/reviews/04_stat_sparkle_LOCKED_CLEAN.webp" alt="" decoding="async" loading="lazy"><div><strong class="reviews-stat__value">Nhiều năm</strong><span class="reviews-stat__label">Đồng hành cùng khách yêu</span></div></article>
         </div>
-        <h3 class="reviews-kicker review-list-title">♡ &nbsp; LỜI KHEN TỪ KHÁCH YÊU &nbsp; ♡</h3>
+        <h3 class="reviews-kicker review-list-title">KHÁCH YÊU NÓI GÌ VỀ 1M65</h3>
         <div class="reviews-grid review-grid" data-review-grid></div>
         <div class="reviews-bottom" aria-hidden="true">
-          <span class="reviews-bottom__wave"></span>
-          <img class="paper-doodle paper-doodle--reviews-divider reviews-bottom__heart" src="../doodles/flower.webp" alt="" decoding="async" loading="lazy">
-          <span class="reviews-bottom__wave"></span>
+          <span class="reviews-bottom__thread"></span>
+          <img class="paper-doodle paper-doodle--reviews-divider reviews-bottom__flower" src="../doodles/flower.webp" alt="" decoding="async" loading="lazy">
+          <span class="reviews-bottom__thread"></span>
         </div>
       </div>
     </section>
