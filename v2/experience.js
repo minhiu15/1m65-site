@@ -3,26 +3,26 @@ import "./booking-v2.js";
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
 const gallery = [
-["nail","assets/gallery/photos/pink-galaxy.jpg","Pink Galaxy","♡"],
-["nail","assets/gallery/photos/hello-kitty-3d-bow.jpg","Hello Kitty 3D","✦"],
-["nail","assets/gallery/photos/hello-kitty-pastel-stars.jpg","Hello Kitty Pastel","☆"],
-["nail","assets/gallery/photos/starlight-glow.jpg","Starlight Glow","♡"],
-["nail","assets/gallery/photos/cute-bear-white.jpg","Cute Bear","✦"],
-["nail","assets/gallery/photos/pink-coquette.jpg","Pink Coquette","☆"],
-["nail","assets/gallery/photos/bold-personality.jpg","Nail cá tính","♡"],
-["nail","assets/gallery/photos/snow-dream.jpg","Snow Dream","✦"],
-["nail","assets/gallery/photos/red-charming.jpg","Red Charming","☆"],
-["nail","assets/gallery/photos/snow-crystal.jpg","Snow Crystal","♡"],
-["nail","assets/gallery/photos/aurora-lilac.jpg","Aurora Lilac","✦"],
-["nail","assets/gallery/photos/pearl-ribbon.jpg","Pearl Ribbon","☆"],
-["nail","assets/gallery/photos/white-starlight.jpg","White Starlight","♡"],
-["nail","assets/gallery/photos/ice-crystal.jpg","Ice Crystal","✦"],
-["nail","assets/gallery/photos/pure-white.jpg","Pure White","☆"],
-["nail","assets/gallery/photos/pearl-glow.jpg","Pearl Glow","♡"],
-["nail","assets/gallery/photos/pink-starlight.jpg","Pink Starlight","✦"],
-["mi","assets/services/signature-shared/service_photos/noi_mi_classic.jpg","Nối mi Classic","◉"],
-["khac","assets/about/photos/salon-corner.jpg","Một góc nhỏ trong tiệm","⌂"],
-["khac","assets/about/photos/nail-technician.jpg","Thợ nail tại 1M65","☺"]
+["nail","assets/gallery/photos/pink-galaxy.jpg","Pink Galaxy"],
+["nail","assets/gallery/photos/hello-kitty-3d-bow.jpg","Hello Kitty 3D"],
+["nail","assets/gallery/photos/hello-kitty-pastel-stars.jpg","Hello Kitty Pastel"],
+["nail","assets/gallery/photos/starlight-glow.jpg","Starlight Glow"],
+["nail","assets/gallery/photos/cute-bear-white.jpg","Cute Bear"],
+["nail","assets/gallery/photos/pink-coquette.jpg","Pink Coquette"],
+["nail","assets/gallery/photos/bold-personality.jpg","Nail cá tính"],
+["nail","assets/gallery/photos/snow-dream.jpg","Snow Dream"],
+["nail","assets/gallery/photos/red-charming.jpg","Red Charming"],
+["nail","assets/gallery/photos/snow-crystal.jpg","Snow Crystal"],
+["nail","assets/gallery/photos/aurora-lilac.jpg","Aurora Lilac"],
+["nail","assets/gallery/photos/pearl-ribbon.jpg","Pearl Ribbon"],
+["nail","assets/gallery/photos/white-starlight.jpg","White Starlight"],
+["nail","assets/gallery/photos/ice-crystal.jpg","Ice Crystal"],
+["nail","assets/gallery/photos/pure-white.jpg","Pure White"],
+["nail","assets/gallery/photos/pearl-glow.jpg","Pearl Glow"],
+["nail","assets/gallery/photos/pink-starlight.jpg","Pink Starlight"],
+["mi","assets/services/signature-shared/service_photos/noi_mi_classic.jpg","Nối mi Classic"],
+["khac","assets/about/photos/salon-corner.jpg","Một góc nhỏ trong tiệm"],
+["khac","assets/about/photos/nail-technician.jpg","Thợ nail tại 1M65"]
 ];
 const fallbackReviews = [
 ["Mình sợ nhất là thợ nói nhiều. Ở đây chị ấy chỉ hỏi một câu rồi im lặng làm suốt hai tiếng. Tuyệt vời.","Thu Hà","Nail Hàn trong veo"],
@@ -46,7 +46,7 @@ let returnFocus = null;
 const modalStack = [];
 let lastInputWasPointer = false;
 let toastTimer = 0;
-const REVIEW_AUTOPLAY_MS = 4200;
+const REVIEW_AUTOPLAY_MS = 3600;
 const REVIEW_TRANSITION_MS = 620;
 const reviewMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -133,7 +133,7 @@ function initialGalleryCount() {
   return matchMedia("(max-width: 600px)").matches ? 6 : 10;
 }
 function tile(item, index) {
-  return '<button type="button" class="gallery-tile" data-gallery-index="'+index+'" data-badge="'+esc(item[3])+'" aria-label="Xem lớn: '+esc(item[2])+'"><img src="'+esc(item[1])+'" alt="" loading="lazy" decoding="async"><span class="sr-only">'+esc(item[2])+'</span></button>';
+  return '<button type="button" class="gallery-tile" data-gallery-index="'+index+'" aria-label="Xem lớn: '+esc(item[2])+'"><img src="'+esc(item[1])+'" alt="" loading="lazy" decoding="async"><span class="sr-only">'+esc(item[2])+'</span></button>';
 }
 function galleryEmptyState() {
   return '<div class="gallery-empty" role="status"><picture class="gallery-empty__art" aria-hidden="true"><source srcset="assets/gallery/empty/gallery-empty-polaroids.webp" type="image/webp"><img src="assets/gallery/empty/gallery-empty-polaroids.png" alt="" loading="lazy" decoding="async"></picture><h3>Chưa có ảnh ở mục này</h3><p>Tụi mình đang chuẩn bị những khoảnh khắc xinh<br>để chia sẻ cùng bạn. Ghé lại sau nhé ♡</p></div>';
@@ -188,7 +188,7 @@ function reviewVisibleCount() {
 }
 function reviewCard(review, index, clone) {
   const quoteAsset = "assets/reviews/01_stat_star_LOCKED.webp";
-  const tone = index % 4;
+  const tone = index % 5;
   const stars = new Array(5).fill('<img src="assets/reviews/08_rating_star_filled_LOCKED_CLEAN.webp" alt="" decoding="async" loading="lazy">').join("");
   return '<article class="review-card review-card--tone-'+(tone+1)+'" data-review-card role="group" aria-roledescription="slide" aria-label="Đánh giá '+(index+1)+' trên '+reviewItems.length+'"'+(clone?' aria-hidden="true"':'')+'><img class="review-card__quote" src="'+quoteAsset+'" alt="" aria-hidden="true" decoding="async" loading="lazy"><p class="review-card__text">“'+esc(review[0])+'”</p><div class="review-card__rating stars" aria-label="5 trên 5 sao">'+stars+'</div><p class="review-card__author">— '+esc(review[1])+'<small>'+esc(review[2])+'</small></p></article>';
 }
@@ -200,7 +200,12 @@ function positionReviewCarousel(animate) {
   const gap = parseFloat(computed.columnGap || computed.gap) || 0;
   track.classList.toggle("is-snapping", !animate);
   track.style.transform = "translate3d("+(-reviewIndex*(card.getBoundingClientRect().width+gap))+"px,0,0)";
-  if (!animate) requestAnimationFrame(function(){track.classList.remove("is-snapping");});
+  if (!animate) {
+    track.getBoundingClientRect();
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){track.classList.remove("is-snapping");});
+    });
+  }
 }
 function advanceReview() {
   if (reviewItems.length <= reviewVisibleCount()) return;
