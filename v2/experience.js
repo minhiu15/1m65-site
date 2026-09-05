@@ -62,6 +62,16 @@ function esc(value) {
 function focusables(root) {
   return Array.from(root.querySelectorAll("a[href],button:not([disabled]),input:not([disabled]),textarea:not([disabled]),iframe,[tabindex]:not([tabindex='-1'])")).filter(function(node){return !node.hidden && node.getAttribute("aria-hidden") !== "true";});
 }
+function setOverlayOpen(open) {
+  const scrollLeft = window.scrollX;
+  const scrollTop = window.scrollY;
+  if (open) document.body.classList.add("has-overlay");
+  else document.body.classList.remove("has-overlay");
+  const previousBehavior = document.documentElement.style.scrollBehavior;
+  document.documentElement.style.scrollBehavior = "auto";
+  window.scrollTo(scrollLeft, scrollTop);
+  document.documentElement.style.scrollBehavior = previousBehavior;
+}
 function focusReturnedControl(focusTarget) {
   if (!focusTarget || !focusTarget.isConnected) return;
   if (lastInputWasPointer) {
@@ -70,7 +80,7 @@ function focusReturnedControl(focusTarget) {
     suppressed.forEach(function(node){node.classList.add("is-pointer-focus-return");});
     focusTarget.addEventListener("blur",function(){suppressed.forEach(function(node){node.classList.remove("is-pointer-focus-return");});},{once:true});
   }
-  focusTarget.focus();
+  focusTarget.focus({ preventScroll: true });
 }
 function rootReturnFocus() {
   return modalStack.length ? modalStack[0].returnFocus : returnFocus;
@@ -89,8 +99,8 @@ function openModal(modal, trigger, options) {
   activeModal = modal;
   returnFocus = trigger || document.activeElement;
   modal.hidden = false;
-  document.body.classList.add("has-overlay");
-  requestAnimationFrame(function(){(modal.querySelector(".modal-close") || focusables(modal)[0] || modal).focus();});
+  setOverlayOpen(true);
+  requestAnimationFrame(function(){(modal.querySelector(".modal-close") || focusables(modal)[0] || modal).focus({ preventScroll: true });});
 }
 function closeModal(modal, restore) {
   const target = modal || activeModal;
@@ -104,7 +114,7 @@ function closeModal(modal, restore) {
     activeModal = previous.modal;
     returnFocus = previous.returnFocus;
     activeModal.hidden = false;
-    document.body.classList.add("has-overlay");
+    setOverlayOpen(true);
     const restoredFocus = focusTarget && focusTarget.isConnected
       ? focusTarget
       : (galleryIndex ? activeModal.querySelector('[data-gallery-index="'+galleryIndex+'"]') : null);
@@ -115,7 +125,7 @@ function closeModal(modal, restore) {
   if (restore === false) {
     modalStack.splice(0).forEach(function(entry){entry.modal.hidden = true;});
   }
-  document.body.classList.remove("has-overlay");
+  setOverlayOpen(false);
   if (restore !== false) focusReturnedControl(focusTarget);
   returnFocus = null;
 }
