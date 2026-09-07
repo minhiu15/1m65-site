@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 120" fill="none">
+  <defs>
+    <linearGradient id="clip-pink" x1="16" y1="10" x2="52" y2="106" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD4E1"/>
+      <stop offset="0.48" stop-color="#F49AB7"/>
+      <stop offset="1" stop-color="#E9779F"/>
+    </linearGradient>
+  </defs>
+  <path d="M39 37V76C39 83.2 34.4 89 29 89C23.6 89 19 83.2 19 76V35C19 20.6 28 9 39 9C50 9 58 20.6 58 35V77C58 96.3 47 112 32 112C18 112 6 96.3 6 77V46"
+        stroke="#C84F79" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M39 37V76C39 83.2 34.4 89 29 89C23.6 89 19 83.2 19 76V35C19 20.6 28 9 39 9C50 9 58 20.6 58 35V77C58 96.3 47 112 32 112C18 112 6 96.3 6 77V46"
+        stroke="url(#clip-pink)" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M38.8 37V75.5C38.8 80.8 36.2 85.3 32.2 86.7M22.8 25.5C25.8 17.6 32.2 12.2 38.7 12.2C48.2 12.2 55.2 22.4 55.2 35V76.5"
+        stroke="#FFF7FA" stroke-width="1.35" stroke-linecap="round" opacity="0.94"/>
+</svg>

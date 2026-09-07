@@ -9,7 +9,7 @@ const tabDefs = [
   { id: "goi", label: "Shampoo" },
 ];
 
-const SIGNATURE_PLACEHOLDER_IMAGE = "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg";
+const SIGNATURE_PLACEHOLDER_IMAGE = "assets/services/signature-shared/service_photos/nail_design_ve_tay_clean.webp";
 
 const fallbackServices = [
   ["ct-tay", "Cắt da tay", 20000, 20, "Gọn viền móng tay", "assets/services/nail-care/service_photos/cat_da_tay.jpg"],
@@ -124,10 +124,13 @@ function renderPrice(service) {
   return `<span class="sale-badge">-${discount}%</span><span class="price-stack"><del>${money(original)}</del><strong>${money(service.price)}</strong></span>`;
 }
 
-function serviceCard(service, className = "", variant = "standard") {
+function serviceCard(service, className = "", variant = "standard", sequenceIndex = 0, { showPhoto = true } = {}) {
   const featured = className.includes("service-card--featured");
-  const image = variant === "signature" ? SIGNATURE_PLACEHOLDER_IMAGE : service.image;
-  return `<article class="service-card ${className}" data-card-variant="${variant}">
+  const signature = variant === "signature";
+  const image = signature ? SIGNATURE_PLACEHOLDER_IMAGE : service.image;
+  const photoTilt = signature && showPhoto ? (sequenceIndex % 2 === 0 ? "left" : "right") : "";
+  const cardClasses = ["service-card", className, showPhoto ? "" : "service-card--text-only"].filter(Boolean).join(" ");
+  return `<article class="${cardClasses}" data-card-variant="${variant}"${photoTilt ? ` data-photo-tilt="${photoTilt}"` : ""}>
     ${featured ? '<span class="featured-badge"><span>ĐƯỢC CHỌN</span><strong>NHIỀU NHẤT</strong></span>' : ""}
     <div class="service-card-copy">
       <h3>${service.name}</h3>
@@ -135,10 +138,11 @@ function serviceCard(service, className = "", variant = "standard") {
       <div class="service-meta"><span class="service-duration">~${service.durationMinutes} phút</span><span class="service-price">${renderPrice(service)}</span></div>
       <button type="button" data-book-service="${service.id}">Đặt hẹn <span aria-hidden="true">→</span></button>
     </div>
-    <div class="service-photo-wrap">
+    ${showPhoto ? `<div class="service-photo-wrap">
       <img src="${image}" alt="Ảnh mẫu tạm cho ${service.name}" loading="lazy" decoding="async">
+      ${signature ? '<img class="signature-photo-pin" src="assets/services/signature-shared/decor/signature_photo_clip_pink.svg" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
       ${featured ? '<img class="featured-cat-sticker" src="assets/services/signature-shared/cats/featured_photo_cat_sticker.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
-    </div>
+    </div>` : ""}
   </article>`;
 }
 
@@ -161,6 +165,8 @@ function renderSignature() {
     name: "Nail design vẽ tay",
     description: "Mắt mèo, tráng gương, ombre, flash – vẽ tay từng ngón theo mood của bạn.",
   } : null;
+  const topServices = rest.slice(0, 3);
+  const lowerServices = rest.slice(3);
   return `<div class="signature-layout">
     <div class="signature-hero-row">
       <div class="signature-intro">
@@ -172,12 +178,12 @@ function renderSignature() {
           <p>Từng chi tiết nhỏ, tạo nên sự khác biệt lớn ♡</p>
         </div>
       </div>
-      ${featured ? serviceCard(featured, "service-card--featured", "signature") : ""}
+      ${featured ? serviceCard(featured, "service-card--featured", "signature", 0) : ""}
     </div>
-    <div class="signature-grid signature-grid--top">${rest.slice(0, 3).map((item) => serviceCard(item, "", "signature")).join("")}</div>
+    <div class="signature-grid signature-grid--top">${topServices.map((item, index) => serviceCard(item, "", "signature", index + 1)).join("")}</div>
     <div class="signature-lower">
       <img class="signature-outside signature-outside--drink" src="assets/services/signature-shared/doodles/bottom_drink.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
-      ${rest.slice(3).map((item) => serviceCard(item, "", "signature")).join("")}
+      ${lowerServices.map((item, index) => serviceCard(item, "", "signature", index + topServices.length + 1, { showPhoto: item.id !== "goi-duongsinh" })).join("")}
       <img class="signature-outside signature-outside--bath-cat" src="assets/services/signature-shared/cats/shampoo_bath_cat_OPTICAL_V1.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
     </div>
     ${renderServiceNote(nailCareNotes)}
