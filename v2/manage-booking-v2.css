@@ -9,7 +9,9 @@
   --purple-dark:#aa3658;
   --lavender:#e9def7;
   --lavender-soft:#f3ecfa;
-  --pink:#d9476d;
+  --pink:#e85e7c;
+  --pink-strong:#d9476d;
+  --highlight-pink:#f36f9a;
   --pink-soft:#fde8ed;
   --peach:#df8c69;
   --peach-soft:#fce9df;
@@ -30,9 +32,14 @@ body{
 }
 :focus-visible{outline-color:rgba(217,71,109,.38)}
 .brand-paw{background:#fde8ed}.brand-paw svg{fill:#d9476d}
-.brand-copy small,.eyebrow,.card-kicker{color:#b74061}
+.brand-copy small,.eyebrow,.card-kicker{color:var(--pink)}
 .back-link{border-radius:13px;color:#a33758}
-.intro h1{color:#4f382e}.intro h1 span{color:#df5d7f}
+.intro h1{color:#4f382e}.intro h1 span{color:var(--highlight-pink)}
+.inline-heart-icon{display:block;flex:0 0 auto;width:24px;height:24px;object-fit:contain}
+.intro-copy>.eyebrow .inline-heart-icon{width:20px;height:20px}
+.intro-note img{width:116px;height:auto;max-height:78px}
+.support-footer{display:block}
+.support-footer .inline-heart-icon{display:inline-block;width:18px;height:18px;margin-right:5px;vertical-align:-4px}
 .intro-note,.lookup-card,.appointment-list-view,.appointment-view{
   border-color:rgba(151,96,78,.18);
   background:rgba(255,253,250,.9);
@@ -77,6 +84,7 @@ body.is-embedded{background:#fcf3ee}
 :root{
   --button-shell-pill:url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.webp");
   --button-shell-rect:url("assets/gallery/ui_shells/primary_button_rounded_rect_paper_v1.webp");
+  --button-shell-lookup:url("assets/booking/ui_shells/lookup_button_pink_paper_760x216_v1.webp");
 }
 .button.primary{
   border-color:transparent;
@@ -89,6 +97,22 @@ body.is-embedded{background:#fcf3ee}
   box-shadow:none;
 }
 .button.primary:hover:not(:disabled){filter:brightness(1.025) saturate(1.05)}
+#lookup-button{
+  width:190px;
+  height:54px;
+  min-height:54px;
+  background-image:var(--button-shell-lookup);
+  background-size:100% 100%;
+}
+.page-shell #lookup-button.button.primary{
+  background-color:transparent!important;
+  background-image:var(--button-shell-lookup)!important;
+  background-position:center!important;
+  background-size:100% 100%!important;
+  background-repeat:no-repeat!important;
+  box-shadow:none!important;
+}
+@media(max-width:800px){#lookup-button{justify-self:center}}
 /* Keep the white fill solid while a rose shadow draws the outline outside it. */
 .button.primary{
   --pink-button-text-outline:rgba(183,68,101,.78);

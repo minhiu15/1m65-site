@@ -93,25 +93,6 @@ const nailCareNotes = [
   "Mẫu càng chi tiết, tụi mình báo giá trước khi làm.",
   "Tụi mình luôn lắng nghe để mang đến dịch vụ phù hợp nhất với bạn!",
 ];
-const signatureIcons = {
-  "ve": "assets/services/signature-shared/tab_icons/design_flower_inactive.webp",
-  "gel-hn": "assets/services/signature-shared/service_icons/son_gel_han_nhat.webp",
-  "noi-gel": "assets/services/signature-shared/service_icons/noi_mong_dap_gel.webp",
-  "noi-bot": "assets/services/signature-shared/service_icons/noi_mong_dap_bot.webp",
-  "mi-classic": "assets/services/signature-shared/service_icons/noi_mi_classic.webp",
-  "goi-duongsinh": "assets/services/signature-shared/tab_icons/shampoo_cat_inactive.webp",
-};
-const nailCareIcons = {
-  "ct-tay": "assets/services/nail-care/service_icons/cat_da_tay.webp",
-  "ct-chan": "assets/services/nail-care/service_icons/cat_da_chan.webp",
-  "thao-gel": "assets/services/nail-care/service_icons/thao_son_gel.webp",
-  "thao-up": "assets/services/nail-care/service_icons/thao_mong_up_nail_box.webp",
-  "thao-bot": "assets/services/nail-care/service_icons/thao_gel_bot.webp",
-  "noi-up": "assets/services/nail-care/service_icons/noi_mong_up_xgel.webp",
-  "noi-gel": "assets/services/nail-care/service_icons/noi_mong_dap_gel.webp",
-  "noi-bot": "assets/services/nail-care/service_icons/noi_mong_dap_bot.webp",
-};
-
 fallbackServices.forEach((service) => {
   if (!groupDefs.nail.ids.includes(service.id)) return;
   service.description = nailCareDescriptions[service.id] || service.description;
@@ -144,13 +125,11 @@ function renderPrice(service) {
 }
 
 function serviceCard(service, className = "", variant = "standard") {
-  const icon = variant === "signature" ? signatureIcons[service.id] : "";
   const featured = className.includes("service-card--featured");
   const image = variant === "signature" ? SIGNATURE_PLACEHOLDER_IMAGE : service.image;
   return `<article class="service-card ${className}" data-card-variant="${variant}">
     ${featured ? '<span class="featured-badge"><span>ĐƯỢC CHỌN</span><strong>NHIỀU NHẤT</strong></span>' : ""}
     <div class="service-card-copy">
-      ${icon ? `<img class="service-icon" src="${icon}" alt="" aria-hidden="true" decoding="async" loading="lazy">` : ""}
       <h3>${service.name}</h3>
       <p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p>
       <div class="service-meta"><span class="service-duration">~${service.durationMinutes} phút</span><span class="service-price">${renderPrice(service)}</span></div>
@@ -186,10 +165,9 @@ function renderSignature() {
     <div class="signature-hero-row">
       <div class="signature-intro">
         <img class="signature-tape" src="assets/services/signature-shared/decor/top_gingham_tape.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
-        <img class="signature-ref-doodle signature-ref-doodle--heart" src="assets/services/signature-shared/doodles/header_heart_outline.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
         <img class="signature-cat" src="assets/services/signature-shared/cats/signature_raised_paw_OPTICAL_V1.webp" alt="Mèo Nhu Nhi vẫy tay" decoding="async" loading="lazy">
         <div class="signature-copy">
-          <img class="signature-wordmark" src="assets/services/signature-shared/signature_wordmark/SIGNATURE_WORDMARK_UNIFIED_PAPER_V10.webp" alt="Signature" decoding="async" loading="lazy">
+          <img class="signature-wordmark" src="assets/services/signature-shared/signature_wordmark/SIGNATURE_WORDMARK_PASTEL_CROWN_V11.webp" alt="Signature" decoding="async" loading="lazy">
           <span class="signature-ribbon">DỊCH VỤ NỔI BẬT TẠI 1M65 NAIL ROOM</span>
           <p>Từng chi tiết nhỏ, tạo nên sự khác biệt lớn ♡</p>
         </div>
@@ -206,32 +184,32 @@ function renderSignature() {
   </div>`;
 }
 
-function sharedServiceRow(service, index, group) {
+function sharedServiceRow(service) {
   const discount = Number(service.discountPercent || 0);
   const original = Number(service.originalPrice || service.price || 0);
   const hasDiscount = discount > 0 && original > Number(service.price || 0);
-  const icon = nailCareIcons[service.id] || signatureIcons[service.id] || group.accent;
-  return `<article class="shared-service-row" style="--service-row-index:${index}" data-card-variant="shared-list">
+  return `<article class="shared-service-row ${hasDiscount ? "has-sale" : ""}" data-card-variant="shared-list">
     <button class="shared-service-row__booking" type="button" data-book-service="${service.id}" aria-label="Đặt hẹn dịch vụ ${service.name}"><span class="sr-only">Đặt hẹn dịch vụ ${service.name}</span></button>
-    <div class="shared-service-row__icon" aria-hidden="true">
-      <img src="${icon}" alt="" decoding="async" loading="lazy">
-    </div>
     <div class="shared-service-row__copy">
-      <h3>${service.name}</h3>
-      <p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p>
+      <div class="shared-service-row__copy-main">
+        <h3>${service.name}</h3>
+        <p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p>
+      </div>
     </div>
-    <div class="shared-service-row__offer ${hasDiscount ? "" : "is-empty"}" aria-hidden="${hasDiscount ? "false" : "true"}">
-      ${hasDiscount ? `<span>-${discount}%</span>` : ""}
+    <div class="shared-service-row__actions">
+      <div class="shared-service-row__offer-slot" aria-hidden="true">
+        ${hasDiscount ? `<div class="shared-service-row__offer"><span>-${discount}%</span></div>` : ""}
+      </div>
+      <div class="shared-service-row__pricing">
+        ${hasDiscount ? `<del>${money(original)}</del>` : ""}
+        <strong>${money(service.price)}</strong>
+      </div>
+      <span class="shared-service-row__cta" aria-hidden="true">Đặt lịch <span>→</span></span>
     </div>
-    <div class="shared-service-row__pricing">
-      ${hasDiscount ? `<del>${money(original)}</del>` : ""}
-      <strong>${money(service.price)}</strong>
-    </div>
-    <div class="shared-service-row__photo"><img src="${service.image}" alt="${service.name}" loading="lazy" decoding="async"></div>
   </article>`;
 }
 
-function renderSharedGroup(id) {
+function renderSharedGroup(id, animate = false) {
   const group = groupDefs[id];
   const services = group.ids.map(serviceById).filter(Boolean);
   const note = id === "nail" ? nailCareNotes : [
@@ -239,25 +217,25 @@ function renderSharedGroup(id) {
     "Tụi mình luôn báo giá trước khi làm.",
     "Bạn cứ mang ảnh mẫu để được tư vấn sát gu nhất nhé!",
   ];
-  return `<div class="shared-service-layout shared-service-layout--${id}" data-template="shared-service-list" data-service-group="${id}">
+  return `<div class="shared-service-layout shared-service-layout--${id}${animate ? " is-entering" : ""}" data-template="shared-service-list" data-service-group="${id}">
     <header class="shared-service-title">
-      <img class="shared-service-title__tape" src="assets/services/nail-care/decor/header_gingham_tape.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
-      <img class="shared-service-title__cat" src="assets/services/nail-care/cats/header_cat_peeking.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
-      <img class="shared-service-title__heart" src="assets/services/nail-care/doodles/header_heart_bubble.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
+      <div class="shared-service-title__mascot" aria-hidden="true">
+        <img class="shared-service-title__cat" src="assets/services/nail-care/cats/header_cat_peeking.webp" alt="" decoding="async" loading="lazy">
+        <img class="shared-service-title__heart" src="assets/services/nail-care/doodles/header_heart_bubble.webp" alt="" decoding="async" loading="lazy">
+      </div>
       <div class="shared-service-title__paper">
-        <img class="shared-service-title__lavender-tape" src="assets/services/nail-care/decor/header_lavender_tape.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
         <h2>${group.title}</h2>
         <p>${group.note}</p>
       </div>
       <span class="shared-service-title__accent" aria-hidden="true"><img src="${group.accent}" alt="" decoding="async" loading="lazy"></span>
       <img class="shared-service-title__flower" src="assets/services/nail-care/doodles/header_flower.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
     </header>
-    <div class="shared-service-list">${services.map((item, index) => sharedServiceRow(item, index, group)).join("")}</div>
+    <div class="shared-service-list">${services.map((item) => sharedServiceRow(item)).join("")}</div>
     ${renderServiceNote(note)}
   </div>`;
 }
 
-function renderServices() {
+function renderServices({ animateShared = false } = {}) {
   const tabs = document.querySelector("[data-service-tabs]");
   const panel = document.querySelector("[data-service-panel]");
   if (!tabs || !panel) return;
@@ -265,7 +243,7 @@ function renderServices() {
   panel.id = "service-panel";
   panel.setAttribute("role", "tabpanel");
   panel.setAttribute("aria-labelledby", `tab-${state.activeTab}`);
-  panel.innerHTML = state.activeTab === "signature" ? renderSignature() : renderSharedGroup(state.activeTab);
+  panel.innerHTML = state.activeTab === "signature" ? renderSignature() : renderSharedGroup(state.activeTab, animateShared);
 }
 async function loadLiveServices() {
   try {
@@ -317,7 +295,13 @@ function setupInteractions() {
   document.querySelectorAll("[data-close-drawer],[data-drawer-link]").forEach((node) => node.addEventListener("click", closeDrawer));
   document.addEventListener("click", (event) => {
     const tab = event.target.closest("[data-service-tab]");
-    if (tab) { state.activeTab = tab.dataset.serviceTab; renderServices(); return; }
+    if (tab) {
+      const nextTab = tab.dataset.serviceTab;
+      if (nextTab === state.activeTab) return;
+      state.activeTab = nextTab;
+      renderServices({ animateShared: nextTab !== "signature" });
+      return;
+    }
     const booking = event.target.closest("[data-open-booking],[data-book-service]");
     if (booking) document.dispatchEvent(new CustomEvent("1m65:v2:open-booking", { detail: { serviceId: booking.dataset.bookService || "", slot: booking.dataset.prefillSlot || "" } }));
   });

@@ -45,8 +45,9 @@ function stepOne(){
   const cards=category.ids.map(byId).filter(Boolean).map(function(service){
     const selected=state.selected.includes(service.id);
     const discount=Number(service.discountPercent||0);
-    const priceHtml=discount>0?'<span class="sale-badge">-'+discount+'%</span> <del>'+money(service.originalPrice)+'</del> <strong>'+money(service.price)+'</strong>':'<strong>'+money(service.price)+'</strong>';
-    return '<button type="button" class="booking-service-option '+(selected?"is-selected":"")+'" data-booking-service="'+esc(service.id)+'" aria-pressed="'+selected+'"><div><h3>'+esc(service.name)+'</h3><p>'+duration(service)+' phút · '+priceHtml+'</p></div><span class="booking-check" aria-hidden="true">'+(selected?"✓":"")+'</span></button>';
+    const badgeHtml=discount>0?'<span class="sale-badge">-'+discount+'%</span>':'';
+    const priceHtml=discount>0?'<del>'+money(service.originalPrice)+'</del><strong>'+money(service.price)+'</strong>':'<strong>'+money(service.price)+'</strong>';
+    return '<button type="button" class="booking-service-option '+(selected?"is-selected ":"")+(discount>0?"has-sale":"")+'" data-booking-service="'+esc(service.id)+'" aria-pressed="'+selected+'"><div class="booking-service-copy"><h3>'+esc(service.name)+'</h3><p>'+duration(service)+' phút</p></div><span class="booking-service-side"><span class="booking-service-price"><span class="booking-service-offer-slot" aria-hidden="true">'+badgeHtml+'</span><span class="booking-service-price-card">'+priceHtml+'</span></span><span class="booking-check" aria-hidden="true">'+(selected?"✓":"")+'</span></span></button>';
   }).join("");
   const picked=selectedServices().map(function(service){return '<button type="button" data-booking-remove="'+esc(service.id)+'">'+esc(service.name)+' ×</button>';}).join("");
   const total=totals();

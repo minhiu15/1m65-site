@@ -1,4 +1,4 @@
-import "./booking-v2.js";
+import "./booking-v2.js?v=20260906-2";
 
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
