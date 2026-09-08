@@ -8,11 +8,11 @@
   <meta name="description" content="Bản xem trước giao diện mới của 1M65 Nails, Eyelashes, Shampoo.">
   <title>1M65 Nails · V2 Preview</title>
   <link rel="icon" href="../favicon.svg">
-  <link rel="stylesheet" href="styles.css?v=20260907-242">
+  <link rel="stylesheet" href="styles.css?v=20260908-255">
   <script src="../turnstile-config.js?v=20260807a"></script>
   <script src="../turnstile-booking.js?v=20260807a"></script>
-  <script type="module" src="app.js?v=20260907-89"></script>
-  <script type="module" src="experience.js?v=20260906-85"></script>
+  <script type="module" src="app.js?v=20260908-91"></script>
+  <script type="module" src="experience.js?v=20260908-87"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
@@ -281,7 +281,11 @@
           <article class="reviews-stat"><img class="reviews-stat__icon" src="assets/reviews/04_stat_sparkle_LOCKED_CLEAN.webp" alt="" decoding="async" loading="lazy"><div><strong class="reviews-stat__value">Nhiều năm</strong><span class="reviews-stat__label">Đồng hành cùng khách yêu</span></div></article>
         </div>
         <h3 class="reviews-kicker review-list-title">KHÁCH YÊU NÓI GÌ VỀ 1M65</h3>
-        <div class="reviews-grid review-grid" data-review-grid></div>
+        <div class="reviews-carousel">
+          <button class="reviews-nav reviews-nav--prev" type="button" data-review-prev aria-label="Xem đánh giá trước">‹</button>
+          <div class="reviews-grid review-grid" data-review-grid></div>
+          <button class="reviews-nav reviews-nav--next" type="button" data-review-next aria-label="Xem đánh giá tiếp theo">›</button>
+        </div>
         <div class="reviews-bottom" aria-hidden="true">
           <span class="reviews-bottom__thread"></span>
           <img class="paper-doodle paper-doodle--reviews-divider reviews-bottom__flower" src="../doodles/flower.webp" alt="" decoding="async" loading="lazy">
@@ -371,7 +375,6 @@
           <figcaption id="gallery-lightbox-title" data-lightbox-caption></figcaption>
         </figure>
         <button type="button" class="lightbox-nav lightbox-nav--next" data-lightbox-next aria-label="Ảnh tiếp theo">›</button>
-        <button class="button-primary lightbox-book" type="button" data-lightbox-book>Đặt hẹn theo mẫu này</button>
       </div>
     </section>
 

@@ -127,9 +127,13 @@ function renderPrice(service) {
 function serviceCard(service, className = "", variant = "standard", sequenceIndex = 0, { showPhoto = true } = {}) {
   const featured = className.includes("service-card--featured");
   const signature = variant === "signature";
-  const image = signature ? SIGNATURE_PLACEHOLDER_IMAGE : service.image;
-  const photoTilt = signature && showPhoto ? (sequenceIndex % 2 === 0 ? "left" : "right") : "";
-  const cardClasses = ["service-card", className, showPhoto ? "" : "service-card--text-only"].filter(Boolean).join(" ");
+  const spaRelaxation = signature && service.id === "goi-duongsinh";
+  const image = spaRelaxation
+    ? "assets/services/signature-shared/cats/spa_relaxation_cat_original.webp"
+    : (signature ? SIGNATURE_PLACEHOLDER_IMAGE : service.image);
+  const photoTilt = signature && showPhoto && !spaRelaxation ? (sequenceIndex % 2 === 0 ? "left" : "right") : "";
+  const cardClasses = ["service-card", className, spaRelaxation ? "service-card--spa" : "", showPhoto ? "" : "service-card--text-only"].filter(Boolean).join(" ");
+  const photoAlt = spaRelaxation ? "Minh họa mèo thư giãn gội đầu tại spa" : `Ảnh mẫu tạm cho ${service.name}`;
   return `<article class="${cardClasses}" data-card-variant="${variant}"${photoTilt ? ` data-photo-tilt="${photoTilt}"` : ""}>
     ${featured ? '<span class="featured-badge"><span>ĐƯỢC CHỌN</span><strong>NHIỀU NHẤT</strong></span>' : ""}
     <div class="service-card-copy">
@@ -138,9 +142,9 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
       <div class="service-meta"><span class="service-duration">~${service.durationMinutes} phút</span><span class="service-price">${renderPrice(service)}</span></div>
       <button type="button" data-book-service="${service.id}">Đặt hẹn <span aria-hidden="true">→</span></button>
     </div>
-    ${showPhoto ? `<div class="service-photo-wrap">
-      <img src="${image}" alt="Ảnh mẫu tạm cho ${service.name}" loading="lazy" decoding="async">
-      ${signature ? '<img class="signature-photo-pin" src="assets/services/signature-shared/decor/signature_photo_clip_pink.svg" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
+    ${showPhoto ? `<div class="service-photo-wrap${spaRelaxation ? " service-photo-wrap--spa" : ""}">
+      <img src="${image}" alt="${photoAlt}" loading="lazy" decoding="async">
+      ${signature && !spaRelaxation ? '<img class="signature-photo-pin" src="assets/services/signature-shared/decor/signature_photo_clip_pink.svg" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
       ${featured ? '<img class="featured-cat-sticker" src="assets/services/signature-shared/cats/featured_photo_cat_sticker.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
     </div>` : ""}
   </article>`;
@@ -183,8 +187,7 @@ function renderSignature() {
     <div class="signature-grid signature-grid--top">${topServices.map((item, index) => serviceCard(item, "", "signature", index + 1)).join("")}</div>
     <div class="signature-lower">
       <img class="signature-outside signature-outside--drink" src="assets/services/signature-shared/doodles/bottom_drink.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
-      ${lowerServices.map((item, index) => serviceCard(item, "", "signature", index + topServices.length + 1, { showPhoto: item.id !== "goi-duongsinh" })).join("")}
-      <img class="signature-outside signature-outside--bath-cat" src="assets/services/signature-shared/cats/shampoo_bath_cat_OPTICAL_V1.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
+      ${lowerServices.map((item, index) => serviceCard(item, "", "signature", index + topServices.length + 1)).join("")}
     </div>
     ${renderServiceNote(nailCareNotes)}
   </div>`;
@@ -218,26 +221,8 @@ function sharedServiceRow(service) {
 function renderSharedGroup(id, animate = false) {
   const group = groupDefs[id];
   const services = group.ids.map(serviceById).filter(Boolean);
-  const note = id === "nail" ? nailCareNotes : [
-    "Giá có thể thay đổi theo độ dài và tình trạng thực tế.",
-    "Tụi mình luôn báo giá trước khi làm.",
-    "Bạn cứ mang ảnh mẫu để được tư vấn sát gu nhất nhé!",
-  ];
   return `<div class="shared-service-layout shared-service-layout--${id}${animate ? " is-entering" : ""}" data-template="shared-service-list" data-service-group="${id}">
-    <header class="shared-service-title">
-      <div class="shared-service-title__mascot" aria-hidden="true">
-        <img class="shared-service-title__cat" src="assets/services/nail-care/cats/header_cat_peeking.webp" alt="" decoding="async" loading="lazy">
-        <img class="shared-service-title__heart" src="assets/services/nail-care/doodles/header_heart_bubble.webp" alt="" decoding="async" loading="lazy">
-      </div>
-      <div class="shared-service-title__paper">
-        <h2>${group.title}</h2>
-        <p>${group.note}</p>
-      </div>
-      <span class="shared-service-title__accent" aria-hidden="true"><img src="${group.accent}" alt="" decoding="async" loading="lazy"></span>
-      <img class="shared-service-title__flower" src="assets/services/nail-care/doodles/header_flower.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
-    </header>
     <div class="shared-service-list">${services.map((item) => sharedServiceRow(item)).join("")}</div>
-    ${renderServiceNote(note)}
   </div>`;
 }
 

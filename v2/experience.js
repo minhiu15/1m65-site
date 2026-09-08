@@ -34,7 +34,7 @@ const fallbackReviews = [
 let galleryFilter = "all";
 let lightboxIndex = 0;
 let reviewItems = fallbackReviews;
-let reviewIndex = 0;
+let reviewIndex = 1;
 let reviewTimer = 0;
 let reviewWrapTimer = 0;
 let reviewResizeTimer = 0;
@@ -192,7 +192,7 @@ function openLightbox(index, trigger) {
   openModal(document.querySelector("#gallery-lightbox"), trigger, { stackCurrent: Boolean(trigger && trigger.closest("#gallery-modal")) });
 }
 function reviewVisibleCount() {
-  if (innerWidth <= 600) return 1;
+  if (innerWidth <= 600) return 2;
   if (innerWidth <= 1180) return 2;
   return 4;
 }
@@ -207,9 +207,13 @@ function positionReviewCarousel(animate) {
   const card = track && track.querySelector("[data-review-card]");
   if (!track || !card) return;
   const computed = getComputedStyle(track);
-  const gap = parseFloat(computed.columnGap || computed.gap) || 0;
+  const vertical = innerWidth <= 600;
+  const gap = parseFloat((vertical ? computed.rowGap : computed.columnGap) || computed.gap) || 0;
+  const cardRect = card.getBoundingClientRect();
+  const preview = vertical ? parseFloat(getComputedStyle(track.parentElement).getPropertyValue("--review-carousel-preview")) || 0 : 0;
+  const offset = -reviewIndex * ((vertical ? cardRect.height : cardRect.width) + gap) + preview;
   track.classList.toggle("is-snapping", !animate);
-  track.style.transform = "translate3d("+(-reviewIndex*(card.getBoundingClientRect().width+gap))+"px,0,0)";
+  track.style.transform = vertical ? "translate3d(0,"+offset+"px,0)" : "translate3d("+offset+"px,0,0)";
   if (!animate) {
     track.getBoundingClientRect();
     requestAnimationFrame(function(){
@@ -217,17 +221,21 @@ function positionReviewCarousel(animate) {
     });
   }
 }
-function advanceReview() {
+function moveReview(direction) {
   if (reviewItems.length <= reviewVisibleCount()) return;
   clearTimeout(reviewWrapTimer);
-  reviewIndex += 1;
+  reviewIndex += direction;
   positionReviewCarousel(true);
-  if (reviewIndex >= reviewItems.length) {
+  const wrappedIndex = direction > 0 ? 1 : reviewItems.length;
+  if ((direction > 0 && reviewIndex >= reviewItems.length + 1) || (direction < 0 && reviewIndex <= 0)) {
     reviewWrapTimer = setTimeout(function(){
-      reviewIndex = 0;
+      reviewIndex = wrappedIndex;
       positionReviewCarousel(false);
     }, REVIEW_TRANSITION_MS + 40);
   }
+}
+function advanceReview() {
+  moveReview(1);
 }
 function scheduleReviewAutoplay() {
   clearTimeout(reviewTimer);
@@ -257,15 +265,16 @@ function renderReviews(reviews) {
   const grid = document.querySelector("[data-review-grid]");
   if (!grid) return;
   reviewItems = reviews.length ? reviews : fallbackReviews;
-  reviewIndex = 0;
+  reviewIndex = 1;
   clearTimeout(reviewWrapTimer);
   const cloneCount = Math.min(4,reviewItems.length);
+  const leadingClone = reviewCard(reviewItems[reviewItems.length-1],reviewItems.length-1,true);
   const cards = reviewItems.map(function(review,index){return reviewCard(review,index,false);});
   const clones = reviewItems.slice(0,cloneCount).map(function(review,index){return reviewCard(review,index,true);});
   grid.setAttribute("role","region");
   grid.setAttribute("aria-roledescription","carousel");
   grid.setAttribute("aria-label","Đánh giá của khách hàng");
-  grid.innerHTML = '<div class="reviews-track is-snapping" data-review-track>'+cards.concat(clones).join("")+'</div>';
+  grid.innerHTML = '<div class="reviews-track is-snapping" data-review-track>'+[leadingClone].concat(cards,clones).join("")+'</div>';
   setupReviewCarousel(grid);
   requestAnimationFrame(function(){positionReviewCarousel(false);scheduleReviewAutoplay();});
 }
@@ -318,6 +327,8 @@ document.addEventListener("click",function(event){
   const galleryTile=target.closest("[data-gallery-index]");if(galleryTile){openLightbox(Number(galleryTile.dataset.galleryIndex),galleryTile);return;}
   if(target.closest("[data-lightbox-prev]")){updateLightbox(lightboxIndex-1);return;}
   if(target.closest("[data-lightbox-next]")){updateLightbox(lightboxIndex+1);return;}
+  if(target.closest("[data-review-prev]")){moveReview(-1);scheduleReviewAutoplay();return;}
+  if(target.closest("[data-review-next]")){moveReview(1);scheduleReviewAutoplay();return;}
   const galleryBook=target.closest("[data-gallery-book]");if(galleryBook){const origin=rootReturnFocus()||galleryBook;closeModal(document.querySelector("#gallery-modal"),false);window.__v2Booking.open({},origin);return;}
   const lightboxBook=target.closest("[data-lightbox-book]");if(lightboxBook){const origin=rootReturnFocus()||lightboxBook;closeModal(document.querySelector("#gallery-lightbox"),false);window.__v2Booking.open({},origin);return;}
   const faq=target.closest("[data-faq-list] button");if(faq){const expanded=faq.getAttribute("aria-expanded")==="true";faq.setAttribute("aria-expanded",String(!expanded));const answer=faq.closest("article").querySelector(".faq-answer");if(answer)answer.hidden=expanded;return;}
