@@ -20,9 +20,7 @@ const gallery = [
 ["nail","assets/gallery/photos/pure-white.jpg","Pure White"],
 ["nail","assets/gallery/photos/pearl-glow.jpg","Pearl Glow"],
 ["nail","assets/gallery/photos/pink-starlight.jpg","Pink Starlight"],
-["mi","assets/services/signature-shared/service_photos/noi_mi_classic.jpg","Nối mi Classic"],
-["khac","assets/about/photos/salon-corner.jpg","Một góc nhỏ trong tiệm"],
-["khac","assets/about/photos/nail-technician.jpg","Thợ nail tại 1M65"]
+["mi","assets/services/signature-shared/service_photos/noi_mi_classic.jpg","Nối mi Classic"]
 ];
 const fallbackReviews = [
 ["Mình sợ nhất là thợ nói nhiều. Ở đây chị ấy chỉ hỏi một câu rồi im lặng làm suốt hai tiếng. Tuyệt vời.","Thu Hà","Nail Hàn trong veo"],
@@ -31,7 +29,7 @@ const fallbackReviews = [
 ["Gội đầu dưỡng sinh xong mình ngủ quên mất hai mươi phút. Chị Hạnh để yên cho mình ngủ, không đánh thức.","Bảo Trâm","Gội đầu dưỡng sinh"],
 ["Đi nhiều tiệm rồi mới thấy: ở đây người ta hỏi mình muốn gì trước khi cầm cọ lên. Nhỏ thôi mà quý.","Ngọc Ánh","French tip"]
 ];
-let galleryFilter = "all";
+let galleryFilter = "nail";
 let lightboxIndex = 0;
 let reviewItems = fallbackReviews;
 let reviewIndex = 1;
@@ -43,6 +41,7 @@ let reviewInView = true;
 let reviewObserver = null;
 let activeModal = null;
 let returnFocus = null;
+let returnFocusWasPointer = false;
 const modalStack = [];
 let lastInputWasPointer = false;
 let toastTimer = 0;
@@ -53,7 +52,6 @@ const reviewMotion = matchMedia("(prefers-reduced-motion: reduce)");
 document.addEventListener("pointerdown",function(){lastInputWasPointer=true;},true);
 document.addEventListener("keydown",function(){
   lastInputWasPointer=false;
-  document.querySelectorAll(".is-pointer-focus-return").forEach(function(node){node.classList.remove("is-pointer-focus-return");});
 },true);
 
 function esc(value) {
@@ -72,9 +70,9 @@ function setOverlayOpen(open) {
   window.scrollTo(scrollLeft, scrollTop);
   document.documentElement.style.scrollBehavior = previousBehavior;
 }
-function focusReturnedControl(focusTarget) {
+function focusReturnedControl(focusTarget, openedWithPointer) {
   if (!focusTarget || !focusTarget.isConnected) return;
-  if (lastInputWasPointer) {
+  if (openedWithPointer) {
     const focusOwner = focusTarget.closest(".service-card[data-card-variant='signature']");
     const suppressed = [focusTarget, focusOwner].filter(Boolean);
     suppressed.forEach(function(node){node.classList.add("is-pointer-focus-return");});
@@ -90,7 +88,7 @@ function openModal(modal, trigger, options) {
   const stackCurrent = Boolean(options && options.stackCurrent);
   if (activeModal && activeModal !== modal) {
     if (stackCurrent) {
-      modalStack.push({ modal: activeModal, returnFocus: returnFocus });
+      modalStack.push({ modal: activeModal, returnFocus: returnFocus, returnFocusWasPointer: returnFocusWasPointer });
       activeModal.hidden = true;
     } else {
       closeModal(activeModal, false);
@@ -98,6 +96,7 @@ function openModal(modal, trigger, options) {
   }
   activeModal = modal;
   returnFocus = trigger || document.activeElement;
+  returnFocusWasPointer = lastInputWasPointer;
   modal.hidden = false;
   setOverlayOpen(true);
   requestAnimationFrame(function(){(modal.querySelector(".modal-close") || focusables(modal)[0] || modal).focus({ preventScroll: true });});
@@ -108,17 +107,19 @@ function closeModal(modal, restore) {
   target.hidden = true;
   if (target !== activeModal) return;
   const focusTarget = returnFocus;
+  const openedWithPointer = returnFocusWasPointer;
   if (restore !== false && modalStack.length) {
     const galleryIndex = focusTarget && focusTarget.dataset ? focusTarget.dataset.galleryIndex : "";
     const previous = modalStack.pop();
     activeModal = previous.modal;
     returnFocus = previous.returnFocus;
+    returnFocusWasPointer = previous.returnFocusWasPointer;
     activeModal.hidden = false;
     setOverlayOpen(true);
     const restoredFocus = focusTarget && focusTarget.isConnected
       ? focusTarget
       : (galleryIndex ? activeModal.querySelector('[data-gallery-index="'+galleryIndex+'"]') : null);
-    focusReturnedControl(restoredFocus);
+    focusReturnedControl(restoredFocus, openedWithPointer);
     return;
   }
   activeModal = null;
@@ -126,8 +127,9 @@ function closeModal(modal, restore) {
     modalStack.splice(0).forEach(function(entry){entry.modal.hidden = true;});
   }
   setOverlayOpen(false);
-  if (restore !== false) focusReturnedControl(focusTarget);
+  if (restore !== false) focusReturnedControl(focusTarget, openedWithPointer);
   returnFocus = null;
+  returnFocusWasPointer = false;
 }
 function toast(message) {
   const node = document.querySelector("[data-toast]");
@@ -149,7 +151,7 @@ function galleryEmptyState() {
   return '<div class="gallery-empty" role="status"><picture class="gallery-empty__art" aria-hidden="true"><source srcset="assets/gallery/empty/gallery-empty-polaroids.webp" type="image/webp"><img src="assets/gallery/empty/gallery-empty-polaroids.png" alt="" loading="lazy" decoding="async"></picture><h3>Chưa có ảnh ở mục này</h3><p>Tụi mình đang chuẩn bị những khoảnh khắc xinh<br>để chia sẻ cùng bạn. Ghé lại sau nhé ♡</p></div>';
 }
 function filteredGallery() {
-  return gallery.filter(function(item){return galleryFilter === "all" || item[0] === galleryFilter;});
+  return gallery.filter(function(item){return item[0] === galleryFilter;});
 }
 function renderGallery() {
   document.querySelectorAll("[data-gallery-filter],[data-gallery-modal-filter]").forEach(function(button){

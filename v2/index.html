@@ -183,16 +183,13 @@
         <p class="gallery-intro">Những mẫu xinh và khoảnh khắc tụi mình đã làm</p>
         <div class="gallery-content-panel">
           <div class="gallery-filters" role="group" aria-label="Lọc thư viện" data-gallery-filters>
-            <button class="is-active" type="button" data-gallery-filter="all">Tất cả</button>
-            <button type="button" data-gallery-filter="nail">Nail</button>
+            <button class="is-active" type="button" data-gallery-filter="nail">Nail</button>
             <button type="button" data-gallery-filter="mi">Mi</button>
-            <button type="button" data-gallery-filter="goi">Gội</button>
             <button type="button" data-gallery-filter="khac">Khác</button>
           </div>
           <div class="gallery-grid" data-gallery-grid></div>
           <div class="gallery-more-wrap">
             <button class="gallery-more" type="button" data-open-gallery>Xem thêm</button>
-            <p data-gallery-hint>Bấm ảnh để xem lớn ♡</p>
           </div>
         </div>
       </div>
@@ -248,13 +245,15 @@
 
         <div class="about-journey" aria-label="Một buổi ở 1M65">
           <div class="about-journey__heading">
-            <h3>Một buổi ở 1M65 <span aria-hidden="true">♡</span></h3>
+            <img class="about-journey__title-shell" src="assets/about/journey/v5/journey_label_shell_no_text.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
+            <h3>Một buổi ở 1M65</h3>
           </div>
+          <img class="about-journey__microcopy" src="assets/about/journey/v5/journey_microcopy_heart_combined.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
           <div class="about-journey-grid">
-            <article><b>01</b><img src="assets/about/journey/about_journey_01_choose_TEMP_LOCKED.webp" alt="" aria-hidden="true" decoding="async" loading="lazy"><div><h4>Chọn dịch vụ</h4><p>Tư vấn nhẹ nhàng, gợi ý phù hợp với bạn nhất.</p></div></article>
-            <article><b>02</b><img src="assets/about/journey/about_journey_02_care_TEMP_LOCKED.webp" alt="" aria-hidden="true" decoding="async" loading="lazy"><div><h4>Chăm chút tỉ mỉ</h4><p>Từng bước thực hiện cẩn thận với sản phẩm chất lượng và vệ sinh.</p></div></article>
-            <article><b>03</b><img src="assets/about/journey/about_journey_03_relax_TEMP_LOCKED.webp" alt="" aria-hidden="true" decoding="async" loading="lazy"><div><h4>Thư giãn nhẹ nhàng</h4><p>Thả lỏng cơ thể, thưởng thức không gian ấm áp và dễ chịu.</p></div></article>
-            <article><b>04</b><img src="assets/about/journey/about_journey_04_leave_TEMP_LOCKED.webp" alt="" aria-hidden="true" decoding="async" loading="lazy"><div><h4>Rời tiệm xinh hơn</h4><p>Mang theo sự tự tin và năng lượng tích cực cho ngày mới!</p></div></article>
+            <article><b class="sr-only">Bước 01</b><img class="about-journey__badge" src="assets/about/journey/v5/journey_badge_step_01.webp" alt="" aria-hidden="true" decoding="async" loading="lazy"><img src="assets/about/journey/about_journey_01_choose_TEMP_LOCKED.webp" alt="" aria-hidden="true" decoding="async" loading="lazy"><div><h4>Chọn dịch vụ</h4><p>Tư vấn nhẹ nhàng, gợi ý phù hợp với bạn nhất.</p></div><span class="about-journey__connector" aria-hidden="true"></span></article>
+            <article><b class="sr-only">Bước 02</b><img class="about-journey__badge" src="assets/about/journey/v5/journey_badge_step_02.webp" alt="" aria-hidden="true" decoding="async" loading="lazy"><img src="assets/about/journey/about_journey_02_care_TEMP_LOCKED.webp" alt="" aria-hidden="true" decoding="async" loading="lazy"><div><h4>Chăm chút tỉ mỉ</h4><p>Từng bước thực hiện cẩn thận với sản phẩm chất lượng và vệ sinh.</p></div><span class="about-journey__connector" aria-hidden="true"></span></article>
+            <article><b class="sr-only">Bước 03</b><img class="about-journey__badge" src="assets/about/journey/v5/journey_badge_step_03.webp" alt="" aria-hidden="true" decoding="async" loading="lazy"><img src="assets/about/journey/about_journey_03_relax_TEMP_LOCKED.webp" alt="" aria-hidden="true" decoding="async" loading="lazy"><div><h4>Thư giãn nhẹ nhàng</h4><p>Thả lỏng cơ thể, thưởng thức không gian ấm áp và dễ chịu.</p></div><span class="about-journey__connector" aria-hidden="true"></span></article>
+            <article><b class="sr-only">Bước 04</b><img class="about-journey__badge" src="assets/about/journey/v5/journey_badge_step_04.webp" alt="" aria-hidden="true" decoding="async" loading="lazy"><img src="assets/about/journey/about_journey_04_leave_TEMP_LOCKED.webp" alt="" aria-hidden="true" decoding="async" loading="lazy"><div><h4>Rời tiệm xinh hơn</h4><p>Mang theo sự tự tin và năng lượng tích cực cho ngày mới!</p></div></article>
           </div>
         </div>
       </div>
@@ -354,10 +353,8 @@
           <button type="button" class="modal-close" data-close-modal aria-label="Đóng thư viện">×</button>
         </header>
         <div class="gallery-filters gallery-modal-filters" role="group" aria-label="Lọc thư viện đầy đủ" data-gallery-modal-filters>
-          <button class="is-active" type="button" data-gallery-modal-filter="all">Tất cả</button>
-          <button type="button" data-gallery-modal-filter="nail">Nail</button>
+          <button class="is-active" type="button" data-gallery-modal-filter="nail">Nail</button>
           <button type="button" data-gallery-modal-filter="mi">Mi</button>
-          <button type="button" data-gallery-modal-filter="goi">Gội</button>
           <button type="button" data-gallery-modal-filter="khac">Khác</button>
         </div>
         <div class="gallery-modal-grid" data-gallery-modal-grid></div>
