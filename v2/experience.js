@@ -141,6 +141,117 @@ function toast(message) {
 }
 window.__v2Experience = { openModal: openModal, closeModal: closeModal, toast: toast, esc: esc };
 
+function setupPawCursor() {
+  const finePointer = matchMedia("(pointer: fine)");
+  if (!finePointer.matches) return;
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  const clickLayer = document.createElement("div");
+  const cursor = document.createElement("div");
+  const state = {
+    x: innerWidth / 2,
+    y: innerHeight / 2,
+    targetX: innerWidth / 2,
+    targetY: innerHeight / 2,
+    rotation: 0,
+    scale: 1,
+    hover: 0,
+    press: 0,
+  };
+  let seen = false;
+
+  clickLayer.className = "paw-click-layer";
+  clickLayer.setAttribute("aria-hidden", "true");
+  cursor.className = "paw-cursor";
+  cursor.dataset.pawCursor = "";
+  cursor.setAttribute("aria-hidden", "true");
+  cursor.innerHTML = '<img src="assets/ui/cat_paw_cursor_upright.webp" alt="" decoding="async">';
+  document.body.append(clickLayer, cursor);
+  document.documentElement.classList.add("paw-cursor-active");
+
+  function isPointerInteraction(event) {
+    return event.pointerType !== "touch";
+  }
+
+  function setHoverTarget(target) {
+    state.hover = target instanceof Element && Boolean(target.closest("a,button,input,select,textarea,[role='button'],[role='tab'],[tabindex]:not([tabindex='-1'])")) ? 1 : 0;
+  }
+
+  function addClickFeedback(x, y) {
+    const ring = document.createElement("span");
+    ring.className = "paw-click-ring";
+    ring.dataset.pawClickRing = "";
+    ring.style.left = x + "px";
+    ring.style.top = y + "px";
+    clickLayer.append(ring);
+    setTimeout(function(){ring.remove();}, reducedMotion.matches ? 180 : 560);
+
+    if (reducedMotion.matches) return;
+    const colors = ["#F5C6D7", "#DDD4F3", "#FCEEE6", "#8A66D8", "#FCE4ED"];
+    for (let index = 0; index < 7; index += 1) {
+      const angle = Math.PI * 2 * index / 7 + Math.random();
+      const distance = 30 + Math.random() * 42;
+      const size = 5 + Math.random() * 6;
+      const particle = document.createElement("span");
+      particle.className = "paw-click-particle";
+      particle.dataset.pawClickParticle = "";
+      particle.style.left = x - size / 2 + "px";
+      particle.style.top = y - size / 2 + "px";
+      particle.style.width = size + "px";
+      particle.style.height = size + "px";
+      particle.style.background = colors[index % colors.length];
+      particle.style.setProperty("--dx", Math.cos(angle) * distance + "px");
+      particle.style.setProperty("--dy", Math.sin(angle) * distance - 16 + "px");
+      clickLayer.append(particle);
+      setTimeout(function(){particle.remove();}, 820);
+    }
+  }
+
+  addEventListener("pointermove", function(event){
+    if (!isPointerInteraction(event)) return;
+    state.targetX = event.clientX;
+    state.targetY = event.clientY;
+    if (!seen) {
+      seen = true;
+      state.x = event.clientX;
+      state.y = event.clientY;
+      cursor.style.opacity = "1";
+    }
+    setHoverTarget(event.target);
+  }, { passive: true });
+  addEventListener("pointerdown", function(event){
+    if (!isPointerInteraction(event) || event.button !== 0) return;
+    state.press = 1;
+    cursor.classList.add("is-pressed");
+    addClickFeedback(event.clientX, event.clientY);
+  }, { passive: true });
+  addEventListener("pointerup", function(event){
+    if (!isPointerInteraction(event)) return;
+    state.press = 0;
+    cursor.classList.remove("is-pressed");
+  }, { passive: true });
+  addEventListener("blur", function(){state.press = 0;cursor.classList.remove("is-pressed");});
+  document.addEventListener("mouseleave", function(){cursor.style.opacity = "0";});
+
+  function tick() {
+    const nextX = state.targetX;
+    const nextY = state.targetY;
+    const velocityX = nextX - state.x;
+    state.x = nextX;
+    state.y = nextY;
+
+    if (reducedMotion.matches) {
+      state.rotation = 0;
+      state.scale = state.press ? .92 : 1;
+    } else {
+      state.rotation += (Math.max(-15, Math.min(15, velocityX * .6)) - state.rotation) * .14;
+      state.scale += ((state.hover ? 1.3 : 1) * (state.press ? .8 : 1) - state.scale) * .2;
+    }
+    cursor.style.transform = "translate3d(" + state.x + "px," + state.y + "px,0) rotate(" + state.rotation + "deg) scale(" + state.scale + "," + state.scale + ")";
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
 function initialGalleryCount() {
   return matchMedia("(max-width: 600px)").matches ? 6 : 10;
 }
@@ -353,6 +464,7 @@ addEventListener("resize",function(){
 });
 document.addEventListener("visibilitychange",scheduleReviewAutoplay);
 if (reviewMotion.addEventListener) reviewMotion.addEventListener("change",scheduleReviewAutoplay);
+setupPawCursor();
 renderGallery();
 loadReviews();
 loadHomeAvailability();
