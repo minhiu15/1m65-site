@@ -214,8 +214,8 @@ function setupPawCursor() {
       seen = true;
       state.x = event.clientX;
       state.y = event.clientY;
-      cursor.style.opacity = "1";
     }
+    cursor.style.opacity = "1";
     setHoverTarget(event.target);
   }, { passive: true });
   addEventListener("pointerdown", function(event){

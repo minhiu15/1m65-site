@@ -134,7 +134,7 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
   const photoTilt = signature && showPhoto && !spaRelaxation ? (sequenceIndex % 2 === 0 ? "left" : "right") : "";
   const cardClasses = ["service-card", className, spaRelaxation ? "service-card--spa" : "", showPhoto ? "" : "service-card--text-only"].filter(Boolean).join(" ");
   const photoAlt = spaRelaxation ? "Minh họa mèo thư giãn gội đầu tại spa" : `Ảnh mẫu tạm cho ${service.name}`;
-  return `<article class="${cardClasses}" data-card-variant="${variant}"${photoTilt ? ` data-photo-tilt="${photoTilt}"` : ""}>
+  return `<article class="${cardClasses}" data-card-variant="${variant}" data-service-id="${service.id}"${photoTilt ? ` data-photo-tilt="${photoTilt}"` : ""}>
     ${featured ? '<span class="featured-badge"><span>ĐƯỢC CHỌN</span><strong>NHIỀU NHẤT</strong></span>' : ""}
     <div class="service-card-copy">
       <h3>${service.name}</h3>
@@ -169,8 +169,9 @@ function renderSignature() {
     name: "Nail design vẽ tay",
     description: "Mắt mèo, tráng gương, ombre, flash – vẽ tay từng ngón theo mood của bạn.",
   } : null;
-  const topServices = rest.slice(0, 3);
-  const lowerServices = rest.slice(3);
+  const topServices = rest.slice(0, 2);
+  const lowerServices = rest.slice(2, 4);
+  const spaServices = rest.slice(4);
   return `<div class="signature-layout">
     <div class="signature-hero-row">
       <div class="signature-intro">
@@ -184,10 +185,15 @@ function renderSignature() {
       </div>
       ${featured ? serviceCard(featured, "service-card--featured", "signature", 0) : ""}
     </div>
-    <div class="signature-grid signature-grid--top">${topServices.map((item, index) => serviceCard(item, "", "signature", index + 1)).join("")}</div>
-    <div class="signature-lower">
-      <img class="signature-outside signature-outside--drink" src="assets/services/signature-shared/doodles/bottom_drink.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
-      ${lowerServices.map((item, index) => serviceCard(item, "", "signature", index + topServices.length + 1)).join("")}
+    <div class="signature-service-groups">
+      <div class="signature-grid signature-grid--top">${topServices.map((item, index) => serviceCard(item, "", "signature", index + 1)).join("")}</div>
+      <div class="signature-lower">
+        <img class="signature-outside signature-outside--drink" src="assets/services/signature-shared/doodles/bottom_drink.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
+        ${lowerServices.map((item, index) => serviceCard(item, "", "signature", index + topServices.length + 1)).join("")}
+      </div>
+      <div class="signature-spa-row">
+        ${spaServices.map((item, index) => serviceCard(item, "", "signature", index + topServices.length + lowerServices.length + 1)).join("")}
+      </div>
     </div>
     ${renderServiceNote(nailCareNotes)}
   </div>`;

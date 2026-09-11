@@ -2898,6 +2898,14 @@ main,
 
 .signature-lower .service-card { min-height: var(--signature-card-height); }
 
+.signature-spa-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin-top: 18px;
+}
+
+.signature-spa-row .service-card { min-height: var(--signature-card-height); }
+
 .signature-outside {
   width: 100%;
   height: auto;
@@ -2910,8 +2918,17 @@ main,
 .signature-outside--bath-cat { align-self: end; transform: translateY(4px); }
 
 @media (min-width: 1181px) {
+  .signature-layout {
+    --signature-two-column-card-width: min(620px, calc((100% - 16px) / 2));
+  }
+
   .service-card--featured[data-card-variant="signature"] {
     align-self: end;
+  }
+
+  .signature-grid--top {
+    display: flex;
+    justify-content: center;
   }
 
   .signature-lower {
@@ -2921,10 +2938,22 @@ main,
     gap: 16px;
   }
 
+  .signature-grid--top .service-card,
   .signature-lower .service-card {
     z-index: 1;
-    flex: 0 0 calc((100% - 32px) / 3);
-    width: calc((100% - 32px) / 3);
+    flex: 0 0 var(--signature-two-column-card-width);
+    width: var(--signature-two-column-card-width);
+  }
+
+  .signature-spa-row {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .signature-spa-row .service-card {
+    flex: 0 0 var(--signature-two-column-card-width);
+    width: var(--signature-two-column-card-width);
   }
 
   .signature-lower .signature-outside {
@@ -2935,6 +2964,32 @@ main,
 
   .signature-outside--drink { left: 0; width: 84px; }
   .signature-outside--bath-cat { right: 0; width: 118px; }
+}
+
+@media (min-width: 1501px) {
+  .signature-service-groups {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 18px 16px;
+    margin-top: 18px;
+  }
+
+  .signature-service-groups > :is(.signature-grid--top, .signature-lower, .signature-spa-row) {
+    display: contents;
+  }
+
+  .signature-service-groups .service-card {
+    width: auto;
+    min-width: 0;
+    flex: none;
+  }
+
+  .signature-service-groups [data-service-id="gel-hn"] { grid-area: 1 / 1 / 2 / 3; }
+  .signature-service-groups [data-service-id="noi-gel"] { grid-area: 1 / 3 / 2 / 5; }
+  .signature-service-groups [data-service-id="noi-bot"] { grid-area: 1 / 5 / 2 / 7; }
+  .signature-service-groups [data-service-id="mi-classic"] { grid-area: 2 / 2 / 3 / 4; }
+  .signature-service-groups [data-service-id="goi-duongsinh"] { grid-area: 2 / 4 / 3 / 6; }
 }
 
 .signature-layout > .service-note { margin-top: 22px; }
@@ -2954,12 +3009,16 @@ main,
   .service-card--featured[data-card-variant="signature"] .service-photo-wrap > img:first-child { min-height: 160px; }
 
   .signature-grid--top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .signature-grid--top .service-card:last-child { grid-column: 1 / -1; }
   .signature-lower { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .signature-outside { display: none; }
 }
 
 @media (max-width: 900px) {
+  .signature-grid--top,
+  .signature-lower {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .service-tabs {
     display: flex;
     min-height: 76px;
@@ -5189,8 +5248,13 @@ main,
 .about-journey-grid .about-journey__badge {
   position: absolute;
   z-index: 3;
-  top: calc(clamp(16px, 1.25vw, 21px) * -1 - 6px);
-  left: calc(clamp(14px, 1.05vw, 18px) * -1 - 6px);
+  top: -5px;
+  right: -5px;
+  left: auto;
+  grid-column: auto;
+  grid-row: auto;
+  align-self: auto;
+  justify-self: auto;
   display: block;
   width: clamp(52px, 4vw, 72px);
   height: auto;
@@ -5216,6 +5280,7 @@ main,
   align-self: start;
   width: min(100%, 230px);
   min-width: 0;
+  transform: translateY(5px);
 }
 
 .about-journey-grid h4 {
@@ -5238,9 +5303,9 @@ main,
 }
 
 .about-journey-grid p {
-  margin: 7px auto 0;
+  margin: 10px auto 0;
   color: #5a3a36;
-  font: 600 clamp(10.5px, .72vw, 12.5px)/1.42 var(--font-signature-body);
+  font: 600 clamp(11.5px, .78vw, 13.5px)/1.42 var(--font-signature-body);
 }
 
 .about-journey__connector {
@@ -5264,18 +5329,20 @@ main,
 
 .about-journey__connector::after { content: none; }
 
+@media (min-width: 1181px) {
+  .about-journey > .about-journey__heading { top: -5px; }
+  .about-journey > .about-journey__microcopy { transform: translateY(-5px); }
+}
+
 @media (max-width: 1180px) {
   .about-journey {
-    width: 100%;
+    width: calc(100% - 20px);
+    margin-inline: auto;
     margin-top: 72px;
     padding: 76px 22px;
   }
   .about-journey > .about-journey__heading { left: -4px; width: min(286px, 38vw); }
-  .about-journey > .about-journey__microcopy {
-    top: -50px;
-    left: calc(-4px + min(286px, 38vw) + 10px);
-    width: min(200px, 23vw);
-  }
+  .about-journey > .about-journey__microcopy { display: none; }
   .about-journey > .about-journey-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px 20px;
@@ -5285,15 +5352,35 @@ main,
     width: min(100%, 340px);
     grid-template-rows: minmax(112px, 1.05fr) minmax(0, .95fr);
   }
+  .about-journey-grid article:nth-child(odd) .about-journey__badge { right: auto; left: -5px; }
+  .about-journey-grid article:nth-child(even) .about-journey__badge { right: -5px; left: auto; }
   .about-journey-grid article > img:not(.about-journey__badge) { width: clamp(104px, 15vw, 136px); height: clamp(104px, 15vw, 136px); }
   .about-journey__connector { display: none; }
+}
+
+@media (min-width: 901px) and (max-width: 1024px) {
+  .about-journey { padding: 52px 22px; }
+  .about-journey > .about-journey-grid { gap: 20px; }
+  .about-journey-grid article {
+    width: 100%;
+    height: clamp(306px, 34vw, 348px);
+    aspect-ratio: auto;
+    grid-template-rows: auto auto;
+    align-content: center;
+    gap: 10px;
+    padding: 18px;
+  }
+  .about-journey-grid article > div {
+    align-self: center;
+    transform: none;
+  }
 }
 
 @media (max-width: 600px) {
   .about-journey {
     width: 100%;
     margin-top: 56px;
-    padding: 62px 12px;
+    padding: 52px 12px;
   }
   .about-journey::before {
     inset: -5px 0;
@@ -5302,11 +5389,10 @@ main,
   .about-journey::after { inset: 2px 7px; border-radius: 23px; }
   .about-journey > .about-journey__heading {
     left: 50%;
-    width: min(220px, 68vw);
-    transform: translate(-50%, -40%) rotate(-1.1deg);
+    width: min(232px, 72vw);
+    transform: translate(-50%, -50%) rotate(-1.1deg);
   }
-  .about-journey h3 { font-size: clamp(15px, 4.5vw, 18px); }
-  .about-journey > .about-journey__microcopy { display: none; }
+  .about-journey h3 { font-size: clamp(16px, 4.7vw, 19px); }
   .about-journey > .about-journey-grid {
     --journey-mobile-column-gap: 24px;
     --journey-mobile-row-gap: 24px;
@@ -5325,26 +5411,30 @@ main,
   .about-journey-grid .about-journey__badge {
     top: -10px;
     left: -9px;
+    right: auto;
     grid-column: auto;
     grid-row: auto;
     align-self: auto;
     justify-self: auto;
     width: 44px;
   }
+  .about-journey-grid article:nth-child(odd) .about-journey__badge { right: auto; left: -9px; }
+  .about-journey-grid article:nth-child(even) .about-journey__badge { right: -9px; left: auto; }
   .about-journey-grid article > img:not(.about-journey__badge) { width: 64px; height: 64px; }
   .about-journey-grid article > div {
     align-self: start;
     width: min(100%, 142px);
     margin-bottom: 0;
+    transform: translateY(-1px);
   }
   .about-journey-grid h4 { margin-top: 0; padding: 4px 5px; font-size: clamp(10px, 3vw, 11.5px); }
-  .about-journey-grid p { margin-top: 7px; font-size: clamp(8.5px, 2.2vw, 9.5px); line-height: 1.35; }
+  .about-journey-grid p { margin-top: 9px; font-size: clamp(9.5px, 2.35vw, 10.5px); line-height: 1.26; }
   .about-journey-grid article:nth-child(1) { grid-column: 1; grid-row: 1; }
   .about-journey-grid article:nth-child(2) { grid-column: 2; grid-row: 1; }
-  .about-journey-grid article:nth-child(3) { grid-column: 2; grid-row: 2; }
-  .about-journey-grid article:nth-child(4) { grid-column: 1; grid-row: 2; }
+  .about-journey-grid article:nth-child(3) { grid-column: 1; grid-row: 2; }
+  .about-journey-grid article:nth-child(4) { grid-column: 2; grid-row: 2; }
   .about-journey__connector {
-    display: grid;
+    display: none;
     width: 72px;
     height: auto;
   }
@@ -6374,8 +6464,12 @@ main,
 
 /* The supplied spa scene is an illustration, not a pinned nail photo. */
 .service-card[data-card-variant="signature"].service-card--spa {
-  grid-template-columns: minmax(0, 1fr) minmax(150px, 47%);
+  grid-template-columns: minmax(0, 1fr) minmax(150px, 48%);
 }
+
+.service-card[data-card-variant="signature"][data-service-id="noi-bot"] { background: var(--pastel-lavender); }
+.service-card[data-card-variant="signature"][data-service-id="mi-classic"] { background: var(--pastel-peach); }
+.service-card[data-card-variant="signature"][data-service-id="goi-duongsinh"] { background: var(--pastel-lavender); }
 
 .service-card[data-card-variant="signature"] .service-photo-wrap--spa {
   isolation: auto;
