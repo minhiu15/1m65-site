@@ -759,7 +759,8 @@ main,
   }
   .drawer-head{margin-bottom:8px;padding-inline:4px}.drawer-head strong{color:var(--pink-strong);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
   .drawer-panel>a{min-height:56px;padding-inline:20px;border-radius:20px;background:#fff}
-  .drawer-book{margin-top:8px}
+  /* Fixed 4:1 size so the paper shell never stretches with the drawer width. */
+  .drawer-book{align-self:center;width:240px;aspect-ratio:4/1;margin-top:8px}
 }
 @keyframes drawer-up{from{transform:translateY(100%)}to{transform:none}}
 @media(max-width:420px){
@@ -6539,7 +6540,6 @@ html.paw-cursor-active * {
   z-index: 2147483647;
   opacity: 0;
   pointer-events: none;
-  will-change: transform;
 }
 
 .paw-cursor img {

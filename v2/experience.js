@@ -244,7 +244,7 @@ function setupPawCursor() {
       state.scale = state.press ? .92 : 1;
     } else {
       state.rotation += (Math.max(-15, Math.min(15, velocityX * .6)) - state.rotation) * .14;
-      state.scale += ((state.hover ? 1.3 : 1) * (state.press ? .8 : 1) - state.scale) * .2;
+      state.scale += ((state.hover ? 1.12 : 1) * (state.press ? .8 : 1) - state.scale) * .2;
     }
     cursor.style.transform = "translate3d(" + state.x + "px," + state.y + "px,0) rotate(" + state.rotation + "deg) scale(" + state.scale + "," + state.scale + ")";
     requestAnimationFrame(tick);
