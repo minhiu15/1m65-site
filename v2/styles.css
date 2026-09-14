@@ -6154,6 +6154,30 @@ main,
 }
 
 @media (max-width: 600px) {
+  .gallery-filters {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+    justify-content: stretch;
+    gap: 8px;
+    margin-inline: 0;
+    overflow: visible;
+  }
+
+  .gallery-filters button {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    min-height: clamp(48px, 11vw, 58px);
+    box-sizing: border-box;
+    padding-inline: 6px;
+  }
+
+  .gallery-modal-filters {
+    flex: 0 0 auto;
+    margin: 12px 16px 6px;
+  }
+
   .home-actions {
     --paired-action-gap: 9px;
     width: 100%;
@@ -6313,6 +6337,35 @@ main,
 @media (min-width: 901px) {
   .booking-service-copy h3 {
     font-size: clamp(18px, 1.2vw, 20px);
+  }
+
+  .booking-service-price { position: relative; }
+
+  .booking-service-offer-slot {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    flex: none;
+    margin-right: 0;
+    transform: translate(12px, -12px);
+  }
+
+  .booking-service-price .sale-badge {
+    width: 46px;
+    min-height: 33px;
+    padding: 4px;
+    border-radius: 11px;
+    font-size: 13px;
+    transform: rotate(5deg);
+  }
+
+  .booking-service-price .sale-badge::after {
+    top: -14px;
+    right: 0;
+    width: 18px;
+    height: 17px;
+    transform: translateX(14px);
   }
 }
 
@@ -6492,6 +6545,23 @@ html.paw-cursor-active * {
   transform: scaleY(.86);
 }
 
+.paw-touch-stamp {
+  position: fixed;
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  pointer-events: none;
+  animation: pawTouchStamp .58s cubic-bezier(.16, 1, .3, 1) forwards;
+}
+
+.paw-touch-stamp img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 1px rgba(255,255,255,.98)) drop-shadow(0 4px 8px rgba(111,54,35,.34));
+}
+
 .paw-click-layer {
   position: fixed;
   inset: 0;
@@ -6525,6 +6595,13 @@ html.paw-cursor-active * {
   100% { opacity: 0; transform: translate(var(--dx),var(--dy)) scale(.15) rotate(150deg); }
 }
 
+@keyframes pawTouchStamp {
+  0% { opacity: 0; transform: translate(-50%,-50%) rotate(-8deg) scale(.62); }
+  28% { opacity: 1; transform: translate(-50%,-50%) rotate(-8deg) scale(1.06,.86); }
+  58% { opacity: 1; transform: translate(-50%,-50%) rotate(-5deg) scale(1); }
+  100% { opacity: 0; transform: translate(-50%,-65%) rotate(-2deg) scale(1.08); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .paw-click-ring {
     animation: pawTapRingReduced .16s ease-out forwards;
@@ -6533,10 +6610,19 @@ html.paw-cursor-active * {
   .paw-click-particle {
     display: none;
   }
+
+  .paw-touch-stamp {
+    animation: pawTouchStampReduced .16s ease-out forwards;
+  }
 }
 
 @keyframes pawTapRingReduced {
   from { opacity: .5; transform: translate(-50%,-50%) scale(.82); }
+  to { opacity: 0; transform: translate(-50%,-50%) scale(1); }
+}
+
+@keyframes pawTouchStampReduced {
+  from { opacity: .75; transform: translate(-50%,-50%) scale(.92); }
   to { opacity: 0; transform: translate(-50%,-50%) scale(1); }
 }
 
@@ -6739,28 +6825,37 @@ html.paw-cursor-active * {
   filter: drop-shadow(0 1px 0 rgba(255, 255, 255, .92));
 }
 
-/* The map is a static preview: shift it up-left and crop its embedded utility row. */
-.footer-map__card iframe {
+/* Leaflet owns the map surface so its marker stays attached to the salon coordinate. */
+.footer-map__live {
   position: absolute;
-  top: -52px;
-  left: -52px;
+  inset: 0;
   z-index: 0;
   display: block;
-  width: calc(100% + 52px);
-  height: calc(100% + 92px);
+  width: 100%;
+  height: 100%;
   border: 0;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: grab;
   filter: saturate(.72) hue-rotate(-8deg) brightness(1.03);
 }
 
-/* Pin tip sits on the map centre, which the 52px shift moves 26px up-left of the card centre. */
+.footer-map__live:active { cursor: grabbing; }
+.footer-map__geo-marker {
+  width: 0 !important;
+  height: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  pointer-events: none !important;
+}
+
+/* The pin tip is the Leaflet anchor; the whole label remains a decorative hit-through layer. */
 .footer-map__pin {
   position: absolute;
   z-index: 3;
-  left: calc(50% - 26px);
-  top: calc(50% - 26px);
+  left: 0;
+  top: 0;
   width: clamp(116px, 7.6vw, 149px);
-  transform: translate(-15%, -88%);
+  transform: translate(-18%, -100%);
   pointer-events: none;
 }
 

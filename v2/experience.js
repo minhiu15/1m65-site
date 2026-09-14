@@ -143,40 +143,27 @@ window.__v2Experience = { openModal: openModal, closeModal: closeModal, toast: t
 
 function setupPawCursor() {
   const finePointer = matchMedia("(pointer: fine)");
-  if (!finePointer.matches) return;
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   const clickLayer = document.createElement("div");
-  const cursor = document.createElement("div");
-  const state = {
-    x: innerWidth / 2,
-    y: innerHeight / 2,
-    targetX: innerWidth / 2,
-    targetY: innerHeight / 2,
-    rotation: 0,
-    scale: 1,
-    hover: 0,
-    press: 0,
-  };
-  let seen = false;
+  const pawArtwork = "assets/ui/cat_paw_cursor_upright.webp";
 
   clickLayer.className = "paw-click-layer";
   clickLayer.setAttribute("aria-hidden", "true");
-  cursor.className = "paw-cursor";
-  cursor.dataset.pawCursor = "";
-  cursor.setAttribute("aria-hidden", "true");
-  cursor.innerHTML = '<img src="assets/ui/cat_paw_cursor_upright.webp" alt="" decoding="async">';
-  document.body.append(clickLayer, cursor);
-  document.documentElement.classList.add("paw-cursor-active");
+  document.body.append(clickLayer);
 
-  function isPointerInteraction(event) {
-    return event.pointerType !== "touch";
+  function addTouchStamp(x, y) {
+    const stamp = document.createElement("span");
+    stamp.className = "paw-touch-stamp";
+    stamp.dataset.pawTouchStamp = "";
+    stamp.style.left = x + "px";
+    stamp.style.top = y + "px";
+    stamp.innerHTML = '<img src="' + pawArtwork + '" alt="" decoding="async">';
+    clickLayer.append(stamp);
+    setTimeout(function(){stamp.remove();}, reducedMotion.matches ? 180 : 620);
   }
 
-  function setHoverTarget(target) {
-    state.hover = target instanceof Element && Boolean(target.closest("a,button,input,select,textarea,[role='button'],[role='tab'],[tabindex]:not([tabindex='-1'])")) ? 1 : 0;
-  }
-
-  function addClickFeedback(x, y) {
+  function addClickFeedback(x, y, showTouchStamp) {
+    if (showTouchStamp) addTouchStamp(x, y);
     const ring = document.createElement("span");
     ring.className = "paw-click-ring";
     ring.dataset.pawClickRing = "";
@@ -204,6 +191,42 @@ function setupPawCursor() {
       clickLayer.append(particle);
       setTimeout(function(){particle.remove();}, 820);
     }
+  }
+
+  if (!finePointer.matches) {
+    addEventListener("pointerdown", function(event){
+      if (event.pointerType !== "touch" || event.button !== 0) return;
+      addClickFeedback(event.clientX, event.clientY, true);
+    }, { passive: true });
+    return;
+  }
+
+  const cursor = document.createElement("div");
+  const state = {
+    x: innerWidth / 2,
+    y: innerHeight / 2,
+    targetX: innerWidth / 2,
+    targetY: innerHeight / 2,
+    rotation: 0,
+    scale: 1,
+    hover: 0,
+    press: 0,
+  };
+  let seen = false;
+
+  cursor.className = "paw-cursor";
+  cursor.dataset.pawCursor = "";
+  cursor.setAttribute("aria-hidden", "true");
+  cursor.innerHTML = '<img src="' + pawArtwork + '" alt="" decoding="async">';
+  document.body.append(cursor);
+  document.documentElement.classList.add("paw-cursor-active");
+
+  function isPointerInteraction(event) {
+    return event.pointerType !== "touch";
+  }
+
+  function setHoverTarget(target) {
+    state.hover = target instanceof Element && Boolean(target.closest("a,button,input,select,textarea,[role='button'],[role='tab'],[tabindex]:not([tabindex='-1'])")) ? 1 : 0;
   }
 
   addEventListener("pointermove", function(event){
@@ -464,6 +487,7 @@ addEventListener("resize",function(){
 });
 document.addEventListener("visibilitychange",scheduleReviewAutoplay);
 if (reviewMotion.addEventListener) reviewMotion.addEventListener("change",scheduleReviewAutoplay);
+window.init1m65FooterMap?.(document.querySelector("[data-footer-map]"));
 setupPawCursor();
 renderGallery();
 loadReviews();

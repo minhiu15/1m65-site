@@ -8,11 +8,14 @@
   <meta name="description" content="Bản xem trước giao diện mới của 1M65 Nails, Eyelashes, Shampoo.">
   <title>1M65 Nails · V2 Preview</title>
   <link rel="icon" href="../favicon.svg">
-  <link rel="stylesheet" href="styles.css?v=20260912-281">
+  <link rel="stylesheet" href="../leaflet.css?v=1.9.4">
+  <link rel="stylesheet" href="styles.css?v=20260914-288">
   <script src="../turnstile-config.js?v=20260807a"></script>
   <script src="../turnstile-booking.js?v=20260807a"></script>
+  <script defer src="../leaflet.js?v=1.9.4"></script>
+  <script defer src="footer-map.js?v=20260914-1"></script>
   <script type="module" src="app.js?v=20260908-91"></script>
-  <script type="module" src="experience.js?v=20260912-89"></script>
+  <script type="module" src="experience.js?v=20260914-91"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
@@ -358,8 +361,7 @@
           <h3 class="footer-title">Đường đến 1M65</h3>
           <div class="footer-map__card">
             <div class="footer-map__viewport">
-              <iframe title="Bản đồ vị trí 1M65" src="https://www.openstreetmap.org/export/embed.html?bbox=106.8203%2C10.7283%2C106.8283%2C10.7333&amp;layer=mapnik" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
-              <span class="footer-map__pin" aria-hidden="true"><img src="assets/footer/footer_map_pin_label.webp" alt="" width="149" height="68" decoding="async" loading="lazy"></span>
+              <div class="footer-map__live" data-footer-map role="application" aria-label="Bản đồ tương tác vị trí 1M65"></div>
               <a class="footer-map__directions" href="https://www.google.com/maps/place/1M65+Nails,+Eyelashes,+Shampoo/@10.7308045,106.824314,17z/data=!4m6!3m5!1s0x31752300363cc559:0x53972471338c54b6!8m2!3d10.7308045!4d106.824314!16s%2Fg%2F11m5z4_2r7" target="_blank" rel="noopener"><span>Mở trong Google Maps</span><svg class="footer-map__directions-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.25 11.2 20 4.1l-5.9 15.8-2.65-6.15L4.25 11.2Z"></path><path d="m11.45 13.75 3.3-3.35"></path></svg></a>
               <a class="footer-map__attribution" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors</a>
             </div>
