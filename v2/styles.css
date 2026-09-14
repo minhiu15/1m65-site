@@ -1334,6 +1334,7 @@ main,
 .faq-list article:nth-child(4n + 3) { border-color: rgba(164, 145, 198, .28); background: var(--pastel-lavender); }
 .faq-list article:nth-child(4n) { border-color: rgba(125, 178, 154, .28); background: var(--pastel-mint); }
 .faq-list article:nth-child(5) { border-color: rgba(218, 184, 107, .32); background: var(--pastel-yellow); }
+.faq-list article[data-faq-tone="blue"] { border-color: rgba(141, 194, 220, .28); background: var(--pastel-blue); }
 
 /* Original paw runner restored between HomeView and Services; its marks can be swapped later. */
 .home-service-divider.nhu-paw-runner-shell {
@@ -6673,7 +6674,7 @@ html.paw-cursor-active * {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: minmax(0, .72fr) minmax(0, 1fr) minmax(0, 1.14fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: start;
 }
 
@@ -6710,7 +6711,14 @@ html.paw-cursor-active * {
 
 .footer-social__link[href]:hover { transform: translateY(-2px); }
 .footer-social__link img { width: auto; height: 36px; }
-.footer-brand__books { width: clamp(96px, 6.5vw, 128px); height: auto; margin-top: 8px; }
+.footer-social__link[aria-label="Zalo"] img { transform: translate(-5px, -1px); }
+.footer-brand__sleeping-cat {
+  align-self: flex-start;
+  width: clamp(280px, 20vw, 350px);
+  height: auto;
+  margin: 4px 0 0 clamp(8px, 1.2vw, 22px);
+  filter: drop-shadow(0 10px 14px rgba(121, 62, 78, .12));
+}
 
 .footer-contact {
   align-self: stretch;
@@ -6754,6 +6762,11 @@ html.paw-cursor-active * {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.footer-contact .footer-social {
+  justify-content: flex-start;
+  margin-top: 24px;
 }
 
 .footer-contact__list li {
@@ -6841,34 +6854,24 @@ html.paw-cursor-active * {
 
 .footer-map__live:active { cursor: grabbing; }
 .footer-map__geo-marker {
-  width: 0 !important;
-  height: 0 !important;
   border: 0 !important;
   background: transparent !important;
   pointer-events: none !important;
 }
 
-/* The pin tip is the Leaflet anchor; the whole label remains a decorative hit-through layer. */
+/* Restore the original pink cat-face pin from the production footer sprite sheet. */
 .footer-map__pin {
-  position: absolute;
+  position: relative;
   z-index: 3;
-  left: 0;
-  top: 0;
-  width: clamp(116px, 7.6vw, 149px);
-  transform: translate(-18%, -100%);
+  display: block;
+  width: 58px;
+  height: 65px;
+  background: transparent url("../footer-doodle-asset-sheet.webp?v=20260810footer-assets1") no-repeat;
+  background-size: 696.667% 627%;
+  background-position: 2.793% 54.08%;
+  filter: drop-shadow(0 5px 5px rgba(79, 47, 70, .2));
   pointer-events: none;
 }
-
-.footer-map__pin::before {
-  content: "";
-  position: absolute;
-  inset: 12% -8% 8% 18%;
-  border-radius: 999px;
-  background: #fff;
-  box-shadow: 0 8px 18px -12px rgba(79, 47, 46, .6);
-}
-
-.footer-map__pin img { position: relative; display: block; width: 100%; height: auto; }
 
 .footer-map__directions {
   position: absolute;
@@ -6914,15 +6917,6 @@ html.paw-cursor-active * {
   font-weight: 600;
   line-height: 1.2;
   text-decoration: none;
-}
-
-.footer-map__note {
-  position: absolute;
-  top: -22px;
-  right: -8px;
-  z-index: 4;
-  width: clamp(124px, 8.6vw, 169px);
-  height: auto;
 }
 
 .footer-map__sign {
@@ -6987,20 +6981,40 @@ html.paw-cursor-active * {
 
 /* Keep the wide footer visually supporting rather than oversized on desktop. */
 @media (min-width: 1181px) {
-  .contact-section { padding: clamp(104px, 6.1vw, 132px) 0 28px; }
+  .booking-faq-section { padding-bottom: 24px; }
+  .contact-section { padding: clamp(80px, 4.5vw, 88px) 0 24px; }
+  .footer-paper__hills { height: clamp(216px, 14.1vw, 270px); }
+
+  .footer-grid {
+    --footer-column-gutter: clamp(20px, 1.5vw, 28px);
+    --footer-decor-overhang: clamp(24px, 3.6vw, 100px);
+    --footer-content-drop: clamp(84px, 5.8vw, 112px);
+  }
 
   .footer-grid,
   .site-footer { width: min(1500px, calc(100% - clamp(80px, 10.5vw, 160px))); }
 
-  .footer-brand { gap: 15px; padding-right: clamp(12px, 1.5vw, 28px); }
-  .footer-brand__logo img { width: clamp(188px, 13vw, 250px); }
-  .footer-brand__slogan { width: clamp(210px, 14.5vw, 285px); }
+  .footer-brand {
+    gap: 15px;
+    padding-inline: var(--footer-column-gutter);
+    transform: translateX(calc(0px - var(--footer-column-gutter) - var(--footer-decor-overhang) - clamp(8px, 1.2vw, 22px)));
+  }
+  .footer-brand__logo img { width: clamp(204px, 14vw, 270px); }
+  .footer-brand__slogan { width: clamp(227px, 15.7vw, 308px); }
   .footer-social { gap: clamp(14px, 1.25vw, 22px); margin-top: 4px; }
+  .footer-brand__logo,
+  .footer-brand__slogan,
+  .footer-contact,
+  .footer-map { transform: translateY(var(--footer-content-drop)); }
   .footer-social__link { width: 60px; height: 56px; }
   .footer-social__link img { height: 32px; }
-  .footer-brand__books { width: clamp(84px, 5.7vw, 112px); margin-top: 6px; }
+  .footer-brand__sleeping-cat {
+    width: clamp(280px, 20vw, 350px);
+    margin-top: 79px;
+    transform: translateY(clamp(28px, 1.7vw, 34px));
+  }
 
-  .footer-contact { padding-inline: clamp(20px, 2vw, 48px); }
+  .footer-contact { padding-inline: var(--footer-column-gutter); }
   .footer-title {
     margin-bottom: 32px;
     font-size: clamp(21px, 1.2vw, 25px);
@@ -7014,25 +7028,29 @@ html.paw-cursor-active * {
   .footer-contact__icon { width: 56px; height: 56px; }
   .footer-contact__icon img { height: 28px; }
 
-  .footer-map { padding-left: clamp(24px, 2.8vw, 54px); }
+  .footer-map {
+    padding-inline: var(--footer-column-gutter);
+  }
   .footer-map__card {
-    width: calc(100% - clamp(0px, 1.7vw, 32px));
+    width: 100%;
     padding: 9px;
     border-radius: 28px;
   }
-  .footer-map__pin { width: clamp(104px, 6.7vw, 132px); }
   .footer-map__directions { min-height: 42px; padding-inline: 15px; font-size: 12.5px; }
-  .footer-map__note { width: clamp(112px, 7.4vw, 148px); }
-  .footer-map__sign { width: clamp(144px, 12.2vw, 240px); }
+  .footer-map__sign {
+    right: calc(0px - var(--footer-decor-overhang));
+    bottom: clamp(-88px, -4.5vw, -64px);
+    width: clamp(144px, 12.2vw, 240px);
+  }
 
   .footer-features {
     width: min(900px, calc(100% - 48px));
-    margin-top: clamp(44px, 3.2vw, 64px);
+    margin-top: clamp(24px, 1.6vw, 32px);
     padding: 14px clamp(18px, 2.4vw, 42px);
   }
   .footer-features li { gap: 16px; padding: 5px 12px; font-size: clamp(13px, .8vw, 15px); }
   .footer-features img { width: clamp(52px, 3.8vw, 72px); height: clamp(42px, 3vw, 58px); }
-  .site-footer { margin-top: clamp(24px, 2vw, 36px); }
+  .site-footer { margin-top: clamp(16px, 1.1vw, 22px); }
 }
 
 @media (max-width: 1180px) {
@@ -7049,7 +7067,7 @@ html.paw-cursor-active * {
     gap: 18px 32px;
     padding-right: 0;
   }
-  .footer-brand__books { display: none; }
+  .footer-brand__sleeping-cat { display: none; }
   .footer-contact { grid-area: contact; padding-left: 0; border-left: 0; }
   .footer-map { grid-area: map; }
 }
@@ -7067,7 +7085,6 @@ html.paw-cursor-active * {
   .footer-contact__phone-link { display: inline; }
   .footer-map { padding: 34px 0 0; border-top: 1px dashed rgba(232, 94, 124, .3); }
   .footer-map__card { width: 100%; }
-  .footer-map__note { top: 84px; right: -4px; width: 112px; }
   .footer-map__sign { right: -10px; bottom: -86px; width: 150px; }
   .footer-features { margin-top: 104px; }
 }
@@ -7097,6 +7114,4 @@ html.paw-cursor-active * {
   .footer-features li > img { grid-column: 2; }
   .footer-features li > span { grid-column: 3; padding-left: 16px; }
   .footer-features li + li { border-left: 0; border-top: 1.5px solid #f0cad3; }
-  /* Sit beside the title so the note never covers the centred map pin. */
-  .footer-map__note { top: 26px; right: -6px; width: 92px; }
 }

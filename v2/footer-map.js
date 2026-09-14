@@ -23,9 +23,9 @@
 
     const markerIcon = global.L.divIcon({
       className: "footer-map__geo-marker",
-      html: '<span class="footer-map__pin" aria-hidden="true"><img src="assets/footer/footer_map_pin_label.webp" alt="" width="149" height="68" decoding="async"></span>',
-      iconSize: [0, 0],
-      iconAnchor: [0, 0],
+      html: '<span class="footer-map__pin" aria-hidden="true"></span>',
+      iconSize: [58, 65],
+      iconAnchor: [29, 65],
     });
 
     global.L.marker([SALON_LOCATION.lat, SALON_LOCATION.lng], {
