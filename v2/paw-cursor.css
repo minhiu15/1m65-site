@@ -1,0 +1,112 @@
+/* Shared cursor surface for the main V2 page and same-origin embedded flows. */
+html.paw-cursor-active,
+html.paw-cursor-active * {
+  cursor: none !important;
+}
+
+.paw-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  z-index: 2147483647;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.paw-cursor img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 1px rgba(255,255,255,.98)) drop-shadow(0 4px 8px rgba(111,54,35,.34));
+  transform-origin: 50% 58%;
+  transition: transform .11s cubic-bezier(.2,.7,.3,1);
+}
+
+.paw-cursor.is-pressed img {
+  transform: scaleY(.86);
+}
+
+.paw-touch-stamp {
+  position: fixed;
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  pointer-events: none;
+  animation: pawTouchStamp .58s cubic-bezier(.16, 1, .3, 1) forwards;
+}
+
+.paw-touch-stamp img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 1px rgba(255,255,255,.98)) drop-shadow(0 4px 8px rgba(111,54,35,.34));
+}
+
+.paw-click-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.paw-click-ring {
+  position: fixed;
+  width: 74px;
+  height: 74px;
+  border: 2px solid rgba(196,88,156,.5);
+  border-radius: 50%;
+  animation: mewTapRing .5s ease-out forwards;
+}
+
+.paw-click-particle {
+  position: fixed;
+  border-radius: 50%;
+  animation: mewSpark .74s cubic-bezier(.2,.7,.3,1) forwards;
+}
+
+@keyframes mewTapRing {
+  0% { opacity: .5; transform: translate(-50%,-50%) scale(.35); }
+  100% { opacity: 0; transform: translate(-50%,-50%) scale(1.5); }
+}
+
+@keyframes mewSpark {
+  0% { opacity: 1; transform: translate(0,0) scale(1) rotate(0); }
+  100% { opacity: 0; transform: translate(var(--dx),var(--dy)) scale(.15) rotate(150deg); }
+}
+
+@keyframes pawTouchStamp {
+  0% { opacity: 0; transform: translate(-50%,-50%) rotate(-8deg) scale(.62); }
+  28% { opacity: 1; transform: translate(-50%,-50%) rotate(-8deg) scale(1.06,.86); }
+  58% { opacity: 1; transform: translate(-50%,-50%) rotate(-5deg) scale(1); }
+  100% { opacity: 0; transform: translate(-50%,-65%) rotate(-2deg) scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paw-click-ring {
+    animation: pawTapRingReduced .16s ease-out forwards;
+  }
+
+  .paw-click-particle {
+    display: none;
+  }
+
+  .paw-touch-stamp {
+    animation: pawTouchStampReduced .16s ease-out forwards;
+  }
+}
+
+@keyframes pawTapRingReduced {
+  from { opacity: .5; transform: translate(-50%,-50%) scale(.82); }
+  to { opacity: 0; transform: translate(-50%,-50%) scale(1); }
+}
+
+@keyframes pawTouchStampReduced {
+  from { opacity: .75; transform: translate(-50%,-50%) scale(.92); }
+  to { opacity: 0; transform: translate(-50%,-50%) scale(1); }
+}

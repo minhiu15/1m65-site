@@ -5559,14 +5559,14 @@ main,
 }
 
 :is(.shared-service-layout, .signature-layout) > .service-note--shared {
-  width: min(100%, 1320px);
-  grid-template-columns: 70px minmax(130px, 150px) minmax(250px, 270px) minmax(420px, 1fr) 70px;
-  grid-template-areas: ". cat label notes decor";
+  width: 100%;
+  grid-template-columns: minmax(130px, 150px) minmax(205px, 225px) minmax(420px, 1fr) 70px;
+  grid-template-areas: "cat label notes decor";
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   gap: 22px;
-  margin: 24px auto 0;
-  padding: 8px 18px 0;
+  margin: 24px 0 0;
+  padding: 8px 18px 12px;
 }
 
 .service-note--shared .service-note-cat {
@@ -5595,7 +5595,7 @@ main,
 .service-note--shared li {
   min-width: 0;
   padding-left: 26px;
-  font-size: 13.5px;
+  font-size: 15px;
   line-height: 1.42;
 }
 
@@ -5648,17 +5648,17 @@ main,
 
   :is(.shared-service-layout, .signature-layout) > .service-note--shared {
     width: 100%;
-    grid-template-columns: 92px 180px minmax(220px, 1fr) 70px;
+    grid-template-columns: 92px 164px minmax(220px, 1fr) 70px;
     grid-template-areas: "cat label notes decor";
     gap: 13px;
-    padding-inline: 4px;
+    padding: 6px 4px 10px;
   }
 
   .service-note--shared .service-note-cat { width: 90px; height: 70px; }
   .service-note--shared .service-note-label { min-height: 56px; padding: 9px 12px; }
   .service-note--shared .service-note-label strong { font-size: 18px; }
   .service-note--shared .service-note-label span { font-size: 18px; }
-  .service-note--shared li { font-size: 11px; }
+  .service-note--shared li { font-size: 12px; }
   .service-note-decor { width: 68px; height: 68px; }
   .service-note-decor__flower { width: 48px; height: 48px; }
 }
@@ -5710,7 +5710,7 @@ main,
     column-gap: 8px;
     row-gap: 10px;
     margin-top: 14px;
-    padding: 7px 4px 3px;
+    padding: 7px 4px 10px;
   }
 
   .service-note--shared .service-note-cat {
@@ -5722,6 +5722,8 @@ main,
 
   .service-note--shared .service-note-label {
     grid-area: label;
+    justify-self: start;
+    width: min(100%, 178px);
     min-height: 46px;
     padding: 7px 9px;
   }
@@ -5737,7 +5739,7 @@ main,
 
   .service-note--shared li {
     padding-left: 18px;
-    font-size: 10.5px;
+    font-size: 11.5px;
     line-height: 1.45;
   }
 
@@ -6506,127 +6508,18 @@ main,
   }
 }
 
-/* Shared tabs end with their final service row; Signature keeps its own footer spacing. */
+/* Service layouts end with a compact lower edge inside the shared paper panel. */
 .services-content:has(> .service-panel > .shared-service-layout) {
   padding-bottom: 0;
+}
+
+.services-content:has(> .service-panel > .signature-layout) {
+  padding-bottom: 8px;
 }
 
 .services-content:has(> .service-panel > .shared-service-layout) .shared-service-list {
   padding-bottom: 0;
 }
-/* The supplied cat-paw cursor keeps the V1 tilt, press squash, and pastel click burst. */
-html.paw-cursor-active,
-html.paw-cursor-active * {
-  cursor: none !important;
-}
-
-.paw-cursor {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 40px;
-  height: 40px;
-  margin: -20px 0 0 -20px;
-  z-index: 2147483647;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.paw-cursor img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 0 1px rgba(255,255,255,.98)) drop-shadow(0 4px 8px rgba(111,54,35,.34));
-  transform-origin: 50% 58%;
-  transition: transform .11s cubic-bezier(.2,.7,.3,1);
-}
-
-.paw-cursor.is-pressed img {
-  transform: scaleY(.86);
-}
-
-.paw-touch-stamp {
-  position: fixed;
-  z-index: 2;
-  width: 42px;
-  height: 42px;
-  pointer-events: none;
-  animation: pawTouchStamp .58s cubic-bezier(.16, 1, .3, 1) forwards;
-}
-
-.paw-touch-stamp img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 0 1px rgba(255,255,255,.98)) drop-shadow(0 4px 8px rgba(111,54,35,.34));
-}
-
-.paw-click-layer {
-  position: fixed;
-  inset: 0;
-  z-index: 2147483646;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.paw-click-ring {
-  position: fixed;
-  width: 74px;
-  height: 74px;
-  border: 2px solid rgba(196,88,156,.5);
-  border-radius: 50%;
-  animation: mewTapRing .5s ease-out forwards;
-}
-
-.paw-click-particle {
-  position: fixed;
-  border-radius: 50%;
-  animation: mewSpark .74s cubic-bezier(.2,.7,.3,1) forwards;
-}
-
-@keyframes mewTapRing {
-  0% { opacity: .5; transform: translate(-50%,-50%) scale(.35); }
-  100% { opacity: 0; transform: translate(-50%,-50%) scale(1.5); }
-}
-
-@keyframes mewSpark {
-  0% { opacity: 1; transform: translate(0,0) scale(1) rotate(0); }
-  100% { opacity: 0; transform: translate(var(--dx),var(--dy)) scale(.15) rotate(150deg); }
-}
-
-@keyframes pawTouchStamp {
-  0% { opacity: 0; transform: translate(-50%,-50%) rotate(-8deg) scale(.62); }
-  28% { opacity: 1; transform: translate(-50%,-50%) rotate(-8deg) scale(1.06,.86); }
-  58% { opacity: 1; transform: translate(-50%,-50%) rotate(-5deg) scale(1); }
-  100% { opacity: 0; transform: translate(-50%,-65%) rotate(-2deg) scale(1.08); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .paw-click-ring {
-    animation: pawTapRingReduced .16s ease-out forwards;
-  }
-
-  .paw-click-particle {
-    display: none;
-  }
-
-  .paw-touch-stamp {
-    animation: pawTouchStampReduced .16s ease-out forwards;
-  }
-}
-
-@keyframes pawTapRingReduced {
-  from { opacity: .5; transform: translate(-50%,-50%) scale(.82); }
-  to { opacity: 0; transform: translate(-50%,-50%) scale(1); }
-}
-
-@keyframes pawTouchStampReduced {
-  from { opacity: .75; transform: translate(-50%,-50%) scale(.92); }
-  to { opacity: 0; transform: translate(-50%,-50%) scale(1); }
-}
-
 /* Footer V2 follows the locked web reference; the cat cluster is omitted until its asset exists. */
 .contact-section {
   position: relative;
@@ -6799,6 +6692,7 @@ html.paw-cursor-active * {
   z-index: 1;
   width: calc(100% - clamp(0px, 2.2vw, 42px));
   aspect-ratio: 526 / 330;
+  min-height: clamp(320px, 20vw, 380px);
   padding: 10px;
   border: 0;
   border-radius: 30px;
@@ -6981,8 +6875,9 @@ html.paw-cursor-active * {
 
 /* Keep the wide footer visually supporting rather than oversized on desktop. */
 @media (min-width: 1181px) {
-  .booking-faq-section { padding-bottom: 24px; }
-  .contact-section { padding: clamp(80px, 4.5vw, 88px) 0 24px; }
+  .booking-faq-section { padding-bottom: 12px; }
+  .booking-cta { padding-bottom: 24px; }
+  .contact-section { padding: clamp(56px, 2.92vw, 60px) 0 24px; }
   .footer-paper__hills { height: clamp(216px, 14.1vw, 270px); }
 
   .footer-grid {
@@ -7011,7 +6906,7 @@ html.paw-cursor-active * {
   .footer-brand__sleeping-cat {
     width: clamp(280px, 20vw, 350px);
     margin-top: 79px;
-    transform: translateY(clamp(28px, 1.7vw, 34px));
+    transform: translateY(clamp(36px, 2.55vw, 50px));
   }
 
   .footer-contact { padding-inline: var(--footer-column-gutter); }
@@ -7045,7 +6940,7 @@ html.paw-cursor-active * {
 
   .footer-features {
     width: min(900px, calc(100% - 48px));
-    margin-top: clamp(24px, 1.6vw, 32px);
+    margin-top: clamp(72px, 5vw, 96px);
     padding: 14px clamp(18px, 2.4vw, 42px);
   }
   .footer-features li { gap: 16px; padding: 5px 12px; font-size: clamp(13px, .8vw, 15px); }
@@ -7074,6 +6969,12 @@ html.paw-cursor-active * {
 
 @media (max-width: 900px) {
   .contact-section { padding: 104px 0 28px; }
+  .footer-contact__phone-text { display: none; }
+  .footer-contact__phone-link { display: inline; }
+  .footer-map__card { min-height: clamp(310px, 40vw, 340px); }
+}
+
+@media (max-width: 600px) {
   .footer-grid {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "brand" "contact" "map";
@@ -7081,37 +6982,37 @@ html.paw-cursor-active * {
   }
   .footer-brand { flex-direction: column; }
   .footer-contact { padding: 34px 0 0; border: 0; border-top: 1px dashed rgba(232, 94, 124, .3); }
-  .footer-contact__phone-text { display: none; }
-  .footer-contact__phone-link { display: inline; }
-  .footer-map { padding: 34px 0 0; border-top: 1px dashed rgba(232, 94, 124, .3); }
-  .footer-map__card { width: 100%; }
-  .footer-map__sign { right: -10px; bottom: -86px; width: 150px; }
-  .footer-features { margin-top: 104px; }
-}
-
-@media (max-width: 600px) {
   .footer-contact__list li { grid-template-columns: 52px minmax(0, 1fr); gap: 14px; font-size: 16px; }
   .footer-contact__icon { width: 52px; height: 52px; }
   .footer-contact__icon img { height: 26px; }
+  .footer-map { padding: 34px 0 0; border-top: 1px dashed rgba(232, 94, 124, .3); }
+  .footer-map__card { width: 100%; min-height: clamp(285px, 76vw, 340px); }
   .footer-map__directions { top: 7px; left: 9px; min-height: 40px; padding: 0 14px; font-size: 12px; }
   .footer-map__directions-icon { width: 16px; height: 16px; }
+  .footer-map__sign { right: -10px; bottom: -60px; width: 150px; }
   .footer-features {
     --features-radius: 28px;
-    /* Shared icon/text tracks centre the group while every label starts on one column. */
-    grid-template-columns: 1fr auto auto 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     width: calc(100% - 28px);
-    padding: 14px 22px;
+    margin-top: 104px;
+    padding: 12px 14px;
   }
   .footer-features li {
     display: grid;
-    grid-column: 1 / -1;
-    grid-template-columns: 1fr auto auto 1fr;
-    grid-template-columns: subgrid;
-    align-items: center;
-    gap: 0;
-    padding: 12px 6px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-content: center;
+    justify-items: center;
+    gap: 6px;
+    min-width: 0;
+    padding: 8px 5px;
+    text-align: center;
+    font-size: clamp(10px, 2.75vw, 11.5px);
+    line-height: 1.35;
   }
-  .footer-features li > img { grid-column: 2; }
-  .footer-features li > span { grid-column: 3; padding-left: 16px; }
-  .footer-features li + li { border-left: 0; border-top: 1.5px solid #f0cad3; }
+  .footer-features img { width: 46px; height: 42px; }
+  .footer-features li > img,
+  .footer-features li > span { grid-column: 1; }
+  .footer-features li > span { padding-left: 0; }
+  .footer-features li + li { border-top: 0; border-left: 1.5px solid #f0cad3; }
 }
