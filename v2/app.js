@@ -11,6 +11,15 @@ const tabDefs = [
 
 const SIGNATURE_PLACEHOLDER_IMAGE = "assets/services/signature-shared/service_photos/nail_design_ve_tay_clean.webp";
 
+/* Cards load the card-sized file; clicking the photo opens the full-size one. */
+const SIGNATURE_PHOTOS = {
+  ve: "nail_design_ve_tay_clean",
+  "gel-hn": "son_gel_han_nhat",
+  "noi-gel": "noi_mong_dap_gel",
+  "noi-bot": "noi_mong_dap_bot",
+  "mi-classic": "noi_mi_classic",
+};
+
 const fallbackServices = [
   ["ct-tay", "Cắt da tay", 20000, 20, "Gọn viền móng tay", "assets/services/nail-care/service_photos/cat_da_tay.jpg"],
   ["ct-chan", "Cắt da chân", 30000, 25, "Làm kỹ da chết quanh móng", "assets/services/nail-care/service_photos/cat_da_chan.jpg"],
@@ -115,6 +124,7 @@ function normalizeServicePricing(service) {
 const state = { activeTab: "signature", services: fallbackServices.map(normalizeServicePricing) };
 window.__v2Services = { get services() { return state.services; } };
 const money = (value) => `${Number(value || 0).toLocaleString("vi-VN")}₫`;
+const signaturePhotoSrc = (id, variant) => (SIGNATURE_PHOTOS[id] ? `assets/services/signature-shared/service_photos/${SIGNATURE_PHOTOS[id]}${variant === "card" ? "_card" : ""}.webp` : "");
 const serviceById = (id) => state.services.find((item) => item.id === id);
 
 function renderPrice(service) {
@@ -128,12 +138,13 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
   const featured = className.includes("service-card--featured");
   const signature = variant === "signature";
   const spaRelaxation = signature && service.id === "goi-duongsinh";
+  const signaturePhoto = signature && !spaRelaxation ? signaturePhotoSrc(service.id, "card") : "";
   const image = spaRelaxation
     ? "assets/services/signature-shared/cats/spa_relaxation_cat_original.webp"
-    : (signature ? SIGNATURE_PLACEHOLDER_IMAGE : service.image);
+    : (signature ? signaturePhoto || SIGNATURE_PLACEHOLDER_IMAGE : service.image);
   const photoTilt = signature && showPhoto && !spaRelaxation ? (sequenceIndex % 2 === 0 ? "left" : "right") : "";
   const cardClasses = ["service-card", className, spaRelaxation ? "service-card--spa" : "", showPhoto ? "" : "service-card--text-only"].filter(Boolean).join(" ");
-  const photoAlt = spaRelaxation ? "Minh họa mèo thư giãn gội đầu tại spa" : `Ảnh mẫu tạm cho ${service.name}`;
+  const photoAlt = spaRelaxation ? "Minh họa mèo thư giãn gội đầu tại spa" : (signaturePhoto ? `Ảnh dịch vụ ${service.name}` : `Ảnh mẫu tạm cho ${service.name}`);
   return `<article class="${cardClasses}" data-card-variant="${variant}" data-service-id="${service.id}"${photoTilt ? ` data-photo-tilt="${photoTilt}"` : ""}>
     ${featured ? '<span class="featured-badge"><span>ĐƯỢC CHỌN</span><strong>NHIỀU NHẤT</strong></span>' : ""}
     <div class="service-card-copy">
@@ -144,6 +155,7 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
     </div>
     ${showPhoto ? `<div class="service-photo-wrap${spaRelaxation ? " service-photo-wrap--spa" : ""}">
       <img src="${image}" alt="${photoAlt}" loading="lazy" decoding="async">
+      ${signature && !spaRelaxation ? `<button class="service-photo-zoom" type="button" data-photo-zoom="${signaturePhoto ? signaturePhotoSrc(service.id, "full") : image}" data-photo-zoom-caption="${service.name}" aria-label="Xem ảnh ${service.name}"></button>` : ""}
       ${signature && !spaRelaxation ? '<img class="signature-photo-pin" src="assets/services/signature-shared/decor/signature_photo_clip_pink.svg" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
       ${featured ? '<img class="featured-cat-sticker" src="assets/services/signature-shared/cats/featured_photo_cat_sticker.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
     </div>` : ""}
