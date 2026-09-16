@@ -3082,7 +3082,7 @@ main,
   .service-card[data-card-variant="signature"] .service-photo-wrap > img:first-child { min-height: 120px; }
   .service-card[data-card-variant="signature"] .signature-photo-pin {
     top: -8px;
-    right: 7px;
+    right: 3px;
     width: 14px !important;
     height: 27px !important;
   }
@@ -5589,12 +5589,14 @@ main,
   }
 
   .service-card--featured[data-card-variant="signature"] .service-card-copy {
-    padding: 74px 0 0;
+    padding: 0;
   }
 
   .featured-badge {
+    z-index: 9;
     top: -9px;
-    left: 10px;
+    right: 20px;
+    left: auto;
     width: 68px;
     height: 85px;
     padding: 24px 8px 28px;
