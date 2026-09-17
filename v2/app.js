@@ -168,7 +168,7 @@ function renderServiceNote(lines) {
     <div class="service-note-label"><strong>Lưu ý nhé</strong><span aria-hidden="true">♡</span></div>
     <ul>${lines.map((line, index) => `<li data-note-tone="${index % 3}">${line}</li>`).join("")}</ul>
     <span class="service-note-decor" aria-hidden="true">
-      <img class="service-note-decor__flower" src="assets/services/nail-care/doodles/header_flower.webp" alt="" decoding="async" loading="lazy">
+      <img class="service-note-decor__sparkle" src="../doodles/sparkle-cluster.webp" alt="" decoding="async" loading="lazy">
     </span>
   </aside>`;
 }

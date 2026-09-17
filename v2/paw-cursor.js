@@ -53,9 +53,35 @@
     }
   }
 
+  let touchStart = null;
+  let lastTouchFeedback = null;
+  const tapTolerance = 12;
+
+  addEventListener("pointerdown", function(event){
+    if (event.pointerType !== "touch" || event.isPrimary === false) return;
+    touchStart = { id: event.pointerId, x: event.clientX, y: event.clientY };
+  }, { passive: true });
+  addEventListener("pointermove", function(event){
+    if (!touchStart || event.pointerId !== touchStart.id) return;
+    if (Math.hypot(event.clientX - touchStart.x, event.clientY - touchStart.y) > tapTolerance) touchStart = null;
+  }, { passive: true });
+  addEventListener("pointercancel", function(event){
+    if (touchStart && event.pointerId === touchStart.id) touchStart = null;
+  }, { passive: true });
+  addEventListener("pointerup", function(event){
+    if (!touchStart || event.pointerId !== touchStart.id) return;
+    const start = touchStart;
+    touchStart = null;
+    if (Math.hypot(event.clientX - start.x, event.clientY - start.y) > tapTolerance) return;
+    lastTouchFeedback = { x: event.clientX, y: event.clientY, time: performance.now() };
+    addClickFeedback(event.clientX, event.clientY, true);
+  }, { passive: true });
+
   if (!finePointer.matches) {
     addEventListener("click", function(event){
       if (event.detail === 0 || (event.pointerType && event.pointerType !== "touch")) return;
+      if (lastTouchFeedback && performance.now() - lastTouchFeedback.time < 750
+        && Math.hypot(event.clientX - lastTouchFeedback.x, event.clientY - lastTouchFeedback.y) < 24) return;
       addClickFeedback(event.clientX, event.clientY, true);
     }, { passive: true });
     return;
