@@ -46,7 +46,7 @@ a{color:inherit;text-decoration:none}
 .home-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(420px,.98fr);grid-template-areas:"copy art" "quote art" "schedule art";column-gap:42px;align-items:center}
 .home-copy{grid-area:copy;padding:20px 0}
 .taped-kicker{display:inline-flex;position:relative;margin:0 0 20px;padding:10px 22px;border:1px solid rgba(232,94,124,.13);border-radius:8px;background:rgba(255,255,255,.68);font-weight:800;font-size:14px;color:#6d5147;transform:rotate(-1deg)}
-.taped-kicker::before{content:"";position:absolute;left:-16px;top:-12px;width:62px;height:28px;background:url(assets/home/decor/gingham_tape_pink.webp) center/contain no-repeat;transform:rotate(-8deg)}
+.taped-kicker::before{content:"";position:absolute;left:-16px;top:-12px;width:62px;height:28px;background:url(assets/home/decor/pink_gingham_tape.webp) center/contain no-repeat;transform:rotate(-8deg)}
 .home-copy h1{margin:0;font:700 clamp(43px,4.35vw,76px)/1.08 Quicksand;letter-spacing:-.045em;color:#382720}
 .home-copy h1 em{color:var(--pink);font-style:normal}
 .home-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
@@ -84,7 +84,7 @@ a{color:inherit;text-decoration:none}
 .service-card{display:grid;grid-template-columns:1fr 42%;gap:16px;align-items:center;min-height:210px;padding:22px;border:1px solid var(--line);border-radius:var(--radius-md);background:rgba(255,255,255,.72);box-shadow:var(--shadow);overflow:hidden}
 .service-card--featured{min-height:250px;background:linear-gradient(135deg,#fff3f5,#fffaf7)}
 .service-card img{width:100%;height:168px;border-radius:17px;object-fit:cover}
-.service-card h3{margin:0 0 6px;font:700 19px/1.25 Quicksand}.service-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}.service-meta{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-top:15px}.service-meta>span:first-child{font-size:11px;color:var(--muted)}.service-price{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px}.service-price strong{font:700 18px Quicksand;color:var(--pink-strong)}.service-price del{font-size:10px;color:var(--muted)}.sale-badge{padding:3px 6px;border-radius:999px;background:#fde2e7;color:var(--pink-strong);font-size:9px;font-weight:900}.service-card button{margin-top:14px;padding:8px 0;border:0;background:transparent;color:var(--pink-strong);font-weight:900;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.service-card h3{margin:0 0 6px;font:700 19px/1.25 Quicksand}.service-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}.service-meta{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-top:15px}.service-meta>span:first-child{font-size:11px;color:var(--muted)}.service-price{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px}.service-price strong{font:700 18px Quicksand;color:var(--pink-strong)}.service-price del{font-size:10px;color:var(--muted)}.sale-badge{padding:3px 6px;border-radius:999px;background:#fde2e7;color:var(--pink-strong);font-size:9px;font-weight:900}
 .signature-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.signature-grid .service-card{min-height:215px}
 .service-note{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:18px;padding:20px;border:1px dashed #eab9c1;border-radius:22px;background:var(--lavender-soft)}.service-note img{width:85px;height:65px;object-fit:contain;align-self:flex-end}.service-note strong{font:700 20px Quicksand;color:#8a63bb}.service-note p{margin:3px 0 0;color:#725f78;font-size:13px}
 .shared-service-title{display:flex;align-items:center;justify-content:center;gap:20px;padding:28px;border:1px solid var(--line);border-radius:var(--radius-lg);background:linear-gradient(135deg,#fffaf8,#fff1f4);text-align:left}.shared-service-title img{width:120px;height:90px;object-fit:contain}.shared-service-title h2{margin:0;font:700 clamp(30px,4vw,52px) Quicksand;color:var(--pink)}.shared-service-title p{max-width:540px;margin:5px 0 0;color:var(--muted)}
@@ -355,7 +355,6 @@ main,
   background:transparent;
   overflow:visible;
 }
-.signature-tape{position:absolute;left:0;top:0;width:105px;transform:rotate(-12deg)}
 .signature-cat{position:relative;z-index:1;width:100%;max-height:330px;object-fit:contain}
 .signature-cat--mobile{display:none}
 .signature-copy{position:relative;z-index:1;text-align:center}
@@ -392,7 +391,6 @@ main,
 .service-price del{font-size:12px}
 .price-stack{display:grid;gap:4px}
 .sale-badge{padding:7px 10px;border:1px dashed var(--pink);border-radius:11px;background:#fff0f3;font-size:12px}
-.service-card button{margin-top:18px;padding:8px 12px;border:1px solid rgba(232,94,124,.28);border-radius:999px;background:rgba(255,255,255,.56);text-decoration:none;font-size:12px}
 .service-card--featured{min-height:390px;padding:34px 30px;background:rgba(255,244,245,.62)}
 .service-card--featured .service-card-copy{padding-top:66px}
 .service-card--featured .service-photo-wrap{min-height:280px}
@@ -406,7 +404,7 @@ main,
 .signature-outside--drink{align-self:end}.signature-outside--bath-cat{align-self:end}
 .service-note{
   display:grid;
-  grid-template-columns:150px 240px 1fr;
+  grid-template-columns:240px 1fr;
   align-items:center;
   gap:28px;
   margin-top:34px;
@@ -415,15 +413,13 @@ main,
   border-radius:26px;
   background:rgba(255,249,247,.35);
 }
-.service-note-cat{width:145px;height:95px;object-fit:contain;align-self:end}
 .service-note-label{display:flex;align-items:center;justify-content:center;gap:10px;min-height:76px;padding:14px 22px;border:1px solid rgba(232,94,124,.22);border-radius:14px;background:rgba(248,216,223,.55);transform:rotate(-1deg)}
 .service-note-label strong{font:700 25px var(--font-signature-display);color:#4f382e}
-.service-note-label span{font-size:24px;color:var(--pink)}
 .service-note ul{display:grid;gap:11px;margin:0;padding:0;list-style:none}
 .service-note li{position:relative;padding-left:28px;font-size:14px;line-height:1.45}
-.service-note li::before{content:"♡";position:absolute;left:0;color:var(--pink);font-weight:900}
-.service-note li[data-note-tone="1"]::before{content:"✿";color:#ad82dc}
-.service-note li[data-note-tone="2"]::before{content:"✦";color:#ef8b4f}
+.service-note li::before{content:"";position:absolute;top:0;left:0;width:22px;height:22px;background:url("assets/services/notes/note-heart.svg") center/contain no-repeat}
+.service-note li[data-note-tone="1"]::before{background-image:url("assets/services/signature-shared/tab_icons/design_flower_inactive.webp");background-size:188% auto}
+.service-note li[data-note-tone="2"]::before{background-image:url("assets/services/notes/note-sparkle.svg")}
 
 /* Nail Care and shared service template */
 .shared-service-title{
@@ -580,7 +576,7 @@ main,
   .home-grid{grid-template-columns:minmax(0,.9fr) minmax(300px,.6fr) minmax(460px,1.28fr)}
   .home-art{min-height:570px}.home-actions>*{min-width:220px}
   .signature-lower{grid-template-columns:110px 1fr 1.16fr 135px}
-  .service-note{grid-template-columns:120px 200px 1fr}
+  .service-note{grid-template-columns:200px 1fr}
   .gallery-filters button{min-width:165px}
   .about-grid{grid-template-columns:1fr 1.05fr .82fr}
 }
@@ -612,7 +608,7 @@ main,
   .service-panel{margin-top:26px}
   .nail-care-grid,.shared-service-grid{grid-template-columns:1fr}
   .shared-service-grid:not(.nail-care-grid) .service-card:last-child:nth-child(odd){grid-column:auto;width:100%}
-  .service-note{grid-template-columns:90px 180px 1fr;padding:18px;gap:16px}.service-note-cat{width:90px}
+  .service-note{grid-template-columns:180px 1fr;padding:18px;gap:16px}
   .gallery-shell{padding:38px 22px}.gallery-grid{grid-template-columns:repeat(3,1fr)}.gallery-filters button{min-width:132px;min-height:62px;font-size:16px}
   .about-floating{display:none}
   .booking-faq-grid{grid-template-columns:1fr;gap:48px}
@@ -637,10 +633,10 @@ main,
   .service-card,.nail-care-card{grid-template-columns:minmax(0,1fr) 42%;min-height:188px;padding:17px;gap:12px}
   .service-card h3,.nail-care-card h3{font-size:17px}.service-card p{font-size:11.5px;line-height:1.45}
   .service-card .service-photo-wrap,.nail-care-card .service-photo-wrap{min-height:142px;padding:6px}.service-card .service-photo-wrap>img:first-child,.nail-care-card .service-photo-wrap>img:first-child{min-height:130px}
-  .service-icon{width:42px!important;height:42px!important;margin-bottom:10px}.service-meta{margin-top:10px}.service-price strong{font-size:17px}.sale-badge{padding:4px 6px;font-size:9px}.service-card button{margin-top:10px;padding:5px 9px;font-size:10px}
+  .service-icon{width:42px!important;height:42px!important;margin-bottom:10px}.service-meta{margin-top:10px}.service-price strong{font-size:17px}.sale-badge{padding:4px 6px;font-size:9px}
   .service-card--featured{min-height:230px}.service-card--featured .service-card-copy{padding-top:44px}.service-card--featured .service-photo-wrap{min-height:175px}.service-card--featured .service-photo-wrap>img:first-child{min-height:163px}.featured-badge{left:13px;top:12px;width:62px;height:62px;font-size:7px}
   .shared-service-title{padding:22px 18px}.shared-service-title h2{font-size:36px}.shared-service-title p{font-size:12px}
-  .service-note{grid-template-columns:72px 1fr;margin-top:22px;padding:14px}.service-note-cat{width:72px;height:60px}.service-note-label{min-height:54px;padding:8px}.service-note-label strong{font-size:17px}.service-note ul{grid-column:1/-1;gap:7px}.service-note li{font-size:11px}
+  .service-note{grid-template-columns:1fr;margin-top:22px;padding:14px}.service-note-label{min-height:54px;padding:8px}.service-note-label strong{font-size:17px}.service-note ul{grid-column:1/-1;gap:7px}.service-note li{font-size:11px}
   .gallery-section{padding:0 0 52px}.gallery-shell{padding:28px 12px;border-radius:28px}.gallery-intro{font-size:12px}
   .gallery-filters{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;margin:24px 3px}.gallery-filters button{flex:0 0 125px;min-height:58px;padding-inline:12px}
   .gallery-grid{grid-template-columns:repeat(2,1fr);gap:10px}.gallery-tile{padding:5px;border-radius:16px}.gallery-more{min-width:240px;min-height:64px;font-size:21px}.gallery-more-wrap{margin-top:30px}.gallery-more-wrap p{font-size:12px}
@@ -775,29 +771,7 @@ main,
   display: none;
 }
 
-/* Signature cards remain the booking affordance without adding UI absent from the refs. */
-.service-card[data-card-variant="signature"] {
-  cursor: pointer;
-}
-
-.service-card[data-card-variant="signature"] .service-card-copy {
-  position: static;
-}
-
-.service-card[data-card-variant="signature"] button {
-  position: absolute;
-  inset: 0;
-  z-index: 6;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  border-radius: inherit;
-  background: transparent;
-  opacity: 0;
-}
-
+/* The photo zoom remains keyboard-focusable after per-service booking is removed. */
 .service-card[data-card-variant="signature"]:focus-within {
   outline: 3px solid var(--pink);
   outline-offset: 4px;
@@ -1943,16 +1917,8 @@ main,
   --doodle-rotate: -4deg;
   right: 8px;
   left: auto;
-  top: 22px;
+  top: 38px;
   bottom: auto;
-}
-.paper-doodle--gallery-star {
-  --doodle-size: 26px;
-  --doodle-opacity: .76;
-  --doodle-rotate: -6deg;
-  right: 19%;
-  top: auto;
-  bottom: 18px;
 }
 
 /* About: distribute accents around the outer canvas, behind the cards. */
@@ -2058,7 +2024,6 @@ main,
 @media (max-width: 900px) {
   .paper-doodle--home-polish,
   .paper-doodle--home-bow,
-  .paper-doodle--gallery-star,
   .paper-doodle--about-mirror,
   .paper-doodle--about-stamp,
   .paper-doodle--about-star,
@@ -2104,10 +2069,14 @@ main,
   .paper-doodle--signature-hearts { --doodle-size: 34px; }
   .paper-doodle--signature-brush { --doodle-size: 40px; }
   .paper-doodle--signature-star { --doodle-size: 22px; }
-  .paper-doodle--gallery-pearls { --doodle-size: 60px; right: 13px; top: 12px; }
+  .paper-doodle--gallery-pearls { --doodle-size: 60px; right: 13px; top: auto; bottom: 14px; }
   .paper-doodle--reviews-divider { --doodle-size: var(--paper-doodle-micro); }
   .paper-doodle--booking-scissors { --doodle-size: var(--paper-doodle-small); }
   .paper-doodle--booking-star { --doodle-size: 24px; }
+}
+
+@media (max-width: 360px) {
+  .paper-doodle--gallery-pearls { right: 0; }
 }
 
 /* On desktop, quote and live schedule form one balanced support row below the hero copy. */
@@ -2279,28 +2248,6 @@ main,
 }
 
 .shared-service-row:last-child { border-bottom: 0; }
-
-.shared-service-row:has(.shared-service-row__booking:hover) {
-  background: color-mix(in srgb, var(--shared-soft) 82%, white);
-  box-shadow: inset 4px 0 0 color-mix(in srgb, var(--shared-accent) 64%, transparent);
-}
-
-.shared-service-row__booking {
-  position: absolute;
-  z-index: 3;
-  inset: 0;
-  width: 100%;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  cursor: pointer;
-}
-
-.shared-service-row__booking:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--shared-accent) 72%, white);
-  outline-offset: -5px;
-}
 
 .shared-service-row__copy h3 {
   margin: 0 0 8px;
@@ -2616,21 +2563,28 @@ main,
 
 .signature-intro {
   position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: minmax(190px, 38%) minmax(0, 62%);
   align-items: center;
-  min-height: 334px;
-  padding: 18px 10px 12px;
-  overflow: hidden;
+  min-height: 302px;
+  padding: 0 10px;
+  overflow: visible;
   border: 0;
   background: transparent;
 }
 
-.signature-tape {
-  left: 8px;
-  top: 8px;
-  width: 90px;
-  z-index: 3;
+.signature-cotton-trail {
+  position: absolute;
+  z-index: 0;
+  bottom: -92px;
+  left: 12px;
+  width: min(84%, 520px);
+  height: auto;
+  aspect-ratio: 3 / 1;
+  object-fit: contain;
+  opacity: .84;
+  pointer-events: none;
 }
 
 .signature-ref-doodle {
@@ -2649,13 +2603,15 @@ main,
   z-index: 1;
   align-self: end;
   justify-self: center;
-  width: min(100%, 270px);
-  height: 292px;
+  width: min(100%, 248px);
+  height: 268px;
   max-height: none;
   object-fit: contain;
   object-position: center bottom;
   image-rendering: auto;
   filter: drop-shadow(0 7px 8px rgba(91, 54, 45, .06));
+  transform: translateY(55px) scale(1.07);
+  transform-origin: center bottom;
 }
 
 .signature-copy {
@@ -2666,6 +2622,8 @@ main,
   align-content: center;
   min-width: 0;
   text-align: center;
+  transform: translateY(-15px) scale(1.05);
+  transform-origin: center bottom;
 }
 
 .signature-wordmark {
@@ -2692,6 +2650,10 @@ main,
   font: 800 clamp(10px, .82vw, 13px)/1.15 var(--font-signature-body);
   letter-spacing: .025em;
   white-space: nowrap;
+}
+
+@media (min-width: 1181px) {
+  .signature-ribbon { margin-top: -6px; }
 }
 
 .signature-copy p {
@@ -2873,6 +2835,9 @@ main,
   margin-top: 18px;
 }
 
+.signature-service-groups { position: relative; z-index: 2; }
+.service-card--featured[data-card-variant="signature"] { z-index: 2; }
+
 .signature-lower {
   position: relative;
   display: grid;
@@ -2987,8 +2952,10 @@ main,
   .service-tabs button.is-active:hover { height: 64px; min-height: 64px; }
 
   .signature-hero-row { grid-template-columns: 1fr; gap: 14px; }
-  .signature-intro { min-height: 300px; grid-template-columns: minmax(180px, 34%) minmax(0, 66%); }
-  .signature-cat { width: min(100%, 230px); height: 264px; }
+  .signature-intro { min-height: 267px; grid-template-columns: minmax(180px, 34%) minmax(0, 66%); }
+  .signature-cotton-trail { bottom: -75px; }
+  .signature-cat { width: min(100%, 212px); height: 243px; transform: translateY(42px) scale(1.07); }
+  .signature-copy { transform: translateY(10px) scale(1.05); }
   .signature-wordmark { max-height: 170px; }
   .service-card--featured[data-card-variant="signature"] { min-height: 236px; }
   .service-card--featured[data-card-variant="signature"] .service-photo-wrap { min-height: 176px; }
@@ -3060,14 +3027,15 @@ main,
   .signature-layout { --signature-card-height: 196px; display: block; padding: 0; border: 0; background: transparent; }
   .signature-hero-row { display: grid; gap: 12px; }
   .signature-intro {
-    grid-template-columns: 105px minmax(0, 1fr);
-    min-height: 202px;
-    padding: 10px 4px 6px;
+    grid-template-columns: 128px minmax(0, 1fr);
+    min-height: 178px;
+    padding: 0 4px;
   }
-  .signature-tape { width: 60px; left: 2px; top: 4px; }
+  .signature-cotton-trail { bottom: -28px; left: 18px; width: min(70%, 260px); }
   .signature-ref-doodle--heart { left: 27%; top: 12%; width: 28px; height: 28px; }
-  .signature-cat { width: 108px; height: 178px; }
-  .signature-wordmark { width: 100%; max-height: 122px; margin-bottom: 0; transform: translateY(2px); }
+  .signature-cat { width: 100px; height: 164px; transform: translateY(24px) scale(1.07); }
+  .signature-copy { transform: translateY(-1px); }
+  .signature-wordmark { width: 100%; max-height: 122px; margin-bottom: 0; }
   .signature-ribbon {
     min-height: 28px;
     margin-bottom: 8px;
@@ -3076,6 +3044,10 @@ main,
     white-space: normal;
   }
   .signature-copy p { font-size: 10px; }
+
+  @media (max-width: 430px) {
+    .signature-copy { transform: translateY(6px); }
+  }
 
   .service-card--featured[data-card-variant="signature"] {
     grid-template-columns: minmax(0, 1fr) 40%;
@@ -3290,15 +3262,6 @@ main,
   background: transparent;
 }
 
-.shared-service-row:has(.shared-service-row__booking:hover),
-.shared-service-row:has(.shared-service-row__booking:focus-visible:not(.is-pointer-focus-return)) {
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--shared-accent) 7%, rgba(255, 252, 249, .96));
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--shared-accent) 28%, transparent),
-    0 10px 24px -22px rgba(176, 74, 99, .45);
-}
-
 .shared-service-row__copy {
   display: grid;
   grid-template-columns: 28px minmax(0, 1fr);
@@ -3399,74 +3362,14 @@ main,
 
 .shared-service-row__pricing small { display: none; }
 
-.shared-service-row__cta {
-  --pink-button-text-outline: rgba(183, 68, 101, .78);
-  position: relative;
-  isolation: isolate;
-  display: inline-flex;
-  flex: 0 0 116px;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  width: 116px;
-  min-height: 46px;
-  padding: 9px 13px;
-  overflow: hidden;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  background: transparent;
-  color: #fff;
-  font: 700 13px/1 var(--font-signature-display);
-  white-space: nowrap;
-  -webkit-text-fill-color: #fff;
-  text-shadow:
-    -1px 0 0 var(--pink-button-text-outline),
-    1px 0 0 var(--pink-button-text-outline),
-    0 -1px 0 var(--pink-button-text-outline),
-    0 1px 0 var(--pink-button-text-outline),
-    -.72px -.72px 0 var(--pink-button-text-outline),
-    .72px -.72px 0 var(--pink-button-text-outline),
-    -.72px .72px 0 var(--pink-button-text-outline),
-    .72px .72px 0 var(--pink-button-text-outline);
-  pointer-events: none;
-  transition: filter .2s ease, transform .2s ease;
-}
-
-.shared-service-row__cta::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--button-shell-pill) center / 105% 118% no-repeat;
-  pointer-events: none;
-}
-
-.shared-service-row__cta span { font-size: 16px; }
-
-.shared-service-row:has(.shared-service-row__booking:hover) .shared-service-row__cta,
-.shared-service-row__booking:focus-visible:not(.is-pointer-focus-return) ~ .shared-service-row__actions .shared-service-row__cta {
-  color: white;
-  filter: brightness(1.035) saturate(1.06);
-  transform: translate(2px, -1px);
-}
-
 :is(.shared-service-layout, .signature-layout) > .service-note--shared {
-  grid-template-columns: 138px 210px minmax(0, 1fr);
+  grid-template-columns: 210px minmax(0, 1fr);
   gap: 22px;
   margin: 17px 0 0;
   padding: 8px 14px 0;
   border: 0;
   border-radius: 0;
   background: transparent;
-}
-
-.service-note--shared .service-note-cat {
-  align-self: end;
-  width: 132px;
-  height: 90px;
-  object-fit: contain;
-  object-position: center bottom;
-  image-rendering: auto;
 }
 
 .service-note--shared .service-note-label {
@@ -3543,8 +3446,7 @@ main,
     row-gap: 0;
   }
   .shared-service-row__pricing { justify-items: center; align-content: center; }
-  :is(.shared-service-layout, .signature-layout) > .service-note--shared { grid-template-columns: 92px 170px minmax(0, 1fr); gap: 13px; padding-inline: 4px; }
-  .service-note--shared .service-note-cat { width: 90px; height: 70px; }
+  :is(.shared-service-layout, .signature-layout) > .service-note--shared { grid-template-columns: 170px minmax(0, 1fr); gap: 13px; padding-inline: 4px; }
   .service-note--shared .service-note-label { min-height: 54px; padding: 9px 12px; }
   .service-note--shared .service-note-label strong { font-size: 17px; }
   .service-note--shared li { font-size: 10px; }
@@ -3633,17 +3535,14 @@ main,
   }
   .shared-service-row__pricing del { font-size: 11px; }
   .shared-service-row__pricing strong { margin-top: 3px; font-size: 18px; }
-  .shared-service-row__cta { display: none; }
   :is(.shared-service-layout, .signature-layout) > .service-note--shared {
-    grid-template-columns: 70px minmax(92px, 116px) minmax(0, 1fr);
+    grid-template-columns: minmax(92px, 116px) minmax(0, 1fr);
     gap: 7px;
     margin-top: 10px;
     padding: 4px 2px 0;
   }
-  .service-note--shared .service-note-cat { width: 68px; height: 52px; }
   .service-note--shared .service-note-label { min-height: 43px; padding: 6px; }
   .service-note--shared .service-note-label strong { font-size: 13px; }
-  .service-note--shared .service-note-label span { font-size: 14px; }
   .service-note--shared ul { gap: 4px; }
   .service-note--shared li { padding-left: 14px; font-size: 7.5px; line-height: 1.35; }
 }
@@ -3743,7 +3642,6 @@ main,
   }
   .shared-service-row__pricing del { font-size: 11px; }
   .shared-service-row__pricing strong { margin-top: 3px; font-size: 19px; }
-  .shared-service-row__cta { display: none; }
 }
 
 /* HomeView 16:9 relayout — matches the approved 1672 × 941 composition. */
@@ -3800,40 +3698,28 @@ main,
 .taped-kicker {
   align-items: center;
   align-self: flex-start;
-  gap: 11px;
   max-width: 100%;
   margin: 0 0 clamp(14px, 1.4vw, 24px);
-  padding: clamp(9px, .75vw, 13px) clamp(16px, 1.5vw, 26px);
-  border: 1px solid rgba(232, 94, 124, .25);
-  border-radius: 10px;
-  background: rgba(255, 252, 250, .74);
+  padding: clamp(12px, .9vw, 16px) clamp(20px, 1.65vw, 28px);
+  border: 1px solid rgba(232, 94, 124, .28);
+  border-radius: 19px 23px 18px 24px;
+  background: linear-gradient(112deg, #fff8fa 0%, #fffdfa 72%);
   color: #614941;
-  font-size: clamp(13px, 1.08vw, 18px);
-  line-height: 1.25;
-  transform: rotate(-.45deg);
-  box-shadow: 0 11px 24px -24px rgba(105, 65, 76, .42);
+  font: 700 clamp(14px, 1.06vw, 18px)/1.35 var(--font-signature-display);
+  transform: rotate(-.6deg);
+  box-shadow: 0 16px 27px -23px rgba(105, 65, 76, .38);
 }
 
 .taped-kicker::before {
-  left: -30px;
-  top: -18px;
-  width: 84px;
-  height: 38px;
-  background-image: url("assets/home/relayout/decor_washi_tape_pink_gingham_optical.webp");
+  left: -24px;
+  top: -25px;
+  width: 88px;
+  height: 40px;
+  background-image: url("assets/home/decor/pink_gingham_tape.webp");
+  transform: rotate(-9deg);
 }
 
-.home-kicker-paw {
-  display: grid;
-  flex: 0 0 auto;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .8);
-  color: var(--pink);
-}
-
-.home-kicker-paw svg { width: 20px; height: 20px; fill: currentColor; }
+.taped-kicker__copy { position: relative; }
 
 .home-copy h1 {
   margin: 0;
@@ -4257,10 +4143,8 @@ main,
 @media (max-width: 600px) {
   .home-section { padding-top: 14px; }
   .home-grid { gap: 16px; }
-  .taped-kicker { gap: 7px; margin-bottom: 18px; padding: 9px 12px; font-size: clamp(10px, 3.1vw, 12px); }
-  .taped-kicker::before { left: -14px; top: -12px; width: 54px; height: 25px; }
-  .home-kicker-paw { width: 24px; height: 24px; }
-  .home-kicker-paw svg { width: 16px; height: 16px; }
+  .taped-kicker { margin-bottom: 18px; padding: 12px 16px; font-size: clamp(12px, 3.3vw, 14px); }
+  .taped-kicker::before { left: -11px; top: -17px; width: 60px; height: 27px; }
   .home-copy h1 { font-size: clamp(40px, 12vw, 56px); line-height: 1.09; }
   .home-lede { max-width: none; margin-top: 16px; padding-left: 16px; font-size: 14px; line-height: 1.55; }
   .home-lede br { display: none; }
@@ -4459,9 +4343,13 @@ main,
   user-select: none;
 }
 
-.about-decor--flower-pink { width: min(84px, 11vw); }
+.about-decor--sparkles {
+  width: min(84px, 11vw);
+  opacity: .78;
+  filter: saturate(.62) brightness(1.08);
+}
 
-.about-intro__flower { top: clamp(10px, 1vw, 18px); right: clamp(28px, 10vw, 180px); }
+.about-intro__sparkles { top: clamp(28px, 2.6vw, 44px); right: clamp(12px, 7vw, 140px); }
 
 .about-photo {
   display: grid;
@@ -4858,7 +4746,7 @@ main,
   .about-intro h2 { margin-bottom: 24px; }
   .about-intro__content { padding-inline: 22px; }
   .about-intro p { max-width: 62ch; font-size: clamp(15px, 1.8vw, 18px); }
-  .about-intro__flower { right: clamp(18px, 7vw, 72px); }
+  .about-intro__sparkles { right: clamp(12px, 4vw, 48px); }
   .about-photo-bubble { top: -10px; left: -6px; width: 140px; min-height: 90px; padding: 16px 14px; font-size: 13px; }
   .about-story {
     padding: 22px 24px 17px;
@@ -4905,7 +4793,7 @@ main,
   }
   .about-divider img { width: 36px; }
   .about-intro p { font-size: clamp(14px, 3.8vw, 16px); line-height: 1.58; }
-  .about-intro__flower { top: 4px; right: 2px; width: 48px; }
+  .about-intro__sparkles { top: 16px; right: -5px; width: 48px; }
   .about-media__photos { height: clamp(300px, 82vw, 360px); }
   .about-photo--main { top: 3%; left: 0; width: 62%; height: 86%; padding: 5px; border-radius: 18px; }
   .about-photo--main > img:first-child { border-radius: 13px; }
@@ -5452,13 +5340,13 @@ main,
 }
 
 .signature-wordmark {
-  width: min(100%, 500px);
+  width: min(95%, 475px);
   height: auto;
   max-width: none;
   max-height: none;
   margin: 0 auto -2px;
   object-fit: contain;
-  transform: none;
+  transform: translateY(-8px);
 }
 
 .service-card--featured[data-card-variant="signature"] .service-card-copy {
@@ -5553,19 +5441,34 @@ main,
 
 :is(.shared-service-layout, .signature-layout) > .service-note--shared {
   width: 100%;
-  grid-template-columns: minmax(130px, 150px) minmax(205px, 225px) minmax(420px, 1fr) 70px;
-  grid-template-areas: "cat label notes decor";
+  grid-template-columns: minmax(205px, 225px) minmax(420px, 1fr) 70px;
+  grid-template-areas: "label notes decor";
   align-items: center;
   justify-content: start;
   gap: 22px;
-  margin: 24px 0 0;
-  padding: 8px 18px 12px;
+  margin: 4px 0 0;
+  padding: 8px 18px 12px 1px;
 }
 
-.service-note--shared .service-note-cat {
-  grid-area: cat;
-  width: 150px;
-  height: 100px;
+.service-note-divider {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.service-note-divider i {
+  display: block;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, #efa0b5 0 10px, transparent 10px 18px);
+}
+
+.service-note-divider img {
+  display: block;
+  width: 36px;
+  height: auto;
 }
 
 .service-note--shared .service-note-label {
@@ -5576,7 +5479,6 @@ main,
 }
 
 .service-note--shared .service-note-label strong { font-size: 23px; }
-.service-note--shared .service-note-label span { font-size: 23px; }
 
 .service-note--shared ul {
   grid-area: notes;
@@ -5587,7 +5489,7 @@ main,
 
 .service-note--shared li {
   min-width: 0;
-  padding-left: 26px;
+  padding-left: 28px;
   font-size: 15px;
   line-height: 1.42;
 }
@@ -5598,8 +5500,8 @@ main,
   align-self: end;
   justify-self: center;
   display: block;
-  width: 68px;
-  height: 70px;
+  width: 46px;
+  height: 46px;
   pointer-events: none;
 }
 
@@ -5609,13 +5511,14 @@ main,
   object-fit: contain;
 }
 
-.service-note-decor__sparkle {
+.service-note .service-note-decor__sparkle {
   left: 50%;
-  top: 31%;
-  width: 64px;
-  height: 64px;
-  opacity: .72;
-  filter: saturate(.7) brightness(1.08);
+  top: 50%;
+  width: 40px;
+  height: 40px;
+  max-width: none;
+  opacity: .8;
+  filter: saturate(.85) brightness(1.08);
   transform: translate(-50%, -50%) rotate(-7deg);
 }
 
@@ -5643,19 +5546,17 @@ main,
 
   :is(.shared-service-layout, .signature-layout) > .service-note--shared {
     width: 100%;
-    grid-template-columns: 92px 164px minmax(220px, 1fr) 70px;
-    grid-template-areas: "cat label notes decor";
+    grid-template-columns: 164px minmax(220px, 1fr) 70px;
+    grid-template-areas: "label notes decor";
     gap: 13px;
     padding: 6px 4px 10px;
   }
 
-  .service-note--shared .service-note-cat { width: 90px; height: 70px; }
   .service-note--shared .service-note-label { min-height: 56px; padding: 9px 12px; }
   .service-note--shared .service-note-label strong { font-size: 18px; }
-  .service-note--shared .service-note-label span { font-size: 18px; }
   .service-note--shared li { font-size: 12px; }
-  .service-note-decor { width: 68px; height: 68px; }
-  .service-note-decor__sparkle { width: 56px; height: 56px; }
+  .service-note-decor { width: 44px; height: 44px; }
+  .service-note .service-note-decor__sparkle { width: 36px; height: 36px; }
 }
 
 @media (max-width: 600px) {
@@ -5670,15 +5571,15 @@ main,
   .home-art__backdrop-surface { stroke-width: 1.5; }
 
   .signature-intro {
-    grid-template-columns: 105px minmax(0, 1fr);
+    grid-template-columns: 128px minmax(0, 1fr);
   }
 
   .signature-wordmark {
-    width: 100%;
+    width: min(94%, 290px);
     height: auto;
     max-height: none;
     margin-bottom: 0;
-    transform: none;
+    transform: translateY(-4px);
   }
 
   .service-card--featured[data-card-variant="signature"] .service-card-copy {
@@ -5700,22 +5601,23 @@ main,
 
   :is(.shared-service-layout, .signature-layout) > .service-note--shared {
     width: 100%;
-    grid-template-columns: 70px minmax(0, 1fr) 48px;
+    grid-template-columns: minmax(0, 1fr) 48px;
     grid-template-areas:
-      "cat label decor"
-      "notes notes notes";
+      "label decor"
+      "notes notes";
     column-gap: 8px;
-    row-gap: 10px;
-    margin-top: 14px;
+    row-gap: 20px;
+    margin-top: 4px;
     padding: 7px 4px 10px;
   }
 
-  .service-note--shared .service-note-cat {
-    grid-area: cat;
-    align-self: end;
-    width: 70px;
-    height: 54px;
+  .service-note-divider {
+    grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr);
+    gap: 7px;
+    margin-top: 12px;
   }
+
+  .service-note-divider img { width: 28px; }
 
   .service-note--shared .service-note-label {
     grid-area: label;
@@ -5726,7 +5628,6 @@ main,
   }
 
   .service-note--shared .service-note-label strong { font-size: 16px; }
-  .service-note--shared .service-note-label span { font-size: 16px; }
 
   .service-note--shared ul {
     grid-area: notes;
@@ -5735,19 +5636,21 @@ main,
   }
 
   .service-note--shared li {
-    padding-left: 18px;
+    padding-left: 26px;
     font-size: 11.5px;
     line-height: 1.45;
   }
 
+  .service-note--shared li::before { top: -1px; width: 18px; height: 18px; }
+
   .service-note-decor {
     grid-area: decor;
     align-self: end;
-    width: 42px;
-    height: 42px;
+    width: 34px;
+    height: 34px;
   }
 
-  .service-note-decor__sparkle { width: 44px; height: 44px; }
+  .service-note .service-note-decor__sparkle { left: 50%; top: 50%; width: 30px; height: 30px; }
 }
 
 /* Booking/FAQ decor field: four quiet edge beats across the full vertical composition. */
@@ -7069,7 +6972,7 @@ main,
   .footer-features li + li { border-top: 0; border-left: 1.5px solid #f0cad3; }
 }
 
-/* The Signature photo opens large, so it sits above the card-wide booking button. */
+/* Only the Signature photo remains interactive inside its informational card. */
 .service-card[data-card-variant="signature"] .service-photo-wrap {
   z-index: 7;
 }

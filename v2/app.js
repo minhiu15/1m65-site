@@ -151,7 +151,6 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
       <h3>${service.name}</h3>
       <p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p>
       <div class="service-meta"><span class="service-duration">~${service.durationMinutes} phút</span><span class="service-price">${renderPrice(service)}</span></div>
-      <button type="button" data-book-service="${service.id}">Đặt hẹn <span aria-hidden="true">→</span></button>
     </div>
     ${showPhoto ? `<div class="service-photo-wrap${spaRelaxation ? " service-photo-wrap--spa" : ""}">
       <img src="${image}" alt="${photoAlt}" loading="lazy" decoding="async">
@@ -163,12 +162,14 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
 }
 
 function renderServiceNote(lines) {
-  return `<aside class="service-note service-note--shared">
-    <img class="service-note-cat" src="assets/services/nail-care/cats/note_cat_peeking.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
-    <div class="service-note-label"><strong>Lưu ý nhé</strong><span aria-hidden="true">♡</span></div>
+  return `<div class="service-note-divider" aria-hidden="true">
+    <i></i><img src="assets/about/decor/about_bow_divider_EXACT.webp" alt="" decoding="async" loading="lazy"><i></i>
+  </div>
+  <aside class="service-note service-note--shared">
+    <div class="service-note-label"><strong>Lưu ý nhé</strong></div>
     <ul>${lines.map((line, index) => `<li data-note-tone="${index % 3}">${line}</li>`).join("")}</ul>
     <span class="service-note-decor" aria-hidden="true">
-      <img class="service-note-decor__sparkle" src="../doodles/sparkle-cluster.webp" alt="" decoding="async" loading="lazy">
+      <img class="service-note-decor__sparkle" src="../doodles/star-lavender.webp" alt="" decoding="async" loading="lazy">
     </span>
   </aside>`;
 }
@@ -187,12 +188,12 @@ function renderSignature() {
   return `<div class="signature-layout">
     <div class="signature-hero-row">
       <div class="signature-intro">
-        <img class="signature-tape" src="assets/services/signature-shared/decor/top_gingham_tape.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
-        <img class="signature-cat" src="assets/services/signature-shared/cats/signature_raised_paw_OPTICAL_V1.webp" alt="Mèo Nhu Nhi vẫy tay" decoding="async" loading="lazy">
+        <img class="signature-cotton-trail" src="assets/services/signature-shared/decor/cotton_puff_ribbon_v1.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
+        <img class="signature-cat" src="assets/services/signature-shared/cats/signature_raised_paw_cotton_v2.webp" alt="Mèo Nhu Nhi vẫy tay" decoding="async" loading="lazy">
         <div class="signature-copy">
           <img class="signature-wordmark" src="assets/services/signature-shared/signature_wordmark/SIGNATURE_WORDMARK_PASTEL_CROWN_V11.webp" alt="Signature" decoding="async" loading="lazy">
           <span class="signature-ribbon">DỊCH VỤ NỔI BẬT TẠI 1M65 NAIL ROOM</span>
-          <p>Từng chi tiết nhỏ, tạo nên sự khác biệt lớn ♡</p>
+          <p>Từng chi tiết nhỏ, tạo nên sự khác biệt lớn</p>
         </div>
       </div>
       ${featured ? serviceCard(featured, "service-card--featured", "signature", 0) : ""}
@@ -216,7 +217,6 @@ function sharedServiceRow(service) {
   const original = Number(service.originalPrice || service.price || 0);
   const hasDiscount = discount > 0 && original > Number(service.price || 0);
   return `<article class="shared-service-row ${hasDiscount ? "has-sale" : ""}" data-card-variant="shared-list">
-    <button class="shared-service-row__booking" type="button" data-book-service="${service.id}" aria-label="Đặt hẹn dịch vụ ${service.name}"><span class="sr-only">Đặt hẹn dịch vụ ${service.name}</span></button>
     <div class="shared-service-row__copy">
       <div class="shared-service-row__copy-main">
         <h3>${service.name}</h3>
@@ -231,7 +231,6 @@ function sharedServiceRow(service) {
         ${hasDiscount ? `<del>${money(original)}</del>` : ""}
         <strong>${money(service.price)}</strong>
       </div>
-      <span class="shared-service-row__cta" aria-hidden="true">Đặt lịch <span>→</span></span>
     </div>
   </article>`;
 }
@@ -239,8 +238,14 @@ function sharedServiceRow(service) {
 function renderSharedGroup(id, animate = false) {
   const group = groupDefs[id];
   const services = group.ids.map(serviceById).filter(Boolean);
+  const noteLines = id === "nail" ? nailCareNotes : [
+    group.note,
+    ...(id === "design" ? [nailCareNotes[1]] : []),
+    nailCareNotes[2],
+  ];
   return `<div class="shared-service-layout shared-service-layout--${id}${animate ? " is-entering" : ""}" data-template="shared-service-list" data-service-group="${id}">
     <div class="shared-service-list">${services.map((item) => sharedServiceRow(item)).join("")}</div>
+    ${renderServiceNote(noteLines)}
   </div>`;
 }
 
@@ -311,8 +316,8 @@ function setupInteractions() {
       renderServices({ animateShared: nextTab !== "signature" });
       return;
     }
-    const booking = event.target.closest("[data-open-booking],[data-book-service]");
-    if (booking) document.dispatchEvent(new CustomEvent("1m65:v2:open-booking", { detail: { serviceId: booking.dataset.bookService || "", slot: booking.dataset.prefillSlot || "" } }));
+    const booking = event.target.closest("[data-open-booking]");
+    if (booking) document.dispatchEvent(new CustomEvent("1m65:v2:open-booking", { detail: { serviceId: "", slot: booking.dataset.prefillSlot || "" } }));
   });
   document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeDrawer(); });
 }
