@@ -1,11 +1,12 @@
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
+const REMOVED_SERVICE_IDS = new Set(["goi-thao"]);
 const categories = [
 {id:"nail",label:"Nail Care",ids:["ct-tay","ct-chan","thao-gel","thao-up","thao-bot","noi-up","noi-gel","noi-bot"]},
 {id:"classic",label:"Classic",ids:["son-cung","gel-hn","gel-thach"]},
 {id:"design",label:"Design",ids:["flash","matmeo","guong","ombre","da","charm","sticker","ve","xacu"]},
 {id:"mi",label:"Eyelashes",ids:["uon-mi","uon-mi-den","mi-classic","mi-tho","mi-volume","mi-sole","mi-duoi"]},
-{id:"goi",label:"Shampoo",ids:["goi-thao","goi-thuong","goi-phuchoi","goi-duongsinh"]}
+{id:"goi",label:"Shampoo",ids:["goi-thuong","goi-phuchoi","goi-duongsinh"]}
 ];
 const state = {step:1,category:"nail",selected:[],date:"",preferred:"",slots:[],blocked:[],slot:"",loading:false,pending:false,error:"",name:"",phone:"",note:"",status:"",reference:""};
 let requestId = 0;
@@ -14,7 +15,7 @@ function exp(){return window.__v2Experience;}
 function esc(value){return exp().esc(value);}
 function services(){
   const source=window.__v2Services&&window.__v2Services.services;
-  return Array.isArray(source)?source.filter(function(service){return service.enabled!==false&&service.active!==false&&service.isActive!==false&&service.status!=="disabled";}):[];
+  return Array.isArray(source)?source.filter(function(service){return !REMOVED_SERVICE_IDS.has(service.id)&&service.enabled!==false&&service.active!==false&&service.isActive!==false&&service.status!=="disabled";}):[];
 }
 function byId(id){return services().find(function(service){return service.id===id;});}
 function categoryOf(id){const item=categories.find(function(category){return category.ids.includes(id);});return item?item.id:"nail";}

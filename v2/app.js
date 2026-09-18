@@ -48,7 +48,6 @@ const fallbackServices = [
   ["mi-volume", "Nối mi Volume", 200000, 110, "Dày và bồng nhất", "assets/services/signature-shared/service_photos/noi_mi_classic.jpg"],
   ["mi-sole", "Nối mi Sole Thái / Anime", 200000, 110, "Thiết kế theo dáng mắt", "assets/services/signature-shared/service_photos/noi_mi_classic.jpg"],
   ["mi-duoi", "Nối mi dưới", 20000, 20, "Làm kèm bộ mi trên", "assets/services/signature-shared/service_photos/noi_mi_classic.jpg"],
-  ["goi-thao", "Gội thảo dược 30′", 29000, 30, "Thư giãn nhẹ nhàng", "assets/services/signature-shared/service_photos/goi_dau_duong_sinh.jpg"],
   ["goi-thuong", "Gội dầu gội thường", 29000, 25, "Nhanh gọn, sạch nhẹ", "assets/services/signature-shared/service_photos/goi_dau_duong_sinh.jpg"],
   ["goi-phuchoi", "Gội phục hồi hư tổn", 69000, 40, "Ủ dưỡng cho tóc khô", "assets/services/signature-shared/service_photos/goi_dau_duong_sinh.jpg"],
   ["goi-duongsinh", "Gội dưỡng sinh + tẩy da chết da đầu", 89000, 45, "Massage đầu, vai và cổ", "assets/services/signature-shared/service_photos/goi_dau_duong_sinh.jpg"],
@@ -83,7 +82,7 @@ const groupDefs = {
     title: "SHAMPOO",
     note: "Một khoảng nghỉ êm cho tóc, da đầu và đôi vai được thả lỏng.",
     accent: "../doodles/teacup.webp",
-    ids: ["goi-thao", "goi-thuong", "goi-phuchoi", "goi-duongsinh"],
+    ids: ["goi-thuong", "goi-phuchoi", "goi-duongsinh"],
   },
 };
 
@@ -140,11 +139,11 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
   const spaRelaxation = signature && service.id === "goi-duongsinh";
   const signaturePhoto = signature && !spaRelaxation ? signaturePhotoSrc(service.id, "card") : "";
   const image = spaRelaxation
-    ? "assets/services/signature-shared/cats/spa_relaxation_cat_original.webp"
+    ? "assets/services/signature-shared/service_photos/goi_thao_duoc.webp"
     : (signature ? signaturePhoto || SIGNATURE_PLACEHOLDER_IMAGE : service.image);
   const photoTilt = signature && showPhoto && !spaRelaxation ? (sequenceIndex % 2 === 0 ? "left" : "right") : "";
   const cardClasses = ["service-card", className, spaRelaxation ? "service-card--spa" : "", showPhoto ? "" : "service-card--text-only"].filter(Boolean).join(" ");
-  const photoAlt = spaRelaxation ? "Minh họa mèo thư giãn gội đầu tại spa" : (signaturePhoto ? `Ảnh dịch vụ ${service.name}` : `Ảnh mẫu tạm cho ${service.name}`);
+  const photoAlt = spaRelaxation ? "Khách được gội và chăm sóc da đầu tại tiệm" : (signaturePhoto ? `Ảnh dịch vụ ${service.name}` : `Ảnh mẫu tạm cho ${service.name}`);
   return `<article class="${cardClasses}" data-card-variant="${variant}" data-service-id="${service.id}"${photoTilt ? ` data-photo-tilt="${photoTilt}"` : ""}>
     ${featured ? '<span class="featured-badge"><span>ĐƯỢC CHỌN</span><strong>NHIỀU NHẤT</strong></span>' : ""}
     <div class="service-card-copy">
@@ -158,6 +157,7 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
       ${signature && !spaRelaxation ? '<img class="signature-photo-pin" src="assets/services/signature-shared/decor/signature_photo_clip_pink.svg" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
       ${featured ? '<img class="featured-cat-sticker" src="assets/services/signature-shared/cats/featured_photo_cat_sticker.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
     </div>` : ""}
+    ${spaRelaxation ? '<img class="signature-spa-cat" src="assets/services/signature-shared/cats/spa_relaxation_cat_original.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
   </article>`;
 }
 

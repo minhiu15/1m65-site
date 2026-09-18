@@ -4,7 +4,7 @@
   const API_URL = 'https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api';
   const SESSION_KEY = '1m65-admin-session';
   const TIME_ZONE = 'Asia/Ho_Chi_Minh';
-  const REMOVED_SERVICE_IDS = new Set(['combo-foot']);
+  const REMOVED_SERVICE_IDS = new Set(['combo-foot', 'goi-thao']);
   const STATUS_LABELS = {
     confirmed: 'Đã xác nhận',
     completed: 'Hoàn thành',
@@ -30,7 +30,7 @@
     },
     {
       id: 'goi', label: 'Gội', hint: 'Thư giãn đầu, vai, cổ',
-      serviceIds: ['goi-thao', 'goi-thuong', 'goi-phuchoi', 'goi-duongsinh']
+      serviceIds: ['goi-thuong', 'goi-phuchoi', 'goi-duongsinh']
     }
   ];
 
