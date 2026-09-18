@@ -2,11 +2,11 @@ const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
 const REMOVED_SERVICE_IDS = new Set(["goi-thao"]);
 const categories = [
-{id:"nail",label:"Nail Care",ids:["ct-tay","ct-chan","thao-gel","thao-up","thao-bot","noi-up","noi-gel","noi-bot"]},
-{id:"classic",label:"Classic",ids:["son-cung","gel-hn","gel-thach"]},
-{id:"design",label:"Design",ids:["flash","matmeo","guong","ombre","da","charm","sticker","ve","xacu"]},
-{id:"mi",label:"Eyelashes",ids:["uon-mi","uon-mi-den","mi-classic","mi-tho","mi-volume","mi-sole","mi-duoi"]},
-{id:"goi",label:"Shampoo",ids:["goi-thuong","goi-phuchoi","goi-duongsinh"]}
+{id:"nail",label:"Nail Care",shortLabel:"Nail",ids:["ct-tay","ct-chan","thao-gel","thao-up","thao-bot","noi-up","noi-gel","noi-bot"]},
+{id:"classic",label:"Classic",shortLabel:"Classic",ids:["son-cung","gel-hn","gel-thach"]},
+{id:"design",label:"Design",shortLabel:"Design",ids:["flash","matmeo","guong","ombre","da","charm","sticker","ve","xacu"]},
+{id:"mi",label:"Eyelashes",shortLabel:"Mi",ids:["uon-mi","uon-mi-den","mi-classic","mi-tho","mi-volume","mi-sole","mi-duoi"]},
+{id:"goi",label:"Shampoo",shortLabel:"Gội",ids:["goi-thuong","goi-phuchoi","goi-duongsinh"]}
 ];
 const state = {step:1,category:"nail",selected:[],date:"",preferred:"",slots:[],blocked:[],slot:"",loading:false,pending:false,error:"",name:"",phone:"",note:"",status:"",reference:""};
 let requestId = 0;
@@ -42,13 +42,14 @@ function reset(options){
 }
 function stepOne(){
   const category=categories.find(function(item){return item.id===state.category;})||categories[0];
-  const categoryHtml=categories.map(function(item){return '<button type="button" class="'+(item.id===state.category?"is-active":"")+'" data-booking-category="'+item.id+'">'+item.label+'</button>';}).join("");
+  const categoryHtml=categories.map(function(item){return '<button type="button" class="'+(item.id===state.category?"is-active":"")+'" data-booking-category="'+item.id+'" aria-label="'+esc(item.label)+'"><span class="booking-category-label">'+esc(item.label)+'</span><span class="booking-category-short" aria-hidden="true">'+esc(item.shortLabel)+'</span></button>';}).join("");
   const cards=category.ids.map(byId).filter(Boolean).map(function(service){
     const selected=state.selected.includes(service.id);
     const discount=Number(service.discountPercent||0);
     const badgeHtml=discount>0?'<span class="sale-badge">-'+discount+'%</span>':'';
     const priceHtml=discount>0?'<del>'+money(service.originalPrice)+'</del><strong>'+money(service.price)+'</strong>':'<strong>'+money(service.price)+'</strong>';
-    return '<button type="button" class="booking-service-option '+(selected?"is-selected ":"")+(discount>0?"has-sale":"")+'" data-booking-service="'+esc(service.id)+'" aria-pressed="'+selected+'"><div class="booking-service-copy"><h3>'+esc(service.name)+'</h3><p>'+duration(service)+' phút</p></div><span class="booking-service-side"><span class="booking-service-price"><span class="booking-service-offer-slot" aria-hidden="true">'+badgeHtml+'</span><span class="booking-service-price-card">'+priceHtml+'</span></span><span class="booking-check" aria-hidden="true">'+(selected?"✓":"")+'</span></span></button>';
+    const saleLabel=discount>0?' aria-label="'+esc(service.name+', giảm '+discount+'%, '+duration(service)+' phút, giá '+money(service.price))+'"':'';
+    return '<button type="button" class="booking-service-option '+(selected?"is-selected ":"")+(discount>0?"has-sale":"")+'" data-booking-service="'+esc(service.id)+'" aria-pressed="'+selected+'"'+saleLabel+'><div class="booking-service-copy"><h3>'+esc(service.name)+'</h3><p><span class="booking-service-duration">'+duration(service)+' phút</span></p></div><span class="booking-service-side"><span class="booking-service-price"><span class="booking-service-offer-slot" aria-hidden="true">'+badgeHtml+'</span><span class="booking-service-price-card">'+priceHtml+'</span></span><span class="booking-check" aria-hidden="true">'+(selected?"✓":"")+'</span></span></button>';
   }).join("");
   const picked=selectedServices().map(function(service){return '<button type="button" data-booking-remove="'+esc(service.id)+'">'+esc(service.name)+' ×</button>';}).join("");
   const total=totals();

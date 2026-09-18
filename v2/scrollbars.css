@@ -1,0 +1,77 @@
+:root {
+  --brand-scroll-track: #fff0f5;
+  --brand-scroll-thumb: #da91aa;
+  --brand-scroll-thumb-hover: #c96f91;
+}
+
+html,
+body,
+body * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--brand-scroll-thumb) var(--brand-scroll-track);
+}
+
+/* The manager's older theme uses an important root color; keep its rail in the V2 palette. */
+html {
+  scrollbar-color: var(--brand-scroll-thumb) var(--brand-scroll-track) !important;
+}
+
+@supports selector(::-webkit-scrollbar) {
+  html,
+  body,
+  body * {
+    scrollbar-width: auto;
+    scrollbar-color: auto;
+  }
+
+  html {
+    scrollbar-color: auto !important;
+  }
+
+  html::-webkit-scrollbar,
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  html::-webkit-scrollbar-track,
+  *::-webkit-scrollbar-track {
+    background: var(--brand-scroll-track) !important;
+    border-radius: 999px;
+  }
+
+  html::-webkit-scrollbar-thumb,
+  *::-webkit-scrollbar-thumb {
+    border: 2px solid var(--brand-scroll-track);
+    border-radius: 999px;
+    background: var(--brand-scroll-thumb) !important;
+    background-clip: padding-box;
+  }
+
+  html::-webkit-scrollbar-thumb:hover,
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--brand-scroll-thumb-hover) !important;
+  }
+
+  html::-webkit-scrollbar-button,
+  *::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  html::-webkit-scrollbar-corner,
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  .booking-modal-body::-webkit-scrollbar,
+  .gallery-modal-grid::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .booking-modal-body::-webkit-scrollbar-thumb,
+  .gallery-modal-grid::-webkit-scrollbar-thumb {
+    border-width: 1px;
+  }
+}

@@ -141,7 +141,7 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
   const image = spaRelaxation
     ? "assets/services/signature-shared/service_photos/goi_thao_duoc.webp"
     : (signature ? signaturePhoto || SIGNATURE_PLACEHOLDER_IMAGE : service.image);
-  const photoTilt = signature && showPhoto && !spaRelaxation ? (sequenceIndex % 2 === 0 ? "left" : "right") : "";
+  const photoTilt = signature && showPhoto ? (sequenceIndex % 2 === 0 ? "left" : "right") : "";
   const cardClasses = ["service-card", className, spaRelaxation ? "service-card--spa" : "", showPhoto ? "" : "service-card--text-only"].filter(Boolean).join(" ");
   const photoAlt = spaRelaxation ? "Khách được gội và chăm sóc da đầu tại tiệm" : (signaturePhoto ? `Ảnh dịch vụ ${service.name}` : `Ảnh mẫu tạm cho ${service.name}`);
   return `<article class="${cardClasses}" data-card-variant="${variant}" data-service-id="${service.id}"${photoTilt ? ` data-photo-tilt="${photoTilt}"` : ""}>
@@ -153,11 +153,12 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
     </div>
     ${showPhoto ? `<div class="service-photo-wrap${spaRelaxation ? " service-photo-wrap--spa" : ""}">
       <img src="${image}" alt="${photoAlt}" loading="lazy" decoding="async">
-      ${signature && !spaRelaxation ? `<button class="service-photo-zoom" type="button" data-photo-zoom="${signaturePhoto ? signaturePhotoSrc(service.id, "full") : image}" data-photo-zoom-caption="${service.name}" aria-label="Xem ảnh ${service.name}"></button>` : ""}
-      ${signature && !spaRelaxation ? '<img class="signature-photo-pin" src="assets/services/signature-shared/decor/signature_photo_clip_pink.svg" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
+      ${signature ? `<button class="service-photo-zoom" type="button" data-photo-zoom="${signaturePhoto ? signaturePhotoSrc(service.id, "full") : image}" data-photo-zoom-caption="${service.name}" aria-label="Xem ảnh ${service.name}"></button>` : ""}
+      ${signature ? '<img class="signature-photo-pin" src="assets/services/signature-shared/decor/signature_photo_clip_pink.svg" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
       ${featured ? '<img class="featured-cat-sticker" src="assets/services/signature-shared/cats/featured_photo_cat_sticker.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
     </div>` : ""}
     ${spaRelaxation ? '<img class="signature-spa-cat" src="assets/services/signature-shared/cats/spa_relaxation_cat_original.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
+    <button class="service-booking-hitarea" type="button" data-book-service="${service.id}" aria-label="Đặt lịch ${service.name}"></button>
   </article>`;
 }
 
@@ -232,6 +233,7 @@ function sharedServiceRow(service) {
         <strong>${money(service.price)}</strong>
       </div>
     </div>
+    <button class="service-booking-hitarea" type="button" data-book-service="${service.id}" aria-label="Đặt lịch ${service.name}"></button>
   </article>`;
 }
 
@@ -318,6 +320,8 @@ function setupInteractions() {
     }
     const booking = event.target.closest("[data-open-booking]");
     if (booking) document.dispatchEvent(new CustomEvent("1m65:v2:open-booking", { detail: { serviceId: "", slot: booking.dataset.prefillSlot || "" } }));
+    const serviceBooking = event.target.closest("[data-book-service]");
+    if (serviceBooking) document.dispatchEvent(new CustomEvent("1m65:v2:open-booking", { detail: { serviceId: serviceBooking.dataset.bookService, slot: "" } }));
   });
   document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeDrawer(); });
 }

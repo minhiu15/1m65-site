@@ -1,3 +1,4 @@
+@import url("scrollbars.css?v=20260918-1");
 @font-face{font-family:Nunito;src:url(../assets/fonts/Nunito-Variable.ttf) format("truetype");font-style:normal;font-weight:200 1000;font-display:swap}
 @font-face{font-family:Quicksand;src:url(../assets/fonts/Quicksand-Variable.ttf) format("truetype");font-style:normal;font-weight:300 700;font-display:swap}
 :root{--paper:#fcf3ee;--paper-2:#fff9f7;--white:#fff;--cocoa:#4f382e;--ink:#5d463d;--muted:#8b746b;--pink:#e85e7c;--pink-strong:#d9476d;--pink-soft:#f8d8df;--lavender:#b493dd;--lavender-soft:#f1e8fa;--peach:#efa87f;--line:#f0d4d1;--shadow:0 24px 70px -44px rgba(93,56,65,.42);--radius-lg:34px;--radius-md:24px;--content:1440px;--header:86px}
@@ -1046,7 +1047,7 @@ main,
   background-color: transparent;
 }
 
-/* Booking category active state uses the compact Gallery paper pill. */
+/* Gallery and booking active tabs share paper-rendering mechanics. */
 .gallery-filters button.is-active,
 .booking-categories button.is-active {
   position: relative;
@@ -1595,6 +1596,8 @@ main,
 }
 
 .services-content {
+  --services-sheet-inline-pad: clamp(24px, 2.8vw, 42px);
+  container-type: inline-size;
   margin-top: var(--services-card-gap);
   padding: clamp(28px, 2.6vw, 40px) clamp(24px, 2.8vw, 42px) clamp(34px, 3.2vw, 48px);
   border: 1px solid rgba(159, 142, 184, .24);
@@ -1657,6 +1660,7 @@ main,
   }
 
   .services-content {
+    --services-sheet-inline-pad: 18px;
     margin-top: var(--services-card-gap);
     padding: 24px 18px 32px;
     border-radius: 30px;
@@ -1780,6 +1784,7 @@ main,
   }
 
   .services-content {
+    --services-sheet-inline-pad: 10px;
     margin-top: 8px;
     padding: 16px 10px 24px;
     border-radius: 24px;
@@ -2585,7 +2590,14 @@ main,
   aspect-ratio: 3 / 1;
   object-fit: contain;
   opacity: .84;
+  filter: blur(.8px);
   pointer-events: none;
+}
+
+/* The booking picker uses a dedicated compact paper shell, not the Gallery pill. */
+.booking-categories button.is-active::before {
+  background-image: url("assets/booking/ui_shells/booking_category_active_pink_paper_v1.webp");
+  background-size: 100% 100%;
 }
 
 .signature-ref-doodle {
@@ -2958,7 +2970,10 @@ main,
   .signature-cat { width: min(100%, 212px); height: 243px; transform: translateY(42px) scale(1.07); }
   .signature-copy { transform: translateY(10px) scale(1.05); }
   .signature-wordmark { max-height: 170px; }
-  .service-card--featured[data-card-variant="signature"] { min-height: 236px; }
+  .service-card--featured[data-card-variant="signature"] {
+    min-height: 236px;
+    background: var(--pastel-rose);
+  }
   .service-card--featured[data-card-variant="signature"] .service-photo-wrap { min-height: 176px; }
   .service-card--featured[data-card-variant="signature"] .service-photo-wrap > img:first-child { min-height: 160px; }
 
@@ -3032,7 +3047,7 @@ main,
     min-height: 178px;
     padding: 0 4px;
   }
-  .signature-cotton-trail { bottom: -28px; left: 18px; width: min(70%, 260px); }
+  .signature-cotton-trail { bottom: -44px; left: 18px; width: min(70%, 260px); }
   .signature-ref-doodle--heart { left: 27%; top: 12%; width: 28px; height: 28px; }
   .signature-cat { width: 100px; height: 164px; transform: translateY(24px) scale(1.07); }
   .signature-copy { transform: translateY(-1px); }
@@ -3704,25 +3719,37 @@ main,
   max-width: 100%;
   margin: 0 0 clamp(14px, 1.4vw, 24px);
   padding: clamp(12px, .9vw, 16px) clamp(20px, 1.65vw, 28px);
-  border: 1px solid rgba(232, 94, 124, .28);
-  border-radius: 19px 23px 18px 24px;
-  background: linear-gradient(112deg, #fff8fa 0%, #fffdfa 72%);
+  border: 1px solid rgba(232, 145, 166, .58);
+  border-radius: 16px;
+  background: linear-gradient(112deg, #fff3f6 0%, #fffaf9 58%, #fff8f3 100%);
   color: #614941;
   font: 700 clamp(14px, 1.06vw, 18px)/1.35 var(--font-signature-display);
   transform: rotate(-.6deg);
-  box-shadow: 0 16px 27px -23px rgba(105, 65, 76, .38);
+  box-shadow: 0 14px 26px -20px rgba(154, 83, 105, .28);
 }
 
 .taped-kicker::before {
+  z-index: 2;
   left: -24px;
   top: -25px;
   width: 88px;
   height: 40px;
   background-image: url("assets/home/decor/pink_gingham_tape.webp");
+  filter: saturate(.64) brightness(1.08);
+  opacity: .84;
   transform: rotate(-9deg);
 }
 
-.taped-kicker__copy { position: relative; }
+.taped-kicker::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px dashed rgba(231, 143, 161, .55);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+.taped-kicker__copy { position: relative; z-index: 1; }
 
 .home-copy h1 {
   margin: 0;
@@ -3902,7 +3929,7 @@ main,
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   padding: clamp(12px, 1vw, 17px) clamp(14px, 1.2vw, 20px);
   border: 5px solid rgba(255, 255, 255, .88);
   border-radius: 21px;
@@ -4003,10 +4030,12 @@ main,
 .home-support .today-card .today-note { padding-top: 5px; font-size: 10px; line-height: 1.3; }
 
 @media (min-width: 1281px) {
+  .home-quote p { margin-top: 14px; }
+
   .home-grid {
     grid-template-rows:
       minmax(0, 1fr)
-      clamp(214px, 13.2vw, 232px)
+      232px
       clamp(88px, 6.3vw, 108px);
   }
 
@@ -4018,7 +4047,7 @@ main,
   .home-support .today-card { padding: 13px 13px 12px; }
   .home-support .today-card .slot-grid { gap: 7px; padding-top: 5px; }
   .home-support .today-card .slot-grid button { min-height: 56px; padding: 10px 6px 7px; }
-  .home-support .today-card .today-note { margin-top: 6px; padding-top: 10px; }
+  .home-support .today-card .today-note { margin-top: 12px; padding-top: 10px; }
 }
 
 .home-bottom {
@@ -4042,6 +4071,10 @@ main,
   background: rgba(255, 252, 250, .82);
   box-shadow: 0 13px 28px -25px rgba(100, 72, 89, .5);
   overflow: hidden;
+}
+
+@media (min-width: 901px) {
+  .home-bottom .benefit-grid { outline: 1px solid rgba(241, 143, 166, .48); }
 }
 
 .home-bottom .benefit-grid article {
@@ -4165,9 +4198,10 @@ main,
   .home-art > .home-art__flower { height: 32px; right: 1%; }
   .home-quote { min-height: 190px; padding: 15px; font-size: 12px; }
   .home-quote__stars img { width: 15px; }
+  .home-quote__bow { right: 0; bottom: 0; width: clamp(36px, 9vw, 40px); }
   .home-support .today-card { min-height: 0; padding: 12px 10px 10px; }
   .home-support .today-card .slot-grid button { min-height: 62px; }
-  .home-support .today-card .today-note { font-size: 9px; }
+  .home-support .today-card .today-note { margin-top: 12px; font-size: 9px; }
   .home-bottom .benefit-grid { grid-template-columns: minmax(0, 1fr); min-height: 0; }
   .home-bottom .benefit-grid article { grid-template-columns: 54px minmax(0, 1fr); min-height: 76px; padding: 10px 14px; border-right: 0; border-bottom: 1px dashed rgba(185, 158, 192, .32); }
   .home-bottom .benefit-grid article:last-child { border-bottom: 0; }
@@ -4499,7 +4533,7 @@ main,
 .about-photo--detail {
   position: absolute;
   z-index: 4;
-  right: 2%;
+  right: 0;
   top: 16%;
   width: clamp(138px, 11.5vw, 176px);
   height: clamp(150px, 12.5vw, 184px);
@@ -4798,10 +4832,10 @@ main,
   .about-divider img { width: 36px; }
   .about-intro p { font-size: clamp(14px, 3.8vw, 16px); line-height: 1.58; }
   .about-intro__sparkles { top: 16px; right: -5px; width: 48px; }
-  .about-media__photos { height: clamp(300px, 82vw, 360px); }
-  .about-photo--main { top: 3%; left: -3%; width: 64%; height: 89%; padding: 5px; border-radius: 18px; }
+  .about-media__photos { height: clamp(338px, 92vw, 400px); }
+  .about-photo--main { top: 3%; left: 1%; width: 62%; height: 89%; padding: 5px; border-radius: 18px; }
   .about-photo--main > img:first-child { border-radius: 13px; }
-  .about-photo--fan { top: 12%; right: 0; width: 68%; height: 85%; padding: 5px; border-radius: 17px; transform: rotate(4deg); }
+  .about-photo--fan { top: 12%; right: .5%; width: 66%; height: 85%; padding: 5px; border-radius: 17px; transform: rotate(4deg); }
   .about-photo--fan > img:first-child { border-radius: 12px; }
   .about-photo-bubble { top: 6px; left: -14px; width: 100px; min-height: 66px; padding: 11px; font-size: 10px; }
   .about-photo__sticker { width: 38px; left: -5px; bottom: -5px; }
@@ -4814,7 +4848,7 @@ main,
     margin: 14px 0 12px;
   }
   .about-divider--story img { width: 30px; }
-  .about-photo--detail { right: 2%; top: 66px; width: clamp(96px, 26vw, 114px); height: clamp(108px, 29vw, 128px); padding: 4px; border-radius: 14px; }
+  .about-photo--detail { right: -1%; top: 72px; width: clamp(96px, 26vw, 114px); height: clamp(108px, 29vw, 128px); padding: 4px; border-radius: 14px; }
   .about-photo--detail > .about-photo__crop { border-radius: 10px; }
   .about-photo__crop > img { transform: scale(1.45); }
   .about-story .about-story__owner { margin-top: 10px; font-size: 14px; line-height: 1.55; }
@@ -5445,7 +5479,7 @@ main,
 }
 
 :is(.shared-service-layout, .signature-layout) > .service-note--shared {
-  width: 100%;
+  width: min(1280px, 100%);
   grid-template-columns: minmax(205px, 225px) minmax(420px, 1fr) 70px;
   grid-template-areas: "label notes decor";
   align-items: center;
@@ -6140,6 +6174,7 @@ main,
 }
 
 /* Booking service choices echo the main-page service rows on desktop. */
+.booking-category-short { display: none; }
 .booking-service-copy { min-width: 0; }
 
 .booking-service-side,
@@ -6150,9 +6185,16 @@ main,
 }
 
 .booking-service-side { gap: 10px; min-width: 0; }
-.booking-service-price { justify-content: flex-end; gap: 5px; white-space: nowrap; }
+.booking-service-price { position: relative; justify-content: flex-end; gap: 5px; white-space: nowrap; }
 .booking-service-price-card { justify-content: center; gap: 5px; }
-.booking-service-offer-slot { display: inline-flex; }
+.booking-service-offer-slot {
+  position: absolute;
+  z-index: 2;
+  top: -7px;
+  right: -10px;
+  display: grid;
+  place-items: center;
+}
 .booking-service-offer-slot:empty { display: none; }
 .booking-service-price .sale-badge { display: inline-grid; flex: none; place-items: center; }
 .booking-service-price-card del { color: var(--muted); font-size: 9px; }
@@ -6195,39 +6237,18 @@ main,
   .booking-service-copy h3 { font: 700 clamp(20px, 1.7vw, 25px) Quicksand; }
   .booking-service-copy p { margin-top: 7px; font-size: 13px; line-height: 1.48; }
   .booking-service-side { gap: 18px; min-width: max-content; }
-  .booking-service-price { gap: 18px; }
-
-  .booking-service-offer-slot {
-    display: grid;
-    flex: 0 0 58px;
-    place-items: center;
-    width: 58px;
-    min-height: 42px;
-    margin-right: 18px;
-  }
 
   .booking-service-price .sale-badge {
     position: relative;
-    width: 58px;
-    min-height: 42px;
-    padding: 5px;
+    width: 46px;
+    min-height: 33px;
+    padding: 4px;
     border: 2px dashed #ff8ca7;
-    border-radius: 13px;
+    border-radius: 11px;
     background: #ffe5ec;
     color: #ff527b;
-    font: 700 16px var(--font-signature-display);
-    transform: rotate(-.7deg);
-  }
-
-  .booking-service-price .sale-badge::after {
-    content: "";
-    position: absolute;
-    top: -18px;
-    right: 0;
-    width: 24px;
-    height: 22px;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 22'%3E%3Cpath d='M2 14L6 2M8 16L15 8M13 19L21 17' fill='none' stroke='%23ff6f91' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
-    transform: translateX(19px);
+    font: 700 13px var(--font-signature-display);
+    transform: rotate(15deg);
   }
 
   .booking-service-price-card {
@@ -6262,35 +6283,6 @@ main,
   .booking-service-copy h3 {
     font-size: clamp(18px, 1.2vw, 20px);
   }
-
-  .booking-service-price { position: relative; }
-
-  .booking-service-offer-slot {
-    position: absolute;
-    z-index: 2;
-    top: 0;
-    right: 0;
-    flex: none;
-    margin-right: 0;
-    transform: translate(12px, -12px);
-  }
-
-  .booking-service-price .sale-badge {
-    width: 46px;
-    min-height: 33px;
-    padding: 4px;
-    border-radius: 11px;
-    font-size: 13px;
-    transform: rotate(5deg);
-  }
-
-  .booking-service-price .sale-badge::after {
-    top: -14px;
-    right: 0;
-    width: 18px;
-    height: 17px;
-    transform: translateX(14px);
-  }
 }
 
 @media (max-width: 600px) {
@@ -6299,6 +6291,8 @@ main,
     min-height: 104px;
     padding: 12px;
   }
+
+  .booking-service-offer-slot { top: -10px; }
 
   .booking-service-copy {
     display: grid;
@@ -6349,37 +6343,79 @@ main,
   .booking-service-price-card del { color: #785f57; font-size: 11px; }
   .booking-service-price-card strong { margin-top: 3px; font-size: 18px; line-height: 1.1; }
 
-  .booking-service-offer-slot {
-    position: absolute;
-    z-index: 2;
-    top: 0;
-    right: 0;
-    display: grid;
-    place-items: center;
-    width: 42px;
-    min-height: 30px;
-    transform: translate(2px, -13px);
-  }
-
-  .booking-service-offer-slot:empty { display: none; }
-
   .booking-service-price .sale-badge {
-    width: 42px;
-    min-height: 30px;
-    padding: 3px;
+    width: 34px;
+    min-height: 20px;
+    padding: 2px;
     border: 2px dashed #ff8ca7;
     border-radius: 11px;
     background: #ffe5ec;
     color: #ff527b;
-    font: 700 11px var(--font-signature-display);
+    font: 700 9px var(--font-signature-display);
     transform: rotate(15deg);
   }
 }
 
+/* Mobile booking keeps every category in one shared segmented control. */
+@media (max-width: 600px) {
+  #booking-modal-v2 .modal-header { gap: 10px; padding: 15px 16px 12px; }
+  #booking-modal-v2 .modal-header h2 { font-size: 20px; line-height: 1.2; }
+  #booking-modal-v2 .modal-close { width: 40px; height: 40px; }
+  .booking-modal-body { padding: 12px 14px; }
+  .booking-step[data-booking-step="1"] { gap: 9px; }
+  .booking-categories {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
+    padding: 4px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: rgba(255, 250, 247, .8);
+  }
+  .booking-categories button {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding-inline: 2px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    font-size: clamp(11px, 2.7vw, 13px);
+    white-space: nowrap;
+  }
+  .booking-service-grid { gap: 8px; }
+  .booking-service-option {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    min-height: 82px;
+    padding: 9px 10px;
+    border-radius: 15px;
+  }
+  .booking-service-copy { grid-template-columns: 16px minmax(0, 1fr); gap: 0 8px; }
+  .booking-service-copy::before { width: 16px; height: 18px; }
+  .booking-service-copy h3 { font-size: 14px; line-height: 1.2; }
+  .booking-service-copy p { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 5px; margin-top: 3px; }
+  .booking-service-side { gap: 9px; }
+  .booking-service-price { flex-basis: 96px; width: 96px; min-height: 52px; }
+  .booking-service-price-card { width: 96px; min-height: 52px; border-radius: 13px; }
+  .booking-service-price-card del { font-size: 10px; }
+  .booking-service-price-card strong { font-size: 16px; }
+  .booking-check { width: 22px; height: 22px; }
+  #booking-modal-v2 .booking-footer { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 8px; padding: 9px 12px; }
+  #booking-modal-v2 .booking-footer [data-booking-back] { min-width: 0; min-height: 44px; padding-inline: 8px; }
+  #booking-modal-v2 .booking-footer [data-booking-next] { width: 100%; min-width: 0; min-height: 44px; height: 44px; padding-inline: 8px; font-size: 13px; }
+}
+
+@media (max-width: 420px) {
+  .booking-categories .booking-category-label { display: none; }
+  .booking-categories .booking-category-short { display: inline; }
+}
+
 /* The portrait stays in the card; the transparent spa cat sits beside it. */
 .signature-spa-row {
-  --spa-cat-size: clamp(130px, 11vw, 170px);
-  --spa-cat-gap: 8px;
+  --spa-cat-size: clamp(200px, 18vw, 260px);
+  --spa-cat-gap: clamp(12px, 1.7vw, 28px);
 }
 
 .service-card[data-card-variant="signature"].service-card--spa {
@@ -6390,7 +6426,7 @@ main,
 .service-card[data-card-variant="signature"] > .signature-spa-cat {
   position: absolute;
   z-index: 2;
-  top: 50%;
+  bottom: -12px;
   left: calc(100% + var(--spa-cat-gap));
   width: var(--spa-cat-size);
   height: auto;
@@ -6398,7 +6434,6 @@ main,
   border-radius: 0;
   object-fit: contain;
   filter: drop-shadow(0 8px 12px rgba(160, 78, 105, .12));
-  transform: translateY(-50%);
   pointer-events: none;
 }
 
@@ -6413,24 +6448,18 @@ main,
   aspect-ratio: auto;
   box-sizing: border-box;
   justify-self: end;
-  padding: 7px;
-  overflow: hidden;
-  border: 1px solid rgba(232, 94, 124, .2);
+  padding: 0;
+  overflow: visible;
+  border: 0;
   border-radius: 18px;
-  background: rgba(255, 255, 255, .86);
-  transform: none;
-}
-
-.service-card[data-card-variant="signature"] .service-photo-wrap--spa::before {
-  content: none;
-  display: none;
+  background: transparent;
 }
 
 .service-card[data-card-variant="signature"] .service-photo-wrap--spa > img:first-child {
   width: 100%;
   height: 100%;
   min-height: 0;
-  border-radius: 12px;
+  border-radius: inherit;
   object-fit: cover;
   object-position: center 40%;
   filter: none;
@@ -6439,9 +6468,11 @@ main,
 
 @media (max-width: 1180px) {
   .signature-spa-row {
-    --spa-cat-size: clamp(100px, 11vw, 128px);
-    padding-right: calc(var(--spa-cat-size) + var(--spa-cat-gap));
+    --spa-cat-size: clamp(130px, 17vw, 175px);
+    --spa-cat-gap: 8px;
+    padding-right: calc(var(--spa-cat-size) + 2 * var(--spa-cat-gap));
   }
+  .service-card[data-card-variant="signature"] > .signature-spa-cat { bottom: -8px; }
 }
 
 @media (max-width: 900px) {
@@ -6453,9 +6484,9 @@ main,
 
 @media (max-width: 600px) {
   .signature-spa-row {
-    --spa-cat-size: clamp(50px, 14vw, 64px);
-    --spa-cat-gap: 4px;
+    padding-right: 0;
   }
+  .service-card[data-card-variant="signature"] > .signature-spa-cat { display: none; }
   .service-card[data-card-variant="signature"].service-card--spa {
     grid-template-columns: minmax(0, 1fr) minmax(82px, 38%);
     gap: 8px;
@@ -6868,12 +6899,16 @@ main,
     padding-inline: var(--footer-column-gutter);
     transform: translateX(calc(0px - var(--footer-column-gutter) - var(--footer-decor-overhang) - clamp(8px, 1.2vw, 22px)));
   }
-  .footer-brand__logo img { width: clamp(204px, 14vw, 270px); }
+  .footer-brand__logo img {
+    width: clamp(204px, 14vw, 270px);
+    transform: scale(1.25);
+    transform-origin: bottom center;
+  }
   .footer-social { gap: clamp(14px, 1.25vw, 22px); margin-top: 4px; }
   .footer-brand__logo,
   .footer-contact,
   .footer-map { transform: translateY(var(--footer-content-drop)); }
-  .footer-brand__logo { transform: translateY(calc(var(--footer-content-drop) + 16px)); }
+  .footer-brand__logo { transform: translate(-10px, calc(var(--footer-content-drop) + 16px)); }
   .footer-social__link { width: 60px; height: 56px; }
   .footer-social__link img { height: 32px; }
   .footer-brand__sleeping-cat {
@@ -6959,6 +6994,10 @@ main,
   .footer-map { grid-area: map; }
 }
 
+@media (min-width: 601px) and (max-width: 1180px) {
+  .footer-brand__logo img { width: clamp(280px, 31vw, 340px); }
+}
+
 @media (max-width: 900px) {
   .contact-section { padding: 104px 0 28px; }
   .footer-contact__phone-text { display: none; }
@@ -7012,7 +7051,62 @@ main,
   .footer-features li + li { border-top: 0; border-left: 1.5px solid #f0cad3; }
 }
 
-/* Only the Signature photo remains interactive inside its informational card. */
+/* A card books from its open surface; the Signature photo independently opens the lightbox. */
+.service-booking-hitarea {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.service-booking-hitarea:focus-visible {
+  outline: 3px solid var(--pink);
+  outline-offset: 3px;
+}
+
+/* Keep the gentle card cue on the card itself, including when its full-size booking button is hovered. */
+.service-card[data-card-variant="signature"] {
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.service-card[data-card-variant="signature"]:is(:hover, :has(:focus-visible:not(.is-pointer-focus-return))) {
+  border-color: rgba(232, 94, 124, .38);
+  box-shadow: inset 0 0 0 999px rgba(255, 255, 255, .1), 0 12px 26px -20px rgba(131, 75, 96, .28);
+}
+
+.shared-service-row {
+  isolation: isolate;
+}
+
+/* The pastel wash spans the whole service sheet; the row's text and booking hit area stay in place. */
+.shared-service-row::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-block: 2px;
+  left: 50%;
+  width: calc(100cqw + 2 * var(--services-sheet-inline-pad));
+  background: color-mix(in srgb, var(--shared-accent) 9%, rgba(255, 252, 249, .8));
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: opacity .2s ease;
+  pointer-events: none;
+}
+
+.shared-service-row:is(:hover, :has(.service-booking-hitarea:focus-visible:not(.is-pointer-focus-return)))::before {
+  opacity: 1;
+}
+
 .service-card[data-card-variant="signature"] .service-photo-wrap {
   z-index: 7;
 }
@@ -7105,6 +7199,14 @@ main,
 .gallery-content-panel > .gallery-filters button:first-child::after { display: none; }
 .gallery-content-panel > .gallery-filters button:not(.is-active):hover { background: rgba(232, 94, 124, .045); }
 .gallery-content-panel > .gallery-filters button:focus-visible { outline: 2px solid #b75676; outline-offset: -4px; }
+
+@media (min-width: 901px) {
+  /* Half the six Services segments, accounting for Gallery's 38px inset and each bar's 8px shell. */
+  .gallery-content-panel > .gallery-filters {
+    width: min(648px, calc(50% + 38px + 8px - clamp(24px, 2.8vw, 42px)));
+    margin-inline: auto;
+  }
+}
 
 @media (max-width: 900px) {
   .gallery-content-panel > .gallery-filters { min-height: 76px; border-radius: 20px; }
