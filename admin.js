@@ -3,6 +3,7 @@
 
   const API_URL = 'https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api';
   const SESSION_KEY = '1m65-admin-session';
+  const REMEMBER_MS = 30 * 24 * 60 * 60 * 1000;
   const TIME_ZONE = 'Asia/Ho_Chi_Minh';
   const REMOVED_SERVICE_IDS = new Set(['combo-foot', 'goi-thao']);
   const STATUS_LABELS = {
@@ -40,6 +41,15 @@
     loginForm: document.querySelector('#login-form'),
     loginButton: document.querySelector('#login-button'),
     loginMessage: document.querySelector('#login-message'),
+    mfaForm: document.querySelector('#mfa-form'),
+    mfaEnroll: document.querySelector('#mfa-enroll'),
+    mfaQr: document.querySelector('#mfa-qr'),
+    mfaSecret: document.querySelector('#mfa-secret'),
+    mfaUri: document.querySelector('#mfa-uri'),
+    mfaCode: document.querySelector('#mfa-code'),
+    mfaRemember: document.querySelector('#mfa-remember'),
+    mfaButton: document.querySelector('#mfa-button'),
+    mfaCancel: document.querySelector('#mfa-cancel'),
     dashboardMessage: document.querySelector('#dashboard-message'),
     adminIdentity: document.querySelector('#admin-identity'),
     fromDate: document.querySelector('#from-date'),
@@ -100,6 +110,7 @@
   const mobileDrawerMedia = window.matchMedia('(max-width: 900px)');
 
   let session = readSession();
+  let pendingMfa = null; // password-only (AAL1) token + factor, kept in memory until the 6-digit code is verified
   let appointments = [];
   let overviewAppointments = [];
   let overviewBlocks = [];
@@ -121,20 +132,27 @@
   const discountDrafts = new Map();
   const discountSavingIds = new Set();
 
+  // Tab-scoped by default; "Ghi nhớ thiết bị" (explicit opt-in after MFA) keeps it for 30 days.
   function readSession() {
     try {
+      const remembered = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+      if (remembered?.accessToken && remembered?.refreshToken && remembered.rememberUntil > Date.now()) return remembered;
+      localStorage.removeItem(SESSION_KEY);
       const value = JSON.parse(sessionStorage.getItem(SESSION_KEY) || 'null');
       return value?.accessToken && value?.refreshToken ? value : null;
     } catch {
-      sessionStorage.removeItem(SESSION_KEY);
+      try { sessionStorage.removeItem(SESSION_KEY); localStorage.removeItem(SESSION_KEY); } catch {}
       return null;
     }
   }
 
   function storeSession(value) {
     session = value;
-    if (value) sessionStorage.setItem(SESSION_KEY, JSON.stringify(value));
-    else sessionStorage.removeItem(SESSION_KEY);
+    try {
+      sessionStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(SESSION_KEY);
+      if (value) (value.rememberUntil ? localStorage : sessionStorage).setItem(SESSION_KEY, JSON.stringify(value));
+    } catch {}
   }
 
   function dateInTimeZone(date = new Date()) {
@@ -170,6 +188,9 @@
       slot_unavailable: 'Khung giờ này không còn trống. Vui lòng chọn giờ khác.',
       too_many_requests: 'Bạn thử đăng nhập quá nhiều lần. Vui lòng chờ một lúc.',
       human_verification_failed: 'Chưa xác minh được bạn là người thật. Vui lòng thử đăng nhập lại.',
+      invalid_mfa_code: 'Mã 6 số chưa đúng hoặc đã hết hạn. Lấy mã mới trong app rồi thử lại.',
+      mfa_expired: 'Phiên xác thực đã hết hạn. Vui lòng đăng nhập lại.',
+      mfa_not_enabled: 'Supabase chưa bật xác thực 2 lớp (TOTP). Bật trong Dashboard → Authentication → Multi-Factor rồi thử lại.',
       turnstile_unavailable: 'Chưa tải được bước xác minh chống bot. Kiểm tra mạng rồi thử lại.',
       invalid_block_range: 'Khoảng thời gian khóa không hợp lệ.',
       too_many_blocks: 'Bạn chọn quá nhiều khoảng khóa cùng lúc.',
@@ -214,7 +235,7 @@
   async function refreshSession() {
     if (!session?.refreshToken) throw new Error('invalid_login');
     const data = await rawRequest({ action: 'admin_refresh', refreshToken: session.refreshToken });
-    storeSession(data.session);
+    storeSession({ ...data.session, rememberUntil: session.rememberUntil });
     return session;
   }
 
@@ -235,6 +256,9 @@
     elements.dashboardView.hidden = true;
     elements.loginView.hidden = false;
     elements.loginForm.reset();
+    elements.loginForm.hidden = false;
+    elements.mfaForm.hidden = true;
+    pendingMfa = null;
     setDrawerOpen(false, false);
     setMessage(elements.loginMessage, message);
   }
@@ -1545,6 +1569,55 @@
     }
   }
 
+  // Step 2 of sign-in: enrol TOTP on first sign-in (QR code), otherwise ask for the 6-digit code.
+  async function startMfa(data) {
+    pendingMfa = { token: data.pending?.accessToken || '', factorId: data.factorId || '' };
+    elements.mfaEnroll.hidden = data.mfa !== 'enroll';
+    if (data.mfa === 'enroll') {
+      const factor = await rawRequest({ action: 'admin_mfa_enroll' }, pendingMfa.token);
+      pendingMfa.factorId = factor.factorId;
+      elements.mfaQr.src = factor.qrCode;
+      elements.mfaSecret.textContent = factor.secret;
+      elements.mfaUri.href = factor.uri;
+    }
+    elements.loginForm.hidden = true;
+    elements.mfaForm.hidden = false;
+    elements.mfaCode.value = '';
+    setMessage(elements.loginMessage, data.mfa === 'enroll'
+      ? 'Quét mã QR rồi nhập mã 6 số để hoàn tất.'
+      : 'Nhập mã 6 số đang hiện trong app xác thực.', true);
+    elements.mfaCode.focus();
+  }
+
+  elements.mfaForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!pendingMfa) return showLogin();
+    elements.mfaButton.disabled = true;
+    setMessage(elements.loginMessage, 'Đang xác nhận…');
+    try {
+      const data = await rawRequest({
+        action: 'admin_mfa_verify',
+        factorId: pendingMfa.factorId,
+        code: elements.mfaCode.value
+      }, pendingMfa.token);
+      const remember = elements.mfaRemember.checked;
+      pendingMfa = null;
+      storeSession({ ...data.session, rememberUntil: remember ? Date.now() + REMEMBER_MS : 0 });
+      showDashboard();
+      await Promise.all([loadOverview(), loadAppointments(), loadBlocks(), loadAdminBookingConfig()]);
+    } catch (error) {
+      if (error.message === 'mfa_expired' || error.status === 401) {
+        showLogin(errorMessage('mfa_expired'));
+        return;
+      }
+      setMessage(elements.loginMessage, errorMessage(error.message));
+      elements.mfaCode.select();
+    } finally {
+      elements.mfaButton.disabled = false;
+    }
+  });
+  elements.mfaCancel.addEventListener('click', () => showLogin());
+
   elements.loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     elements.loginButton.disabled = true;
@@ -1560,9 +1633,7 @@
         password: String(form.get('password') || ''),
         captchaToken
       });
-      storeSession(data.session);
-      showDashboard();
-      await Promise.all([loadOverview(), loadAppointments(), loadBlocks(), loadAdminBookingConfig()]);
+      await startMfa(data);
     } catch (error) {
       storeSession(null);
       setMessage(elements.loginMessage, errorMessage(error.message));

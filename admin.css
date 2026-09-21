@@ -171,6 +171,16 @@ select{appearance:none;padding-right:34px;
 #login-form{display:grid;gap:16px;margin-top:0}
 #login-form label{margin:0}
 #login-button{width:100%;min-height:50px;margin-top:6px;font-size:14.5px}
+/* MFA step (TOTP) */
+.mfa-form{display:grid;gap:14px}
+.mfa-form[hidden],.mfa-enroll[hidden]{display:none}
+.mfa-enroll{display:grid;gap:10px;justify-items:center;text-align:center;font-size:13.5px;line-height:1.55}
+.mfa-qr{width:200px;height:200px;padding:8px;border-radius:14px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+.mfa-enroll code{word-break:break-all;font-size:12.5px}
+.mfa-uri{font-size:13px}
+.mfa-remember{display:flex;align-items:center;gap:8px;margin:0;font-size:13.5px}
+.mfa-remember input{width:auto;min-height:0}
+#mfa-button{width:100%;min-height:50px;font-size:14.5px}
 #login-message{margin-top:14px}
 #login-message:not(:empty){
   padding:11px 13px;border:1px solid var(--bad-line);border-radius:var(--r-md);background:#fdf1f3;
