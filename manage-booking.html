@@ -8,11 +8,11 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://aomiaszicxqrctcgeoms.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; script-src 'self' https://challenges.cloudflare.com; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'self'">
   <title>Quản lý lịch hẹn · 1M65 Nails</title>
   <link rel="icon" href="favicon.svg">
-  <link rel="stylesheet" href="manage-booking.css?v=20260809-12">
+  <link rel="stylesheet" href="manage-booking.css?v=20260921-1">
   <link rel="stylesheet" href="rose-theme.css?v=20260903webp1">
   <script src="turnstile-config.js?v=20260807a"></script>
   <script src="turnstile-booking.js?v=20260807a"></script>
-  <script src="manage-booking.js?v=20260809-4" defer></script>
+  <script src="manage-booking.js?v=20260921-1" defer></script>
 </head>
 <body>
   <div class="ambient-doodles" aria-hidden="true">
@@ -35,7 +35,7 @@
       <div class="intro-copy">
         <p class="eyebrow"><span aria-hidden="true">♡</span> Lịch hẹn của bạn</p>
         <h1 id="page-title">Hẹn với tiệm,<br><span>mình cùng xem lại nha.</span></h1>
-        <p>Chỉ cần nhập số điện thoại đã đặt, tiệm sẽ tìm tất cả lịch hẹn đang có của bạn để mình xem, dời hoặc hủy lịch.</p>
+        <p>Nhập số điện thoại và tên bạn đã dùng khi đặt lịch, tiệm sẽ tìm các lịch hẹn đang có của bạn để mình xem, dời hoặc hủy lịch.</p>
       </div>
       <div class="intro-note" aria-hidden="true">
         <img src="doodles/cat-stamp.webp" alt="">
@@ -46,15 +46,26 @@
     <section class="lookup-card" aria-labelledby="lookup-title">
       <div class="card-title-row">
         <span class="step-bubble" aria-hidden="true">1</span>
-        <div><p class="card-kicker">Tra cứu nhanh</p><h2 id="lookup-title">Nhập số điện thoại của bạn</h2></div>
+        <div><p class="card-kicker">Tra cứu nhanh</p><h2 id="lookup-title">Nhập số điện thoại và tên của bạn</h2></div>
       </div>
       <form id="lookup-form" autocomplete="off">
-        <label for="booking-phone">Số điện thoại đã đặt</label>
-        <div class="phone-field">
-          <span class="phone-field-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M7.2 3.5 9.8 8c.3.6.2 1.2-.3 1.6l-1.3 1.1c1.1 2.2 2.9 4 5.1 5.1l1.1-1.3c.4-.5 1.1-.6 1.6-.3l4.5 2.6c.6.3.8 1 .5 1.6l-.7 1.5c-.4.8-1.2 1.3-2.1 1.3C9.7 20.8 3.2 14.3 2.8 5.8c0-.9.5-1.7 1.3-2.1L5.6 3c.6-.3 1.3-.1 1.6.5Z"></path></svg>
-          </span>
-          <input id="booking-phone" name="phone" type="tel" inputmode="numeric" pattern="0[0-9]{9}" maxlength="10" placeholder="Nhập số điện thoại" autocomplete="tel" required>
+        <div class="lookup-field">
+          <label for="booking-phone">Số điện thoại đã đặt</label>
+          <div class="phone-field">
+            <span class="phone-field-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M7.2 3.5 9.8 8c.3.6.2 1.2-.3 1.6l-1.3 1.1c1.1 2.2 2.9 4 5.1 5.1l1.1-1.3c.4-.5 1.1-.6 1.6-.3l4.5 2.6c.6.3.8 1 .5 1.6l-.7 1.5c-.4.8-1.2 1.3-2.1 1.3C9.7 20.8 3.2 14.3 2.8 5.8c0-.9.5-1.7 1.3-2.1L5.6 3c.6-.3 1.3-.1 1.6.5Z"></path></svg>
+            </span>
+            <input id="booking-phone" name="phone" type="tel" inputmode="numeric" pattern="0[0-9]{9}" maxlength="10" placeholder="Nhập số điện thoại" autocomplete="tel" required>
+          </div>
+        </div>
+        <div class="lookup-field" id="booking-name-group">
+          <label for="booking-name">Tên bạn đã dùng khi đặt lịch</label>
+          <div class="phone-field">
+            <span class="phone-field-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"></circle><path d="M4.8 20c1.2-3.6 3.9-5.4 7.2-5.4s6 1.8 7.2 5.4"></path></svg>
+            </span>
+            <input id="booking-name" name="name" type="text" maxlength="80" placeholder="Ví dụ: Thu Hà" autocomplete="name" required>
+          </div>
         </div>
         <button id="lookup-button" class="button primary" type="submit">Tìm lịch của bạn</button>
       </form>

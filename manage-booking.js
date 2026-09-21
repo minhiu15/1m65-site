@@ -12,7 +12,8 @@
     no_show: 'Không đến'
   };
   const ERRORS = {
-    booking_lookup_failed: 'Số điện thoại chưa đúng hoặc chưa có lịch nào đang đặt. Bạn kiểm tra lại giúp mình nhé.',
+    booking_lookup_failed: 'Chưa tìm thấy lịch khớp với số điện thoại và tên này. Bạn nhập đúng tên đã dùng khi đặt lịch, hoặc nhắn Zalo cho tiệm giúp mình nhé.',
+    too_many_attempts: 'Bạn đã thử quá nhiều lần. Bạn thử lại sau 10 phút hoặc nhắn Zalo cho tiệm để được hỗ trợ nhé.',
     appointment_not_manageable: 'Lịch này không còn có thể dời hoặc hủy trên website.',
     appointment_change_cutoff: 'Đã qua thời hạn tự thay đổi lịch. Bạn liên hệ trực tiếp với tiệm giúp mình nhé.',
     slot_unavailable: 'Khung giờ này vừa có người chọn. Bạn chọn lại khung khác nhé.',
@@ -25,6 +26,8 @@
   const elements = {
     lookupForm: document.querySelector('#lookup-form'),
     phone: document.querySelector('#booking-phone'),
+    name: document.querySelector('#booking-name'),
+    nameGroup: document.querySelector('#booking-name-group'),
     lookupButton: document.querySelector('#lookup-button'),
     lookupMessage: document.querySelector('#lookup-message'),
     listView: document.querySelector('#appointment-list-view'),
@@ -67,6 +70,12 @@
   const preferredReference = String(
     new URLSearchParams(window.location.search).get('reference') || ''
   ).trim().toUpperCase().slice(0, 32);
+  // Opened from the booking success screen: the booking code already proves the booking, so skip the name.
+  if (preferredReference) {
+    elements.nameGroup.hidden = true;
+    elements.name.required = false;
+    document.querySelector('#lookup-title').textContent = 'Nhập số điện thoại của bạn';
+  }
 
   function setMessage(target, text = '', success = false) {
     target.textContent = text;
@@ -359,7 +368,7 @@
   async function lookup(event) {
     event.preventDefault();
     credentials = {
-      reference: '',
+      reference: preferredReference,
       phone: elements.phone.value.replace(/\D/g, '')
     };
     elements.phone.value = credentials.phone;
@@ -370,7 +379,7 @@
     activeAppointments = [];
     setMessage(elements.lookupMessage, 'Đang kiểm tra lịch hẹn…');
     try {
-      const body = await request('lookup');
+      const body = await request('lookup', { name: elements.name.value.trim() });
       renderAppointmentList(body.appointments);
       if (!activeAppointments.length) {
         setMessage(elements.lookupMessage, 'Số điện thoại này hiện chưa có lịch nào đang đặt.');
