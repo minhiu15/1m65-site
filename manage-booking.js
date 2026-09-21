@@ -77,6 +77,17 @@
     document.querySelector('#lookup-title').textContent = 'Nhập số điện thoại của bạn';
   }
 
+  // Native "required"/"pattern" bubbles follow the browser language; keep them Vietnamese.
+  [
+    [elements.phone, 'Bạn nhập số điện thoại đã dùng khi đặt lịch nhé.', 'Số điện thoại gồm 10 số và bắt đầu bằng số 0 nhé.'],
+    [elements.name, 'Bạn nhập tên đã dùng khi đặt lịch nhé.', '']
+  ].forEach(([input, missing, mismatch]) => {
+    input.addEventListener('invalid', () => {
+      input.setCustomValidity(input.validity.valueMissing ? missing : mismatch);
+    });
+    input.addEventListener('input', () => input.setCustomValidity(''));
+  });
+
   function setMessage(target, text = '', success = false) {
     target.textContent = text;
     target.classList.toggle('success', success);
