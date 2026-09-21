@@ -8,7 +8,7 @@ const categories = [
 {id:"mi",label:"Eyelashes",shortLabel:"Mi",ids:["uon-mi","uon-mi-den","mi-classic","mi-tho","mi-volume","mi-sole","mi-duoi"]},
 {id:"goi",label:"Shampoo",shortLabel:"Gội",ids:["goi-thuong","goi-phuchoi","goi-duongsinh"]}
 ];
-const state = {step:1,category:"nail",selected:[],date:"",preferred:"",slots:[],blocked:[],slot:"",loading:false,pending:false,error:"",name:"",phone:"",note:"",status:"",reference:""};
+const state = {step:1,category:"nail",selected:[],date:"",preferred:"",slots:[],blocked:[],day:null,slot:"",loading:false,pending:false,error:"",name:"",phone:"",note:"",status:"",reference:""};
 let requestId = 0;
 
 function exp(){return window.__v2Experience;}
@@ -36,7 +36,7 @@ function reset(options){
   const next=options||{};
   state.step=1;state.category=next.serviceId?categoryOf(next.serviceId):"nail";
   state.selected=next.serviceId&&byId(next.serviceId)?[next.serviceId]:[];
-  state.date=isoToday();state.preferred=next.slot||"";state.slots=[];state.blocked=[];state.slot="";
+  state.date=isoToday();state.preferred=next.slot||"";state.slots=[];state.blocked=[];state.day=null;state.slot="";
   state.loading=false;state.pending=false;state.error="";state.name="";state.phone="";state.note="";state.status="";state.reference="";
   requestId+=1;
 }
@@ -58,14 +58,18 @@ function stepOne(){
 function schedule(){
   const available=new Map(state.slots.map(function(item){const start=item.start_at||item.startAt;return [slotLabel(start),start];}));
   const blocked=new Map(state.blocked.map(function(item){const start=item.start_at||item.startAt;return [slotLabel(start),item.content==="tiệm hôm nay nghỉ"?"Tiệm nghỉ":(item.content||"Tiệm khóa lịch")];}));
-  const result=[];for(let minute=540;minute<=1020;minute+=30){const label=String(Math.floor(minute/60)).padStart(2,"0")+":"+String(minute%60).padStart(2,"0");result.push({label:label,start:available.get(label)||"",blocked:blocked.get(label)||""});}return result;
+  const booked=new Set((state.day&&Array.isArray(state.day.bookedStarts)?state.day.bookedStarts:[]).map(slotLabel));
+  const latestEnd=state.day&&state.day.latestEndAt?new Date(state.day.latestEndAt).getTime():0,minutes=totals().minutes;
+  // Why an unavailable slot is unavailable: a real booking keeps "Đã kín"; the rest name the rule that blocks it.
+  function reason(label){const start=new Date(state.date+"T"+label+":00+07:00").getTime();if(booked.has(label))return "Đã kín";if(start<=Date.now())return "Đã qua";if(!state.day)return "Đã kín";if(!latestEnd)return "Tiệm nghỉ";if(start+minutes*60000>latestEnd)return "Quá giờ làm";return "Sát lịch khác";}
+  const result=[];for(let minute=540;minute<=1020;minute+=30){const label=String(Math.floor(minute/60)).padStart(2,"0")+":"+String(minute%60).padStart(2,"0");result.push({label:label,start:available.get(label)||"",blocked:blocked.get(label)||"",reason:available.has(label)?"":reason(label)});}return result;
 }
 function stepTwo(){
   const dates=new Array(7).fill(0).map(function(_,index){const iso=offsetDate(index),parts=iso.split("-"),weekday=dateLabel(iso).split(",")[0];return '<button type="button" class="booking-date '+(state.date===iso?"is-active":"")+'" data-booking-date="'+iso+'"><span>'+(index===0?"Hôm nay":esc(weekday))+'</span><strong>'+parts[2]+'</strong><small>th '+Number(parts[1])+'</small></button>';}).join("");
   let slots="";
   if(state.loading)slots='<div class="booking-loading">Đang tải giờ trống thật từ tiệm…</div>';
   else if(state.error)slots='<div class="booking-empty" role="alert"><p>'+esc(state.error)+'</p><button class="button-secondary" type="button" data-booking-retry>Thử tải lại</button></div>';
-  else slots='<div class="booking-slots">'+schedule().map(function(slot){const selected=state.slot===slot.start&&!!slot.start;return '<button type="button" class="booking-slot '+(selected?"is-active ":"")+(slot.blocked?"is-blocked":"")+'" data-booking-slot="'+esc(slot.start)+'" '+(!slot.start?"disabled":"")+' aria-pressed="'+selected+'"><strong>'+slot.label+'</strong><small>'+esc(slot.blocked||(slot.start?"Còn trống":"Đã kín"))+'</small></button>';}).join("")+'</div>';
+  else slots='<div class="booking-slots">'+schedule().map(function(slot){const selected=state.slot===slot.start&&!!slot.start;return '<button type="button" class="booking-slot '+(selected?"is-active ":"")+(slot.blocked?"is-blocked":"")+'" data-booking-slot="'+esc(slot.start)+'" '+(!slot.start?"disabled":"")+' aria-pressed="'+selected+'"><strong>'+slot.label+'</strong><small>'+esc(slot.blocked||(slot.start?"Còn trống":slot.reason))+'</small></button>';}).join("")+'</div>';
   return '<div class="booking-step" data-booking-step="2"><div class="booking-dates">'+dates+'</div><label class="booking-calendar-field"><span>Ngày khác</span><input type="date" data-booking-custom-date min="'+isoToday()+'" max="'+offsetDate(30)+'" value="'+state.date+'"></label>'+slots+'</div>';
 }
 function stepThree(){
@@ -93,9 +97,9 @@ async function availability(){
   if(!state.selected.length)return;const current=++requestId;state.loading=true;state.error="";state.slot="";render();
   try{
     const body=await request("availability",{date:state.date,serviceIds:state.selected.slice()});if(current!==requestId)return;
-    state.slots=Array.isArray(body.slots)?body.slots:[];state.blocked=Array.isArray(body.blockedSlots)?body.blockedSlots:[];
+    state.slots=Array.isArray(body.slots)?body.slots:[];state.blocked=Array.isArray(body.blockedSlots)?body.blockedSlots:[];state.day=body.daySchedule||null;
     if(state.preferred){const match=state.slots.find(function(item){return slotLabel(item.start_at||item.startAt)===state.preferred;});if(match)state.slot=String(match.start_at||match.startAt);else exp().toast(state.preferred+" không còn trống — bạn chọn giờ khác nha");state.preferred="";}
-  }catch(_){if(current!==requestId)return;state.slots=[];state.blocked=[];state.error="Chưa tải được lịch trống. Bạn thử lại giúp tụi mình nha.";}
+  }catch(_){if(current!==requestId)return;state.slots=[];state.blocked=[];state.day=null;state.error="Chưa tải được lịch trống. Bạn thử lại giúp tụi mình nha.";}
   finally{if(current===requestId){state.loading=false;render();}}
 }
 function open(options,trigger){reset(options);render();exp().openModal(document.querySelector("#booking-modal-v2"),trigger);}
