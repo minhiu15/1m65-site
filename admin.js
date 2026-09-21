@@ -169,6 +169,8 @@
       appointment_not_reschedulable: 'Chỉ có thể dời lịch đang chờ hoặc đã xác nhận.',
       slot_unavailable: 'Khung giờ này không còn trống. Vui lòng chọn giờ khác.',
       too_many_requests: 'Bạn thử đăng nhập quá nhiều lần. Vui lòng chờ một lúc.',
+      human_verification_failed: 'Chưa xác minh được bạn là người thật. Vui lòng thử đăng nhập lại.',
+      turnstile_unavailable: 'Chưa tải được bước xác minh chống bot. Kiểm tra mạng rồi thử lại.',
       invalid_block_range: 'Khoảng thời gian khóa không hợp lệ.',
       too_many_blocks: 'Bạn chọn quá nhiều khoảng khóa cùng lúc.',
       block_reason_too_long: 'Lý do khóa lịch dài quá 120 ký tự.',
@@ -1550,10 +1552,13 @@
     setMessage(elements.loginMessage, 'Đang đăng nhập…');
     try {
       const form = new FormData(elements.loginForm);
+      // Supabase Auth CAPTCHA protection needs a fresh Turnstile token for every sign-in.
+      const captchaToken = window.mewTurnstileBooking ? await window.mewTurnstileBooking.getToken() : '';
       const data = await rawRequest({
         action: 'admin_login',
         email: String(form.get('email') || '').trim(),
-        password: String(form.get('password') || '')
+        password: String(form.get('password') || ''),
+        captchaToken
       });
       storeSession(data.session);
       showDashboard();
