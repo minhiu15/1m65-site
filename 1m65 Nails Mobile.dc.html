@@ -1277,10 +1277,12 @@ class Component extends DCLogic {
         this.setState({ status: 'conflict', bookingPending: false, slot: null });
         return this.loadAvailability();
       }
-      if (error.code === 'phone_daily_limit' || error.code === 'phone_booking_limit') {
+      if (error.code === 'phone_daily_limit' || error.code === 'phone_booking_limit' || error.code === 'ip_booking_limit') {
         this.setState({ bookingPending: false });
         return this.toast(error.code === 'phone_daily_limit'
           ? 'Số điện thoại này đã có lịch trong ngày đó rồi. Bạn xem hoặc dời lịch cũ ở “Xem lịch của bạn”, hoặc nhắn Zalo cho tiệm nhé'
+          : error.code === 'ip_booking_limit'
+          ? 'Thiết bị hoặc mạng này đã đặt nhiều lịch trong 24 giờ qua. Bạn thử lại sau hoặc nhắn Zalo cho tiệm để được hỗ trợ nhé'
           : 'Số điện thoại này đang có nhiều lịch sắp tới nên chưa đặt thêm được. Bạn xem hoặc hủy bớt ở “Xem lịch của bạn”, hoặc nhắn Zalo cho tiệm nhé');
       }
       if (error.code === 'human_verification_failed' || error.code === 'turnstile_unavailable') {
