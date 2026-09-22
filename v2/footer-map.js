@@ -47,9 +47,13 @@
       scrollWheelZoom: true,
     }).setView([SALON_LOCATION.lat, SALON_LOCATION.lng], 15);
 
+    // On mobile Leaflet only loads tiles once a drag ends, so the view shows grey gaps mid-drag.
+    // Load while dragging and keep a wider ring of tiles around the view.
     global.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       minZoom: 12,
       maxZoom: 19,
+      updateWhenIdle: false,
+      keepBuffer: 4,
       attribution: "&copy; OpenStreetMap contributors",
     }).addTo(map);
 

@@ -8,12 +8,12 @@
   <meta name="description" content="Bản xem trước giao diện mới của 1M65 Nails, Eyelashes, Shampoo.">
   <title>1M65 Nails · V2 Preview</title>
   <link rel="icon" href="../favicon.svg">
-  <link rel="stylesheet" href="styles.css?v=20260922-5">
-  <link rel="stylesheet" href="paw-cursor.css?v=20260915-1">
+  <link rel="stylesheet" href="styles.css?v=20260922-16">
+  <link rel="stylesheet" href="paw-cursor.css?v=20260922-1">
   <script defer src="../turnstile-config.js?v=20260807a"></script>
   <script defer src="../turnstile-booking.js?v=20260807a"></script>
-  <script defer src="footer-map.js?v=20260921-1"></script>
-  <script defer src="paw-cursor.js?v=20260922-2"></script>
+  <script defer src="footer-map.js?v=20260922-1"></script>
+  <script defer src="paw-cursor.js?v=20260922-3"></script>
   <script type="module" src="app.js?v=20260918-108"></script>
   <script type="module" src="experience.js?v=20260921-100"></script>
 </head>
@@ -37,17 +37,30 @@
       <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Mở menu">
         <span></span><span></span><span></span>
       </button>
+      <a class="header-call" href="tel:0946712911" aria-label="Gọi 1M65: 0946 712 911"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"></path></svg></a>
     </div>
     <div class="mobile-drawer" id="mobile-drawer" hidden>
       <div class="drawer-backdrop" data-close-drawer></div>
       <nav class="drawer-panel" aria-label="Điều hướng di động">
-        <div class="drawer-head"><strong>Menu</strong><button type="button" data-close-drawer aria-label="Đóng menu">×</button></div>
+        <div class="drawer-head"><strong>Menu</strong><button type="button" data-close-drawer aria-label="Đóng menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div>
         <a href="#dichvu" data-drawer-link>Dịch vụ <span>→</span></a>
         <a href="#thuvien" data-drawer-link>Thư viện <span>→</span></a>
         <a href="#vechungminh" data-drawer-link>Về chúng mình <span>→</span></a>
         <a href="#danhgia" data-drawer-link>Đánh giá <span>→</span></a>
         <a href="#lienhe" data-drawer-link>Liên hệ <span>→</span></a>
         <button class="button-primary drawer-book" type="button" data-close-drawer data-open-booking>Đặt lịch hẹn</button>
+        <div class="drawer-contact" role="group" aria-label="Thông tin liên hệ">
+          <svg class="drawer-contact__wave" viewBox="0 0 320 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path class="footer-paper__fill" d="M0 30Q32 16 64 30T128 30T192 30T256 30T320 30V40H0Z"></path>
+            <path class="footer-paper__stitch" d="M0 20Q32 6 64 20T128 20T192 20T256 20T320 20"></path>
+            <path class="footer-paper__edge" d="M0 30Q32 16 64 30T128 30T192 30T256 30T320 30"></path>
+          </svg>
+          <div class="drawer-contact__rows">
+          <a class="drawer-contact__row" href="tel:0946712911"><span class="drawer-contact__icon"><img src="assets/footer/footer_contact_phone_icon.webp" alt="" width="50" height="50" decoding="async" loading="lazy"></span><span><small>Hotline</small><strong>0946 712 911</strong></span></a>
+          <p class="drawer-contact__row"><span class="drawer-contact__icon"><img src="assets/footer/footer_contact_clock_icon.webp" alt="" width="53" height="54" decoding="async" loading="lazy"></span><span><small>Giờ làm việc</small><strong>9:00 – 18:00 (T2 – CN)</strong></span></p>
+          <a class="drawer-contact__row" href="https://www.google.com/maps/place/1M65+Nails,+Eyelashes,+Shampoo/@10.7308045,106.824314,17z/data=!4m6!3m5!1s0x31752300363cc559:0x53972471338c54b6!8m2!3d10.7308045!4d106.824314!16s%2Fg%2F11m5z4_2r7" target="_blank" rel="noopener"><span class="drawer-contact__icon"><img src="assets/footer/footer_contact_location_icon.webp" alt="" width="47" height="56" decoding="async" loading="lazy"></span><span><small>Địa chỉ</small><strong>Lý Thái Tổ, Đại Phước, Đồng Nai</strong></span></a>
+          </div>
+        </div>
       </nav>
     </div>
   </header>

@@ -138,6 +138,16 @@
     cursor.classList.remove("is-pressed");
   }
 
+  // A scrollbar would inherit the page's cursor: none and show no cursor at all, so the element under
+  // the pointer lends it a native paw (paw-cursor.css) until the pointer is back on the content.
+  let nativeCursorHost = null;
+  function setNativeCursorHost(element) {
+    if (nativeCursorHost === element) return;
+    if (nativeCursorHost) nativeCursorHost.classList.remove("paw-native-cursor");
+    nativeCursorHost = element instanceof Element ? element : null;
+    if (nativeCursorHost) nativeCursorHost.classList.add("paw-native-cursor");
+  }
+
   // Scrollbars belong to the browser: the window's scrollbar is painted above the page (so the paw
   // would slide under it) and dragging any scrollbar sends no pointer moves (so the paw would freeze).
   // Over a scrollbar the native cursor takes over until the pointer comes back to the content.
@@ -160,7 +170,11 @@
 
   addEventListener("pointermove", function(event){
     if (!isPointerInteraction(event)) return;
-    if (isOverScrollbar(event)) return hideCursor();
+    if (isOverScrollbar(event)) {
+      setNativeCursorHost(event.target);
+      return hideCursor();
+    }
+    setNativeCursorHost(null);
     state.targetX = event.clientX;
     state.targetY = event.clientY;
     if (!seen) {
@@ -174,7 +188,10 @@
   }, { passive: true });
   addEventListener("pointerdown", function(event){
     if (!isPointerInteraction(event) || event.button !== 0) return;
-    if (isOverScrollbar(event)) return hideCursor();
+    if (isOverScrollbar(event)) {
+      setNativeCursorHost(event.target);
+      return hideCursor();
+    }
     state.press = 1;
     cursor.classList.add("is-pressed");
     addClickFeedback(event.clientX, event.clientY);

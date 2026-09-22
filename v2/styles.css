@@ -36,12 +36,23 @@ a{color:inherit;text-decoration:none}
 .menu-button span{display:block;width:20px;height:2px;margin:4px auto;border-radius:999px;background:var(--pink-strong)}
 .mobile-drawer[hidden]{display:none}
 .mobile-drawer{position:fixed;inset:0;z-index:120}
-.drawer-backdrop{position:absolute;inset:0;background:rgba(79,56,46,.3);backdrop-filter:blur(5px)}
+.drawer-backdrop{position:absolute;inset:0;background:rgba(79,56,46,.3);backdrop-filter:blur(2px)}
 .drawer-panel{position:absolute;right:0;top:0;bottom:0;width:min(390px,88vw);display:flex;flex-direction:column;gap:9px;padding:28px 24px;background:var(--paper);box-shadow:-28px 0 80px -50px #4f382e;animation:drawer-in .26s ease both}
 .drawer-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font:700 21px Quicksand}
-.drawer-head button{width:44px;height:44px;border:1px solid var(--line);border-radius:14px;background:#fff;font-size:28px;cursor:pointer}
+.drawer-head button{display:grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--cocoa);cursor:pointer}
+.drawer-head button svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
 .drawer-panel>a{display:flex;align-items:center;justify-content:space-between;min-height:54px;padding:0 17px;border:1px solid var(--line);border-radius:17px;background:rgba(255,255,255,.7);font-weight:800}
 .drawer-book{margin-top:auto}
+/* Hotline, hours and address sit on the footer's wavy pink paper at the foot of the drawer,
+   bleeding past the drawer padding to its edges and bottom. */
+.drawer-contact{display:grid;margin:auto -16px -30px}
+.drawer-contact__wave{display:block;width:100%;height:40px;margin-bottom:-1px;overflow:visible}
+.drawer-contact__rows{display:grid;gap:14px;padding:22px 26px 30px;background:#fdf0ef}
+.drawer-contact__row{display:grid;grid-template-columns:38px minmax(0,1fr);align-items:center;gap:12px;margin:0;color:var(--cocoa);text-decoration:none}
+.drawer-contact__icon{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#fff;box-shadow:0 8px 18px -14px rgba(121,62,78,.6)}
+.drawer-contact__icon img{width:auto;height:20px}
+.drawer-contact small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--pink-strong)}
+.drawer-contact strong{display:block;margin-top:2px;font-size:14px;font-weight:700;line-height:1.35}
 @keyframes drawer-in{from{transform:translateX(100%)}to{transform:none}}
 .home-section{padding:42px 0 34px;background:radial-gradient(circle at 83% 28%,rgba(244,190,210,.28),transparent 32%),linear-gradient(180deg,#fff8f4,var(--paper))}
 .home-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(420px,.98fr);grid-template-areas:"copy art" "quote art" "schedule art";column-gap:42px;align-items:center}
@@ -131,7 +142,7 @@ a{color:inherit;text-decoration:none}
 .booking-cta{position:relative;display:grid;justify-items:center;text-align:center}.booking-eyebrow{display:inline-flex;padding:9px 20px;border:1px solid #e8a7b5;border-radius:999px;color:#b74061;font-weight:800}.booking-cta h2{margin:18px 0 10px;font:700 clamp(48px,5.3vw,76px)/1.05 Quicksand;letter-spacing:-.04em}.booking-cta h2 em{font-style:normal;color:var(--pink)}.booking-cta>p{margin:0;color:var(--muted);font-size:17px}.booking-main-cta{min-width:420px;min-height:60px;margin-top:24px;border-radius:14px;font-size:18px}.booking-heart,.booking-sparkle,.booking-flower{position:absolute;object-fit:contain;pointer-events:none}.booking-heart{left:6%;top:2%;width:35px}.booking-sparkle{right:14%;top:10%;width:30px}.booking-flower{right:5%;bottom:0;width:45px}
 .faq-layout{display:grid;grid-template-columns:260px 1fr;gap:35px;margin-top:55px}.faq-heading{position:relative;padding:10px 0}.faq-heading h3{margin:0;font:700 37px/1.05 Quicksand}.faq-heading img{width:135px;height:32px;object-fit:contain;margin:6px 0}.faq-heading p{margin:0;color:var(--muted);font-size:13px}.faq-list{display:grid;grid-template-columns:repeat(2,1fr);align-content:start;gap:10px}.faq-list article{border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.55);overflow:hidden}.faq-list h4{margin:0}.faq-list button{width:100%;min-height:54px;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:0 19px;border:0;background:transparent;text-align:left;font-weight:700;cursor:pointer}.faq-list button span{font-size:25px;color:var(--pink-strong);transition:transform .2s ease}.faq-list button[aria-expanded=true] span{transform:rotate(45deg)}.faq-answer{padding:0 19px 16px}.faq-answer p{margin:0;color:var(--muted);line-height:1.6;font-size:13px}
 .manage-fab{position:fixed;right:18px;bottom:18px;z-index:75;min-height:44px;padding:0 17px;border:1px solid #ebc7cf;border-radius:999px;background:rgba(255,255,255,.94);color:#b74061;font-weight:800;box-shadow:0 14px 34px -22px rgba(79,56,46,.7);cursor:pointer;backdrop-filter:blur(12px)}
-.modal[hidden]{display:none}.modal{position:fixed;inset:0;z-index:150;display:grid;place-items:center;padding:24px}.modal-backdrop{position:absolute;inset:0;background:rgba(79,56,46,.36);backdrop-filter:blur(8px)}.modal-panel{position:relative;display:flex;flex-direction:column;width:min(1080px,100%);max-height:calc(100dvh - 48px);border:1px solid rgba(255,255,255,.7);border-radius:36px;background:var(--paper-2);box-shadow:0 45px 120px -50px rgba(79,56,46,.75);overflow:hidden;animation:modal-in .3s cubic-bezier(.2,.8,.25,1) both}.modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:25px 29px 18px;border-bottom:1px solid var(--line)}.modal-header span{font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--pink)}.modal-header h2{margin:5px 0 0;font:700 28px Quicksand}.modal-close{flex:none;width:44px;height:44px;border:1px solid var(--line);border-radius:14px;background:#fff;font-size:29px;line-height:1;cursor:pointer}.modal-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 28px;border-top:1px solid var(--line);background:rgba(255,255,255,.62)}.modal-footer p{margin:0;color:var(--muted);font-size:12px}
+.modal[hidden]{display:none}.modal{position:fixed;inset:0;z-index:150;display:grid;place-items:center;padding:24px}.modal-backdrop{position:absolute;inset:0;background:rgba(79,56,46,.36);backdrop-filter:blur(3px)}.modal-panel{position:relative;display:flex;flex-direction:column;width:min(1080px,100%);max-height:calc(100dvh - 48px);border:1px solid rgba(255,255,255,.7);border-radius:36px;background:var(--paper-2);box-shadow:0 45px 120px -50px rgba(79,56,46,.75);overflow:hidden;animation:modal-in .3s cubic-bezier(.2,.8,.25,1) both}.modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:25px 29px 18px;border-bottom:1px solid var(--line)}.modal-header span{font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--pink)}.modal-header h2{margin:5px 0 0;font:700 28px Quicksand}.modal-close{flex:none;width:44px;height:44px;border:1px solid var(--line);border-radius:14px;background:#fff;font-size:29px;line-height:1;cursor:pointer}.modal-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 28px;border-top:1px solid var(--line);background:rgba(255,255,255,.62)}.modal-footer p{margin:0;color:var(--muted);font-size:12px}
 .gallery-modal-panel{height:min(850px,calc(100dvh - 48px))}.gallery-modal-filters{justify-content:flex-start;margin:16px 28px 5px}.gallery-modal-grid{display:grid;flex:1 1 auto;grid-template-columns:repeat(4,1fr);grid-auto-rows:max-content;align-content:start;gap:12px;min-height:0;padding:14px 28px 24px;overflow-y:auto}.gallery-modal-grid .gallery-tile{height:auto;aspect-ratio:4/3}
 .booking-modal-panel{height:min(850px,calc(100dvh - 48px))}.booking-modal-body{flex:1;min-height:0;padding:22px 29px;overflow:auto}.booking-footer [data-booking-summary]{flex:1;text-align:center;color:var(--muted);font-size:12px}.booking-step{display:grid;gap:17px}.booking-categories{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}.booking-categories button{flex:none;min-height:42px;padding:0 17px;border:1px solid var(--line);border-radius:999px;background:#fff;cursor:pointer;font-weight:800}.booking-categories button.is-active{background:var(--pink);color:#fff;border-color:transparent}.booking-service-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.booking-service-option{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;min-height:76px;padding:15px 17px;border:1px solid var(--line);border-radius:17px;background:#fff;text-align:left;cursor:pointer}.booking-service-option.is-selected{border-color:var(--pink);background:#fff3f5}.booking-service-option h3{margin:0;font:700 14px Quicksand}.booking-service-option p{margin:4px 0 0;color:var(--muted);font-size:10px}.booking-service-option strong{color:var(--pink-strong)}.booking-check{display:grid;place-items:center;width:23px;height:23px;border:2px solid #e5c6cd;border-radius:7px}.is-selected .booking-check{border-color:var(--pink);background:var(--pink);color:#fff}.booking-picked{display:flex;flex-wrap:wrap;gap:6px}.booking-picked button{padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:var(--lavender-soft);font-size:11px;cursor:pointer}.booking-total{display:flex;justify-content:space-between;gap:18px;padding:16px 19px;border-radius:18px;background:linear-gradient(120deg,var(--lavender-soft),#fde9ee)}.booking-total strong{color:var(--pink-strong)}
 .booking-dates{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.booking-date{min-height:69px;padding:7px 3px;border:1px solid var(--line);border-radius:14px;background:#fff;cursor:pointer}.booking-date.is-active{border-color:var(--pink);background:var(--pink);color:#fff}.booking-date span,.booking-date small{display:block;font-size:10px}.booking-date strong{display:block;font:700 18px Quicksand}.booking-calendar-field{display:flex;align-items:center;gap:10px}.booking-calendar-field input{min-height:44px;padding:0 13px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--cocoa)}.booking-slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.booking-slot{min-height:56px;border:1px solid var(--line);border-radius:13px;background:#fff;cursor:pointer}.booking-slot strong,.booking-slot small{display:block}.booking-slot small{margin-top:3px;font-size:9px;color:var(--muted)}.booking-slot.is-active{border-color:var(--pink);background:var(--pink);color:#fff}.booking-slot:disabled{opacity:.55;cursor:not-allowed}.booking-slot.is-blocked small{color:#b4233f}.booking-loading,.booking-empty{padding:34px;border:1px dashed var(--line);border-radius:17px;text-align:center;color:var(--muted)}
@@ -732,30 +743,33 @@ main,
   .site-header{padding:10px 14px 6px}
   .header-inner{width:100%;min-height:60px;padding:7px 8px 7px 14px}
   .site-header .brand{display:flex;gap:8px}
-  .site-header .brand img.brand-logo{width:60px;height:42px}
+  .site-header .brand img.brand-logo{width:72px;height:48px}
   .site-header .brand-mark{font-size:18px}
   .site-header .brand-sub{margin-top:0;font-size:11.5px}
   .menu-button{display:grid;place-items:center;width:44px;height:44px;border-radius:999px}
+  /* The compact menu slides in from the left edge, next to its trigger. */
   .drawer-panel{
     left:0;
-    right:0;
-    top:auto;
-    width:100%;
+    right:auto;
+    top:0;
+    bottom:0;
+    width:min(340px,86vw);
+    overflow-y:auto;
     padding:20px 16px 30px;
-    border-radius:32px 32px 0 0;
+    border-radius:0 28px 28px 0;
     background:var(--paper-2);
-    box-shadow:0 -20px 60px -24px rgba(79,56,46,.5);
-    animation:drawer-up .28s ease both;
+    box-shadow:20px 0 60px -24px rgba(79,56,46,.5);
+    animation:drawer-left .28s ease both;
   }
   .drawer-head{margin-bottom:8px;padding-inline:4px}.drawer-head strong{color:var(--pink-strong);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
   .drawer-panel>a{min-height:56px;padding-inline:20px;border-radius:20px;background:#fff}
   /* Fixed 4:1 size so the paper shell never stretches with the drawer width. */
   .drawer-book{align-self:center;width:240px;aspect-ratio:4/1;margin-top:8px}
 }
-@keyframes drawer-up{from{transform:translateY(100%)}to{transform:none}}
+@keyframes drawer-left{from{transform:translateX(-100%)}to{transform:none}}
 @media(max-width:420px){
   .site-header{padding-inline:10px}
-  .site-header .brand img.brand-logo{width:56px;height:40px}
+  .site-header .brand img.brand-logo{width:66px;height:44px}
   .site-header .brand-sub{font-size:10px;letter-spacing:.045em}
 }
 
@@ -5878,12 +5892,13 @@ main,
     display: none;
   }
 
+  /* Two full reviews (2 x 208px + 2 x 12px = 440px) plus half of the next one, softened only at the bottom. */
   .reviews-grid {
     --review-carousel-gap: 12px;
-    --review-carousel-preview: 44px;
-    height: 520px;
-    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .34) 3%, #000 8.5%, #000 91.5%, rgba(0, 0, 0, .34) 97%, rgba(0, 0, 0, 0) 100%);
-    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .34) 3%, #000 8.5%, #000 91.5%, rgba(0, 0, 0, .34) 97%, rgba(0, 0, 0, 0) 100%);
+    --review-carousel-preview: 0px;
+    height: 544px;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 81%, rgba(0, 0, 0, .38) 92%, rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 81%, rgba(0, 0, 0, .38) 92%, rgba(0, 0, 0, 0) 100%);
   }
 
   .reviews-track {
@@ -6023,20 +6038,36 @@ main,
 }
 /* Mobile navigation trigger sits before the brand and uses a cleaner Paper control. */
 @media (max-width: 900px) {
+  /* Drawer trigger left, wordmark centred, call button right. */
   .header-inner {
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    align-items: center;
     gap: 10px;
-    padding: 7px 12px 7px 8px;
+    padding: 7px 8px;
+    /* Corners concentric with the 16px buttons (16px + 8px inset) and a firmer pink outline,
+       so the bar reads against the page instead of melting into it. */
+    border: 1.5px solid rgba(224, 79, 116, .3);
+    border-radius: 24px;
+    background: rgba(255, 253, 251, .94);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9), 0 14px 30px -20px rgba(117, 62, 76, .6);
   }
 
+  /* grid-row pins all three to one row; otherwise the order: 1 trigger auto-places on a second row. */
   .site-header .brand {
-    order: 2;
+    grid-row: 1;
+    grid-column: 2;
+    justify-self: center;
     min-width: 0;
-    margin-left: auto;
+    margin: 0;
   }
+
+  .site-header .brand-copy { display: none; }
 
   .menu-button {
     position: relative;
+    grid-row: 1;
+    grid-column: 1;
     order: 1;
     display: flex;
     flex: 0 0 44px;
@@ -6082,14 +6113,35 @@ main,
   .menu-button[aria-expanded="true"] span:last-child { transform: translateY(-6px) rotate(-45deg); }
 }
 
-/* Tablet and mobile: menu on the left, descriptor then wordmark in the right corner. */
+.header-call { display: none; }
+
 @media (max-width: 900px) {
-  .site-header .brand { flex-direction: row-reverse; }
+  .header-call {
+    grid-row: 1;
+    grid-column: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(224, 79, 116, .32);
+    border-radius: 16px;
+    background:
+      radial-gradient(circle at 27% 24%, rgba(255, 255, 255, .95) 0 3px, transparent 4px),
+      linear-gradient(145deg, rgba(255, 250, 251, .98), rgba(250, 211, 223, .94));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, .9),
+      0 9px 20px -14px rgba(188, 61, 96, .78);
+    color: #dc4f74;
+  }
+
+  .header-call svg { width: 20px; height: 20px; }
 }
 
 @media (max-width: 420px) {
-  .header-inner { padding-left: 7px; }
-  .menu-button {
+  .header-inner { grid-template-columns: 42px minmax(0, 1fr) 42px; padding-inline: 7px; border-radius: 22px; }
+  .menu-button,
+  .header-call {
     flex-basis: 42px;
     width: 42px;
     height: 42px;
@@ -6736,6 +6788,8 @@ main,
 }
 
 .footer-map__live:active { cursor: grabbing; }
+/* Tiles still loading show the OSM land colour instead of Leaflet's grey #ddd. */
+.footer-map__live.leaflet-container { background: #f2efe9; }
 .footer-map__geo-marker {
   border: 0 !important;
   background: transparent !important;

@@ -4,6 +4,13 @@ html.paw-cursor-active * {
   cursor: none !important;
 }
 
+/* Over a scrollbar the DOM paw hides (paw-cursor.js). The scrollbar would otherwise inherit cursor: none
+   and show no cursor at all, so the element under the pointer shows a native paw instead. */
+html.paw-cursor-active.paw-native-cursor,
+html.paw-cursor-active .paw-native-cursor {
+  cursor: url("assets/ui/cat_paw_cursor_32.png") 16 16, auto !important;
+}
+
 .paw-cursor {
   position: fixed;
   left: 0;
