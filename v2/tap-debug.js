@@ -32,5 +32,11 @@
     }, { capture: true, passive: true });
   });
   addEventListener("scroll", () => { if (lines[lines.length - 1] !== "  scroll") log("  scroll"); }, { passive: true });
-  log("tapdebug on — chạm thử các nút bị lỗi rồi chụp màn hình gửi lại");
+  // &nopaw: keep paw-cursor.js from adding its stamp/ring/particles at touch end (between touchstart and
+  // the synthetic mouse move, which iOS watches), to test whether that makes iOS treat a link tap as
+  // hover. Its click listener then draws the feedback after the click instead. Window capture runs
+  // before paw-cursor's window listener; nothing else listens to pointerup.
+  const noPaw = /[?&]nopaw\b/.test(location.search);
+  if (noPaw) addEventListener("pointerup", (event) => { if (event.pointerType === "touch") event.stopImmediatePropagation(); }, true);
+  log("tapdebug on" + (noPaw ? " · TẮT hiệu ứng chân mèo" : "") + " — chạm thử các nút bị lỗi rồi chụp màn hình gửi lại");
 })();
