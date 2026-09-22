@@ -7245,10 +7245,23 @@ main,
   .gallery-content-panel > .gallery-filters button::after { top: 12px; bottom: 12px; }
 }
 
-/* Clip the pink paper buttons along the corners painted in their shell images, not a fixed radius.
-   The rect shell (drawn at 103.5% x 114.5%) paints its corners at 6.2% of the width / 25.8% of the
-   height, and the booking tab shell (drawn at 100%) at 11.3% / 22.7%. A fixed 16-18px radius is larger
-   than that on phone-sized buttons and cut through the dark outline at all four corners. These
-   percentages sit slightly inside the painted corners, so the outline survives at any size. */
-.button-primary:not(.header-book) { border-radius: 5.6% / 23%; }
-.booking-categories button.is-active { border-radius: 10.5% / 21%; }
+/* Nine-slice the pink paper shells so their corners keep the painted proportions at any button size;
+   only the edges and the centre stretch. The rect shell (1200x320) has 20px of transparent margin and
+   72px painted corners, so slices of 92px drawn 20px wide round each corner at ~15.6px, pushed out by
+   the margin (20 * 20 / 92 = 4.35px) to sit on the button edge. The booking tab shell (512x256) paints
+   58px corners edge to edge. border-image ignores border-radius and nothing clips these buttons, so
+   the dark outline stays whole on all four corners; border-radius now only shapes the focus ring. */
+.button-primary:not(.header-book) { overflow: visible; border-radius: 15px; }
+.button-primary:not(.header-book)::before {
+  background-image: none;
+  border-image: var(--button-shell-rect) 92 fill / 20px / 4.35px stretch;
+}
+.booking-categories button.is-active { overflow: visible; }
+.booking-categories button.is-active::before {
+  background-image: none;
+  border-image: url("assets/booking/ui_shells/booking_category_active_pink_paper_v1.webp") 64 fill / 24px stretch;
+}
+@media (max-width: 600px) {
+  /* Phone tabs are 10px rounded rectangles: 11px corners paint a ~10px radius. */
+  .booking-categories button.is-active::before { border-image-width: 11px; }
+}
