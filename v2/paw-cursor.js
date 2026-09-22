@@ -55,7 +55,22 @@
 
   let touchStart = null;
   let lastTouchFeedback = null;
+  let pendingTap = null;
+  let pendingTapTimer = 0;
   const tapTolerance = 12;
+  // iOS Safari watches the page between touchend and its synthetic click; content appearing there makes
+  // it treat a link tap as hover and drop the click (links then needed a second tap). So a tap's paw is
+  // drawn on its click, after Safari has decided, or once this delay passes for taps with no click.
+  const tapFeedbackDelay = 300;
+
+  function flushTapFeedback() {
+    clearTimeout(pendingTapTimer);
+    if (!pendingTap) return;
+    const tap = pendingTap;
+    pendingTap = null;
+    lastTouchFeedback = { x: tap.x, y: tap.y, time: performance.now() };
+    addClickFeedback(tap.x, tap.y, true);
+  }
 
   addEventListener("pointerdown", function(event){
     if (event.pointerType !== "touch" || event.isPrimary === false) return;
@@ -73,9 +88,11 @@
     const start = touchStart;
     touchStart = null;
     if (Math.hypot(event.clientX - start.x, event.clientY - start.y) > tapTolerance) return;
-    lastTouchFeedback = { x: event.clientX, y: event.clientY, time: performance.now() };
-    addClickFeedback(event.clientX, event.clientY, true);
+    flushTapFeedback();
+    pendingTap = { x: event.clientX, y: event.clientY };
+    pendingTapTimer = setTimeout(flushTapFeedback, tapFeedbackDelay);
   }, { passive: true });
+  addEventListener("click", flushTapFeedback, { passive: true });
 
   if (!finePointer.matches) {
     addEventListener("click", function(event){
