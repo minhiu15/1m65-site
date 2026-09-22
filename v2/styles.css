@@ -7244,3 +7244,11 @@ main,
   }
   .gallery-content-panel > .gallery-filters button::after { top: 12px; bottom: 12px; }
 }
+
+/* Clip the pink paper buttons along the corners painted in their shell images, not a fixed radius.
+   The rect shell (drawn at 103.5% x 114.5%) paints its corners at 6.2% of the width / 25.8% of the
+   height, and the booking tab shell (drawn at 100%) at 11.3% / 22.7%. A fixed 16-18px radius is larger
+   than that on phone-sized buttons and cut through the dark outline at all four corners. These
+   percentages sit slightly inside the painted corners, so the outline survives at any size. */
+.button-primary:not(.header-book) { border-radius: 5.6% / 23%; }
+.booking-categories button.is-active { border-radius: 10.5% / 21%; }
