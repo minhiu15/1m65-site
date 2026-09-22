@@ -998,8 +998,10 @@ main,
   border-radius: 18px;
 }
 
-/* Booking CTA stays close to the generated shell's native 4:1 proportions. */
+/* Booking CTA stays close to the generated shell's native 4:1 proportions. Its nine-slice corners
+   scale with it (about a third of its height), keeping the thick, smooth outline of the original. */
 .booking-main-cta.button-primary {
+  --shell-corner: 36px;
   width: min(440px, calc(100% - 32px));
   min-width: 0;
   min-height: 0;
@@ -1023,6 +1025,7 @@ main,
   }
 
   .booking-main-cta.button-primary {
+    --shell-corner: 28px;
     width: min(360px, 100%);
     aspect-ratio: 4 / 1;
     padding-inline: 24px;
@@ -7248,13 +7251,14 @@ main,
 /* Nine-slice the pink paper shells so their corners keep the painted proportions at any button size;
    only the edges and the centre stretch. The rect shell (1200x320) has 20px of transparent margin and
    72px painted corners, so slices of 92px drawn 20px wide round each corner at ~15.6px, pushed out by
-   the margin (20 * 20 / 92 = 4.35px) to sit on the button edge. The booking tab shell (512x256) paints
+   the margin (20 * 20 / 92 = 4.35px) to sit on the button edge; --shell-corner (about a third of the
+   button height) enlarges them on taller buttons. The booking tab shell (512x256) paints
    58px corners edge to edge. border-image ignores border-radius and nothing clips these buttons, so
    the dark outline stays whole on all four corners; border-radius now only shapes the focus ring. */
 .button-primary:not(.header-book) { overflow: visible; border-radius: 15px; }
 .button-primary:not(.header-book)::before {
   background-image: none;
-  border-image: var(--button-shell-rect) 92 fill / 20px / 4.35px stretch;
+  border-image: var(--button-shell-rect) 92 fill / var(--shell-corner, 20px) / calc(var(--shell-corner, 20px) * 20 / 92) stretch;
 }
 .booking-categories button.is-active { overflow: visible; }
 .booking-categories button.is-active::before {
