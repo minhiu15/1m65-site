@@ -6673,6 +6673,9 @@ main,
 .footer-map__card {
   position: relative;
   z-index: 1;
+  /* Grid stretch sizes the map to the card's final height. Safari resolved the old height: 100%
+     against the aspect-ratio height, ignoring min-height, which left a thick blank band at the bottom. */
+  display: grid;
   width: calc(100% - clamp(0px, 2.2vw, 42px));
   aspect-ratio: 526 / 330;
   min-height: clamp(320px, 20vw, 380px);
@@ -6686,7 +6689,7 @@ main,
 .footer-map__viewport {
   position: relative;
   width: 100%;
-  height: 100%;
+  min-height: 0;
   overflow: hidden;
   border: 0;
   border-radius: 23px;
