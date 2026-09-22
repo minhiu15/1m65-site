@@ -4384,10 +4384,10 @@ main,
 .about-decor--sparkles {
   width: min(84px, 11vw);
   opacity: .78;
-  filter: saturate(.62) brightness(1.08);
+  filter: saturate(.62) brightness(1.26) contrast(.7);
 }
 
-.about-intro__sparkles { top: clamp(28px, 2.6vw, 44px); right: clamp(12px, 7vw, 140px); }
+.about-intro__sparkles { top: clamp(40px, 4.6vw, 88px); right: clamp(12px, 3.6vw, 70px); }
 
 .about-photo {
   display: grid;
@@ -4534,7 +4534,10 @@ main,
   position: absolute;
   z-index: 4;
   right: 0;
-  top: 16%;
+  /* Hung from the large photo's top edge: under the clip that rotated edge sits at
+     8.57% of the collage height + 5.06% of its width (margin % follow the width). */
+  top: calc(8.57% - 8px);
+  margin-top: 5.06%;
   width: clamp(138px, 11.5vw, 176px);
   height: clamp(150px, 12.5vw, 184px);
   min-height: 0;
@@ -4568,7 +4571,7 @@ main,
 .about-photo > .about-paperclip {
   position: absolute;
   z-index: 5;
-  top: -10px;
+  top: -16px;
   right: 12px;
   left: auto;
   width: 20px;
@@ -4784,7 +4787,7 @@ main,
   .about-intro h2 { margin-bottom: 24px; }
   .about-intro__content { padding-inline: 22px; }
   .about-intro p { max-width: 62ch; font-size: clamp(15px, 1.8vw, 18px); }
-  .about-intro__sparkles { right: clamp(12px, 4vw, 48px); }
+  .about-intro__sparkles { right: clamp(10px, 2.4vw, 30px); }
   .about-photo-bubble { top: calc(3% - 4px); left: -28px; width: 140px; min-height: 90px; padding: 16px 14px; font-size: 13px; }
   .about-story {
     padding: 22px 24px 17px;
@@ -4848,11 +4851,11 @@ main,
     margin: 14px 0 12px;
   }
   .about-divider--story img { width: 30px; }
-  .about-photo--detail { right: -1%; top: 72px; width: clamp(96px, 26vw, 114px); height: clamp(108px, 29vw, 128px); padding: 4px; border-radius: 14px; }
+  .about-photo--detail { right: -1%; top: calc(11.9% - 3px); margin-top: 2.41%; width: clamp(96px, 26vw, 114px); height: clamp(108px, 29vw, 128px); padding: 4px; border-radius: 14px; }
   .about-photo--detail > .about-photo__crop { border-radius: 10px; }
   .about-photo__crop > img { transform: scale(1.45); }
   .about-story .about-story__owner { margin-top: 10px; font-size: 14px; line-height: 1.55; }
-  .about-photo > .about-paperclip { top: -8px; right: 10px; width: 20px; }
+  .about-photo > .about-paperclip { top: -14px; right: 10px; width: 20px; }
   .about-story > .about-info-rail { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 12px; padding: 18px 0 0; }
   .about-story > .about-info-rail article { display: flex; padding: 0 3px; text-align: center; }
   .about-story > .about-info-rail img { width: 28px; height: 28px; }
@@ -6076,20 +6079,9 @@ main,
   .menu-button[aria-expanded="true"] span:last-child { transform: translateY(-6px) rotate(-45deg); }
 }
 
-@media (min-width: 601px) and (max-width: 900px) {
+/* Tablet and mobile: menu on the left, descriptor then wordmark in the right corner. */
+@media (max-width: 900px) {
   .site-header .brand { flex-direction: row-reverse; }
-}
-
-@media (max-width: 600px) {
-  .site-header .brand {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    min-height: 44px;
-    margin-left: 0;
-    transform: translate(-50%, -50%);
-  }
-  .site-header .brand-copy { display: none; }
 }
 
 @media (max-width: 420px) {
@@ -6897,7 +6889,10 @@ main,
   .footer-brand {
     gap: 15px;
     padding-inline: var(--footer-column-gutter);
-    transform: translateX(calc(0px - var(--footer-column-gutter) - var(--footer-decor-overhang) - clamp(8px, 1.2vw, 22px)));
+    /* Centre the logo and cat between the paper's left edge and the column divider: shift by half the
+       grid's side inset, max((100vw - 1500px) / 2, clamp(80px, 10.5vw, 160px) / 2), plus 10px to
+       cancel the logo's own nudge. */
+    transform: translateX(calc(10px - max(25vw - 375px, clamp(20px, 2.625vw, 40px))));
   }
   .footer-brand__logo img {
     width: clamp(204px, 14vw, 270px);
@@ -6908,13 +6903,16 @@ main,
   .footer-brand__logo,
   .footer-contact,
   .footer-map { transform: translateY(var(--footer-content-drop)); }
-  .footer-brand__logo { transform: translate(-10px, calc(var(--footer-content-drop) + 16px)); }
+  /* 34px below the column headings centres the logo between the paper wave and the cat. */
+  .footer-brand__logo { transform: translate(-10px, calc(var(--footer-content-drop) + 50px)); }
   .footer-social__link { width: 60px; height: 56px; }
   .footer-social__link img { height: 32px; }
   .footer-brand__sleeping-cat {
+    align-self: center;
     width: clamp(310px, 22vw, 385px);
-    margin-top: 63px;
-    transform: translateY(calc(clamp(48px, 3.2vw, 62px) + 69px));
+    margin: 63px 0 0;
+    /* -10px matches the logo's nudge, so both sit on the brand column's centre. */
+    transform: translate(-10px, calc(clamp(48px, 3.2vw, 62px) + 69px));
   }
 
   .footer-contact { padding-inline: var(--footer-column-gutter); }
@@ -6966,6 +6964,7 @@ main,
   }
 
   .footer-features {
+    /* Stays centred on the page; on narrower desktops it tucks slightly over the centred cat's books. */
     width: min(900px, calc(100% - 48px));
     margin-top: clamp(52px, 3.7vw, 72px);
     padding: 14px clamp(18px, 2.4vw, 42px);

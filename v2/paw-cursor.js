@@ -121,8 +121,29 @@
     cursor.classList.remove("is-pressed");
   }
 
+  // Scrollbars belong to the browser: the window's scrollbar is painted above the page (so the paw
+  // would slide under it) and dragging any scrollbar sends no pointer moves (so the paw would freeze).
+  // Over a scrollbar the native cursor takes over until the pointer comes back to the content.
+  function isOverScrollbar(event) {
+    const element = event.target;
+    if (element === document.documentElement) {
+      return event.clientX >= element.clientWidth || event.clientY >= element.clientHeight;
+    }
+    if (!(element instanceof Element)) return false;
+    const rect = element.getBoundingClientRect();
+    const x = event.clientX - rect.left - element.clientLeft;
+    const y = event.clientY - rect.top - element.clientTop;
+    if (x < element.clientWidth && y < element.clientHeight) return false;
+    const style = getComputedStyle(element);
+    const barWidth = element.offsetWidth - element.clientWidth - element.clientLeft - parseFloat(style.borderRightWidth);
+    const barHeight = element.offsetHeight - element.clientHeight - element.clientTop - parseFloat(style.borderBottomWidth);
+    return (barWidth > 0 && x >= element.clientWidth && x < element.clientWidth + barWidth)
+      || (barHeight > 0 && y >= element.clientHeight && y < element.clientHeight + barHeight);
+  }
+
   addEventListener("pointermove", function(event){
     if (!isPointerInteraction(event)) return;
+    if (isOverScrollbar(event)) return hideCursor();
     state.targetX = event.clientX;
     state.targetY = event.clientY;
     if (!seen) {
@@ -136,6 +157,7 @@
   }, { passive: true });
   addEventListener("pointerdown", function(event){
     if (!isPointerInteraction(event) || event.button !== 0) return;
+    if (isOverScrollbar(event)) return hideCursor();
     state.press = 1;
     cursor.classList.add("is-pressed");
     addClickFeedback(event.clientX, event.clientY);
