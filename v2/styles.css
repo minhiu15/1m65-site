@@ -692,7 +692,7 @@ main,
   min-height:76px;
   padding:12px 16px 12px 20px;
   gap:12px;
-  border:1px solid rgba(232,94,124,.16);
+  border:1.5px solid rgba(224,79,116,.3);
   border-radius:999px;
   background:rgba(255,253,251,.78);
   box-shadow:0 12px 34px -22px rgba(117,62,76,.52);
@@ -887,16 +887,6 @@ main,
 .signature-lower .service-meta {
   gap: 5px;
   margin-top: 8px;
-}
-
-.signature-grid--top .service-price strong,
-.signature-lower .service-price strong {
-  font-size: 14px;
-}
-
-.signature-grid--top .service-duration,
-.signature-lower .service-duration {
-  font-size: 8px !important;
 }
 
 .signature-lower .service-card:last-of-type {
@@ -1113,10 +1103,6 @@ main,
   --line: rgba(133, 120, 158, .22);
 }
 
-.header-inner {
-  border-color: rgba(159, 142, 184, .22);
-  background: rgba(255, 253, 248, .86);
-}
 .desktop-nav a:hover,
 .desktop-nav a.is-active {
   background: var(--pastel-blue);
@@ -1411,7 +1397,9 @@ main,
 @media (max-width: 600px) {
   .home-service-divider.nhu-paw-runner-shell { height: 58px; }
   .home-service-divider .nhu-paw-runner-viewport { width: calc(100% - 32px); }
-  .home-service-divider .nhu-paw-runner-group { padding-inline: 0; }
+  /* Four paws per screen instead of six, so the trail reads sparser on phones. */
+  .home-service-divider .nhu-paw-runner-group { grid-template-columns: repeat(4, minmax(0, 1fr)); padding-inline: 0; }
+  .home-service-divider .nhu-paw-runner-mark:nth-child(n+5) { display: none; }
   .home-service-divider .nhu-paw-runner-mark { width: 24px; height: 24px; }
   .home-service-divider .nhu-paw-runner-mark:nth-child(2n) { width: 22px; height: 22px; }
 }
@@ -3083,7 +3071,8 @@ main,
   }
 
   .service-card--featured[data-card-variant="signature"] {
-    grid-template-columns: minmax(0, 1fr) 40%;
+    /* The frame is a fixed 124px, so the column matches it and the 16px gap stays honest. */
+    grid-template-columns: minmax(0, 1fr) 124px;
     min-height: 188px;
     padding: 14px;
   }
@@ -3102,9 +3091,10 @@ main,
   .signature-grid--top .service-card:last-child { grid-column: auto; }
   .signature-lower .service-card { min-height: 188px; }
   .service-card[data-card-variant="signature"] {
-    grid-template-columns: minmax(0, 1fr) 39%;
+    grid-template-columns: minmax(0, 1fr) 124px;
     min-height: 188px;
-    gap: 10px;
+    /* Wide enough for the dashed ring (6px outside the photo) to clear the price row. */
+    gap: 16px;
     padding: 14px;
     border-radius: 19px;
   }
@@ -3113,7 +3103,27 @@ main,
   .service-card[data-card-variant="signature"] p { font-size: 11px; line-height: 1.4; }
   .service-card[data-card-variant="signature"] .service-meta { margin-top: 16px; padding-top: 0; }
   .service-card[data-card-variant="signature"] .service-photo-wrap { min-height: 132px; padding: 5px; }
+  /* Dashed ring concentric with the 16.8px scaled photo corners (16.8 + 5.2 gap), so the corners
+     keep the same clearance as the sides instead of biting into the photo. */
+  .service-card[data-card-variant="signature"] .service-photo-wrap::before { inset: -6px; border-radius: 21.5px; }
   .service-card[data-card-variant="signature"] .service-photo-wrap > img:first-child { min-height: 120px; }
+  /* Single column on phones: alternate the photo side, top card first on the left.
+     data-photo-tilt already runs 0..5 across the four signature rows, so "left" is every odd card. */
+  .service-card[data-card-variant="signature"][data-photo-tilt="left"] { grid-template-columns: 124px minmax(0, 1fr); }
+  /* The frame is a fixed 124px pinned to the column end, so flipping it also flips that anchor. */
+  .service-card[data-card-variant="signature"][data-photo-tilt="left"] .service-photo-wrap { order: -1; justify-self: start; }
+  .service-card--featured[data-card-variant="signature"][data-photo-tilt="left"] { grid-template-columns: 124px minmax(0, 1fr); }
+  /* The badge owns the card's top-right corner, so the copy starts below it (badge bottom is
+     -9px + 85px = 76px from the card top, i.e. 62px below the copy box) and the card follows
+     its own text instead of clipping it on narrow phones. */
+  .service-card--featured[data-card-variant="signature"][data-photo-tilt="left"] {
+    height: auto;
+    min-height: var(--signature-card-height);
+  }
+  .service-card--featured[data-card-variant="signature"][data-photo-tilt="left"] .service-card-copy {
+    justify-content: flex-start;
+    padding-top: 64px;
+  }
   .service-card[data-card-variant="signature"] .signature-photo-pin {
     top: -8px;
     right: 3px;
@@ -3126,6 +3136,11 @@ main,
     bottom: -7px;
     width: 44px !important;
     height: 44px !important;
+  }
+  /* The sticker hangs off the photo's outer corner, which is the left one once the photo flips. */
+  [data-photo-tilt="left"] .featured-cat-sticker {
+    left: -4px !important;
+    right: auto;
   }
   .service-card[data-card-variant="signature"]::after { right: 6px; bottom: 4px; font-size: 20px; }
   .signature-layout > .service-note { margin-top: 14px; }
@@ -3503,7 +3518,8 @@ main,
   .shared-service-title p { font-size: 9px; line-height: 1.42; }
   .shared-service-title__accent { width: 38px; height: 56px; }
   .shared-service-title__accent img { width: 38px; height: auto; }
-  .shared-service-list { padding: 5px 6px; }
+  /* Rows span the tab bar exactly; their own padding keeps the copy and price off the edges. */
+  .shared-service-list { padding: 5px 0; }
   .shared-service-row,
   .shared-service-row:nth-child(even) {
     grid-template-columns: minmax(0, 1fr) 112px;
@@ -3511,7 +3527,7 @@ main,
     align-items: center;
     gap: 12px;
     min-height: 0;
-    padding: 18px 32px 18px 18px;
+    padding: 18px 24px 18px 14px;
   }
   .shared-service-row__copy {
     grid-area: auto;
@@ -6536,7 +6552,7 @@ main,
   .service-card[data-card-variant="signature"] > .signature-spa-cat { display: none; }
   .service-card[data-card-variant="signature"].service-card--spa {
     grid-template-columns: minmax(0, 1fr) minmax(82px, 38%);
-    gap: 8px;
+    gap: 16px;
     padding: 12px;
   }
 }
