@@ -2585,20 +2585,6 @@ main,
   background: transparent;
 }
 
-.signature-cotton-trail {
-  position: absolute;
-  z-index: 0;
-  bottom: -92px;
-  left: 12px;
-  width: min(84%, 520px);
-  height: auto;
-  aspect-ratio: 3 / 1;
-  object-fit: contain;
-  opacity: .84;
-  filter: blur(.8px);
-  pointer-events: none;
-}
-
 /* The booking picker uses a dedicated compact paper shell, not the Gallery pill. */
 .booking-categories button.is-active::before {
   background-image: url("assets/booking/ui_shells/booking_category_active_pink_paper_v1.webp");
@@ -2726,8 +2712,56 @@ main,
 }
 
 .service-card[data-card-variant="signature"] .service-meta {
+  display: grid;
+  justify-content: start;
+  align-items: start;
+  gap: 3px;
+  width: max-content;
+  max-width: 100%;
   margin-top: 24px;
   padding-top: 0;
+}
+
+.service-card[data-card-variant="signature"] .service-price {
+  display: grid;
+  grid-template-columns: max-content;
+  grid-template-areas: "current";
+  align-items: center;
+  justify-content: start;
+  width: max-content;
+  max-width: 100%;
+  gap: 0;
+}
+
+.service-card[data-card-variant="signature"] .service-price--sale {
+  grid-template-columns: max-content max-content;
+  grid-template-areas:
+    "badge badge"
+    "current original";
+  gap: 3px 10px;
+}
+
+.service-card[data-card-variant="signature"] .service-price-current { grid-area: current; }
+.service-card[data-card-variant="signature"] .service-price-original {
+  grid-area: original;
+  align-self: center;
+  color: #876f69;
+  font-size: 12px;
+}
+.service-card[data-card-variant="signature"] .sale-badge {
+  grid-area: badge;
+  justify-self: end;
+  padding: 2px 8px;
+  border-radius: 9px;
+  background: #fff5f7;
+  font-size: 10px;
+  line-height: 1;
+  transform: rotate(-3deg);
+}
+.service-card[data-card-variant="signature"] .service-duration {
+  order: initial;
+  justify-self: start;
+  line-height: 1.25;
 }
 
 .service-card[data-card-variant="signature"] .service-photo-wrap {
@@ -2971,7 +3005,6 @@ main,
 
   .signature-hero-row { grid-template-columns: 1fr; gap: 14px; }
   .signature-intro { min-height: 267px; grid-template-columns: minmax(180px, 34%) minmax(0, 66%); }
-  .signature-cotton-trail { bottom: -75px; }
   .signature-cat { width: min(100%, 212px); height: 243px; transform: translateY(42px) scale(1.07); }
   .signature-copy { transform: translateY(10px) scale(1.05); }
   .signature-wordmark { max-height: 170px; }
@@ -3052,7 +3085,6 @@ main,
     min-height: 178px;
     padding: 0 4px;
   }
-  .signature-cotton-trail { bottom: -44px; left: 18px; width: min(70%, 260px); }
   .signature-ref-doodle--heart { left: 27%; top: 12%; width: 28px; height: 28px; }
   .signature-cat { width: 100px; height: 164px; transform: translateY(24px) scale(1.07); }
   .signature-copy { transform: translateY(-1px); }
@@ -5646,7 +5678,21 @@ main,
   .home-art__backdrop-surface { stroke-width: 1.5; }
 
   .signature-intro {
-    grid-template-columns: 128px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    min-height: 156px;
+    margin-bottom: 4px;
+    padding-inline: 4px;
+  }
+
+  .signature-cat {
+    display: none;
+  }
+
+  .signature-copy {
+    width: min(100%, 320px);
+    justify-self: center;
+    transform: translateY(0);
   }
 
   .signature-wordmark {
@@ -5657,18 +5703,30 @@ main,
     transform: translateY(-4px);
   }
 
-  .service-card--featured[data-card-variant="signature"] .service-card-copy {
-    padding: 0;
+  .service-card--featured[data-card-variant="signature"][data-photo-tilt="left"] .service-card-copy {
+    justify-content: flex-start;
+    padding: 35px 0 0;
+  }
+
+  .service-card--featured[data-card-variant="signature"] {
+    overflow: visible;
   }
 
   .featured-badge {
     z-index: 9;
-    top: -9px;
-    right: 20px;
+    top: -52px;
+    right: -8px;
     left: auto;
-    width: 68px;
-    height: 85px;
-    padding: 24px 8px 28px;
+    box-sizing: border-box;
+    width: 72px;
+    height: 90px;
+    padding: 31px 8px 24px;
+    overflow: visible;
+    background-image: url("assets/services/signature-shared/decor/featured_most_chosen_badge_mobile_ribbons_v1.png");
+    background-position: center;
+    background-size: contain;
+    transform: rotate(7deg);
+    transform-origin: 78% 22%;
   }
 
   .featured-badge span { font-size: 6px; }
@@ -6554,6 +6612,9 @@ main,
     grid-template-columns: minmax(0, 1fr) minmax(82px, 38%);
     gap: 16px;
     padding: 12px;
+  }
+  .service-card[data-card-variant="signature"] .service-photo-wrap--spa::before {
+    inset: -4.5px;
   }
 }
 

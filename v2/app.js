@@ -129,8 +129,11 @@ const serviceById = (id) => state.services.find((item) => item.id === id);
 function renderPrice(service) {
   const discount = Number(service.discountPercent || 0);
   const original = Number(service.originalPrice || service.price || 0);
-  if (discount <= 0 || original <= Number(service.price || 0)) return `<strong>${money(service.price)}</strong>`;
-  return `<span class="sale-badge">-${discount}%</span><span class="price-stack"><del>${money(original)}</del><strong>${money(service.price)}</strong></span>`;
+  const onSale = discount > 0 && original > Number(service.price || 0);
+  return `<span class="service-price${onSale ? " service-price--sale" : ""}">
+    <strong class="service-price-current">${money(service.price)}</strong>
+    ${onSale ? `<del class="service-price-original">${money(original)}</del><span class="sale-badge">-${discount}%</span>` : ""}
+  </span>`;
 }
 
 function serviceCard(service, className = "", variant = "standard", sequenceIndex = 0, { showPhoto = true } = {}) {
@@ -149,7 +152,7 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
     <div class="service-card-copy">
       <h3>${service.name}</h3>
       <p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p>
-      <div class="service-meta"><span class="service-duration">~${service.durationMinutes} phút</span><span class="service-price">${renderPrice(service)}</span></div>
+      <div class="service-meta">${renderPrice(service)}<span class="service-duration">~${service.durationMinutes} phút</span></div>
     </div>
     ${showPhoto ? `<div class="service-photo-wrap${spaRelaxation ? " service-photo-wrap--spa" : ""}">
       <img src="${image}" alt="${photoAlt}" loading="lazy" decoding="async">
@@ -189,7 +192,6 @@ function renderSignature() {
   return `<div class="signature-layout">
     <div class="signature-hero-row">
       <div class="signature-intro">
-        <img class="signature-cotton-trail" src="assets/services/signature-shared/decor/cotton_puff_ribbon_v1.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">
         <img class="signature-cat" src="assets/services/signature-shared/cats/signature_raised_paw_cotton_v2.webp" alt="Mèo Nhu Nhi vẫy tay" decoding="async" loading="lazy">
         <div class="signature-copy">
           <img class="signature-wordmark" src="assets/services/signature-shared/signature_wordmark/SIGNATURE_WORDMARK_PASTEL_CROWN_V11.webp" alt="Signature" decoding="async" loading="lazy">
