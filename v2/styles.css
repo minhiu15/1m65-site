@@ -7491,7 +7491,7 @@ main,
      left of tilt-left cards on phones); the text side keeps 14px so the sale prices fit on one row. */
   .signature-layout .service-card[data-card-variant="signature"] { padding-inline: 14px 20px; }
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="left"] { padding-inline: 20px 14px; }
-  .signature-layout .service-card[data-card-variant="signature"] .sale-badge { padding-inline: 5px; font-size: 9.5px; }
+  .signature-layout .service-card[data-card-variant="signature"] .sale-badge { padding-inline: 4px; font-size: 9.5px; }
   .signature-layout .service-card[data-card-variant="signature"] .service-price-original { font-size: 11px; }
   .signature-layout .service-card[data-card-variant="signature"] .service-price--sale { column-gap: 4px; }
   .signature-layout .signature-wordmark { width: min(100%, 316px); margin-top: 8px; }
@@ -7560,4 +7560,48 @@ main,
   flex-wrap: wrap;
   align-items: center;
   gap: 3px 5px;
+}
+
+/* The Signature price row has room for a slightly larger ticket on tablet and desktop. */
+@media (min-width: 601px) {
+  .signature-layout .service-card[data-card-variant="signature"] .sale-badge { padding: 3px 7px; font-size: 12px; }
+}
+
+/* One sale ticket everywhere, the one the owner picked from the desktop service list: a dashed pink
+   ticket with three burst strokes off its top-right corner. The strokes are sized in em so they
+   follow each context's ticket size (24x22px beside the 16px list ticket). */
+.signature-layout .sale-badge,
+.shared-service-row__offer,
+.booking-service-price .sale-badge {
+  position: relative;
+  overflow: visible;
+  border: 2px dashed #ff8ca7;
+  border-radius: 11px;
+  background: #ffe5ec;
+  color: #ff527b;
+  font-family: var(--font-signature-display);
+  font-weight: 700;
+  line-height: 1;
+  transform: rotate(-.7deg);
+}
+.signature-layout .sale-badge::after,
+.shared-service-row__offer::after,
+.booking-service-price .sale-badge::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -1.1em;
+  right: -1.2em;
+  width: 1.5em;
+  height: 1.375em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 22'%3E%3Cpath d='M2 14L6 2M8 16L15 8M13 19L21 17' fill='none' stroke='%23ff6f91' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  transform: none;
+  pointer-events: none;
+}
+@media (max-width: 600px) {
+  /* The burst strokes stick out to the right of the ticket; tuck the phone ticket 7.5px further onto the
+     price card (it still covers only the card's outer 30px) and hold the strokes 2px closer, so they
+     stay inside the row. */
+  .shared-service-row__offer-slot { transform: translate(12.5px, -14px); }
+  .shared-service-row__offer::after { right: -1em; }
 }
