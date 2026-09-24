@@ -7491,6 +7491,16 @@ main,
      on the left of tilt-left cards on phones), 20px on the text side and 22px between photo and copy. */
   .signature-layout .service-card[data-card-variant="signature"] { padding: 18px 22px 18px 20px; column-gap: 22px; }
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="left"] { padding: 18px 20px 18px 22px; }
+  /* The hair-wash card shares the other cards' 124px photo column (its desktop 34% column left a
+     wider gap on phones), and prices read a little larger. */
+  .signature-layout .service-card--spa[data-card-variant="signature"] { grid-template-columns: minmax(0, 1fr) 124px; }
+  .signature-layout .service-card[data-card-variant="signature"] .service-price-current { font-size: 19px; }
+  /* The copy fills the photo's 152px height: the title starts level with the photo's top and the
+     prices and pill finish level with its bottom, with larger type and more air between the lines. */
+  .signature-layout .service-card[data-card-variant="signature"] .service-card-copy { align-self: center; justify-content: flex-start; height: auto; min-height: 152px; }
+  .signature-layout .service-card[data-card-variant="signature"] h3 { margin-bottom: 6px; font-size: 18px; }
+  .signature-layout .service-card[data-card-variant="signature"] .service-card-copy > p { margin-bottom: 12px; font-size: 12.5px; line-height: 1.45; }
+  .signature-layout .service-card[data-card-variant="signature"] .service-meta { margin-top: auto; }
   /* Trial: cards with the photo on the right align their copy, prices and pill towards the photo. */
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] .service-card-copy { align-items: flex-end; text-align: right; }
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] .service-meta { justify-items: end; }
@@ -7499,7 +7509,7 @@ main,
   .signature-layout .service-card[data-card-variant="signature"] .service-price--sale { column-gap: 8px; }
   .signature-layout .signature-wordmark { width: min(100%, 316px); margin-top: 8px; }
   .signature-layout .service-card--featured[data-card-variant="signature"] { margin-top: 18px; }
-  .signature-layout .service-card--featured[data-card-variant="signature"] .service-card-copy { justify-content: center; padding-top: 0; }
+  .signature-layout .service-card--featured[data-card-variant="signature"] .service-card-copy { padding-top: 0; }
   .signature-layout .service-card--featured[data-card-variant="signature"] h3 { width: fit-content; }
   .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge {
     top: -26px;
@@ -7515,8 +7525,15 @@ main,
   /* Too little room beside the duration pill on the smallest phones. */
   .signature-layout .service-card[data-card-variant="signature"]::after { display: none; }
 }
-@media (max-width: 419px) {
+@media (max-width: 479px) {
   .signature-layout .service-card--featured[data-card-variant="signature"] h3 { max-width: 96px; }
+}
+@media (min-width: 480px) and (max-width: 600px) {
+  /* Wider phones: the featured title and description flow around a float that keeps the badge's
+     corner clear, and the prices and pill hold the bottom of the photo-high copy box. */
+  .signature-layout .service-card--featured[data-card-variant="signature"] .service-card-copy { display: block; position: relative; padding-bottom: 66px; }
+  .signature-layout .service-card--featured[data-card-variant="signature"] .service-card-copy::before { content: ""; float: right; width: 70px; height: 52px; }
+  .signature-layout .service-card--featured[data-card-variant="signature"] .service-meta { position: absolute; bottom: 0; left: 0; }
 }
 @media (max-width: 389px) {
   /* Narrow phones keep most of the extra room but a 112px photo column, so the copy stays ~150px wide. */
