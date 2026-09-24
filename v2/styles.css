@@ -7468,6 +7468,9 @@ main,
 .signature-layout .service-card--featured[data-card-variant="signature"]::after {
   inset: auto 16px 10px auto;
 }
+/* The 196px photo frame (200px with its mat) needs 244px cards to sit centred inside the 22px padding;
+   at 236px it overflowed 8px and crowded the bottom outline. */
+.signature-layout { --signature-card-height: 244px; }
 @media (max-width: 600px) {
   .signature-layout .service-card[data-card-variant="signature"] { --card-shell-corner: 24px; }
   .signature-layout .service-card[data-card-variant="signature"]::after {
@@ -7484,6 +7487,13 @@ main,
      design / vẽ tay") so it stays clear of the badge. The card sits 18px below the subtitle so the badge clears the banner tip.
      The Signature wordmark is a little larger (316px, was 290px) and 8px lower. */
   .signature-layout { --signature-card-height: 200px; }
+  /* 20px on the photo side keeps its dashed frame clear of the hand-drawn outline (photos sit on the
+     left of tilt-left cards on phones); the text side keeps 14px so the sale prices fit on one row. */
+  .signature-layout .service-card[data-card-variant="signature"] { padding-inline: 14px 20px; }
+  .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="left"] { padding-inline: 20px 14px; }
+  .signature-layout .service-card[data-card-variant="signature"] .sale-badge { padding-inline: 5px; font-size: 9.5px; }
+  .signature-layout .service-card[data-card-variant="signature"] .service-price-original { font-size: 11px; }
+  .signature-layout .service-card[data-card-variant="signature"] .service-price--sale { column-gap: 4px; }
   .signature-layout .signature-wordmark { width: min(100%, 316px); margin-top: 8px; }
   .signature-layout .service-card--featured[data-card-variant="signature"] { margin-top: 18px; }
   .signature-layout .service-card--featured[data-card-variant="signature"] .service-card-copy { justify-content: center; padding-top: 0; }
@@ -7508,6 +7518,9 @@ main,
 @media (max-width: 389px) {
   /* Narrow phones: hang the badge 8px further past the card edge so "design" keeps clear of it. */
   .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge { right: -12px; }
+}
+@media (max-width: 374px) {
+  .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge { right: -17px; }
 }
 @media (max-width: 359px) {
   /* The smallest phones have no room beside the badge, so the copy starts below it instead. */
@@ -7536,4 +7549,15 @@ main,
   -webkit-mask: var(--clock-icon) center / contain no-repeat;
   mask: var(--clock-icon) center / contain no-repeat;
   --clock-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7.5V12l3 2'/%3E%3C/svg%3E");
+}
+
+/* Sale details share the price row: current price, the struck-through original, then the ticket. The
+   owner didn't want the ticket on its own row pushing the copy down; it wraps under the prices only
+   when a narrow card has no room beside them (the meta column may shrink below its content for that). */
+.signature-layout .service-card[data-card-variant="signature"] .service-meta { grid-template-columns: minmax(0, max-content); }
+.signature-layout .service-card[data-card-variant="signature"] .service-price--sale {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px 5px;
 }
