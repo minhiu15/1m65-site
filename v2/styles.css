@@ -7400,3 +7400,68 @@ main,
   /* Phone tabs are 10px rounded rectangles: 11px corners paint a ~10px radius. */
   .booking-categories button.is-active::before { border-image-width: 11px; }
 }
+
+/* Signature cards are hand-drawn paper: the fill and the pencil outline come from one nine-slice SVG
+   per tone (44-unit corners drawn 30px, 24px on phones; the wobbly edge tile repeats), pushed out 3px
+   so the line sits on the card edge. Pink line-art doodles sit in the free bottom corner on the text
+   side, which is the right side when the photo is on the left. */
+.signature-layout .service-card[data-card-variant="signature"] {
+  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_blue.svg");
+  --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_sparkle.svg");
+  --card-shell-corner: 30px;
+  isolation: isolate;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+}
+.signature-layout .service-card--featured[data-card-variant="signature"] {
+  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_rose.svg");
+  --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_hearts.svg");
+}
+.signature-layout .service-card[data-card-variant="signature"]:is([data-service-id="noi-gel"], [data-service-id="mi-classic"]) {
+  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_peach.svg");
+}
+.signature-layout .service-card[data-card-variant="signature"]:is([data-service-id="noi-bot"], [data-service-id="goi-duongsinh"]) {
+  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_lavender.svg");
+}
+.signature-layout .service-card[data-card-variant="signature"]:is([data-service-id="noi-gel"], [data-service-id="goi-duongsinh"]) {
+  --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_flower.svg");
+}
+.signature-layout .service-card[data-card-variant="signature"][data-service-id="noi-bot"] {
+  --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_hearts.svg");
+}
+.signature-layout .service-card[data-card-variant="signature"]::before,
+.signature-layout .service-card[data-card-variant="signature"]::after {
+  content: "";
+  display: block;
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+.signature-layout .service-card[data-card-variant="signature"]::before {
+  inset: 0;
+  border-image: var(--card-shell) 44 fill / var(--card-shell-corner) / 3px round;
+}
+.signature-layout .service-card[data-card-variant="signature"]::after {
+  inset: auto auto 6px 12px;
+  width: 64px;
+  height: 36px;
+  background: var(--card-doodles) center / contain no-repeat;
+}
+.signature-layout .service-card--featured[data-card-variant="signature"]::after {
+  inset: auto 16px 10px auto;
+}
+@media (max-width: 600px) {
+  .signature-layout .service-card[data-card-variant="signature"] { --card-shell-corner: 24px; }
+  .signature-layout .service-card[data-card-variant="signature"]::after {
+    inset: auto auto 4px 9px;
+    width: 50px;
+    height: 28px;
+  }
+  .signature-layout .service-card[data-card-variant="signature"]:is(.service-card--featured, [data-photo-tilt="left"])::after {
+    inset: auto 12px 7px auto;
+  }
+}
+@media (max-width: 359px) {
+  .signature-layout .service-card[data-card-variant="signature"]::after { width: 36px; height: 20px; }
+}
