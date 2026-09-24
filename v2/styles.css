@@ -7468,16 +7468,21 @@ main,
   }
   /* Phone badge: sits low on the card's top-right corner with its 7deg tilt, its two lines centred on
      the cream disc (51% across, 45% down the art, about 65% of its width wide). The featured copy
-     starts 18px lower so the ribbon tails clear the title; every Signature card grows to 210px so the
-     cards keep one shared height and the featured title stays within the cards' rhythm. The card
-     drops 26px so the badge clears the banner tip and the subtitle. The Signature wordmark is a
-     little larger (316px, was 290px) and 8px lower. */
-  .signature-layout { --signature-card-height: 210px; }
+     starts below the ribbon tails, so the featured card grows to fit it (about 211px, a little more
+     with a sale tag) while the other Signature cards share a shorter 200px. The card sits 18px lower
+     so the badge clears the banner tip and the subtitle. The Signature wordmark is a little larger
+     (316px, was 290px) and 8px lower. */
+  .signature-layout { --signature-card-height: 200px; }
   .signature-layout .signature-wordmark { width: min(100%, 316px); margin-top: 8px; }
-  .signature-layout .service-card--featured[data-card-variant="signature"] { margin-top: 26px; padding-bottom: 10px; }
-  .signature-layout .service-card--featured[data-card-variant="signature"] .service-card-copy { padding-top: 53px; }
+  .signature-layout .service-card--featured[data-card-variant="signature"] {
+    height: auto;
+    min-height: var(--signature-card-height);
+    margin-top: 18px;
+    padding-bottom: 10px;
+  }
+  .signature-layout .service-card--featured[data-card-variant="signature"] .service-card-copy { padding-top: 61px; }
   .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge {
-    top: -34px;
+    top: -26px;
     right: -4px;
     width: 78px;
     height: 97.5px;
