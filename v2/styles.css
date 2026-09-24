@@ -7407,7 +7407,7 @@ main,
    line-art doodles, drawn in the free bottom corner on the text side (the right side when the photo
    is on the left). */
 .signature-layout .service-card[data-card-variant="signature"] {
-  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_blue.svg");
+  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_blue.svg?v=2");
   --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_sparkle.svg");
   --card-shell-corner: 30px;
   isolation: isolate;
@@ -7416,23 +7416,23 @@ main,
   background: transparent;
 }
 .signature-layout .service-card--featured[data-card-variant="signature"] {
-  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_rose.svg");
+  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_rose.svg?v=2");
   --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_hearts.svg");
 }
 .signature-layout .service-card[data-card-variant="signature"][data-service-id="noi-gel"] {
-  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_peach.svg");
+  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_peach.svg?v=2");
   --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_flower.svg");
 }
 .signature-layout .service-card[data-card-variant="signature"][data-service-id="noi-bot"] {
-  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_lavender.svg");
+  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_lavender.svg?v=2");
   --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_paw.svg");
 }
 .signature-layout .service-card[data-card-variant="signature"][data-service-id="mi-classic"] {
-  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_mint.svg");
+  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_mint.svg?v=2");
   --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_bow.svg");
 }
 .signature-layout .service-card[data-card-variant="signature"][data-service-id="goi-duongsinh"] {
-  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_yellow.svg");
+  --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_yellow.svg?v=2");
   --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_bubbles.svg");
 }
 .signature-layout .service-card[data-card-variant="signature"]::before,
