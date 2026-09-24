@@ -7487,10 +7487,14 @@ main,
      design / vẽ tay") so it stays clear of the badge. The card sits 18px below the subtitle so the badge clears the banner tip.
      The Signature wordmark is a little larger (316px, was 290px) and 8px lower. */
   .signature-layout { --signature-card-height: 200px; }
-  /* 20px on the photo side keeps its dashed frame clear of the hand-drawn outline (photos sit on the
-     left of tilt-left cards on phones); the text side keeps 14px so the sale prices fit on one row. */
-  .signature-layout .service-card[data-card-variant="signature"] { padding-inline: 14px 20px; }
-  .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="left"] { padding-inline: 20px 14px; }
+  /* Roomier phone cards, as the owner asked: 18px above and below, 22px on the photo side (photos sit
+     on the left of tilt-left cards on phones), 20px on the text side and 22px between photo and copy. */
+  .signature-layout .service-card[data-card-variant="signature"] { padding: 18px 22px 18px 20px; column-gap: 22px; }
+  .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="left"] { padding: 18px 20px 18px 22px; }
+  /* Trial: cards with the photo on the right align their copy, prices and pill towards the photo. */
+  .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] .service-card-copy { align-items: flex-end; text-align: right; }
+  .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] .service-meta { justify-items: end; }
+  .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] :is(.service-price--sale, .service-duration-row) { justify-content: flex-end; }
   .signature-layout .service-card[data-card-variant="signature"] .sale-badge { padding-inline: 5px; font-size: 10.5px; }
   .signature-layout .service-card[data-card-variant="signature"] .service-price--sale { column-gap: 8px; }
   .signature-layout .signature-wordmark { width: min(100%, 316px); margin-top: 8px; }
@@ -7515,6 +7519,10 @@ main,
   .signature-layout .service-card--featured[data-card-variant="signature"] h3 { max-width: 96px; }
 }
 @media (max-width: 389px) {
+  /* Narrow phones keep most of the extra room but a 112px photo column, so the copy stays ~150px wide. */
+  .signature-layout .service-card[data-card-variant="signature"] { grid-template-columns: minmax(0, 1fr) 112px; padding: 16px 18px 16px 16px; column-gap: 18px; }
+  .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="left"] { grid-template-columns: 112px minmax(0, 1fr); padding: 16px 16px 16px 18px; }
+  .signature-layout .service-card[data-card-variant="signature"] .service-photo-wrap { width: 112px; }
   /* Narrow phones: hang the badge 8px further past the card edge so "design" keeps clear of it. */
   .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge { right: -12px; }
 }
