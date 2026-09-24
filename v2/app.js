@@ -126,13 +126,16 @@ const money = (value) => `${Number(value || 0).toLocaleString("vi-VN")}₫`;
 const signaturePhotoSrc = (id, variant) => (SIGNATURE_PHOTOS[id] ? `assets/services/signature-shared/service_photos/${SIGNATURE_PHOTOS[id]}${variant === "card" ? "_card" : ""}.webp` : "");
 const serviceById = (id) => state.services.find((item) => item.id === id);
 
-function renderPrice(service) {
+const saleDiscount = (service) => {
   const discount = Number(service.discountPercent || 0);
-  const original = Number(service.originalPrice || service.price || 0);
-  const onSale = discount > 0 && original > Number(service.price || 0);
+  return discount > 0 && Number(service.originalPrice || service.price || 0) > Number(service.price || 0) ? discount : 0;
+};
+
+function renderPrice(service) {
+  const onSale = saleDiscount(service) > 0;
   return `<span class="service-price${onSale ? " service-price--sale" : ""}">
     <strong class="service-price-current">${money(service.price)}</strong>
-    ${onSale ? `<del class="service-price-original">${money(original)}</del><span class="sale-badge">-${discount}%</span>` : ""}
+    ${onSale ? `<del class="service-price-original">${money(service.originalPrice)}</del>` : ""}
   </span>`;
 }
 
@@ -152,7 +155,7 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
     <div class="service-card-copy">
       <h3>${service.name}</h3>
       <p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p>
-      <div class="service-meta">${renderPrice(service)}<span class="service-duration">~${service.durationMinutes} phút</span></div>
+      <div class="service-meta">${renderPrice(service)}<span class="service-duration-row"><span class="service-duration">~${service.durationMinutes} phút</span>${saleDiscount(service) ? `<span class="sale-badge">-${saleDiscount(service)}%</span>` : ""}</span></div>
     </div>
     ${showPhoto ? `<div class="service-photo-wrap${spaRelaxation ? " service-photo-wrap--spa" : ""}">
       <img src="${image}" alt="${photoAlt}" loading="lazy" decoding="async">
