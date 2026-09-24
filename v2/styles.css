@@ -7468,12 +7468,13 @@ main,
   }
   /* Phone badge: sits on the card's top-right corner (rosette centre on the top edge) with its 7deg
      tilt, and its two lines centred on the cream disc (51% across, 45% down the art, about 65% of its
-     width wide). The copy starts 10px lower so the ribbon tails clear the title, and the card drops
-     34px so the badge hangs in clear space instead of over the banner tip and the subtitle. */
-  .signature-layout .service-card--featured[data-card-variant="signature"] { margin-top: 34px; }
-  .signature-layout .service-card--featured[data-card-variant="signature"] .service-card-copy { padding-top: 45px; }
+     width wide). The copy starts 6px lower so the ribbon tails clear the title, and 4px less bottom
+     padding keeps the card at the shared Signature height; the card drops 34px so the badge hangs in
+     clear space instead of over the banner tip and the subtitle. */
+  .signature-layout .service-card--featured[data-card-variant="signature"] { margin-top: 34px; padding-bottom: 10px; }
+  .signature-layout .service-card--featured[data-card-variant="signature"] .service-card-copy { padding-top: 41px; }
   .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge {
-    top: -43px;
+    top: -46px;
     right: -4px;
     width: 78px;
     height: 97.5px;
