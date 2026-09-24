@@ -7495,12 +7495,14 @@ main,
      wider gap on phones), and prices read a little larger. */
   .signature-layout .service-card--spa[data-card-variant="signature"] { grid-template-columns: minmax(0, 1fr) 124px; }
   .signature-layout .service-card[data-card-variant="signature"] .service-price-current { font-size: 19px; }
-  /* The copy fills the photo's 152px height: the title starts level with the photo's top and the
-     prices and pill finish level with its bottom, with larger type and more air between the lines. */
-  .signature-layout .service-card[data-card-variant="signature"] .service-card-copy { align-self: center; justify-content: flex-start; height: auto; min-height: 152px; }
+  /* The copy spans the photo's 152px height with larger type. The gap between description and prices
+     grows from 12px to at most 24px (a capped flex spacer); any height left after that is split above
+     and below, so short copy stays centred on the photo instead of opening a wide gap. */
+  .signature-layout .service-card[data-card-variant="signature"] .service-card-copy { align-self: center; justify-content: center; height: auto; min-height: 152px; }
+  .signature-layout .service-card[data-card-variant="signature"] .service-card-copy::after { content: ""; order: 3; flex: 1 1 0; max-height: 12px; }
   .signature-layout .service-card[data-card-variant="signature"] h3 { margin-bottom: 6px; font-size: 18px; }
   .signature-layout .service-card[data-card-variant="signature"] .service-card-copy > p { margin-bottom: 12px; font-size: 12.5px; line-height: 1.45; }
-  .signature-layout .service-card[data-card-variant="signature"] .service-meta { margin-top: auto; }
+  .signature-layout .service-card[data-card-variant="signature"] .service-meta { order: 4; margin-top: 0; }
   /* Trial: cards with the photo on the right align their copy, prices and pill towards the photo. */
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] .service-card-copy { align-items: flex-end; text-align: right; }
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] .service-meta { justify-items: end; }
