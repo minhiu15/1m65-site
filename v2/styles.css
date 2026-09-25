@@ -5553,7 +5553,7 @@ main,
   align-items: center;
   justify-content: start;
   gap: 22px;
-  margin: 4px auto 0;
+  margin: 4px 0 0; /* anchored to the left edge; auto margins centred the 1280px box on wide screens */
   padding: 8px 18px 12px 1px;
 }
 
