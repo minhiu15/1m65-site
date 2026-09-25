@@ -7511,7 +7511,7 @@ main,
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] .service-card-copy { align-items: flex-end; text-align: right; }
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] .service-meta { justify-items: end; }
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] :is(.service-price--sale, .service-duration-row) { justify-content: flex-end; }
-  .signature-layout .service-card[data-card-variant="signature"] .sale-badge { width: 44px; min-height: 30px; font-size: 11.5px; }
+  .signature-layout .service-card[data-card-variant="signature"] .sale-badge { width: 38px; min-height: 26px; font-size: 10.5px; }
   .signature-layout .service-card[data-card-variant="signature"] .service-price--sale { column-gap: 12px; }
   .signature-layout .signature-wordmark { width: min(100%, 316px); margin-top: 8px; }
   .signature-layout .service-card--featured[data-card-variant="signature"] { margin-top: 18px; }
@@ -7533,10 +7533,6 @@ main,
 }
 @media (max-width: 479px) {
   .signature-layout .service-card--featured[data-card-variant="signature"] h3 { max-width: 96px; }
-}
-@media (max-width: 419px) {
-  /* Narrow phones: the list ticket's exact 42px width keeps pill and ticket on one row. */
-  .signature-layout .service-card[data-card-variant="signature"] .sale-badge { width: 42px; }
 }
 @media (min-width: 480px) and (max-width: 600px) {
   /* Wider phones: the featured title and description flow around a float that keeps the badge's
@@ -7618,17 +7614,17 @@ main,
   .signature-layout .service-card[data-card-variant="signature"] .service-duration-row { column-gap: 8px; }
 }
 
-/* The Signature ticket takes the Nail Care list ticket's chunky box proportions (about 1.45:1, bold
-   centred text): 50x34px on tablet and desktop, 44x30px on phones. */
+/* The Signature ticket keeps the Nail Care list ticket's box proportions (about 1.45:1, bold centred
+   text) but smaller and upright, as the owner asked: 44x30px on tablet and desktop, 38x26px on phones. */
 .signature-layout .service-card[data-card-variant="signature"] .sale-badge {
   display: inline-grid;
   place-items: center;
   box-sizing: border-box;
-  margin-block: -4px; /* the taller ticket overhangs the pill's row instead of pushing the pill down */
+  margin-block: -3px; /* the ticket overhangs the pill's row instead of pushing the pill down */
   padding: 3px;
 }
 @media (min-width: 601px) {
-  .signature-layout .service-card[data-card-variant="signature"] .sale-badge { width: 50px; min-height: 34px; font-size: 13px; }
+  .signature-layout .service-card[data-card-variant="signature"] .sale-badge { width: 44px; min-height: 30px; font-size: 12px; }
 }
 
 /* One sale ticket everywhere, the one the owner picked from the desktop service list: a dashed pink
@@ -7648,6 +7644,7 @@ main,
   line-height: 1;
   transform: rotate(-.7deg);
 }
+.signature-layout .service-card[data-card-variant="signature"] .sale-badge { transform: none; }
 .signature-layout .sale-badge::after,
 .shared-service-row__offer::after,
 .booking-service-price .sale-badge::after {
