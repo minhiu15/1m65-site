@@ -12,8 +12,9 @@ const categories = [
 // After the 84 country code a number never starts with 0 unless that 0 is the trunk prefix itself.
 const vnPhone=(value)=>String(value||"").replace(/\D/g,"").replace(/^(?:840(?=\d{9}$)|84(?=[1-9]\d{8}$))/,"0");
 // Reference photos (up to 3): uploads are shrunk on the phone before they are sent, so a 108MP
-// photo still leaves as a ~300KB JPEG (and re-drawing it drops EXIF, including GPS location).
-const MAX_PHOTOS=3,MAX_PHOTO_SOURCE_BYTES=40*1024*1024,MAX_PHOTO_UPLOAD_BYTES=650*1024;
+// photo still leaves as a sharp JPEG under 1MB, the private bucket's file limit (and re-drawing it
+// drops EXIF, including GPS location).
+const MAX_PHOTOS=3,MAX_PHOTO_SOURCE_BYTES=40*1024*1024,MAX_PHOTO_UPLOAD_BYTES=980*1024;
 const PICKER_LABELS={nail:"Nail",mi:"Mi",khac:"Khác"};
 const state = {step:1,category:"nail",selected:[],date:"",calendarOpen:false,calendarMonth:"",preferred:"",slots:[],blocked:[],day:null,slot:"",loading:false,pending:false,error:"",name:"",phone:"",note:"",status:"",reference:"",photos:[],photoBusy:0,photoError:"",photoWarning:"",picker:false,pickerFilter:"nail"};
 let requestId = 0;
@@ -182,14 +183,28 @@ function decodePhoto(file){
   if(window.createImageBitmap)return createImageBitmap(file);
   return new Promise(function(resolve,reject){const image=new Image();image.onload=function(){resolve(image);};image.onerror=reject;image.src=URL.createObjectURL(file);});
 }
-// Longest edge 1600px at JPEG 0.82; busier photos step down to 0.7, then to 1280px, to stay under 650KB.
+// A one-step 4000 -> 2048px draw samples too few pixels and smears fine nail detail, so the photo is
+// halved in steps (each canvas kept under 16MP for iOS) with high-quality smoothing.
+function drawScaled(source,width,height,targetWidth,targetHeight){
+  let current=source,currentWidth=width,currentHeight=height;
+  while(currentWidth/2>=targetWidth){
+    const fit=Math.min(.5,Math.sqrt(16e6/(currentWidth*currentHeight))),step=document.createElement("canvas");
+    step.width=Math.max(targetWidth,Math.round(currentWidth*fit));step.height=Math.max(targetHeight,Math.round(currentHeight*fit));
+    const stepContext=step.getContext("2d");stepContext.imageSmoothingQuality="high";stepContext.drawImage(current,0,0,step.width,step.height);
+    current=step;currentWidth=step.width;currentHeight=step.height;
+  }
+  const canvas=document.createElement("canvas");canvas.width=targetWidth;canvas.height=targetHeight;
+  const context=canvas.getContext("2d");context.fillStyle="#fff";context.fillRect(0,0,targetWidth,targetHeight);
+  context.imageSmoothingQuality="high";context.drawImage(current,0,0,targetWidth,targetHeight);
+  return canvas;
+}
+// Longest edge 2048px at JPEG 0.9; only very busy photos step down (0.82, then 1800px, then 1600px) to stay under 980KB.
 async function shrinkPhoto(file){
   const source=await decodePhoto(file);const width=source.width||source.naturalWidth,height=source.height||source.naturalHeight;
   try{
-    for(const [edge,quality] of [[1600,.82],[1600,.7],[1280,.7]]){
-      const scale=Math.min(1,edge/Math.max(width,height)),canvas=document.createElement("canvas");
-      canvas.width=Math.max(1,Math.round(width*scale));canvas.height=Math.max(1,Math.round(height*scale));
-      const context=canvas.getContext("2d");context.fillStyle="#fff";context.fillRect(0,0,canvas.width,canvas.height);context.drawImage(source,0,0,canvas.width,canvas.height);
+    for(const [edge,quality] of [[2048,.9],[2048,.82],[1800,.8],[1600,.78]]){
+      const scale=Math.min(1,edge/Math.max(width,height));
+      const canvas=drawScaled(source,width,height,Math.max(1,Math.round(width*scale)),Math.max(1,Math.round(height*scale)));
       const blob=await new Promise(function(resolve){canvas.toBlob(resolve,"image/jpeg",quality);});
       if(blob&&blob.size<=MAX_PHOTO_UPLOAD_BYTES)return await new Promise(function(resolve,reject){const reader=new FileReader();reader.onload=function(){resolve(String(reader.result));};reader.onerror=reject;reader.readAsDataURL(blob);});
     }
