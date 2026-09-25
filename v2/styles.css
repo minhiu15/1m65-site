@@ -5461,7 +5461,7 @@ main,
 }
 
 .featured-badge {
-  top: -18px;
+  top: -17px; /* the ribbon's two curled tips (10.6% down the art) sit on the card's top outline */
   left: 16px;
   width: 144px;
   height: 180px;
@@ -6525,7 +6525,7 @@ main,
   .booking-check { width: 22px; height: 22px; }
   #booking-modal-v2 .booking-footer { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 8px; padding: 9px 12px; }
   #booking-modal-v2 .booking-footer [data-booking-back] { min-width: 0; min-height: 44px; padding-inline: 8px; }
-  #booking-modal-v2 .booking-footer [data-booking-next] { width: 100%; min-width: 0; min-height: 44px; height: 44px; padding-inline: 8px; font-size: 13px; }
+  #booking-modal-v2 .booking-footer [data-booking-next] { width: 100%; min-width: 0; min-height: 44px; height: 44px; padding-inline: 8px; font-size: 16px; }
 }
 
 @media (max-width: 420px) {
@@ -7698,6 +7698,195 @@ main,
 @media (min-width: 1181px) and (max-width: 1279px) {
   .signature-layout .service-card--featured[data-card-variant="signature"] { height: auto; min-height: var(--signature-card-height); }
   .signature-layout .service-card--featured[data-card-variant="signature"] .service-card-copy { padding-right: 124px; }
-  .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge { width: 116px; height: 145px; padding: 41px 16px 50px; }
+  .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge { top: -14px; width: 116px; height: 145px; padding: 41px 16px 50px; }
   .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge span { font-size: .8em; }
+}
+
+/* Tablet (601-900px): the Signature cards already stack in one column, so they follow the phone layout.
+   Photos alternate sides (left on tilt-left cards), sit in a 124px column 22px from the copy, cards with
+   the photo on the right align their copy towards it, the hair-wash card drops its outside cat and fills
+   the row, and every card keeps its corner doodles. */
+@media (min-width: 601px) and (max-width: 900px) {
+  .signature-layout .service-card[data-card-variant="signature"]:not(.service-card--featured) { grid-template-columns: minmax(0, 1fr) 124px; column-gap: 22px; }
+  .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="left"]:not(.service-card--featured) { grid-template-columns: 124px minmax(0, 1fr); }
+  .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="left"] .service-photo-wrap { order: -1; justify-self: start; }
+  .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] .service-card-copy { align-items: flex-end; text-align: right; }
+  .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] .service-meta { justify-items: end; }
+  .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] :is(.service-price--sale, .service-duration-row) { justify-content: flex-end; }
+  .signature-layout .signature-spa-row { padding-right: 0; }
+  .signature-layout .service-card[data-card-variant="signature"] > .signature-spa-cat { display: none; }
+  /* Corner doodles on every card, as on phones: bottom-left beside a right photo, bottom-right beside a
+     left photo, lifted off the outline like the phone insets. */
+  .signature-layout .service-card[data-card-variant="signature"]:not(.service-card--featured)::after { display: block; inset: auto auto 14px 16px; }
+  .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="left"]:not(.service-card--featured)::after { inset: auto 18px 16px auto; }
+}
+
+/* Booking step 2 day chips read "weekday / DD/MM" on two lines (was three with "th M"), so they are shorter. */
+.booking-date { min-height: 54px; padding-block: 7px; }
+.booking-date strong { font-size: 17px; line-height: 1.2; }
+
+/* Booking step 2: a chosen time shares the step-1 total box's lavender-to-pink wash, with pink-strong
+   text (as on "1/8 dịch vụ") and a pink rim. Chosen days (the chips and the calendar) keep the pink paper
+   shell of the step-1 category tab, with white outlined text. */
+.booking-slot.is-active {
+  border: 1px solid #f09bb3;
+  background: linear-gradient(120deg, var(--lavender-soft), #fde9ee);
+  box-shadow: none;
+}
+.booking-slot.is-active strong {
+  color: var(--pink-strong);
+  -webkit-text-fill-color: var(--pink-strong);
+  text-shadow: none;
+}
+.booking-slot.is-active small { color: var(--muted); -webkit-text-fill-color: var(--muted); }
+.booking-date.is-active,
+.booking-calendar__day.is-active {
+  border-color: transparent;
+  background: transparent;
+  border-image: url("assets/booking/ui_shells/booking_category_active_pink_paper_v1.webp") 64 fill / 18px stretch;
+}
+.booking-calendar__day.is-active { border-image-width: 12px; }
+.booking-date.is-active :is(span, small) { color: #fff; -webkit-text-fill-color: #fff; opacity: .92; }
+.booking-calendar__day.is-active {
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+  text-shadow: 0 0 1px rgba(183, 68, 101, .9), 0 1px 0 rgba(183, 68, 101, .7);
+}
+
+/* The service tick is drawn as a centred SVG mark: the text "✓" sat about 3px low in its box. */
+.booking-check { font-size: 0; line-height: 0; }
+.is-selected .booking-check::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background: currentColor;
+  -webkit-mask: var(--booking-tick) center / contain no-repeat;
+  mask: var(--booking-tick) center / contain no-repeat;
+  --booking-tick: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.3l4.6 4.6L19 7.3' fill='none' stroke='%23000' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* Booking step 2 "Ngày khác": a month grid in the site's paper style instead of the browser's picker. */
+.booking-calendar-field { position: relative; }
+.booking-calendar-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 14px 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--cocoa);
+  font: 700 14px var(--font-signature-display);
+  cursor: pointer;
+}
+.booking-calendar-trigger::before {
+  content: "";
+  width: 17px;
+  height: 17px;
+  background: var(--pink-strong);
+  -webkit-mask: var(--calendar-icon) center / contain no-repeat;
+  mask: var(--calendar-icon) center / contain no-repeat;
+  --calendar-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3.5' y='5' width='17' height='15.5' rx='3.5'/%3E%3Cpath d='M3.5 10h17M8 3v4M16 3v4'/%3E%3C/svg%3E");
+}
+.booking-calendar-trigger[aria-expanded="true"] { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(217, 71, 109, .12); }
+.booking-calendar {
+  position: absolute;
+  z-index: 6;
+  top: calc(100% + 8px);
+  left: 0;
+  width: min(308px, calc(100vw - 48px));
+  padding: 14px 14px 12px;
+  border: 1px solid color-mix(in srgb, var(--pink) 28%, transparent);
+  border-radius: 20px;
+  background: #fffaf8;
+  box-shadow: 0 18px 36px -18px rgba(131, 75, 96, .45);
+}
+.booking-calendar__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.booking-calendar__head strong { font: 700 16px var(--font-signature-display); color: var(--cocoa); }
+.booking-calendar__head button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--pink-strong);
+  font: 700 18px/1 var(--font-signature-display);
+  cursor: pointer;
+}
+.booking-calendar__head button:disabled { opacity: .35; cursor: default; }
+.booking-calendar__dows,
+.booking-calendar__grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; text-align: center; }
+.booking-calendar__dows span { padding-bottom: 4px; color: var(--muted); font: 800 11px var(--font-signature-body); }
+.booking-calendar__day {
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--cocoa);
+  font: 700 14px var(--font-signature-display);
+  cursor: pointer;
+}
+.booking-calendar__day:hover:not(:disabled) { background: #ffe5ec; }
+.booking-calendar__day.is-out { color: #b9a7a2; }
+.booking-calendar__day.is-today { outline: 1.5px dashed #ff8ca7; outline-offset: -3px; }
+.booking-calendar__day.is-active { outline: 0; }
+.booking-calendar__day:disabled { color: #d9ccc8; cursor: default; }
+
+/* Phone booking footer: the 44px pink button matches "Để sau" (15px corners, 16px text). The shell is a
+   shorter cut of the paper (1200x250, middle band removed) so 19px slices round the corners at ~15px
+   (72 * 19 / 92) while the texture still scales evenly instead of flattening. */
+@media (max-width: 600px) {
+  .booking-footer [data-booking-next] {
+    --button-shell-rect: url("assets/gallery/ui_shells/primary_button_rounded_rect_paper_short_v1.webp");
+    --shell-corner: 19px;
+  }
+}
+
+/* Touch devices: iOS zooms into any field whose text is under 16px when it gains focus. */
+@media (pointer: coarse) {
+  input:not([type="checkbox"], [type="radio"], [type="button"], [type="submit"], [type="range"]),
+  textarea,
+  select { font-size: max(16px, 1em); }
+}
+
+/* The page Gallery bar mirrors the Services bar: every segment owns a pill (5px in on the first, 7/3px
+   between the dividers on the others) that tints on hover, instead of washing the whole segment. */
+.gallery-content-panel > .gallery-filters button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 7px;
+  right: 3px;
+  z-index: -1;
+  border-radius: 18px;
+  background: transparent;
+  pointer-events: none;
+}
+.gallery-content-panel > .gallery-filters button:first-child::before { left: 5px; right: 5px; }
+.gallery-content-panel > .gallery-filters button.is-active::before { top: 0; bottom: 0; left: 7px; right: 3px; }
+.gallery-content-panel > .gallery-filters button:first-child.is-active::before { left: 5px; right: 5px; }
+.gallery-content-panel > .gallery-filters button:not(.is-active):hover { background: transparent; }
+.gallery-content-panel > .gallery-filters button:not(.is-active):hover::before { background: rgba(255, 224, 233, .72); }
+@media (max-width: 600px) {
+  .gallery-content-panel > .gallery-filters button::before { border-radius: 10px; }
+}
+
+/* One pill per tab bar (Services, page Gallery) glides to the chosen tab: experience.js positions it on
+   the active tab's pill and copies that pill's look, and the tab's own pill stays hidden underneath. */
+.has-tab-slider { position: relative; isolation: isolate; }
+.has-tab-slider > .tab-slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  box-sizing: border-box;
+  pointer-events: none;
+  transition: transform .38s cubic-bezier(.22, .8, .25, 1), width .38s cubic-bezier(.22, .8, .25, 1), height .38s cubic-bezier(.22, .8, .25, 1);
+}
+.has-tab-slider > .is-active::before { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) {
+  .has-tab-slider > .tab-slider { transition: none; }
 }

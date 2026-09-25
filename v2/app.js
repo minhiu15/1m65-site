@@ -260,7 +260,17 @@ function renderServices({ animateShared = false } = {}) {
   const tabs = document.querySelector("[data-service-tabs]");
   const panel = document.querySelector("[data-service-panel]");
   if (!tabs || !panel) return;
-  tabs.innerHTML = tabDefs.map((tab) => `<button type="button" role="tab" id="tab-${tab.id}" aria-controls="service-panel" aria-selected="${tab.id === state.activeTab}" class="${tab.id === state.activeTab ? "is-active" : ""}" data-service-tab="${tab.id}"><span>${tab.label}</span></button>`).join("");
+  const tabButtons = tabs.querySelectorAll("[data-service-tab]");
+  // Once built, only the active state changes, so the sliding tab pill keeps its element and glides.
+  if (tabButtons.length === tabDefs.length) {
+    tabButtons.forEach((button) => {
+      const active = button.dataset.serviceTab === state.activeTab;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-selected", String(active));
+    });
+  } else {
+    tabs.innerHTML = tabDefs.map((tab) => `<button type="button" role="tab" id="tab-${tab.id}" aria-controls="service-panel" aria-selected="${tab.id === state.activeTab}" class="${tab.id === state.activeTab ? "is-active" : ""}" data-service-tab="${tab.id}"><span>${tab.label}</span></button>`).join("");
+  };
   panel.id = "service-panel";
   panel.setAttribute("role", "tabpanel");
   panel.setAttribute("aria-labelledby", `tab-${state.activeTab}`);

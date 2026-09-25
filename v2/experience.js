@@ -1,4 +1,4 @@
-import "./booking-v2.js?v=20260921-8";
+import "./booking-v2.js?v=20260925-10";
 
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
@@ -372,3 +372,33 @@ window.init1m65FooterMap?.(document.querySelector("[data-footer-map]"));
 renderGallery();
 loadReviews();
 loadHomeAvailability();
+
+// A tap on plain content closes the phone keyboard: iOS keeps a field focused after such a tap.
+document.addEventListener("pointerdown",function(event){
+  const active=document.activeElement;
+  if(!active||!active.matches("input, textarea, select, [contenteditable='true']"))return;
+  if(event.target.closest("input, textarea, select, label, button, a, [contenteditable='true']"))return;
+  active.blur();
+},true);
+
+// One pill per tab bar glides to the chosen tab (Services and the page Gallery) instead of jumping. It is
+// placed on the active tab's own pill and copies its look, so every breakpoint keeps its sizing.
+function syncTabSlider(bar,animate){
+  const active=bar.querySelector(":scope > .is-active");if(!active)return;
+  let pill=bar.querySelector(":scope > .tab-slider");
+  if(!pill){pill=document.createElement("span");pill.className="tab-slider";pill.setAttribute("aria-hidden","true");bar.append(pill);animate=false;}
+  bar.classList.add("has-tab-slider");
+  const shell=getComputedStyle(active,"::before"),box=bar.getBoundingClientRect(),rect=active.getBoundingClientRect(),inset=function(side){return parseFloat(shell[side])||0;};
+  const x=rect.left-box.left-bar.clientLeft+inset("left"),y=rect.top-box.top-bar.clientTop+inset("top");
+  pill.style.transition=animate?"":"none";
+  Object.assign(pill.style,{width:(rect.width-inset("left")-inset("right"))+"px",height:(rect.height-inset("top")-inset("bottom"))+"px",transform:"translate("+x+"px,"+y+"px)",borderRadius:shell.borderRadius,border:shell.borderTopWidth+" "+shell.borderTopStyle+" "+shell.borderTopColor,backgroundColor:shell.backgroundColor,backgroundImage:shell.backgroundImage,backgroundSize:shell.backgroundSize,backgroundPosition:shell.backgroundPosition,backgroundRepeat:shell.backgroundRepeat,boxShadow:shell.boxShadow});
+  if(!animate){pill.getBoundingClientRect();pill.style.transition="";}
+}
+function watchTabSlider(bar){
+  let frame=0;const queue=function(animate){cancelAnimationFrame(frame);frame=requestAnimationFrame(function(){syncTabSlider(bar,animate);});};
+  new MutationObserver(function(){queue(true);}).observe(bar,{subtree:true,childList:true,attributes:true,attributeFilter:["class"]});
+  addEventListener("resize",function(){queue(false);});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){queue(false);});
+  queue(false);
+}
+document.querySelectorAll("[data-service-tabs], .gallery-content-panel > [data-gallery-filters]").forEach(watchTabSlider);

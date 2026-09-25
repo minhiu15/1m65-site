@@ -8,7 +8,7 @@ const categories = [
 {id:"mi",label:"Eyelashes",shortLabel:"Mi",ids:["uon-mi","uon-mi-den","mi-classic","mi-tho","mi-volume","mi-sole","mi-duoi"]},
 {id:"goi",label:"Shampoo",shortLabel:"Gội",ids:["goi-thuong","goi-phuchoi","goi-duongsinh"]}
 ];
-const state = {step:1,category:"nail",selected:[],date:"",preferred:"",slots:[],blocked:[],day:null,slot:"",loading:false,pending:false,error:"",name:"",phone:"",note:"",status:"",reference:""};
+const state = {step:1,category:"nail",selected:[],date:"",calendarOpen:false,calendarMonth:"",preferred:"",slots:[],blocked:[],day:null,slot:"",loading:false,pending:false,error:"",name:"",phone:"",note:"",status:"",reference:""};
 let requestId = 0;
 
 function exp(){return window.__v2Experience;}
@@ -36,7 +36,7 @@ function reset(options){
   const next=options||{};
   state.step=1;state.category=next.serviceId?categoryOf(next.serviceId):"nail";
   state.selected=next.serviceId&&byId(next.serviceId)?[next.serviceId]:[];
-  state.date=isoToday();state.preferred=next.slot||"";state.slots=[];state.blocked=[];state.day=null;state.slot="";
+  state.date=isoToday();state.calendarOpen=false;state.calendarMonth="";state.preferred=next.slot||"";state.slots=[];state.blocked=[];state.day=null;state.slot="";
   state.loading=false;state.pending=false;state.error="";state.name="";state.phone="";state.note="";state.status="";state.reference="";
   requestId+=1;
 }
@@ -64,18 +64,28 @@ function schedule(){
   function reason(label){const start=new Date(state.date+"T"+label+":00+07:00").getTime();if(booked.has(label))return "Đã kín";if(start<=Date.now())return "Đã qua";if(!state.day)return "Đã kín";if(!latestEnd)return "Tiệm nghỉ";if(start+minutes*60000>latestEnd)return "Quá giờ làm";return "Sát lịch khác";}
   const result=[];for(let minute=540;minute<=1020;minute+=30){const label=String(Math.floor(minute/60)).padStart(2,"0")+":"+String(minute%60).padStart(2,"0");result.push({label:label,start:available.get(label)||"",blocked:blocked.get(label)||"",reason:available.has(label)?"":reason(label)});}return result;
 }
+function shiftMonth(month,step){const year=Number(month.slice(0,4)),date=new Date(Date.UTC(year,Number(month.slice(5,7))-1+step,1));return date.getUTCFullYear()+"-"+String(date.getUTCMonth()+1).padStart(2,"0");}
+// "Ngày khác" opens this month grid instead of the browser's native date picker (bookable: today + 30 days).
+function calendar(){
+  const month=state.calendarMonth||state.date.slice(0,7),min=isoToday(),max=offsetDate(30),year=Number(month.slice(0,4)),index=Number(month.slice(5,7))-1;
+  const start=Date.UTC(year,index,1-((new Date(Date.UTC(year,index,1)).getUTCDay()+6)%7));let days="";
+  for(let i=0;i<42;i++){const day=new Date(start+i*86400000),iso=day.toISOString().slice(0,10),active=iso===state.date;
+    days+='<button type="button" class="booking-calendar__day'+(day.getUTCMonth()!==index?" is-out":"")+(active?" is-active":"")+(iso===min?" is-today":"")+'" data-booking-calendar-day="'+iso+'" aria-label="'+esc(dateLabel(iso))+'" aria-pressed="'+active+'"'+(iso<min||iso>max?" disabled":"")+'>'+day.getUTCDate()+'</button>';}
+  const dows=["T2","T3","T4","T5","T6","T7","CN"].map(function(label){return '<span>'+label+'</span>';}).join("");
+  return '<div class="booking-calendar" role="dialog" aria-label="Chọn ngày"><div class="booking-calendar__head"><button type="button" data-booking-calendar-month="-1" aria-label="Tháng trước"'+(month>min.slice(0,7)?"":" disabled")+'>‹</button><strong>Tháng '+(index+1)+', '+year+'</strong><button type="button" data-booking-calendar-month="1" aria-label="Tháng sau"'+(month<max.slice(0,7)?"":" disabled")+'>›</button></div><div class="booking-calendar__dows" aria-hidden="true">'+dows+'</div><div class="booking-calendar__grid">'+days+'</div></div>';
+}
 function stepTwo(){
-  const dates=new Array(7).fill(0).map(function(_,index){const iso=offsetDate(index),parts=iso.split("-"),weekday=dateLabel(iso).split(",")[0];return '<button type="button" class="booking-date '+(state.date===iso?"is-active":"")+'" data-booking-date="'+iso+'"><span>'+(index===0?"Hôm nay":esc(weekday))+'</span><strong>'+parts[2]+'</strong><small>th '+Number(parts[1])+'</small></button>';}).join("");
+  const dates=new Array(7).fill(0).map(function(_,index){const iso=offsetDate(index),parts=iso.split("-"),weekday=dateLabel(iso).split(",")[0];return '<button type="button" class="booking-date '+(state.date===iso?"is-active":"")+'" data-booking-date="'+iso+'"><span>'+(index===0?"Hôm nay":esc(weekday))+'</span><strong>'+parts[2]+'/'+parts[1]+'</strong></button>';}).join("");
   let slots="";
   if(state.loading)slots='<div class="booking-loading">Đang tải giờ trống thật từ tiệm…</div>';
   else if(state.error)slots='<div class="booking-empty" role="alert"><p>'+esc(state.error)+'</p><button class="button-secondary" type="button" data-booking-retry>Thử tải lại</button></div>';
   else slots='<div class="booking-slots">'+schedule().map(function(slot){const selected=state.slot===slot.start&&!!slot.start;return '<button type="button" class="booking-slot '+(selected?"is-active ":"")+(slot.blocked?"is-blocked":"")+'" data-booking-slot="'+esc(slot.start)+'" '+(!slot.start?"disabled":"")+' aria-pressed="'+selected+'"><strong>'+slot.label+'</strong><small>'+esc(slot.blocked||(slot.start?"Còn trống":slot.reason))+'</small></button>';}).join("")+'</div>';
-  return '<div class="booking-step" data-booking-step="2"><div class="booking-dates">'+dates+'</div><label class="booking-calendar-field"><span>Ngày khác</span><input type="date" data-booking-custom-date min="'+isoToday()+'" max="'+offsetDate(30)+'" value="'+state.date+'"></label>'+slots+'</div>';
+  return '<div class="booking-step" data-booking-step="2"><div class="booking-dates">'+dates+'</div><div class="booking-calendar-field"><span>Ngày khác</span><button type="button" class="booking-calendar-trigger" data-booking-calendar-toggle aria-haspopup="dialog" aria-expanded="'+state.calendarOpen+'">'+esc(dateLabel(state.date))+'</button>'+(state.calendarOpen?calendar():"")+'</div>'+slots+'</div>';
 }
 function stepThree(){
   const total=totals(),names=selectedServices().map(function(service){return service.name;}).join(" + ");
   const time=state.slot?dateLabel(state.date)+" · "+slotLabel(state.slot):"Chưa chọn giờ";
-  return '<div class="booking-step" data-booking-step="3">'+(state.error?'<div class="booking-empty" role="alert">'+esc(state.error)+'</div>':'')+'<div class="booking-confirm-card"><div><strong>'+esc(names)+'</strong><br><small>'+esc(time)+' · '+durationText(total.minutes)+'</small></div><strong>'+money(total.price)+'</strong></div><div class="booking-form"><label>Họ và tên<input type="text" autocomplete="name" data-booking-name maxlength="80" required value="'+esc(state.name)+'" placeholder="Tên của bạn"></label><label>Số điện thoại<input type="tel" inputmode="numeric" autocomplete="tel" data-booking-phone maxlength="10" required value="'+esc(state.phone)+'" placeholder="0xxxxxxxxx"></label><label>Ghi chú<textarea rows="2" data-booking-note maxlength="500" placeholder="Mẫu mong muốn hoặc điều tiệm cần biết">'+esc(state.note)+'</textarea></label><label class="sr-only">Website<input type="text" tabindex="-1" autocomplete="off" data-booking-website></label></div><p class="booking-security">Bước xác minh Turnstile sẽ chạy khi bạn nhấn xác nhận.</p></div>';
+  return '<div class="booking-step" data-booking-step="3">'+(state.error?'<div class="booking-empty" role="alert">'+esc(state.error)+'</div>':'')+'<div class="booking-confirm-card"><div><strong>'+esc(names)+'</strong><br><small>'+esc(time)+' · '+durationText(total.minutes)+'</small></div><strong>'+money(total.price)+'</strong></div><div class="booking-form"><label>Họ và tên<input type="text" autocomplete="name" data-booking-name maxlength="80" required value="'+esc(state.name)+'" placeholder="Tên của bạn"></label><label>Số điện thoại<input type="tel" inputmode="numeric" autocomplete="tel" data-booking-phone maxlength="10" required value="'+esc(state.phone)+'" placeholder="0xxxxxxxxx"></label><label>Ghi chú<textarea rows="2" data-booking-note maxlength="500" placeholder="Mẫu mong muốn hoặc điều tiệm cần biết">'+esc(state.note)+'</textarea></label><label class="sr-only">Website<input type="text" tabindex="-1" autocomplete="off" data-booking-website></label></div></div>';
 }
 function success(){
   return '<div class="booking-result" data-booking-step="success"><img src="assets/home/header/logo_cat.webp" alt="" decoding="async" loading="lazy"><h3>Hẹn nhau ở 1M65 nha!</h3><p>Lịch đã được xác nhận. Bạn lưu mã dưới đây để tiện trao đổi với tiệm.</p><code>'+esc(state.reference||"Đã xác nhận")+'</code><div class="booking-result-actions"><button class="button-secondary" type="button" data-booking-manage>Xem lịch của bạn</button><button class="button-primary" type="button" data-booking-reset>Đặt lịch tiếp</button></div></div>';
@@ -105,10 +115,12 @@ async function availability(){
 function open(options,trigger){reset(options);render();exp().openModal(document.querySelector("#booking-modal-v2"),trigger);}
 function toggle(id){if(state.selected.includes(id))state.selected=state.selected.filter(function(item){return item!==id;});else if(state.selected.length>=8)return exp().toast("Mỗi lịch chọn tối đa 8 dịch vụ nha");else state.selected=state.selected.concat(id);state.error="";render();}
 function back(){
+  state.calendarOpen=false;
   if(state.status==="done"||state.step===1)return exp().closeModal(document.querySelector("#booking-modal-v2"));
   state.step-=1;state.error="";render();
 }
 async function next(){
+  state.calendarOpen=false;
   if(state.status==="done"){reset();render();return;}
   if(state.step===1){if(!state.selected.length)return exp().toast("Bạn chọn ít nhất một dịch vụ trước nha");state.step=2;render();await availability();return;}
   if(state.step===2){if(!state.slot)return exp().toast("Bạn chọn một giờ còn trống trước nha");state.step=3;state.error="";render();requestAnimationFrame(function(){document.querySelector("[data-booking-name]")?.focus();});return;}
@@ -131,6 +143,11 @@ async function submit(){
 }
 document.addEventListener("click",function(event){
   const target=event.target,category=target.closest("[data-booking-category]"),service=target.closest("[data-booking-service]"),remove=target.closest("[data-booking-remove]"),date=target.closest("[data-booking-date]"),slot=target.closest("[data-booking-slot]");
+  const calendarToggle=target.closest("[data-booking-calendar-toggle]"),calendarMonth=target.closest("[data-booking-calendar-month]"),calendarDay=target.closest("[data-booking-calendar-day]");
+  if(calendarToggle){state.calendarOpen=!state.calendarOpen;state.calendarMonth=state.date.slice(0,7);render();if(state.calendarOpen)document.querySelector(".booking-calendar__day.is-active:not(:disabled), .booking-calendar__day.is-today")?.focus();return;}
+  if(calendarMonth){state.calendarMonth=shiftMonth(state.calendarMonth||state.date.slice(0,7),Number(calendarMonth.dataset.bookingCalendarMonth));render();return;}
+  if(calendarDay){state.date=calendarDay.dataset.bookingCalendarDay;state.calendarOpen=false;state.preferred="";render();document.querySelector("[data-booking-calendar-toggle]")?.focus();availability();return;}
+  if(state.calendarOpen&&!target.closest(".booking-calendar-field")){state.calendarOpen=false;render();}
   if(category){state.category=category.dataset.bookingCategory;render();return;}
   if(service){toggle(service.dataset.bookingService);return;}
   if(remove){toggle(remove.dataset.bookingRemove);return;}
@@ -147,11 +164,10 @@ document.addEventListener("input",function(event){
   if(target.matches("[data-booking-phone]")){state.phone=target.value.replace(/\D/g,"").slice(0,10);if(target.value!==state.phone)target.value=state.phone;}
   if(target.matches("[data-booking-note]"))state.note=target.value;
 });
-document.addEventListener("change",function(event){
-  if(!event.target.matches("[data-booking-custom-date]"))return;const value=event.target.value;
-  if(value<isoToday()||value>offsetDate(30)){exp().toast("Bạn chỉ có thể đặt trước trong vòng 30 ngày nha");event.target.value=state.date;return;}
-  state.date=value;state.preferred="";render();availability();
-});
+document.addEventListener("keydown",function(event){
+  if(event.key!=="Escape"||!state.calendarOpen)return;event.preventDefault();event.stopImmediatePropagation();
+  state.calendarOpen=false;render();document.querySelector("[data-booking-calendar-toggle]")?.focus();
+},true);
 reset();
 window.__v2Booking={open:open};
 
