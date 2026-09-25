@@ -7496,9 +7496,9 @@ main,
   .signature-layout .service-card[data-card-variant="signature"] { padding: 18px 22px 18px 20px; column-gap: 22px; }
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="left"] { padding: 18px 20px 18px 22px; }
   /* The hair-wash card shares the other cards' 124px photo column (its desktop 34% column left a
-     wider gap on phones), and prices read a little larger. */
+     wider gap on phones), and prices read larger (21px). */
   .signature-layout .service-card--spa[data-card-variant="signature"] { grid-template-columns: minmax(0, 1fr) 124px; }
-  .signature-layout .service-card[data-card-variant="signature"] .service-price-current { font-size: 19px; }
+  .signature-layout .service-card[data-card-variant="signature"] .service-price-current { font-size: 21px; }
   /* The copy spans the photo's 152px height with larger type. The gap between description and prices
      grows from 12px to at most 24px (a capped flex spacer); any height left after that is split above
      and below, so short copy stays centred on the photo instead of opening a wide gap. */
@@ -7625,6 +7625,9 @@ main,
 }
 @media (min-width: 601px) {
   .signature-layout .service-card[data-card-variant="signature"] .sale-badge { width: 44px; min-height: 30px; font-size: 12px; }
+  /* A touch larger than the shared clamp(20px, 1.45vw, 28px) so the price holds its own beside the
+     larger titles, pill and ticket. */
+  .signature-layout .service-card[data-card-variant="signature"] .service-price-current { font-size: clamp(22px, 1.6vw, 26px); }
 }
 
 /* One sale ticket everywhere, the one the owner picked from the desktop service list: a dashed pink
