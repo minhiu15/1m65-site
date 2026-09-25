@@ -7678,4 +7678,26 @@ main,
   .shared-service-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; width: 100%; }
   .shared-service-row:is(:last-child, :nth-last-child(2):nth-child(odd)) { border-bottom: 0; }
   .shared-service-row::before { left: 0; width: 100%; transform: none; }
+  /* A dashed rule down the middle of the 48px gap, in the same ink as the dashed rules between rows. */
+  .shared-service-list { position: relative; }
+  .shared-service-list::after {
+    content: "";
+    position: absolute;
+    top: 18px;
+    bottom: 18px;
+    left: 50%;
+    border-left: 1px dashed color-mix(in srgb, var(--shared-accent) 22%, transparent);
+    pointer-events: none;
+  }
+}
+
+/* Around 1181-1279px the featured card sits beside the Signature intro at only ~520-560px wide, and the
+   144px badge plus its 158px reserved column left the copy ~133px, spilling price and pill out of the
+   card. There the badge shrinks to 80% (its text scales with it), reserves 124px, and the card may grow
+   instead of overflowing. */
+@media (min-width: 1181px) and (max-width: 1279px) {
+  .signature-layout .service-card--featured[data-card-variant="signature"] { height: auto; min-height: var(--signature-card-height); }
+  .signature-layout .service-card--featured[data-card-variant="signature"] .service-card-copy { padding-right: 124px; }
+  .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge { width: 116px; height: 145px; padding: 41px 16px 50px; }
+  .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge span { font-size: .8em; }
 }
