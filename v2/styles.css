@@ -7669,3 +7669,13 @@ main,
   .shared-service-row__offer-slot { transform: translate(12.5px, -14px); }
   .shared-service-row__offer::after { right: -1em; }
 }
+
+/* Trial: on the web the shared service lists (Nail Care, Classic, ...) run in two columns, read row by
+   row. Each column is about 600px at 1440px, which keeps copy, sale ticket and price card on one line;
+   the hover wash stays inside its own row, and the bottom row of each column drops its dashed rule. */
+@media (min-width: 1181px) {
+  /* Full panel width like the Signature cards, so the left-anchored note lines up with the list. */
+  .shared-service-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; width: 100%; }
+  .shared-service-row:is(:last-child, :nth-last-child(2):nth-child(odd)) { border-bottom: 0; }
+  .shared-service-row::before { left: 0; width: 100%; transform: none; }
+}
