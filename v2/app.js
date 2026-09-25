@@ -155,8 +155,9 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
     <div class="service-card-copy">
       <h3>${service.name}</h3>
       <p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p>
-      <div class="service-meta">${renderPrice(service)}<span class="service-duration-row"><span class="service-duration">~${service.durationMinutes} phút</span>${saleDiscount(service) ? `<span class="sale-badge">-${saleDiscount(service)}%</span>` : ""}</span></div>
+      <div class="service-meta">${renderPrice(service)}<span class="service-duration-row"><span class="service-duration">~${service.durationMinutes} phút</span></span></div>
     </div>
+    ${saleDiscount(service) ? `<span class="signature-sale">-${saleDiscount(service)}%</span>` : ""}
     ${showPhoto ? `<div class="service-photo-wrap${spaRelaxation ? " service-photo-wrap--spa" : ""}">
       <img src="${image}" alt="${photoAlt}" loading="lazy" decoding="async">
       ${signature ? `<button class="service-photo-zoom" type="button" data-photo-zoom="${signaturePhoto ? signaturePhotoSrc(service.id, "full") : image}" data-photo-zoom-caption="${service.name}" aria-label="Xem ảnh ${service.name}"></button>` : ""}

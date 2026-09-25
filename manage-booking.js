@@ -4,6 +4,8 @@
   if (window.self !== window.top) document.body.classList.add('is-embedded');
 
   const API_URL = 'https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-manage';
+  // "+84 912 345 678", "84912345678" and "+84 0912 345 678" are the same Vietnamese number as 0912345678.
+  const vnPhone = (value) => String(value || '').replace(/\D/g, '').replace(/^(?:840(?=\d{9}$)|84(?=[1-9]\d{8}$))/, '0');
   const TIME_ZONE = 'Asia/Ho_Chi_Minh';
   const STATUS_LABELS = {
     confirmed: 'Đã xác nhận',
@@ -80,13 +82,19 @@
 
   // Native "required"/"pattern" bubbles follow the browser language; keep them Vietnamese.
   [
-    [elements.phone, 'Bạn nhập số điện thoại đã dùng khi đặt lịch nhé.', 'Số điện thoại gồm 10 số và bắt đầu bằng số 0 nhé.'],
+    [elements.phone, 'Bạn nhập số điện thoại đã dùng khi đặt lịch nhé.', 'Số điện thoại gồm 10 số, bắt đầu bằng 0 hoặc +84 nhé.'],
     [elements.name, 'Bạn nhập tên đã dùng khi đặt lịch nhé.', '']
   ].forEach(([input, missing, mismatch]) => {
     input.addEventListener('invalid', () => {
       input.setCustomValidity(input.validity.valueMissing ? missing : mismatch);
     });
     input.addEventListener('input', () => input.setCustomValidity(''));
+  });
+  // Normalise while typing so a +84 / 84 number already reads 0xxxxxxxxx when the form checks it.
+  elements.phone.addEventListener('input', () => {
+    const typed = vnPhone(elements.phone.value);
+    const next = typed.slice(0, typed.startsWith('0') ? 10 : 12);
+    if (elements.phone.value !== next) elements.phone.value = next;
   });
 
   function setMessage(target, text = '', success = false) {
@@ -381,7 +389,7 @@
     event.preventDefault();
     credentials = {
       reference: preferredReference,
-      phone: elements.phone.value.replace(/\D/g, '')
+      phone: vnPhone(elements.phone.value)
     };
     elements.phone.value = credentials.phone;
     elements.lookupButton.disabled = true;

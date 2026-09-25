@@ -1154,6 +1154,12 @@ input:focus,select:focus,textarea:focus{
 .appointment-detail-grid a{color:var(--rose-deep);text-decoration:underline;text-decoration-color:rgba(208,108,153,.34);text-underline-offset:3px}
 .appointment-detail-reference dd{font-family:var(--mono);font-size:11px}
 .appointment-detail-note{grid-column:span 2}
+/* Reference photos the customer attached: thumbnails that open the full photo in a new tab. */
+.appointment-detail-photos{grid-column:1/-1}
+.appointment-detail-photos dd{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.appointment-detail-grid a.appointment-photo{display:grid;gap:5px;width:112px;color:var(--ink-2);font-size:11px;text-decoration:none}
+.appointment-photo img{display:block;width:112px;height:112px;object-fit:cover;border:1px solid var(--line);border-radius:12px;background:#fff}
+.appointment-photo span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .appointment-expanded>.status-column{
   display:flex;width:100%;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);gap:9px;
 }

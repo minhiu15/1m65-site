@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100">
+  <defs>
+    <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff93b1"/><stop offset=".55" stop-color="#ff6f98"/><stop offset="1" stop-color="#f45686"/></linearGradient>
+  </defs>
+  <path d="M60 19Q70.41 11.31 76.92 22.07Q89.18 18.98 90.49 30.67Q102.17 32.78 98.02 43.1Q106.8 50 98.02 56.9Q102.17 67.22 90.49 69.33Q89.18 81.02 76.92 77.93Q70.41 88.69 60 81Q49.59 88.69 43.08 77.93Q30.82 81.02 29.51 69.33Q17.83 67.22 21.98 56.9Q13.2 50 21.98 43.1Q17.83 32.78 29.51 30.67Q30.82 18.98 43.08 22.07Q49.59 11.31 60 19Z" fill="url(#fill)" stroke="#ef4f80" stroke-width="1.2" stroke-linejoin="round"/>
+  <ellipse cx="52" cy="28" rx="19" ry="5" fill="#fff" opacity=".15"/>
+  <path d="M60 26Q68.27 20.52 73.67 28.38Q83.18 26.36 84.63 35.04Q93.49 36.88 90.71 44.66Q97.17 50 90.71 55.34Q93.49 63.12 84.63 64.96Q83.18 73.64 73.67 71.62Q68.27 79.48 60 74Q51.73 79.48 46.33 71.62Q36.82 73.64 35.37 64.96Q26.51 63.12 29.29 55.34Q22.83 50 29.29 44.66Q26.51 36.88 35.37 35.04Q36.82 26.36 46.33 28.38Q51.73 20.52 60 26Z" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="3.4 2.6" stroke-linecap="round" stroke-linejoin="round" opacity=".92"/>
+  <g fill="#ff8fb0">
+    <path d="M0-7C.6-2.2 2.2-.6 7 0C2.2.6.6 2.2 0 7C-.6 2.2-2.2.6-7 0C-2.2-.6-.6-2.2 0-7Z" transform="translate(9 34) scale(.62)"/>
+    <path d="M0-7C.6-2.2 2.2-.6 7 0C2.2.6.6 2.2 0 7C-.6 2.2-2.2.6-7 0C-2.2-.6-.6-2.2 0-7Z" transform="translate(111 22) scale(.55)"/>
+    <path d="M0-7C.6-2.2 2.2-.6 7 0C2.2.6.6 2.2 0 7C-.6 2.2-2.2.6-7 0C-2.2-.6-.6-2.2 0-7Z" transform="translate(108 76) scale(.72)"/>
+  </g>
+  <g fill="#ffb3c8">
+    <path d="M0-7C.6-2.2 2.2-.6 7 0C2.2.6.6 2.2 0 7C-.6 2.2-2.2.6-7 0C-2.2-.6-.6-2.2 0-7Z" transform="translate(14 80) scale(.42)"/>
+    <path d="M0-7C.6-2.2 2.2-.6 7 0C2.2.6.6 2.2 0 7C-.6 2.2-2.2.6-7 0C-2.2-.6-.6-2.2 0-7Z" transform="translate(98 8) scale(.36)"/>
+    <circle cx="6" cy="57" r="1.5"/><circle cx="116" cy="50" r="1.4"/><circle cx="22" cy="12" r="1.3"/>
+  </g>
+</svg>

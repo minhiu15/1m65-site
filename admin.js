@@ -1037,9 +1037,11 @@
     timing.append(time, node('div', 'date', start.date));
 
     const summaryMain = node('div', 'appointment-summary-main');
+    // Reference photos the customer attached: signed Storage links for uploads, site paths for gallery picks.
+    const photos = Array.isArray(item.referencePhotos) ? item.referencePhotos.filter((photo) => photo?.url) : [];
     summaryMain.append(
       node('h2', '', item.customerName),
-      node('p', 'appointment-summary-service', `${item.service} · ${item.durationMinutes} phút`)
+      node('p', 'appointment-summary-service', `${item.service} · ${item.durationMinutes} phút${photos.length ? ` · ${photos.length} ảnh mẫu` : ''}`)
     );
     const summaryStatus = node('span', `badge appointment-summary-status ${item.status}`, STATUS_LABELS[item.status] || item.status);
     const toggle = node('button', 'appointment-toggle');
@@ -1078,6 +1080,25 @@
       detailItem('Thợ thực hiện', item.staff || 'Chưa chỉ định'),
       detailItem('Ghi chú', item.customerNote || 'Không có ghi chú', 'appointment-detail-note')
     );
+    if (photos.length) {
+      const photoGroup = node('div', 'appointment-detail-photos');
+      const photoValue = node('dd');
+      photos.forEach((photo, index) => {
+        const label = photo.kind === 'gallery' ? (photo.title || 'Mẫu trong thư viện') : `Ảnh khách gửi ${index + 1}`;
+        const link = node('a', 'appointment-photo');
+        link.href = photo.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        const image = node('img');
+        image.src = photo.url;
+        image.alt = label;
+        image.loading = 'lazy';
+        link.append(image, node('span', '', label));
+        photoValue.append(link);
+      });
+      photoGroup.append(node('dt', '', 'Ảnh mẫu'), photoValue);
+      detailList.append(photoGroup);
+    }
 
     const statusColumn = node('div', 'status-column');
     statusColumn.append(node('p', 'appointment-actions-title', 'Quản lý lịch hẹn'));

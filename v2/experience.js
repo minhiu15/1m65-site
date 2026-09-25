@@ -1,4 +1,4 @@
-import "./booking-v2.js?v=20260925-10";
+import "./booking-v2.js?v=20260925-11";
 
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
@@ -139,7 +139,7 @@ function toast(message) {
   node.hidden = false;
   toastTimer = setTimeout(function(){node.hidden = true;}, 3200);
 }
-window.__v2Experience = { openModal: openModal, closeModal: closeModal, toast: toast, esc: esc };
+window.__v2Experience = { openModal: openModal, closeModal: closeModal, toast: toast, esc: esc, gallery: gallery };
 
 function initialGalleryCount() {
   return matchMedia("(max-width: 600px)").matches ? 6 : 10;
@@ -348,7 +348,7 @@ document.addEventListener("click",function(event){
   if(target.closest("[data-review-next]")){moveReview(1);scheduleReviewAutoplay();return;}
   const galleryBook=target.closest("[data-gallery-book]");if(galleryBook){const origin=rootReturnFocus()||galleryBook;closeModal(document.querySelector("#gallery-modal"),false);window.__v2Booking.open({},origin);return;}
   const lightboxBook=target.closest("[data-lightbox-book]");if(lightboxBook){const origin=rootReturnFocus()||lightboxBook;closeModal(document.querySelector("#gallery-lightbox"),false);window.__v2Booking.open({},origin);return;}
-  const faq=target.closest("[data-faq-list] button");if(faq){const expanded=faq.getAttribute("aria-expanded")==="true";faq.setAttribute("aria-expanded",String(!expanded));const answer=faq.closest("article").querySelector(".faq-answer");if(answer)answer.hidden=expanded;return;}
+  const faq=target.closest("[data-faq-list] button");if(faq){const expanded=faq.getAttribute("aria-expanded")==="true";faq.setAttribute("aria-expanded",String(!expanded));return;}
   const manager=target.closest("[data-open-manager]");if(manager)openManager("",manager);
 });
 document.addEventListener("1m65:v2:open-booking",function(event){window.__v2Booking.open(event.detail||{},document.activeElement);});

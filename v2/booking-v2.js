@@ -8,7 +8,14 @@ const categories = [
 {id:"mi",label:"Eyelashes",shortLabel:"Mi",ids:["uon-mi","uon-mi-den","mi-classic","mi-tho","mi-volume","mi-sole","mi-duoi"]},
 {id:"goi",label:"Shampoo",shortLabel:"Gội",ids:["goi-thuong","goi-phuchoi","goi-duongsinh"]}
 ];
-const state = {step:1,category:"nail",selected:[],date:"",calendarOpen:false,calendarMonth:"",preferred:"",slots:[],blocked:[],day:null,slot:"",loading:false,pending:false,error:"",name:"",phone:"",note:"",status:"",reference:""};
+// "+84 912 345 678", "84912345678" and "+84 0912 345 678" are the same Vietnamese number as 0912345678.
+// After the 84 country code a number never starts with 0 unless that 0 is the trunk prefix itself.
+const vnPhone=(value)=>String(value||"").replace(/\D/g,"").replace(/^(?:840(?=\d{9}$)|84(?=[1-9]\d{8}$))/,"0");
+// Reference photos (up to 3): uploads are shrunk on the phone before they are sent, so a 108MP
+// photo still leaves as a ~300KB JPEG (and re-drawing it drops EXIF, including GPS location).
+const MAX_PHOTOS=3,MAX_PHOTO_SOURCE_BYTES=40*1024*1024,MAX_PHOTO_UPLOAD_BYTES=650*1024;
+const PICKER_LABELS={nail:"Nail",mi:"Mi",khac:"Khác"};
+const state = {step:1,category:"nail",selected:[],date:"",calendarOpen:false,calendarMonth:"",preferred:"",slots:[],blocked:[],day:null,slot:"",loading:false,pending:false,error:"",name:"",phone:"",note:"",status:"",reference:"",photos:[],photoBusy:0,photoError:"",photoWarning:"",picker:false,pickerFilter:"nail"};
 let requestId = 0;
 
 function exp(){return window.__v2Experience;}
@@ -38,6 +45,7 @@ function reset(options){
   state.selected=next.serviceId&&byId(next.serviceId)?[next.serviceId]:[];
   state.date=isoToday();state.calendarOpen=false;state.calendarMonth="";state.preferred=next.slot||"";state.slots=[];state.blocked=[];state.day=null;state.slot="";
   state.loading=false;state.pending=false;state.error="";state.name="";state.phone="";state.note="";state.status="";state.reference="";
+  state.photos=[];state.photoBusy=0;state.photoError="";state.photoWarning="";state.picker=false;
   requestId+=1;
 }
 function stepOne(){
@@ -82,22 +90,46 @@ function stepTwo(){
   else slots='<div class="booking-slots">'+schedule().map(function(slot){const selected=state.slot===slot.start&&!!slot.start;return '<button type="button" class="booking-slot '+(selected?"is-active ":"")+(slot.blocked?"is-blocked":"")+'" data-booking-slot="'+esc(slot.start)+'" '+(!slot.start?"disabled":"")+' aria-pressed="'+selected+'"><strong>'+slot.label+'</strong><small>'+esc(slot.blocked||(slot.start?"Còn trống":slot.reason))+'</small></button>';}).join("")+'</div>';
   return '<div class="booking-step" data-booking-step="2"><div class="booking-dates">'+dates+'</div><div class="booking-calendar-field"><span>Ngày khác</span><button type="button" class="booking-calendar-trigger" data-booking-calendar-toggle aria-haspopup="dialog" aria-expanded="'+state.calendarOpen+'">'+esc(dateLabel(state.date))+'</button>'+(state.calendarOpen?calendar():"")+'</div>'+slots+'</div>';
 }
+function photoField(){
+  const tiles=state.photos.map(function(photo,index){
+    const gallery=photo.kind==="gallery",label=gallery?photo.title:"Ảnh của bạn";
+    return '<figure class="booking-photo"><img src="'+esc(gallery?photo.src:photo.data)+'" alt="'+esc(label)+'" decoding="async"><figcaption>'+esc(label)+'</figcaption><button type="button" data-booking-photo-remove="'+index+'" aria-label="Bỏ ảnh '+esc(label)+'">×</button></figure>';
+  }).join("")+new Array(state.photoBusy).fill('<span class="booking-photo is-busy" role="status" aria-label="Đang xử lý ảnh"></span>').join("");
+  const room=MAX_PHOTOS-state.photos.length-state.photoBusy;
+  const actions=room>0?'<div class="booking-photo-actions"><label class="booking-photo-button"><input type="file" accept="image/*" multiple data-booking-photo-input>Tải ảnh lên</label><button type="button" class="booking-photo-button" data-booking-photo-picker>Chọn từ thư viện</button></div>':'';
+  return '<div class="booking-photos" data-booking-photos><span class="booking-photos__label">Ảnh mẫu <small>tối đa '+MAX_PHOTOS+' ảnh · không bắt buộc</small></span>'+(tiles?'<div class="booking-photo-row">'+tiles+'</div>':'')+actions+(state.photoError?'<p class="booking-photo-error" role="alert">'+esc(state.photoError)+'</p>':'')+'</div>';
+}
+// After an async photo step only the photo block is redrawn, so a customer typing her name keeps her caret.
+function refreshPhotos(){const block=document.querySelector("[data-booking-photos]");if(block&&!state.picker)block.outerHTML=photoField();else render();}
+function pickerView(){
+  const items=Array.isArray(exp().gallery)?exp().gallery:[];
+  const filters=Object.keys(PICKER_LABELS).filter(function(id){return items.some(function(item){return item[0]===id;});});
+  const chosen=new Set(state.photos.filter(function(photo){return photo.kind==="gallery";}).map(function(photo){return photo.src;}));
+  const full=state.photos.length+state.photoBusy>=MAX_PHOTOS;
+  const tabs=filters.map(function(id){return '<button type="button" class="'+(id===state.pickerFilter?"is-active":"")+'" data-booking-picker-filter="'+id+'" aria-pressed="'+(id===state.pickerFilter)+'">'+PICKER_LABELS[id]+'</button>';}).join("");
+  const grid=items.filter(function(item){return item[0]===state.pickerFilter;}).map(function(item){
+    const selected=chosen.has(item[1]);
+    return '<button type="button" class="booking-pick'+(selected?" is-selected":"")+'" data-booking-pick="'+esc(item[1])+'" data-booking-pick-title="'+esc(item[2])+'" aria-pressed="'+selected+'"'+(!selected&&full?" disabled":"")+'><img src="'+esc(item[1])+'" alt="" loading="lazy" decoding="async"><span>'+esc(item[2])+'</span><i aria-hidden="true">'+(selected?"✓":"")+'</i></button>';
+  }).join("");
+  return '<div class="booking-step booking-picker" data-booking-step="picker"><div class="booking-categories booking-picker__tabs" role="group" aria-label="Lọc thư viện">'+tabs+'</div><p class="booking-picker__hint">Chạm để chọn mẫu bạn thích · còn '+Math.max(0,MAX_PHOTOS-state.photos.length-state.photoBusy)+' chỗ</p><div class="booking-pick-grid">'+grid+'</div></div>';
+}
 function stepThree(){
   const total=totals(),names=selectedServices().map(function(service){return service.name;}).join(" + ");
   const time=state.slot?dateLabel(state.date)+" · "+slotLabel(state.slot):"Chưa chọn giờ";
-  return '<div class="booking-step" data-booking-step="3">'+(state.error?'<div class="booking-empty" role="alert">'+esc(state.error)+'</div>':'')+'<div class="booking-confirm-card"><div><strong>'+esc(names)+'</strong><br><small>'+esc(time)+' · '+durationText(total.minutes)+'</small></div><strong>'+money(total.price)+'</strong></div><div class="booking-form"><label>Họ và tên<input type="text" autocomplete="name" data-booking-name maxlength="80" required value="'+esc(state.name)+'" placeholder="Tên của bạn"></label><label>Số điện thoại<input type="tel" inputmode="numeric" autocomplete="tel" data-booking-phone maxlength="10" required value="'+esc(state.phone)+'" placeholder="0xxxxxxxxx"></label><label>Ghi chú<textarea rows="2" data-booking-note maxlength="500" placeholder="Mẫu mong muốn hoặc điều tiệm cần biết">'+esc(state.note)+'</textarea></label><label class="sr-only">Website<input type="text" tabindex="-1" autocomplete="off" data-booking-website></label></div></div>';
+  return '<div class="booking-step" data-booking-step="3">'+(state.error?'<div class="booking-empty" role="alert">'+esc(state.error)+'</div>':'')+'<div class="booking-confirm-card"><div><strong>'+esc(names)+'</strong><br><small>'+esc(time)+' · '+durationText(total.minutes)+'</small></div><strong>'+money(total.price)+'</strong></div><div class="booking-form"><label>Họ và tên<input type="text" autocomplete="name" data-booking-name maxlength="80" required value="'+esc(state.name)+'" placeholder="Tên của bạn"></label><label>Số điện thoại<input type="tel" inputmode="tel" autocomplete="tel" data-booking-phone maxlength="16" required value="'+esc(state.phone)+'" placeholder="0xxxxxxxxx"></label><label>Ghi chú<textarea rows="2" data-booking-note maxlength="500" placeholder="Mẫu mong muốn hoặc điều tiệm cần biết">'+esc(state.note)+'</textarea></label><label class="sr-only">Website<input type="text" tabindex="-1" autocomplete="off" data-booking-website></label></div>'+photoField()+'</div>';
 }
 function success(){
-  return '<div class="booking-result" data-booking-step="success"><img src="assets/home/header/logo_cat.webp" alt="" decoding="async" loading="lazy"><h3>Hẹn nhau ở 1M65 nha!</h3><p>Lịch đã được xác nhận. Bạn lưu mã dưới đây để tiện trao đổi với tiệm.</p><code>'+esc(state.reference||"Đã xác nhận")+'</code><div class="booking-result-actions"><button class="button-secondary" type="button" data-booking-manage>Xem lịch của bạn</button><button class="button-primary" type="button" data-booking-reset>Đặt lịch tiếp</button></div></div>';
+  return '<div class="booking-result" data-booking-step="success"><img src="assets/home/header/logo_cat.webp" alt="" decoding="async" loading="lazy"><h3>Hẹn nhau ở 1M65 nha!</h3><p>Lịch đã được xác nhận. Bạn lưu mã dưới đây để tiện trao đổi với tiệm.</p><code>'+esc(state.reference||"Đã xác nhận")+'</code>'+(state.photoWarning?'<p class="booking-photo-error" role="status">'+esc(state.photoWarning)+'</p>':'')+'<div class="booking-result-actions"><button class="button-secondary" type="button" data-booking-manage>Xem lịch của bạn</button><button class="button-primary" type="button" data-booking-reset>Đặt lịch tiếp</button></div></div>';
 }
 function render(){
   const body=document.querySelector("[data-booking-body]"),eyebrow=document.querySelector("[data-booking-eyebrow]"),title=document.querySelector("[data-booking-title]"),back=document.querySelector("[data-booking-back]"),next=document.querySelector("[data-booking-next]"),summary=document.querySelector("[data-booking-summary]");
   if(!body||!eyebrow||!title||!back||!next||!summary)return;
   if(state.status==="done"){eyebrow.textContent="Đã đặt hẹn";title.textContent="Lịch của bạn đã sẵn sàng";body.innerHTML=success();back.textContent="Đóng";next.textContent="Đặt lịch tiếp";next.disabled=false;summary.textContent="";return;}
+  if(state.picker){eyebrow.textContent="Đặt hẹn · ảnh mẫu";title.textContent="Chọn mẫu từ thư viện";body.innerHTML=pickerView();back.textContent="Quay lại";next.disabled=false;next.textContent="Xong ("+state.photos.length+"/"+MAX_PHOTOS+")";summary.textContent="";return;}
   const titles=["Bạn muốn làm gì hôm nay?","Mình ghé tiệm lúc nào?","Cho tiệm biết tên bạn nhé"];
   eyebrow.textContent="Đặt hẹn · bước "+state.step+"/3";title.textContent=titles[state.step-1];body.innerHTML=state.step===1?stepOne():(state.step===2?stepTwo():stepThree());back.textContent=state.step===1?"Để sau":"Quay lại";next.disabled=state.pending||state.loading;
-  next.textContent=state.pending?"Đang xác nhận…":(state.step===1?(state.selected.length?"Chọn ngày & giờ":"Chọn dịch vụ trước"):(state.step===2?"Nhập thông tin":"Xác nhận đặt hẹn"));
-  const total=totals();summary.textContent=state.selected.length+" dịch vụ · "+durationText(total.minutes)+" · "+money(total.price);
+  next.textContent=state.pending?(state.photos.some(function(photo){return photo.kind==="upload";})?"Đang gửi ảnh…":"Đang xác nhận…"):(state.step===1?(state.selected.length?"Chọn ngày & giờ":"Chọn dịch vụ trước"):(state.step===2?"Nhập thông tin":"Xác nhận đặt hẹn"));
+  const total=totals();summary.textContent=state.selected.length+" dịch vụ · "+durationText(total.minutes)+" · "+money(total.price)+(state.step===3&&state.photos.length?" · "+state.photos.length+" ảnh mẫu":"");
 }
 async function request(action,payload){
   const response=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(Object.assign({action:action},payload||{}))});
@@ -116,30 +148,73 @@ function open(options,trigger){reset(options);render();exp().openModal(document.
 function toggle(id){if(state.selected.includes(id))state.selected=state.selected.filter(function(item){return item!==id;});else if(state.selected.length>=8)return exp().toast("Mỗi lịch chọn tối đa 8 dịch vụ nha");else state.selected=state.selected.concat(id);state.error="";render();}
 function back(){
   state.calendarOpen=false;
+  if(state.picker){state.picker=false;render();return;}
   if(state.status==="done"||state.step===1)return exp().closeModal(document.querySelector("#booking-modal-v2"));
   state.step-=1;state.error="";render();
 }
 async function next(){
   state.calendarOpen=false;
+  if(state.picker){state.picker=false;render();return;}
   if(state.status==="done"){reset();render();return;}
   if(state.step===1){if(!state.selected.length)return exp().toast("Bạn chọn ít nhất một dịch vụ trước nha");state.step=2;render();await availability();return;}
   if(state.step===2){if(!state.slot)return exp().toast("Bạn chọn một giờ còn trống trước nha");state.step=3;state.error="";render();requestAnimationFrame(function(){document.querySelector("[data-booking-name]")?.focus();});return;}
   await submit();
 }
 async function submit(){
-  if(state.pending)return;const name=state.name.trim(),phone=state.phone.replace(/\D/g,""),website=document.querySelector("[data-booking-website]")?.value||"";
+  if(state.pending)return;const name=state.name.trim(),phone=vnPhone(state.phone),website=document.querySelector("[data-booking-website]")?.value||"";
+  if(state.photoBusy)return exp().toast("Ảnh đang được xử lý, bạn chờ chút xíu nha");
   if(name.length<2){state.error="Bạn nhập giúp tiệm họ tên từ 2 ký tự nhé.";render();document.querySelector("[data-booking-name]")?.focus();return;}
-  if(!/^0\d{9}$/.test(phone)){state.error="Số điện thoại cần đủ 10 số và bắt đầu bằng 0.";render();document.querySelector("[data-booking-phone]")?.focus();return;}
+  if(!/^0\d{9}$/.test(phone)){state.error="Số điện thoại cần đủ 10 số, bắt đầu bằng 0 hoặc +84.";render();document.querySelector("[data-booking-phone]")?.focus();return;}
   state.pending=true;state.error="";render();
   try{
     if(!window.mewTurnstileBooking||typeof window.mewTurnstileBooking.getToken!=="function"){const error=new Error("turnstile_unavailable");error.code="turnstile_unavailable";throw error;}
     const token=await window.mewTurnstileBooking.getToken();
-    const body=await request("create",{serviceId:state.selected[0],serviceIds:state.selected.slice(),startAt:state.slot,customerName:name,customerPhone:phone,customerNote:state.note.trim(),turnstileToken:token,website:website});
+    const body=await request("create",{serviceId:state.selected[0],serviceIds:state.selected.slice(),startAt:state.slot,customerName:name,customerPhone:phone,customerNote:state.note.trim(),turnstileToken:token,website:website,referencePhotos:state.photos.map(function(photo){return photo.kind==="upload"?{kind:"upload",data:photo.data}:{kind:"gallery",src:photo.src,title:photo.title};})});
     state.status="done";state.reference=String((body.appointment&&body.appointment.reference)||"Đã xác nhận");
+    const missing=state.photos.length-Number(body.photosSaved||0);
+    state.photoWarning=state.photos.length&&missing>0?"Lịch đã xác nhận, nhưng "+missing+" ảnh mẫu chưa gửi được. Bạn nhắn Zalo ảnh đó cho tiệm giúp tụi mình nhé.":"";
   }catch(error){
     if(error.code==="slot_unavailable"){state.step=2;state.pending=false;exp().toast("Khung giờ vừa có khách khác chọn. Tụi mình đang tải lại lịch.");render();await availability();return;}
-    state.error=error.code==="phone_daily_limit"?"Số điện thoại này đã có lịch trong ngày đó rồi. Bạn xem hoặc dời lịch cũ ở “Xem lịch của bạn”, hoặc nhắn Zalo cho tiệm nhé.":error.code==="phone_booking_limit"?"Số điện thoại này đang có nhiều lịch sắp tới nên chưa đặt thêm được. Bạn xem hoặc hủy bớt ở “Xem lịch của bạn”, hoặc nhắn Zalo cho tiệm nhé.":error.code==="ip_booking_limit"?"Thiết bị hoặc mạng này đã đặt nhiều lịch trong 24 giờ qua. Bạn thử lại sau hoặc nhắn Zalo cho tiệm để được hỗ trợ nhé.":error.code==="human_verification_failed"||error.code==="turnstile_unavailable"?"Chưa xác minh được bạn là người thật. Bạn thử lại giúp tụi mình nha.":"Chưa thể xác nhận lịch. Bạn kiểm tra mạng rồi thử lại giúp tụi mình nha.";
+    state.error=error.code==="phone_daily_limit"?"Số điện thoại này đã có lịch trong ngày đó rồi. Bạn xem hoặc dời lịch cũ ở “Xem lịch của bạn”, hoặc nhắn Zalo cho tiệm nhé.":error.code==="phone_booking_limit"?"Số điện thoại này đang có nhiều lịch sắp tới nên chưa đặt thêm được. Bạn xem hoặc hủy bớt ở “Xem lịch của bạn”, hoặc nhắn Zalo cho tiệm nhé.":error.code==="ip_booking_limit"?"Thiết bị hoặc mạng này đã đặt nhiều lịch trong 24 giờ qua. Bạn thử lại sau hoặc nhắn Zalo cho tiệm để được hỗ trợ nhé.":error.code==="human_verification_failed"||error.code==="turnstile_unavailable"?"Chưa xác minh được bạn là người thật. Bạn thử lại giúp tụi mình nha.":error.code==="invalid_reference_photos"||error.code==="request_too_large"?"Có ảnh mẫu chưa gửi được. Bạn bỏ ảnh đó rồi thử lại, hoặc nhắn Zalo ảnh cho tiệm nhé.":"Chưa thể xác nhận lịch. Bạn kiểm tra mạng rồi thử lại giúp tụi mình nha.";
   }finally{state.pending=false;render();}
+}
+function decodePhoto(file){
+  if(window.createImageBitmap)return createImageBitmap(file);
+  return new Promise(function(resolve,reject){const image=new Image();image.onload=function(){resolve(image);};image.onerror=reject;image.src=URL.createObjectURL(file);});
+}
+// Longest edge 1600px at JPEG 0.82; busier photos step down to 0.7, then to 1280px, to stay under 650KB.
+async function shrinkPhoto(file){
+  const source=await decodePhoto(file);const width=source.width||source.naturalWidth,height=source.height||source.naturalHeight;
+  try{
+    for(const [edge,quality] of [[1600,.82],[1600,.7],[1280,.7]]){
+      const scale=Math.min(1,edge/Math.max(width,height)),canvas=document.createElement("canvas");
+      canvas.width=Math.max(1,Math.round(width*scale));canvas.height=Math.max(1,Math.round(height*scale));
+      const context=canvas.getContext("2d");context.fillStyle="#fff";context.fillRect(0,0,canvas.width,canvas.height);context.drawImage(source,0,0,canvas.width,canvas.height);
+      const blob=await new Promise(function(resolve){canvas.toBlob(resolve,"image/jpeg",quality);});
+      if(blob&&blob.size<=MAX_PHOTO_UPLOAD_BYTES)return await new Promise(function(resolve,reject){const reader=new FileReader();reader.onload=function(){resolve(String(reader.result));};reader.onerror=reject;reader.readAsDataURL(blob);});
+    }
+  }finally{if(source.close)source.close();}
+  throw new Error("photo_too_large");
+}
+async function addPhotoFiles(files){
+  const room=MAX_PHOTOS-state.photos.length-state.photoBusy,picked=Array.from(files||[]);
+  state.photoError=picked.length>room?"Mỗi lịch gửi tối đa "+MAX_PHOTOS+" ảnh nha.":"";
+  const accepted=picked.slice(0,Math.max(0,room)).filter(function(file){
+    if(!/^image\//.test(file.type||"")){state.photoError="Tệp “"+file.name+"” không phải ảnh.";return false;}
+    if(file.size>MAX_PHOTO_SOURCE_BYTES){state.photoError="Ảnh “"+file.name+"” lớn quá 40MB, bạn chọn ảnh khác nha.";return false;}
+    return true;
+  });
+  state.photoBusy+=accepted.length;refreshPhotos();
+  await Promise.all(accepted.map(async function(file){
+    try{const data=await shrinkPhoto(file);if(state.photos.length<MAX_PHOTOS)state.photos.push({kind:"upload",data:data});}
+    catch(_){state.photoError="Ảnh “"+file.name+"” chưa đọc được. Bạn thử chụp màn hình ảnh đó rồi gửi lại nhé.";}
+    finally{state.photoBusy-=1;refreshPhotos();}
+  }));
+}
+function togglePick(src,title){
+  const index=state.photos.findIndex(function(photo){return photo.kind==="gallery"&&photo.src===src;});
+  if(index>=0)state.photos.splice(index,1);else if(state.photos.length+state.photoBusy<MAX_PHOTOS)state.photos.push({kind:"gallery",src:src,title:title});
+  render();
 }
 document.addEventListener("click",function(event){
   const target=event.target,category=target.closest("[data-booking-category]"),service=target.closest("[data-booking-service]"),remove=target.closest("[data-booking-remove]"),date=target.closest("[data-booking-date]"),slot=target.closest("[data-booking-slot]");
@@ -154,6 +229,10 @@ document.addEventListener("click",function(event){
   if(date){state.date=date.dataset.bookingDate;state.preferred="";render();availability();return;}
   if(slot&&slot.dataset.bookingSlot){state.slot=slot.dataset.bookingSlot;render();return;}
   if(target.closest("[data-booking-retry]")){availability();return;}
+  const photoRemove=target.closest("[data-booking-photo-remove]");if(photoRemove){state.photos.splice(Number(photoRemove.dataset.bookingPhotoRemove),1);state.photoError="";refreshPhotos();return;}
+  if(target.closest("[data-booking-photo-picker]")){const items=Array.isArray(exp().gallery)?exp().gallery:[];if(!items.some(function(item){return item[0]===state.pickerFilter;})&&items.length)state.pickerFilter=items[0][0];state.picker=true;render();document.querySelector(".booking-picker__tabs .is-active")?.focus();return;}
+  const pickerFilter=target.closest("[data-booking-picker-filter]");if(pickerFilter){state.pickerFilter=pickerFilter.dataset.bookingPickerFilter;render();return;}
+  const pick=target.closest("[data-booking-pick]");if(pick){togglePick(pick.dataset.bookingPick,pick.dataset.bookingPickTitle||"");return;}
   if(target.closest("[data-booking-back]")){back();return;}
   if(target.closest("[data-booking-next]")){next();return;}
   if(target.closest("[data-booking-reset]")){reset();render();return;}
@@ -161,8 +240,12 @@ document.addEventListener("click",function(event){
 });
 document.addEventListener("input",function(event){
   const target=event.target;if(target.matches("[data-booking-name]"))state.name=target.value;
-  if(target.matches("[data-booking-phone]")){state.phone=target.value.replace(/\D/g,"").slice(0,10);if(target.value!==state.phone)target.value=state.phone;}
+  if(target.matches("[data-booking-phone]")){const typed=vnPhone(target.value);state.phone=typed.slice(0,typed.startsWith("0")?10:12);if(target.value!==state.phone)target.value=state.phone;}
   if(target.matches("[data-booking-note]"))state.note=target.value;
+});
+document.addEventListener("change",function(event){
+  const input=event.target;if(!input.matches||!input.matches("[data-booking-photo-input]"))return;
+  const files=input.files;addPhotoFiles(files);
 });
 document.addEventListener("keydown",function(event){
   if(event.key!=="Escape"||!state.calendarOpen)return;event.preventDefault();event.stopImmediatePropagation();
