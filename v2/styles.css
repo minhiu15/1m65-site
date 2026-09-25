@@ -7410,7 +7410,7 @@ main,
   --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_blue.svg?v=2");
   --card-pill: #dcebf9;
   --card-pill-ink: #2d68a4;
-  --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_sparkle.svg");
+  --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_sparkle.svg?v=2");
   --card-shell-corner: 30px;
   isolation: isolate;
   overflow: visible;
@@ -7427,25 +7427,25 @@ main,
   --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_peach.svg?v=2");
   --card-pill: #fde2d2;
   --card-pill-ink: #9c4b29;
-  --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_flower.svg");
+  --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_flower.svg?v=2");
 }
 .signature-layout .service-card[data-card-variant="signature"][data-service-id="noi-bot"] {
   --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_lavender.svg?v=2");
   --card-pill: #e8def8;
   --card-pill-ink: #6547a3;
-  --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_paw.svg");
+  --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_powder.svg");
 }
 .signature-layout .service-card[data-card-variant="signature"][data-service-id="mi-classic"] {
   --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_mint.svg?v=2");
   --card-pill: #d8efe2;
   --card-pill-ink: #2b7350;
-  --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_bow.svg");
+  --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_lash.svg");
 }
 .signature-layout .service-card[data-card-variant="signature"][data-service-id="goi-duongsinh"] {
   --card-shell: url("assets/services/signature-shared/decor/signature_card_shell_yellow.svg?v=2");
   --card-pill: #faecc2;
   --card-pill-ink: #7d5f10;
-  --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_bubbles.svg");
+  --card-doodles: url("assets/services/signature-shared/decor/signature_card_doodles_bubbles.svg?v=2");
 }
 .signature-layout .service-card[data-card-variant="signature"]::before,
 .signature-layout .service-card[data-card-variant="signature"]::after {
@@ -7468,18 +7468,22 @@ main,
 .signature-layout .service-card--featured[data-card-variant="signature"]::after {
   inset: auto 16px 10px auto;
 }
+/* Web and tablet keep the corner doodles on the featured card only; phones show them on every card. */
+@media (min-width: 601px) {
+  .signature-layout .service-card[data-card-variant="signature"]:not(.service-card--featured)::after { display: none; }
+}
 /* The 196px photo frame (200px with its mat) needs 244px cards to sit centred inside the 22px padding;
    at 236px it overflowed 8px and crowded the bottom outline. */
 .signature-layout { --signature-card-height: 244px; }
 @media (max-width: 600px) {
   .signature-layout .service-card[data-card-variant="signature"] { --card-shell-corner: 24px; }
   .signature-layout .service-card[data-card-variant="signature"]::after {
-    inset: auto auto 4px 9px;
+    inset: auto auto 12px 9px;
     width: 50px;
     height: 28px;
   }
   .signature-layout .service-card[data-card-variant="signature"]:is(.service-card--featured, [data-photo-tilt="left"])::after {
-    inset: auto 12px 7px auto;
+    inset: auto 12px 15px auto;
   }
   /* Phone badge: sits low on the card's top-right corner with its 7deg tilt, its two lines centred on
      the cream disc (51% across, 45% down the art, about 65% of its width wide). The featured copy is

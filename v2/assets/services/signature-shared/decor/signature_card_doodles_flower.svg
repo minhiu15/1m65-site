@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 40" fill="none" stroke-linejoin="round">
   <g transform="translate(22 22) rotate(-10)">
-    <g stroke="#f09ab0" stroke-width="3.4"><ellipse cx="0" cy="-6.6" rx="5.2" ry="6"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(72)"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(144)"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(216)"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(288)"/></g>
-    <g fill="#fff6f8"><ellipse cx="0" cy="-6.6" rx="5.2" ry="6"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(72)"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(144)"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(216)"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(288)"/></g>
-    <circle r="2.5" fill="#f7bccb"/>
+    <g stroke="#edb19a" stroke-width="3.4"><ellipse cx="0" cy="-6.6" rx="5.2" ry="6"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(72)"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(144)"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(216)"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(288)"/></g>
+    <g fill="#fff7f3"><ellipse cx="0" cy="-6.6" rx="5.2" ry="6"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(72)"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(144)"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(216)"/><ellipse cx="0" cy="-6.6" rx="5.2" ry="6" transform="rotate(288)"/></g>
+    <circle r="2.5" fill="#f5cbbb"/>
   </g>
-  <path d="M0 6.5C-3 4-8 .8-8-2.8C-8-5.6-5.8-7.4-3.6-7.4C-2-7.4-.6-6.5 0-5.2C.6-6.5 2-7.4 3.6-7.4C5.8-7.4 8-5.6 8-2.8C8 .8 3 4 0 6.5Z" transform="translate(49 11) rotate(18) scale(.75)" stroke="#f09ab0" stroke-width="1.7"/>
-  <path d="M0-7C.6-2.2 2.2-.6 7 0C2.2.6.6 2.2 0 7C-.6 2.2-2.2.6-7 0C-2.2-.6-.6-2.2 0-7Z" transform="translate(58 29) scale(.75)" fill="#f5a9bb"/>
+  <path d="M0 6.5C-3 4-8 .8-8-2.8C-8-5.6-5.8-7.4-3.6-7.4C-2-7.4-.6-6.5 0-5.2C.6-6.5 2-7.4 3.6-7.4C5.8-7.4 8-5.6 8-2.8C8 .8 3 4 0 6.5Z" transform="translate(49 11) rotate(18) scale(.75)" stroke="#edb19a" stroke-width="1.7"/>
+  <path d="M0-7C.6-2.2 2.2-.6 7 0C2.2.6.6 2.2 0 7C-.6 2.2-2.2.6-7 0C-2.2-.6-.6-2.2 0-7Z" transform="translate(58 29) scale(.75)" fill="#f2bda9"/>
 </svg>
