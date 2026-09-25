@@ -7511,8 +7511,8 @@ main,
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] .service-card-copy { align-items: flex-end; text-align: right; }
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] .service-meta { justify-items: end; }
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] :is(.service-price--sale, .service-duration-row) { justify-content: flex-end; }
-  .signature-layout .service-card[data-card-variant="signature"] .sale-badge { padding-inline: 5px; font-size: 10.5px; }
-  .signature-layout .service-card[data-card-variant="signature"] .service-price--sale { column-gap: 8px; }
+  .signature-layout .service-card[data-card-variant="signature"] .sale-badge { width: 44px; min-height: 30px; font-size: 11.5px; }
+  .signature-layout .service-card[data-card-variant="signature"] .service-price--sale { column-gap: 12px; }
   .signature-layout .signature-wordmark { width: min(100%, 316px); margin-top: 8px; }
   .signature-layout .service-card--featured[data-card-variant="signature"] { margin-top: 18px; }
   .signature-layout .service-card--featured[data-card-variant="signature"] .service-card-copy { padding-top: 0; }
@@ -7534,6 +7534,10 @@ main,
 @media (max-width: 479px) {
   .signature-layout .service-card--featured[data-card-variant="signature"] h3 { max-width: 96px; }
 }
+@media (max-width: 419px) {
+  /* Narrow phones: the list ticket's exact 42px width keeps pill and ticket on one row. */
+  .signature-layout .service-card[data-card-variant="signature"] .sale-badge { width: 42px; }
+}
 @media (min-width: 480px) and (max-width: 600px) {
   /* Wider phones: the featured title and description flow around a float that keeps the badge's
      corner clear, and the prices and pill hold the bottom of the photo-high copy box. */
@@ -7552,7 +7556,6 @@ main,
 @media (max-width: 374px) {
   .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge { right: -17px; }
   /* Keeps the duration pill and sale ticket on one row on 360px Android phones. */
-  .signature-layout .service-card[data-card-variant="signature"] .service-duration-row { column-gap: 6px; }
   .signature-layout .service-card[data-card-variant="signature"] .service-duration-row > .service-duration { padding-inline: 7px 9px; }
   .signature-layout .service-card[data-card-variant="signature"]::after { width: 44px; height: 25px; }
 }
@@ -7589,28 +7592,43 @@ main,
   --clock-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7.5V12l3 2'/%3E%3C/svg%3E");
 }
 
-/* Sale details: the struck-through original sits 10px after the current price (8px on phones), and
+/* Sale details: the struck-through original sits 14px after the current price (12px on phones), and
    the ticket follows the duration pill on its row, as the owner asked, so it never pushes the copy
    down; it wraps under the pill only when a card is too narrow (the meta column may shrink for that). */
 .signature-layout .service-card[data-card-variant="signature"] .service-meta { grid-template-columns: minmax(0, max-content); }
 .signature-layout .service-card[data-card-variant="signature"] .service-price--sale {
   display: flex;
   align-items: center;
-  column-gap: 10px;
+  column-gap: 14px;
 }
 .signature-layout .service-card[data-card-variant="signature"] .service-duration-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-self: start;
-  gap: 4px 8px;
+  gap: 4px 12px;
   margin-top: 3px;
 }
 .signature-layout .service-card[data-card-variant="signature"] .service-duration-row > .service-duration { margin-top: 0; }
+@media (max-width: 419px) {
+  /* Narrower pill-to-ticket gaps on narrow phones so the pair stays on one row. */
+  .signature-layout .service-card[data-card-variant="signature"] .service-duration-row { column-gap: 10px; }
+}
+@media (max-width: 374px) {
+  .signature-layout .service-card[data-card-variant="signature"] .service-duration-row { column-gap: 8px; }
+}
 
-/* The Signature price row has room for a slightly larger ticket on tablet and desktop. */
+/* The Signature ticket takes the Nail Care list ticket's chunky box proportions (about 1.45:1, bold
+   centred text): 50x34px on tablet and desktop, 44x30px on phones. */
+.signature-layout .service-card[data-card-variant="signature"] .sale-badge {
+  display: inline-grid;
+  place-items: center;
+  box-sizing: border-box;
+  margin-block: -4px; /* the taller ticket overhangs the pill's row instead of pushing the pill down */
+  padding: 3px;
+}
 @media (min-width: 601px) {
-  .signature-layout .service-card[data-card-variant="signature"] .sale-badge { padding: 3px 7px; font-size: 12px; }
+  .signature-layout .service-card[data-card-variant="signature"] .sale-badge { width: 50px; min-height: 34px; font-size: 13px; }
 }
 
 /* One sale ticket everywhere, the one the owner picked from the desktop service list: a dashed pink
