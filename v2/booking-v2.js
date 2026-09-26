@@ -119,13 +119,92 @@ function stepThree(){
   const time=state.slot?dateLabel(state.date)+" · "+slotLabel(state.slot):"Chưa chọn giờ";
   return '<div class="booking-step" data-booking-step="3">'+(state.error?'<div class="booking-empty" role="alert">'+esc(state.error)+'</div>':'')+'<div class="booking-confirm-card"><div><strong>'+esc(names)+'</strong><br><small>'+esc(time)+' · '+durationText(total.minutes)+'</small></div><strong>'+money(total.price)+'</strong></div><div class="booking-form"><label>Họ và tên<input type="text" autocomplete="name" data-booking-name maxlength="80" required value="'+esc(state.name)+'" placeholder="Tên của bạn"></label><label>Số điện thoại<input type="tel" inputmode="tel" autocomplete="tel" data-booking-phone maxlength="16" required value="'+esc(state.phone)+'" placeholder="0xxxxxxxxx"></label><label>Ghi chú<textarea rows="2" data-booking-note maxlength="500" placeholder="Mẫu mong muốn hoặc điều tiệm cần biết">'+esc(state.note)+'</textarea></label><label class="sr-only">Website<input type="text" tabindex="-1" autocomplete="off" data-booking-website></label></div>'+photoField()+'</div>';
 }
-function success(){
-  return '<div class="booking-result" data-booking-step="success"><img src="assets/home/header/logo_cat.webp" alt="" decoding="async" loading="lazy"><h3>Hẹn nhau ở 1M65 nha!</h3><p>Lịch đã được xác nhận. Bạn lưu mã dưới đây để tiện trao đổi với tiệm.</p><code>'+esc(state.reference||"Đã xác nhận")+'</code>'+(state.photoWarning?'<p class="booking-photo-error" role="status">'+esc(state.photoWarning)+'</p>':'')+'<div class="booking-result-actions"><button class="button-secondary" type="button" data-booking-manage>Xem lịch của bạn</button><button class="button-primary" type="button" data-booking-reset>Đặt lịch tiếp</button></div></div>';
+// After "Xác nhận đặt hẹn" the form steps aside for a short sequence: a spinner while the booking is
+// sent, a tick once it is confirmed, then the booking ticket flies in. Reduced motion skips the waits.
+const reduceMotion=window.matchMedia?window.matchMedia("(prefers-reduced-motion: reduce)"):{matches:false};
+let ticketObserver=null;
+function wait(ms){return new Promise(function(resolve){setTimeout(resolve,reduceMotion.matches?0:ms);});}
+function bookingModal(){return document.querySelector("#booking-modal-v2");}
+function setStage(name){
+  const modal=bookingModal();if(!modal)return;
+  if(!modal.querySelector("[data-booking-sending]"))modal.insertAdjacentHTML("beforeend",'<div class="booking-sending" data-booking-sending role="status" aria-live="polite"><div class="booking-sending__badge"><svg viewBox="0 0 80 80" aria-hidden="true"><circle class="booking-sending__track" cx="40" cy="40" r="34"/><circle class="booking-sending__ring" cx="40" cy="40" r="34"/><path class="booking-sending__tick" d="M25 41l10 10 21-21"/></svg></div><p class="booking-sending__label" data-booking-sending-label></p></div><div class="booking-ticket" data-booking-ticket></div>');
+  modal.classList.toggle("is-sending",name==="sending"||name==="confirmed");
+  modal.classList.toggle("is-confirmed",name==="confirmed");
+  modal.classList.toggle("is-ticket",name==="ticket");
+  // The hidden form leaves the focus order, so Tab stays inside the spinner or the ticket.
+  const panel=modal.querySelector(".booking-modal-panel");if(panel)panel.inert=!!name;
+  const label=modal.querySelector("[data-booking-sending-label]");if(label)label.textContent=name==="sending"?"Đang xác nhận lịch…":(name==="confirmed"?"Đã xác nhận!":"");
+  if(name!=="ticket"){const ticket=modal.querySelector("[data-booking-ticket]");if(ticket)ticket.innerHTML="";if(ticketObserver){ticketObserver.disconnect();ticketObserver=null;}}
+}
+const TICKET_ICONS={
+  calendar:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M12 17.2l-2.1-2a1.25 1.25 0 0 1 2.1-1.3 1.25 1.25 0 0 1 2.1 1.3z" class="is-filled"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+  crown:'<svg class="booking-ticket__crown" viewBox="0 0 64 44" aria-hidden="true"><path d="M8 36L4 12l15 12L32 5l13 19 15-12-4 24z"/><path d="M9 41h46"/><circle cx="4" cy="11" r="3"/><circle cx="32" cy="4" r="3"/><circle cx="60" cy="11" r="3"/></svg>'
+};
+// A decorative barcode drawn from the booking code, so every ticket's bars differ.
+function barcodeSvg(code){
+  let x=0,bars="";
+  String(code||"").split("").forEach(function(character){const value=character.charCodeAt(0);for(let bit=0;bit<3;bit++){const width=1+((value>>bit)&1)*2;bars+='<rect x="'+x+'" width="'+width+'" height="56"/>';x+=width+1+((value>>(bit+3))&1);}});
+  return '<svg class="booking-ticket__barcode" viewBox="0 0 '+Math.max(1,x)+' 56" preserveAspectRatio="none" aria-hidden="true">'+bars+'</svg>';
+}
+// Outline of the paper ticket, traced clockwise: rounded corners, small perforation bites down both outer
+// edges, and either the notches of the tear-off line (with a stub) or a notch mid-way down each side.
+function ticketPath(width,height,stub){
+  const radius=18,notch=13,bite=4.5,step=17,round=function(value){return Math.round(value*10)/10;};
+  const stops=[];for(let y=radius+14;y<=height-radius-14;y+=step){if(!stub&&Math.abs(y-height/2)<notch+bite+6)continue;stops.push({y:y,size:bite});}
+  if(!stub)stops.push({y:height/2,size:notch});
+  stops.sort(function(a,b){return a.y-b.y;});
+  let d="M"+radius+" 0";
+  if(stub)d+="H"+round(stub-notch)+"A"+notch+" "+notch+" 0 0 0 "+round(stub+notch)+" 0";
+  d+="H"+round(width-radius)+"A"+radius+" "+radius+" 0 0 1 "+round(width)+" "+radius;
+  stops.forEach(function(stop){d+="V"+round(stop.y-stop.size)+"A"+stop.size+" "+stop.size+" 0 0 0 "+round(width)+" "+round(stop.y+stop.size);});
+  d+="V"+round(height-radius)+"A"+radius+" "+radius+" 0 0 1 "+round(width-radius)+" "+round(height);
+  if(stub)d+="H"+round(stub+notch)+"A"+notch+" "+notch+" 0 0 0 "+round(stub-notch)+" "+round(height);
+  d+="H"+radius+"A"+radius+" "+radius+" 0 0 1 0 "+round(height-radius);
+  stops.slice().reverse().forEach(function(stop){d+="V"+round(stop.y+stop.size)+"A"+stop.size+" "+stop.size+" 0 0 0 0 "+round(stop.y-stop.size);});
+  return d+"V"+radius+"A"+radius+" "+radius+" 0 0 1 "+radius+" 0Z";
+}
+// Drawn at the card's measured size (and again when it resizes), so notches stay round at any width.
+function drawTicketPaper(card){
+  const paper=card&&card.querySelector(".booking-ticket__paper");if(!paper)return;
+  const width=card.offsetWidth,height=card.offsetHeight;if(!width||!height)return;
+  const stubNode=card.querySelector(".booking-ticket__stub"),stub=stubNode&&stubNode.offsetWidth?width-stubNode.offsetWidth:0;
+  const d=ticketPath(width,height,stub);
+  paper.setAttribute("viewBox","0 0 "+width+" "+height);
+  paper.innerHTML='<defs><pattern id="booking-ticket-gingham" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#fff5f7"/><rect width="6" height="12" fill="#f8cfdb" opacity=".55"/><rect width="12" height="6" fill="#f8cfdb" opacity=".55"/></pattern><linearGradient id="booking-ticket-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffaf4"/><stop offset="1" stop-color="#fdefe9"/></linearGradient><clipPath id="booking-ticket-clip"><path d="'+d+'"/></clipPath></defs><path d="'+d+'" fill="url(#booking-ticket-fill)"/><path d="'+d+'" fill="none" stroke="url(#booking-ticket-gingham)" stroke-width="22" clip-path="url(#booking-ticket-clip)"/><path d="'+d+'" fill="none" stroke="#f0a2b8" stroke-width="2"/>'+(stub?'<line x1="'+stub+'" y1="22" x2="'+stub+'" y2="'+(height-22)+'" stroke="#f0a2b8" stroke-width="2" stroke-dasharray="7 6"/>':'');
+}
+function ticketHtml(){
+  const when=state.slot?dateLabel(state.date)+" · "+slotLabel(state.slot):"";
+  const decor=function(className,src){return '<img class="'+className+'" src="'+src+'" alt="" aria-hidden="true" decoding="async">';};
+  return '<div class="booking-ticket__card" tabindex="-1" aria-labelledby="booking-ticket-title"><svg class="booking-ticket__paper" aria-hidden="true"></svg>'
+    +decor("booking-ticket__bow","assets/home/relayout/decor_bow_blush_refined.webp")
+    +decor("booking-ticket__cat","assets/services/nail-care/cats/header_cat_peeking.webp")
+    +decor("booking-ticket__cat-bow","assets/home/relayout/decor_bow_blush_refined.webp")
+    +decor("booking-ticket__sparkle booking-ticket__sparkle--one","assets/home/relayout/decor_sparkle_pastel_optical.webp")
+    +decor("booking-ticket__sparkle booking-ticket__sparkle--two","assets/home/relayout/decor_sparkle_pastel_optical.webp")
+    +decor("booking-ticket__flower","assets/home/relayout/decor_flower_pink_optical.webp")
+    +decor("booking-ticket__tape","assets/home/decor/pink_gingham_tape.webp")
+    +'<button type="button" class="booking-ticket__close" data-close-modal aria-label="Đóng">×</button>'
+    +'<div class="booking-ticket__main"><h2 id="booking-ticket-title">Đặt lịch thành công!<img src="assets/booking/booking_heart_outline_pink.webp" alt="" aria-hidden="true" decoding="async"></h2>'
+    +'<p class="booking-ticket__thanks">Cảm ơn bạn đã đặt lịch tại 1M65!</p>'
+    +'<p class="booking-ticket__note">Lịch đã được xác nhận, hẹn gặp bạn ở tiệm nhé <span aria-hidden="true">♡</span></p>'
+    +'<div class="booking-ticket__info"><div class="booking-ticket__field"><span class="booking-ticket__icon">'+TICKET_ICONS.calendar+'</span><span><small>Mã lịch hẹn</small><strong class="booking-ticket__code">'+esc(state.reference)+'</strong></span></div>'
+    +(when?'<div class="booking-ticket__field"><span class="booking-ticket__icon">'+TICKET_ICONS.clock+'</span><span><small>Thời gian</small><strong>'+esc(when)+'</strong></span></div>':'')+'</div>'
+    +(state.photoWarning?'<p class="booking-ticket__warning" role="status">'+esc(state.photoWarning)+'</p>':'')
+    +'<div class="booking-ticket__actions"><button class="button-secondary" type="button" data-booking-manage>'+TICKET_ICONS.calendar+'Xem lại lịch của bạn</button><button class="button-primary" type="button" data-booking-reset>'+TICKET_ICONS.calendar+'Đặt lịch tiếp<span aria-hidden="true">→</span></button></div></div>'
+    +'<div class="booking-ticket__stub" aria-hidden="true">'+TICKET_ICONS.crown+'<strong>1M65</strong><small>NAIL · LASH · SHAMPOO</small>'+barcodeSvg(state.reference)+'<span class="booking-ticket__stub-heart">♥</span></div></div>';
+}
+function showTicket(){
+  const modal=bookingModal(),holder=modal&&modal.querySelector("[data-booking-ticket]");if(!holder)return;
+  holder.innerHTML=ticketHtml();setStage("ticket");
+  const card=holder.querySelector(".booking-ticket__card");drawTicketPaper(card);
+  if(window.ResizeObserver){ticketObserver=new ResizeObserver(function(){drawTicketPaper(card);});ticketObserver.observe(card);}
+  card.focus({preventScroll:true});
 }
 function render(){
   const body=document.querySelector("[data-booking-body]"),eyebrow=document.querySelector("[data-booking-eyebrow]"),title=document.querySelector("[data-booking-title]"),back=document.querySelector("[data-booking-back]"),next=document.querySelector("[data-booking-next]"),summary=document.querySelector("[data-booking-summary]");
   if(!body||!eyebrow||!title||!back||!next||!summary)return;
-  if(state.status==="done"){eyebrow.textContent="Đã đặt hẹn";title.textContent="Lịch của bạn đã sẵn sàng";body.innerHTML=success();back.textContent="Đóng";next.textContent="Đặt lịch tiếp";next.disabled=false;summary.textContent="";return;}
+  if(state.status==="done")return; // the ticket has taken over; the hidden form is left as it was
   if(state.picker){eyebrow.textContent="Đặt hẹn · ảnh mẫu";title.textContent="Chọn mẫu từ thư viện";body.innerHTML=pickerView();back.textContent="Quay lại";next.disabled=false;next.textContent="Xong ("+state.photos.length+"/"+MAX_PHOTOS+")";summary.textContent="";return;}
   const titles=["Bạn muốn làm gì hôm nay?","Mình ghé tiệm lúc nào?","Cho tiệm biết tên bạn nhé"];
   eyebrow.textContent="Đặt hẹn · bước "+state.step+"/3";title.textContent=titles[state.step-1];body.innerHTML=state.step===1?stepOne():(state.step===2?stepTwo():stepThree());back.textContent=state.step===1?"Để sau":"Quay lại";next.disabled=state.pending||state.loading;
@@ -145,7 +224,7 @@ async function availability(){
   }catch(_){if(current!==requestId)return;state.slots=[];state.blocked=[];state.day=null;state.error="Chưa tải được lịch trống. Bạn thử lại giúp tụi mình nha.";}
   finally{if(current===requestId){state.loading=false;render();}}
 }
-function open(options,trigger){reset(options);render();exp().openModal(document.querySelector("#booking-modal-v2"),trigger);}
+function open(options,trigger){reset(options);setStage("");render();exp().openModal(document.querySelector("#booking-modal-v2"),trigger);}
 function toggle(id){if(state.selected.includes(id))state.selected=state.selected.filter(function(item){return item!==id;});else if(state.selected.length>=8)return exp().toast("Mỗi lịch chọn tối đa 8 dịch vụ nha");else state.selected=state.selected.concat(id);state.error="";render();}
 function back(){
   state.calendarOpen=false;
@@ -156,7 +235,7 @@ function back(){
 async function next(){
   state.calendarOpen=false;
   if(state.picker){state.picker=false;render();return;}
-  if(state.status==="done"){reset();render();return;}
+  if(state.status==="done"){reset();setStage("");render();return;}
   if(state.step===1){if(!state.selected.length)return exp().toast("Bạn chọn ít nhất một dịch vụ trước nha");state.step=2;render();await availability();return;}
   if(state.step===2){if(!state.slot)return exp().toast("Bạn chọn một giờ còn trống trước nha");state.step=3;state.error="";render();requestAnimationFrame(function(){document.querySelector("[data-booking-name]")?.focus();});return;}
   await submit();
@@ -167,6 +246,7 @@ async function submit(){
   if(name.length<2){state.error="Bạn nhập giúp tiệm họ tên từ 2 ký tự nhé.";render();document.querySelector("[data-booking-name]")?.focus();return;}
   if(!/^0\d{9}$/.test(phone)){state.error="Số điện thoại cần đủ 10 số, bắt đầu bằng 0 hoặc +84.";render();document.querySelector("[data-booking-phone]")?.focus();return;}
   state.pending=true;state.error="";render();
+  const started=Date.now();setStage("sending");
   try{
     if(!window.mewTurnstileBooking||typeof window.mewTurnstileBooking.getToken!=="function"){const error=new Error("turnstile_unavailable");error.code="turnstile_unavailable";throw error;}
     const token=await window.mewTurnstileBooking.getToken();
@@ -174,7 +254,12 @@ async function submit(){
     state.status="done";state.reference=String((body.appointment&&body.appointment.reference)||"Đã xác nhận");
     const missing=state.photos.length-Number(body.photosSaved||0);
     state.photoWarning=state.photos.length&&missing>0?"Lịch đã xác nhận, nhưng "+missing+" ảnh mẫu chưa gửi được. Bạn nhắn Zalo ảnh đó cho tiệm giúp tụi mình nhé.":"";
+    // Let the spinner show for a beat even on a fast network, draw the tick, then fly the ticket in.
+    await wait(Math.max(0,900-(Date.now()-started)));
+    setStage("confirmed");await wait(1050);
+    showTicket();
   }catch(error){
+    setStage("");
     if(error.code==="slot_unavailable"){state.step=2;state.pending=false;exp().toast("Khung giờ vừa có khách khác chọn. Tụi mình đang tải lại lịch.");render();await availability();return;}
     state.error=error.code==="phone_daily_limit"?"Số điện thoại này đã có lịch trong ngày đó rồi. Bạn xem hoặc dời lịch cũ ở “Xem lịch của bạn”, hoặc nhắn Zalo cho tiệm nhé.":error.code==="phone_booking_limit"?"Số điện thoại này đang có nhiều lịch sắp tới nên chưa đặt thêm được. Bạn xem hoặc hủy bớt ở “Xem lịch của bạn”, hoặc nhắn Zalo cho tiệm nhé.":error.code==="ip_booking_limit"?"Thiết bị hoặc mạng này đã đặt nhiều lịch trong 24 giờ qua. Bạn thử lại sau hoặc nhắn Zalo cho tiệm để được hỗ trợ nhé.":error.code==="human_verification_failed"||error.code==="turnstile_unavailable"?"Chưa xác minh được bạn là người thật. Bạn thử lại giúp tụi mình nha.":error.code==="invalid_reference_photos"||error.code==="request_too_large"?"Có ảnh mẫu chưa gửi được. Bạn bỏ ảnh đó rồi thử lại, hoặc nhắn Zalo ảnh cho tiệm nhé.":"Chưa thể xác nhận lịch. Bạn kiểm tra mạng rồi thử lại giúp tụi mình nha.";
   }finally{state.pending=false;render();}
@@ -250,7 +335,7 @@ document.addEventListener("click",function(event){
   const pick=target.closest("[data-booking-pick]");if(pick){togglePick(pick.dataset.bookingPick,pick.dataset.bookingPickTitle||"");return;}
   if(target.closest("[data-booking-back]")){back();return;}
   if(target.closest("[data-booking-next]")){next();return;}
-  if(target.closest("[data-booking-reset]")){reset();render();return;}
+  if(target.closest("[data-booking-reset]")){reset();setStage("");render();return;}
   const manage=target.closest("[data-booking-manage]");if(manage){const reference=state.reference;exp().closeModal(document.querySelector("#booking-modal-v2"),false);exp().openManager(reference,manage);}
 });
 document.addEventListener("input",function(event){

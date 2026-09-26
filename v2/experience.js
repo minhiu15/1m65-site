@@ -1,4 +1,4 @@
-import "./booking-v2.js?v=20260925-12";
+import "./booking-v2.js?v=20260926-1";
 
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
@@ -58,7 +58,7 @@ function esc(value) {
   return String(value == null ? "" : value).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 }
 function focusables(root) {
-  return Array.from(root.querySelectorAll("a[href],button:not([disabled]),input:not([disabled]),textarea:not([disabled]),iframe,[tabindex]:not([tabindex='-1'])")).filter(function(node){return !node.hidden && node.getAttribute("aria-hidden") !== "true";});
+  return Array.from(root.querySelectorAll("a[href],button:not([disabled]),input:not([disabled]),textarea:not([disabled]),iframe,[tabindex]:not([tabindex='-1'])")).filter(function(node){return !node.closest("[hidden],[inert]") && node.getAttribute("aria-hidden") !== "true";});
 }
 function setOverlayOpen(open) {
   const scrollLeft = window.scrollX;

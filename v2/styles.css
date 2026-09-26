@@ -8059,3 +8059,272 @@ main,
 @media (prefers-reduced-motion: reduce) {
   .booking-photo.is-busy { animation: none; }
 }
+
+/* Booking confirmed: the form steps aside (it goes inert in booking-v2.js), a spinner shows while the
+   booking is sent, turns into a drawn tick, then the paper ticket flies in. The ticket's outline is
+   an SVG traced at the card's measured size (notches, perforations, gingham band). */
+.booking-modal-panel { transition: opacity .25s ease, transform .25s ease; }
+.modal.is-sending .booking-modal-panel,
+.modal.is-ticket .booking-modal-panel {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(14px) scale(.94);
+  pointer-events: none;
+  transition: opacity .22s ease, transform .22s ease, visibility 0s linear .22s;
+}
+.modal.is-sending .modal-backdrop { pointer-events: none; }
+
+.booking-sending {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 16px;
+  opacity: 0;
+  transform: scale(.8);
+  pointer-events: none;
+  transition: opacity .25s ease, transform .35s cubic-bezier(.2, .9, .3, 1.25);
+}
+.modal.is-sending .booking-sending { opacity: 1; transform: none; transition-delay: .12s; }
+.booking-sending__badge {
+  display: grid;
+  place-items: center;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 20px 44px -20px rgba(233, 75, 119, .6);
+  transition: background-color .3s ease, transform .4s cubic-bezier(.2, .9, .3, 1.4);
+}
+.booking-sending__badge svg { width: 84px; height: 84px; overflow: visible; }
+.booking-sending__track { fill: none; stroke: #fde1e9; stroke-width: 6; }
+.booking-sending__ring {
+  fill: none;
+  stroke: #f47ea0;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 64 150;
+  transform-origin: 40px 40px;
+  animation: booking-sending-spin .85s linear infinite;
+}
+.booking-sending__tick {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+}
+.booking-sending__label {
+  margin: 0;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: rgba(255, 252, 253, .94);
+  color: #6b4a44;
+  font: 700 14px/1.2 var(--font-signature-body);
+}
+.modal.is-confirmed .booking-sending__badge { background: #f47ea0; transform: scale(1.08); }
+.modal.is-confirmed .booking-sending__ring { stroke: rgba(255, 255, 255, .55); stroke-dasharray: 214 0; animation: none; transition: stroke-dasharray .3s ease; }
+.modal.is-confirmed .booking-sending__track { stroke: transparent; }
+.modal.is-confirmed .booking-sending__tick { stroke-dashoffset: 0; transition: stroke-dashoffset .45s .15s cubic-bezier(.4, 0, .2, 1); }
+@keyframes booking-sending-spin { to { transform: rotate(360deg); } }
+
+.booking-ticket {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  padding: 90px 24px 32px;
+  overflow: auto;
+  pointer-events: none;
+}
+.booking-ticket:empty { display: none; }
+.booking-ticket__card {
+  --ticket-tilt: -2.5deg;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 210px;
+  width: min(880px, 100%);
+  color: #4a2a26;
+  transform: rotate(var(--ticket-tilt));
+  pointer-events: auto;
+  outline: none;
+}
+.modal.is-ticket .booking-ticket__card { animation: booking-ticket-in .8s cubic-bezier(.2, .9, .3, 1.12) both; }
+@keyframes booking-ticket-in {
+  0% { opacity: 0; transform: translateY(80px) scale(.5) rotate(-14deg); }
+  55% { opacity: 1; }
+  72% { transform: translateY(-10px) scale(1.03) rotate(calc(var(--ticket-tilt) + 1.5deg)); }
+  100% { transform: rotate(var(--ticket-tilt)); }
+}
+.booking-ticket__paper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 24px 34px rgba(79, 47, 46, .26));
+}
+.booking-ticket__main {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 58px 46px 40px;
+  text-align: center;
+}
+.booking-ticket__main h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font: 700 clamp(32px, 4.2vw, 46px)/1.1 var(--font-signature-display);
+  letter-spacing: -.01em;
+  color: #4a2a26;
+}
+.booking-ticket__main h2 img { width: 38px; height: auto; }
+.booking-ticket__thanks { margin: 6px 0 0; font: 700 18px/1.4 var(--font-signature-body); color: #4a2a26; }
+.booking-ticket__note { margin: 0; font-size: 15px; line-height: 1.5; color: #6b4a44; }
+.booking-ticket__note span { color: #f06f97; }
+.booking-ticket__info {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  gap: 16px 0;
+  width: 100%;
+  margin-top: 14px;
+  padding: 16px 18px;
+  border: 1.5px dashed #f2a9bd;
+  border-radius: 22px;
+  background: rgba(253, 226, 234, .55);
+}
+.booking-ticket__field { display: flex; align-items: center; gap: 12px; padding: 0 16px; text-align: left; }
+.booking-ticket__field + .booking-ticket__field { border-left: 1.5px dashed #f2a9bd; }
+.booking-ticket__field small { display: block; font-size: 13px; color: #8a6a64; }
+.booking-ticket__field strong { display: block; margin-top: 3px; font: 700 17px/1.3 var(--font-signature-body); color: #4a2a26; white-space: nowrap; }
+.booking-ticket__icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #fde2ea;
+  color: #e45a86;
+}
+.booking-ticket__icon svg,
+.booking-ticket__actions svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.booking-ticket svg .is-filled { fill: currentColor; stroke: none; }
+.booking-ticket__field strong.booking-ticket__code {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #f9cfdc;
+  color: #c23b66;
+  font-family: var(--font-signature-display);
+  font-size: 16px;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+.booking-ticket__warning { max-width: 460px; margin: 4px 0 0; color: #c2385f; font-size: 13px; line-height: 1.45; }
+.booking-ticket__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 16px; }
+.booking-ticket__actions > button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-width: 220px; }
+.booking-ticket__actions svg { width: 20px; height: 20px; }
+.booking-ticket__actions span { font-size: 1.15em; line-height: 1; }
+.booking-ticket__stub {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 8px;
+  padding: 40px 26px 58px;
+  color: #5a3530;
+}
+.booking-ticket__crown { width: 64px; height: 44px; fill: none; stroke: #5a3530; stroke-width: 3; stroke-linejoin: round; }
+.booking-ticket__crown circle { fill: #5a3530; stroke: none; }
+.booking-ticket__stub strong { font: 700 44px/1 var(--font-signature-display); letter-spacing: -.02em; }
+.booking-ticket__stub small { font-size: 10.5px; font-weight: 800; letter-spacing: .12em; }
+.booking-ticket__barcode { width: 128px; height: 58px; margin-top: 10px; fill: #5a3530; }
+.booking-ticket__stub-heart { color: #6b3b34; font-size: 22px; line-height: 1; }
+.booking-ticket__card > img { position: absolute; z-index: 2; height: auto; pointer-events: none; }
+.booking-ticket__cat { top: -86px; left: 24%; width: 150px; }
+.booking-ticket__cat-bow { top: -84px; left: calc(24% + 92px); width: 40px; transform: rotate(16deg); }
+.booking-ticket__bow { top: -24px; left: -34px; width: 104px; transform: rotate(-20deg); }
+.booking-ticket__sparkle { width: 30px; }
+.booking-ticket__sparkle--one { top: 40%; left: 20px; }
+.booking-ticket__sparkle--two { top: -28px; left: calc(24% + 168px); width: 26px; }
+.booking-ticket__flower { bottom: 22px; left: 22px; width: 46px; }
+.booking-ticket__tape { right: -30px; bottom: -8px; width: 132px; transform: rotate(-22deg); }
+.booking-ticket__close {
+  position: absolute;
+  z-index: 4;
+  top: -20px;
+  right: -20px;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  padding: 0;
+  border: 2px solid #f4b3c5;
+  border-radius: 50%;
+  background: #fffafb;
+  color: #e45a86;
+  font: 400 32px/1 var(--font-signature-body);
+  box-shadow: 0 10px 22px -12px rgba(79, 47, 46, .45);
+  cursor: pointer;
+}
+.booking-ticket__close:hover { background: #ffeef3; }
+.booking-ticket__close:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+@media (max-width: 979px) {
+  /* Code and time only fit side by side on a near full-width ticket; below that they stack, so the
+     long booking code never squeezes the date. */
+  .booking-ticket__info { grid-template-columns: minmax(0, 1fr); justify-content: stretch; }
+  .booking-ticket__field + .booking-ticket__field { padding-top: 14px; border-top: 1.5px dashed #f2a9bd; border-left: 0; }
+}
+@media (max-width: 720px) {
+  .booking-ticket { padding: 96px 14px 24px; }
+  .booking-ticket__card { --ticket-tilt: -1.5deg; grid-template-columns: minmax(0, 1fr); width: min(460px, 100%); }
+  .booking-ticket__stub { display: none; }
+  .booking-ticket__main { gap: 6px; padding: 50px 22px 30px; }
+  .booking-ticket__main h2 { gap: 8px; font-size: clamp(26px, 7.4vw, 34px); }
+  .booking-ticket__main h2 img { width: 28px; }
+  .booking-ticket__thanks { font-size: 15.5px; }
+  .booking-ticket__note { font-size: 13.5px; }
+  .booking-ticket__info { padding: 14px 12px; }
+  .booking-ticket__field { gap: 10px; padding: 0 12px; }
+  .booking-ticket__icon { width: 44px; height: 44px; }
+  .booking-ticket__icon svg { width: 24px; height: 24px; }
+  .booking-ticket__field strong { font-size: 15px; }
+  .booking-ticket__field strong.booking-ticket__code { padding: 5px 10px; font-size: 14px; }
+  .booking-ticket__actions { flex-wrap: nowrap; gap: 10px; width: 100%; }
+  .booking-ticket__actions > button { flex: 1 1 0; min-width: 0; padding-inline: 10px; font-size: 13.5px; }
+  .booking-ticket__cat { top: -74px; left: 50%; width: 130px; margin-left: -85px; }
+  .booking-ticket__cat-bow { top: -72px; left: 50%; width: 34px; margin-left: -6px; }
+  .booking-ticket__bow { display: none; }
+  .booking-ticket__sparkle--one { display: none; }
+  .booking-ticket__sparkle--two { top: -22px; left: 50%; margin-left: 50px; width: 22px; }
+  .booking-ticket__flower { bottom: -12px; left: 16px; width: 38px; }
+  .booking-ticket__tape { right: -18px; bottom: -6px; width: 104px; }
+  .booking-ticket__close { top: -16px; right: -10px; width: 46px; height: 46px; font-size: 28px; }
+}
+@media (max-width: 480px) {
+  /* The two buttons stack full width instead of wrapping their labels onto two lines. */
+  .booking-ticket__actions { flex-direction: column; gap: 10px; }
+  .booking-ticket__actions > button { flex: none; width: 100%; font-size: 14.5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .booking-sending,
+  .booking-sending__badge,
+  .modal.is-sending .booking-modal-panel,
+  .modal.is-ticket .booking-modal-panel,
+  .modal.is-confirmed .booking-sending__tick { transition: none; }
+  .booking-sending__ring,
+  .modal.is-ticket .booking-ticket__card { animation: none; }
+}
