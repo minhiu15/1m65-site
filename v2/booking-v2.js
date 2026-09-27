@@ -122,7 +122,6 @@ function stepThree(){
 // After "Xác nhận đặt hẹn" the form steps aside for a short sequence: a spinner while the booking is
 // sent, a tick once it is confirmed, then the booking ticket flies in. Reduced motion skips the waits.
 const reduceMotion=window.matchMedia?window.matchMedia("(prefers-reduced-motion: reduce)"):{matches:false};
-let ticketObserver=null;
 function wait(ms){return new Promise(function(resolve){setTimeout(resolve,reduceMotion.matches?0:ms);});}
 function bookingModal(){return document.querySelector("#booking-modal-v2");}
 function setStage(name){
@@ -134,72 +133,56 @@ function setStage(name){
   // The hidden form leaves the focus order, so Tab stays inside the spinner or the ticket.
   const panel=modal.querySelector(".booking-modal-panel");if(panel)panel.inert=!!name;
   const label=modal.querySelector("[data-booking-sending-label]");if(label)label.textContent=name==="sending"?"Đang xác nhận lịch…":(name==="confirmed"?"Đã xác nhận!":"");
-  if(name!=="ticket"){const ticket=modal.querySelector("[data-booking-ticket]");if(ticket)ticket.innerHTML="";if(ticketObserver){ticketObserver.disconnect();ticketObserver=null;}}
+  if(name!=="ticket"){const ticket=modal.querySelector("[data-booking-ticket]");if(ticket)ticket.innerHTML="";}
 }
+// The owner's ticket art lives in assets/booking/confirmation (the decorated wide ticket, plus the portrait
+// shell and the cat, bow, hearts, flower, tape and close button that dress it on phones, and the row icons);
+// titles, booking data, the button, 1M65 and the barcode stay live.
+const TICKET_ART="assets/booking/confirmation/";
 const TICKET_ICONS={
-  calendar:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M12 17.2l-2.1-2a1.25 1.25 0 0 1 2.1-1.3 1.25 1.25 0 0 1 2.1 1.3z" class="is-filled"/></svg>',
-  clock:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+  calendar:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h2M12 14h2M16 14h.5M8 17h2M12 17h2"/></svg>',
   crown:'<svg class="booking-ticket__crown" viewBox="0 0 64 44" aria-hidden="true"><path d="M8 36L4 12l15 12L32 5l13 19 15-12-4 24z"/><path d="M9 41h46"/><circle cx="4" cy="11" r="3"/><circle cx="32" cy="4" r="3"/><circle cx="60" cy="11" r="3"/></svg>'
 };
+const TICKET_HEART="M0 6.5C-3 4-8 .8-8-2.8C-8-5.6-5.8-7.4-3.6-7.4C-2-7.4-.6-6.5 0-5.2C.6-6.5 2-7.4 3.6-7.4C5.8-7.4 8-5.6 8-2.8C8 .8 3 4 0 6.5Z";
+const TICKET_STAR="M0-7C.6-2.2 2.2-.6 7 0C2.2.6.6 2.2 0 7C-.6 2.2-2.2.6-7 0C-2.2-.6-.6-2.2 0-7Z";
+// Outline sparkles in the art's amber, two to a cluster like the reference.
+function ticketSparkles(className){return '<svg class="booking-ticket__deco '+className+'" viewBox="-9 -9 30 28" aria-hidden="true"><g fill="#fff4d6" stroke="#f0a43a" stroke-width="1.3" stroke-linejoin="round"><path d="'+TICKET_STAR+'"/><path d="'+TICKET_STAR+'" transform="translate(13 12) scale(.6)"/></g></svg>';}
+function ticketHeart(className,outline){return '<svg class="'+className+'" viewBox="-9.5 -9 19 17" aria-hidden="true"><path d="'+TICKET_HEART+'" fill="'+(outline?"none":"#f38bab")+'" stroke="#e8628d" stroke-width="'+(outline?"1.6":"1")+'" stroke-linejoin="round"/></svg>';}
 // A decorative barcode drawn from the booking code, so every ticket's bars differ.
 function barcodeSvg(code){
   let x=0,bars="";
   String(code||"").split("").forEach(function(character){const value=character.charCodeAt(0);for(let bit=0;bit<3;bit++){const width=1+((value>>bit)&1)*2;bars+='<rect x="'+x+'" width="'+width+'" height="56"/>';x+=width+1+((value>>(bit+3))&1);}});
   return '<svg class="booking-ticket__barcode" viewBox="0 0 '+Math.max(1,x)+' 56" preserveAspectRatio="none" aria-hidden="true">'+bars+'</svg>';
 }
-// Outline of the paper ticket, traced clockwise: rounded corners, small perforation bites down both outer
-// edges, and either the notches of the tear-off line (with a stub) or a notch mid-way down each side.
-function ticketPath(width,height,stub){
-  const radius=18,notch=13,bite=4.5,step=17,round=function(value){return Math.round(value*10)/10;};
-  const stops=[];for(let y=radius+14;y<=height-radius-14;y+=step){if(!stub&&Math.abs(y-height/2)<notch+bite+6)continue;stops.push({y:y,size:bite});}
-  if(!stub)stops.push({y:height/2,size:notch});
-  stops.sort(function(a,b){return a.y-b.y;});
-  let d="M"+radius+" 0";
-  if(stub)d+="H"+round(stub-notch)+"A"+notch+" "+notch+" 0 0 0 "+round(stub+notch)+" 0";
-  d+="H"+round(width-radius)+"A"+radius+" "+radius+" 0 0 1 "+round(width)+" "+radius;
-  stops.forEach(function(stop){d+="V"+round(stop.y-stop.size)+"A"+stop.size+" "+stop.size+" 0 0 0 "+round(width)+" "+round(stop.y+stop.size);});
-  d+="V"+round(height-radius)+"A"+radius+" "+radius+" 0 0 1 "+round(width-radius)+" "+round(height);
-  if(stub)d+="H"+round(stub+notch)+"A"+notch+" "+notch+" 0 0 0 "+round(stub-notch)+" "+round(height);
-  d+="H"+radius+"A"+radius+" "+radius+" 0 0 1 0 "+round(height-radius);
-  stops.slice().reverse().forEach(function(stop){d+="V"+round(stop.y+stop.size)+"A"+stop.size+" "+stop.size+" 0 0 0 0 "+round(stop.y-stop.size);});
-  return d+"V"+radius+"A"+radius+" "+radius+" 0 0 1 "+radius+" 0Z";
-}
-// Drawn at the card's measured size (and again when it resizes), so notches stay round at any width.
-function drawTicketPaper(card){
-  const paper=card&&card.querySelector(".booking-ticket__paper");if(!paper)return;
-  const width=card.offsetWidth,height=card.offsetHeight;if(!width||!height)return;
-  const stubNode=card.querySelector(".booking-ticket__stub"),stub=stubNode&&stubNode.offsetWidth?width-stubNode.offsetWidth:0;
-  const d=ticketPath(width,height,stub);
-  paper.setAttribute("viewBox","0 0 "+width+" "+height);
-  paper.innerHTML='<defs><pattern id="booking-ticket-gingham" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#fff5f7"/><rect width="6" height="12" fill="#f8cfdb" opacity=".55"/><rect width="12" height="6" fill="#f8cfdb" opacity=".55"/></pattern><linearGradient id="booking-ticket-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffaf4"/><stop offset="1" stop-color="#fdefe9"/></linearGradient><clipPath id="booking-ticket-clip"><path d="'+d+'"/></clipPath></defs><path d="'+d+'" fill="url(#booking-ticket-fill)"/><path d="'+d+'" fill="none" stroke="url(#booking-ticket-gingham)" stroke-width="22" clip-path="url(#booking-ticket-clip)"/><path d="'+d+'" fill="none" stroke="#f0a2b8" stroke-width="2"/>'+(stub?'<line x1="'+stub+'" y1="22" x2="'+stub+'" y2="'+(height-22)+'" stroke="#f0a2b8" stroke-width="2" stroke-dasharray="7 6"/>':'');
-}
 function ticketHtml(){
-  const when=state.slot?dateLabel(state.date)+" · "+slotLabel(state.slot):"";
-  const decor=function(className,src){return '<img class="'+className+'" src="'+src+'" alt="" aria-hidden="true" decoding="async">';};
-  return '<div class="booking-ticket__card" tabindex="-1" aria-labelledby="booking-ticket-title"><svg class="booking-ticket__paper" aria-hidden="true"></svg>'
-    +decor("booking-ticket__bow","assets/home/relayout/decor_bow_blush_refined.webp")
-    +decor("booking-ticket__cat","assets/services/nail-care/cats/header_cat_peeking.webp")
-    +decor("booking-ticket__cat-bow","assets/home/relayout/decor_bow_blush_refined.webp")
-    +decor("booking-ticket__sparkle booking-ticket__sparkle--one","assets/home/relayout/decor_sparkle_pastel_optical.webp")
-    +decor("booking-ticket__sparkle booking-ticket__sparkle--two","assets/home/relayout/decor_sparkle_pastel_optical.webp")
-    +decor("booking-ticket__flower","assets/home/relayout/decor_flower_pink_optical.webp")
-    +decor("booking-ticket__tape","assets/home/decor/pink_gingham_tape.webp")
-    +'<button type="button" class="booking-ticket__close" data-close-modal aria-label="Đóng">×</button>'
-    +'<div class="booking-ticket__main"><h2 id="booking-ticket-title">Đặt lịch thành công!<img src="assets/booking/booking_heart_outline_pink.webp" alt="" aria-hidden="true" decoding="async"></h2>'
-    +'<p class="booking-ticket__thanks">Cảm ơn bạn đã đặt lịch tại 1M65!</p>'
-    +'<p class="booking-ticket__note">Lịch đã được xác nhận, hẹn gặp bạn ở tiệm nhé <span aria-hidden="true">♡</span></p>'
-    +'<div class="booking-ticket__info"><div class="booking-ticket__field"><span class="booking-ticket__icon">'+TICKET_ICONS.calendar+'</span><span><small>Mã lịch hẹn</small><strong class="booking-ticket__code">'+esc(state.reference)+'</strong></span></div>'
-    +(when?'<div class="booking-ticket__field"><span class="booking-ticket__icon">'+TICKET_ICONS.clock+'</span><span><small>Thời gian</small><strong>'+esc(when)+'</strong></span></div>':'')+'</div>'
-    +(state.photoWarning?'<p class="booking-ticket__warning" role="status">'+esc(state.photoWarning)+'</p>':'')
-    +'<div class="booking-ticket__actions"><button class="button-secondary" type="button" data-booking-manage>'+TICKET_ICONS.calendar+'Xem lại lịch của bạn</button><button class="button-primary" type="button" data-booking-reset>'+TICKET_ICONS.calendar+'Đặt lịch tiếp<span aria-hidden="true">→</span></button></div></div>'
-    +'<div class="booking-ticket__stub" aria-hidden="true">'+TICKET_ICONS.crown+'<strong>1M65</strong><small>NAIL · LASH · SHAMPOO</small>'+barcodeSvg(state.reference)+'<span class="booking-ticket__stub-heart">♥</span></div></div>';
+  const art=function(className,file){return '<img class="booking-ticket__deco '+className+'" src="'+TICKET_ART+file+'" alt="" aria-hidden="true" decoding="async">';};
+  const when=state.slot?slotLabel(state.slot)+" · "+state.date.split("-").reverse().join("/"):"";
+  const names=selectedServices().map(function(service){return service.name;}).join(" + "),minutes=totals().minutes;
+  const row=function(icon,label,value){return '<div class="booking-ticket__row"><img class="booking-ticket__row-icon" src="'+TICKET_ART+icon+'" alt="" aria-hidden="true" decoding="async"><dt>'+label+'</dt><dd>'+value+'</dd></div>';};
+  return '<div class="booking-ticket__card" tabindex="-1" aria-labelledby="booking-ticket-title">'
+    +art("booking-ticket__cat","cat-peeking.webp")+art("booking-ticket__bow","pink-bow.webp")+art("booking-ticket__hearts","hearts-sparkles.webp")
+    +ticketSparkles("booking-ticket__sparkles booking-ticket__sparkles--title")
+    +art("booking-ticket__flower","single-flower.webp")+art("booking-ticket__tape","gingham-tape.webp")
+    +'<button type="button" class="booking-ticket__close" data-close-modal aria-label="Đóng"><img src="'+TICKET_ART+'close-button.webp" alt="" decoding="async"></button>'
+    +'<div class="booking-ticket__main"><div class="booking-ticket__heading"><p class="booking-ticket__eyebrow">Đã đặt hẹn</p>'
+    +'<h2 id="booking-ticket-title">Đặt lịch thành công!'+ticketHeart("booking-ticket__title-heart",true)+'</h2></div>'
+    +'<p class="booking-ticket__thanks">Cảm ơn bạn đã đặt lịch tại 1M65.</p>'
+    +'<p class="booking-ticket__note">Lịch đã được xác nhận, hẹn gặp bạn ở tiệm <span class="booking-ticket__nowrap">nhé '+ticketHeart("booking-ticket__note-heart",false)+'</span></p>'
+    +'<dl class="booking-ticket__info">'
+    +row("calendar-icon.webp","Mã lịch hẹn",'<span class="booking-ticket__code">'+esc(state.reference)+'</span>')
+    +(when?row("clock-icon.webp","Lịch hẹn",esc(when)):"")
+    +(names?row("service-icon.webp","Dịch vụ",'<span class="booking-ticket__service">'+esc(names)+'</span><span class="booking-ticket__duration">~'+minutes+' phút</span>'):"")
+    +'</dl>'
+    +'<button class="booking-ticket__cta" type="button" data-booking-manage>'+TICKET_ICONS.calendar+'Xem lịch của bạn</button></div>'
+    +'<div class="booking-ticket__stub" aria-hidden="true"><div class="booking-ticket__brand">'+TICKET_ICONS.crown+'<strong>1M65'+ticketHeart("booking-ticket__brand-heart",false)+'</strong><small>NAIL · LASH · SPA</small></div>'
+    +'<div class="booking-ticket__scan">'+barcodeSvg(state.reference)+'<span class="booking-ticket__scan-heart">♥</span></div></div></div>';
 }
 function showTicket(){
   const modal=bookingModal(),holder=modal&&modal.querySelector("[data-booking-ticket]");if(!holder)return;
   holder.innerHTML=ticketHtml();setStage("ticket");
-  const card=holder.querySelector(".booking-ticket__card");drawTicketPaper(card);
-  if(window.ResizeObserver){ticketObserver=new ResizeObserver(function(){drawTicketPaper(card);});ticketObserver.observe(card);}
-  card.focus({preventScroll:true});
+  holder.querySelector(".booking-ticket__card").focus({preventScroll:true});
+  // The ticket art has no room for it, so a photo that failed to upload is flagged in a toast instead.
+  if(state.photoWarning)exp().toast(state.photoWarning);
 }
 function render(){
   const body=document.querySelector("[data-booking-body]"),eyebrow=document.querySelector("[data-booking-eyebrow]"),title=document.querySelector("[data-booking-title]"),back=document.querySelector("[data-booking-back]"),next=document.querySelector("[data-booking-next]"),summary=document.querySelector("[data-booking-summary]");
@@ -353,4 +336,19 @@ document.addEventListener("keydown",function(event){
 },true);
 reset();
 window.__v2Booking={open:open};
+// Temporary, local only: a floating "▶ Ticket" button replays just the ticket's entrance with sample
+// data, so its motion can be tuned without booking anything. Remove once the motion is final; it never
+// renders on the live site (localhost and private network addresses only, for testing from a phone).
+if(typeof location!=="undefined"&&document.body&&/^(localhost|127\.0\.0\.1|\[::1\]|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+)$/.test(location.hostname)){
+  const replay=document.createElement("button");
+  replay.type="button";replay.textContent="▶ Ticket";replay.setAttribute("data-booking-ticket-replay","");
+  replay.style.cssText="position:fixed;left:12px;bottom:12px;z-index:400;padding:10px 16px;border:2px dashed #e45a86;border-radius:999px;background:#fff;color:#c23b66;font:700 14px/1 sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.18)";
+  replay.addEventListener("click",function(){
+    const modal=bookingModal();if(!modal)return;
+    reset();state.status="done";state.selected=["ve"];state.reference="1M65-260927-CD102D";state.date=offsetDate(1);state.slot=new Date(state.date+"T10:00:00+07:00").toISOString();
+    if(modal.hidden)exp().openModal(modal,replay);
+    setStage("");showTicket();
+  });
+  document.body.append(replay);
+}
 

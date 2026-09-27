@@ -8132,192 +8132,238 @@ main,
 .modal.is-confirmed .booking-sending__tick { stroke-dashoffset: 0; transition: stroke-dashoffset .45s .15s cubic-bezier(.4, 0, .2, 1); }
 @keyframes booking-sending-spin { to { transform: rotate(360deg); } }
 
+/* The ticket is sized by the screen's height as well as its width, so the cat, the ticket and a little
+   breathing room always fit on one screen (100dvh follows a phone's visible area under its browser bars).
+   The landscape ticket plus the cat and its -6deg tilt is about 0.66 of its width tall. */
 .booking-ticket {
+  --ticket-w: min(900px, calc(100vw - 72px), calc((100vh - 36px) * 1.35));
   position: absolute;
   inset: 0;
   z-index: 3;
   display: grid;
   place-items: center;
-  padding: 90px 24px 32px;
-  overflow: auto;
+  padding: calc(var(--ticket-w) * .15) 36px 36px;
+  overflow: hidden auto;
   pointer-events: none;
 }
+@supports (height: 100dvh) {
+  .booking-ticket { --ticket-w: min(900px, calc(100vw - 72px), calc((100dvh - 36px) * 1.35)); }
+}
 .booking-ticket:empty { display: none; }
+/* Everything on the ticket is sized in cqw, so the whole composition scales with it. Wide screens: the owner's
+   decorated ticket (cat, bow, sparkles, bouquet and close mark drawn in) on a ::before that reaches above the
+   card for the cat; the card box is the paper, perforation at 73.2%. Phones and tablets: the portrait paper
+   shell, dressed with the separate decorations. */
 .booking-ticket__card {
-  --ticket-tilt: -2.5deg;
+  --ticket-tilt: -6deg;
+  container-type: inline-size;
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 210px;
-  width: min(880px, 100%);
+  grid-template-columns: 73.2% 26.8%;
+  width: var(--ticket-w);
+  aspect-ratio: 1676 / 790;
+  background: center / 100% 100% no-repeat;
+  filter: drop-shadow(0 22px 30px rgba(79, 47, 46, .26));
   color: #4a2a26;
   transform: rotate(var(--ticket-tilt));
   pointer-events: auto;
   outline: none;
 }
+.booking-ticket__card::before {
+  content: "";
+  position: absolute;
+  inset: -10.26cqw 0 -.72cqw;
+  z-index: -1;
+  background: url("assets/booking/confirmation/ticket-decorated-desktop.webp") center / 100% 100% no-repeat;
+  pointer-events: none;
+}
 .modal.is-ticket .booking-ticket__card { animation: booking-ticket-in .8s cubic-bezier(.2, .9, .3, 1.12) both; }
 @keyframes booking-ticket-in {
-  0% { opacity: 0; transform: translateY(80px) scale(.5) rotate(-14deg); }
+  0% { opacity: 0; transform: translateY(80px) scale(.5) rotate(calc(var(--ticket-tilt) - 10deg)); }
   55% { opacity: 1; }
   72% { transform: translateY(-10px) scale(1.03) rotate(calc(var(--ticket-tilt) + 1.5deg)); }
   100% { transform: rotate(var(--ticket-tilt)); }
 }
-.booking-ticket__paper {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  filter: drop-shadow(0 24px 34px rgba(79, 47, 46, .26));
-}
 .booking-ticket__main {
   position: relative;
   z-index: 1;
-  display: grid;
-  justify-items: center;
-  gap: 8px;
-  padding: 58px 46px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 4.4cqw 2.2cqw 4.8cqw 6.4cqw;
   text-align: center;
+}
+.booking-ticket__heading { display: grid; justify-items: start; }
+.booking-ticket__eyebrow {
+  margin: 0 0 .2cqw;
+  color: #e0527f;
+  font: 800 max(10px, 1.45cqw)/1.2 var(--font-signature-body);
+  letter-spacing: .1em;
+  text-transform: uppercase;
 }
 .booking-ticket__main h2 {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: .8cqw;
   margin: 0;
-  font: 700 clamp(32px, 4.2vw, 46px)/1.1 var(--font-signature-display);
+  font: 700 5.3cqw/1.05 var(--font-signature-display);
   letter-spacing: -.01em;
+  white-space: nowrap;
   color: #4a2a26;
 }
-.booking-ticket__main h2 img { width: 38px; height: auto; }
-.booking-ticket__thanks { margin: 6px 0 0; font: 700 18px/1.4 var(--font-signature-body); color: #4a2a26; }
-.booking-ticket__note { margin: 0; font-size: 15px; line-height: 1.5; color: #6b4a44; }
-.booking-ticket__note span { color: #f06f97; }
+.booking-ticket__title-heart { flex: none; width: 3.8cqw; height: 3.4cqw; transform: rotate(10deg) translateY(-1.2cqw); }
+.booking-ticket__thanks { margin: .7cqw 0 0; font: 700 max(12px, 2cqw)/1.35 var(--font-signature-body); color: #354a63; }
+.booking-ticket__note { margin: .2cqw 0 0; font: 600 max(11px, 1.65cqw)/1.4 var(--font-signature-body); color: #4b566a; }
+.booking-ticket__note-heart { width: 1.8cqw; height: 1.6cqw; vertical-align: -.1em; }
+.booking-ticket__nowrap { white-space: nowrap; }
 .booking-ticket__info {
   display: grid;
-  grid-template-columns: auto auto;
-  justify-content: center;
-  gap: 16px 0;
+  grid-template-columns: 1.35fr 1fr 1.1fr;
   width: 100%;
-  margin-top: 14px;
-  padding: 16px 18px;
-  border: 1.5px dashed #f2a9bd;
-  border-radius: 22px;
-  background: rgba(253, 226, 234, .55);
+  margin: 1.7cqw 0 0;
+  padding: 1.2cqw .8cqw;
+  border: 1.5px dashed #f0a3b8;
+  border-radius: 2.6cqw;
+  background: rgba(252, 222, 232, .55);
 }
-.booking-ticket__field { display: flex; align-items: center; gap: 12px; padding: 0 16px; text-align: left; }
-.booking-ticket__field + .booking-ticket__field { border-left: 1.5px dashed #f2a9bd; }
-.booking-ticket__field small { display: block; font-size: 13px; color: #8a6a64; }
-.booking-ticket__field strong { display: block; margin-top: 3px; font: 700 17px/1.3 var(--font-signature-body); color: #4a2a26; white-space: nowrap; }
-.booking-ticket__icon {
+.booking-ticket__row {
   display: grid;
-  flex: none;
-  place-items: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #fde2ea;
-  color: #e45a86;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: .9cqw;
+  row-gap: .4cqw;
+  min-width: 0;
+  padding: 0 1cqw;
+  text-align: left;
 }
-.booking-ticket__icon svg,
-.booking-ticket__actions svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.booking-ticket svg .is-filled { fill: currentColor; stroke: none; }
-.booking-ticket__field strong.booking-ticket__code {
+.booking-ticket__row + .booking-ticket__row { border-left: 1.5px dashed #f0a3b8; }
+.booking-ticket__row-icon { width: 3.4cqw; height: auto; }
+.booking-ticket__row dt { font: 700 max(9px, 1.2cqw)/1.2 var(--font-signature-body); letter-spacing: .06em; text-transform: uppercase; color: #6b4f52; }
+.booking-ticket__row dd { grid-column: 1 / -1; margin: 0; font: 700 max(11px, 1.6cqw)/1.3 var(--font-signature-body); color: #4a2a26; }
+.booking-ticket__code {
   display: inline-block;
-  padding: 6px 14px;
+  padding: .45cqw 1.1cqw;
   border-radius: 999px;
-  background: #f9cfdc;
-  color: #c23b66;
+  background: #f9c9d8;
+  color: #c2336a;
   font-family: var(--font-signature-display);
-  font-size: 16px;
-  letter-spacing: .02em;
   white-space: nowrap;
 }
-.booking-ticket__warning { max-width: 460px; margin: 4px 0 0; color: #c2385f; font-size: 13px; line-height: 1.45; }
-.booking-ticket__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 16px; }
-.booking-ticket__actions > button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-width: 220px; }
-.booking-ticket__actions svg { width: 20px; height: 20px; }
-.booking-ticket__actions span { font-size: 1.15em; line-height: 1; }
+.booking-ticket__service { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.booking-ticket__duration { display: block; font-weight: 600; color: #6b4f52; }
+.booking-ticket__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4cqw;
+  min-width: 36cqw;
+  min-height: 5.6cqw;
+  margin-top: 2cqw;
+  padding: 0 4cqw;
+  border: 1.5px solid #cf3d6e;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ef6d97 0%, #dd4a7c 100%);
+  color: #fff;
+  font: 700 max(13px, 2.1cqw)/1 var(--font-signature-body);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .28), 0 1.2cqw 2.4cqw -1.4cqw rgba(200, 55, 100, .8);
+  cursor: pointer;
+  transition: transform .15s ease, filter .15s ease;
+}
+.booking-ticket__cta svg { width: 2.8cqw; height: 2.8cqw; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.booking-ticket__cta:hover { transform: translateY(-1px); filter: brightness(1.04); }
+.booking-ticket__cta:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
 .booking-ticket__stub {
   position: relative;
   z-index: 1;
   display: grid;
   align-content: center;
   justify-items: center;
-  gap: 8px;
-  padding: 40px 26px 58px;
-  color: #5a3530;
+  gap: 1.4cqw;
+  padding: 5cqw 3.2cqw 5cqw 1.6cqw;
+  color: #4a2a26;
 }
-.booking-ticket__crown { width: 64px; height: 44px; fill: none; stroke: #5a3530; stroke-width: 3; stroke-linejoin: round; }
-.booking-ticket__crown circle { fill: #5a3530; stroke: none; }
-.booking-ticket__stub strong { font: 700 44px/1 var(--font-signature-display); letter-spacing: -.02em; }
-.booking-ticket__stub small { font-size: 10.5px; font-weight: 800; letter-spacing: .12em; }
-.booking-ticket__barcode { width: 128px; height: 58px; margin-top: 10px; fill: #5a3530; }
-.booking-ticket__stub-heart { color: #6b3b34; font-size: 22px; line-height: 1; }
-.booking-ticket__card > img { position: absolute; z-index: 2; height: auto; pointer-events: none; }
-.booking-ticket__cat { top: -86px; left: 24%; width: 150px; }
-.booking-ticket__cat-bow { top: -84px; left: calc(24% + 92px); width: 40px; transform: rotate(16deg); }
-.booking-ticket__bow { top: -24px; left: -34px; width: 104px; transform: rotate(-20deg); }
-.booking-ticket__sparkle { width: 30px; }
-.booking-ticket__sparkle--one { top: 40%; left: 20px; }
-.booking-ticket__sparkle--two { top: -28px; left: calc(24% + 168px); width: 26px; }
-.booking-ticket__flower { bottom: 22px; left: 22px; width: 46px; }
-.booking-ticket__tape { right: -30px; bottom: -8px; width: 132px; transform: rotate(-22deg); }
+.booking-ticket__brand { display: grid; justify-items: center; gap: .5cqw; }
+.booking-ticket__crown { width: 7cqw; height: auto; fill: none; stroke: #4a2a26; stroke-width: 3; stroke-linejoin: round; }
+.booking-ticket__crown circle { fill: #4a2a26; stroke: none; }
+.booking-ticket__brand strong { position: relative; font: 700 6.2cqw/1 var(--font-signature-display); letter-spacing: -.02em; }
+.booking-ticket__brand-heart { position: absolute; top: -.8cqw; right: -2.4cqw; width: 2cqw; transform: rotate(14deg); }
+.booking-ticket__brand small { font: 800 max(9px, 1.3cqw)/1 var(--font-signature-body); letter-spacing: .12em; }
+.booking-ticket__scan { display: grid; justify-items: center; gap: 1cqw; width: 100%; padding-top: 1.6cqw; border-top: 1.5px dashed #f0a3b8; }
+.booking-ticket__barcode { width: 15cqw; height: 7cqw; fill: #4a2a26; }
+.booking-ticket__scan-heart { color: #5a2f2c; font-size: 2.6cqw; line-height: 1; }
+.booking-ticket__card > .booking-ticket__deco { position: absolute; z-index: 2; display: none; height: auto; pointer-events: none; }
+/* Wide screens: the close mark is drawn into the ticket art, so the button is a clear hit area over it. */
 .booking-ticket__close {
   position: absolute;
   z-index: 4;
-  top: -20px;
-  right: -20px;
-  display: grid;
-  place-items: center;
-  width: 54px;
-  height: 54px;
+  top: -2.8cqw;
+  right: .1cqw;
+  width: 6.8cqw;
   padding: 0;
-  border: 2px solid #f4b3c5;
+  border: 0;
   border-radius: 50%;
-  background: #fffafb;
-  color: #e45a86;
-  font: 400 32px/1 var(--font-signature-body);
-  box-shadow: 0 10px 22px -12px rgba(79, 47, 46, .45);
+  background: none;
   cursor: pointer;
 }
-.booking-ticket__close:hover { background: #ffeef3; }
-.booking-ticket__close:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
-@media (max-width: 979px) {
-  /* Code and time only fit side by side on a near full-width ticket; below that they stack, so the
-     long booking code never squeezes the date. */
-  .booking-ticket__info { grid-template-columns: minmax(0, 1fr); justify-content: stretch; }
-  .booking-ticket__field + .booking-ticket__field { padding-top: 14px; border-top: 1.5px dashed #f2a9bd; border-left: 0; }
-}
-@media (max-width: 720px) {
-  .booking-ticket { padding: 96px 14px 24px; }
-  .booking-ticket__card { --ticket-tilt: -1.5deg; grid-template-columns: minmax(0, 1fr); width: min(460px, 100%); }
-  .booking-ticket__stub { display: none; }
-  .booking-ticket__main { gap: 6px; padding: 50px 22px 30px; }
-  .booking-ticket__main h2 { gap: 8px; font-size: clamp(26px, 7.4vw, 34px); }
-  .booking-ticket__main h2 img { width: 28px; }
-  .booking-ticket__thanks { font-size: 15.5px; }
-  .booking-ticket__note { font-size: 13.5px; }
-  .booking-ticket__info { padding: 14px 12px; }
-  .booking-ticket__field { gap: 10px; padding: 0 12px; }
-  .booking-ticket__icon { width: 44px; height: 44px; }
-  .booking-ticket__icon svg { width: 24px; height: 24px; }
-  .booking-ticket__field strong { font-size: 15px; }
-  .booking-ticket__field strong.booking-ticket__code { padding: 5px 10px; font-size: 14px; }
-  .booking-ticket__actions { flex-wrap: nowrap; gap: 10px; width: 100%; }
-  .booking-ticket__actions > button { flex: 1 1 0; min-width: 0; padding-inline: 10px; font-size: 13.5px; }
-  .booking-ticket__cat { top: -74px; left: 50%; width: 130px; margin-left: -85px; }
-  .booking-ticket__cat-bow { top: -72px; left: 50%; width: 34px; margin-left: -6px; }
-  .booking-ticket__bow { display: none; }
-  .booking-ticket__sparkle--one { display: none; }
-  .booking-ticket__sparkle--two { top: -22px; left: 50%; margin-left: 50px; width: 22px; }
-  .booking-ticket__flower { bottom: -12px; left: 16px; width: 38px; }
-  .booking-ticket__tape { right: -18px; bottom: -6px; width: 104px; }
-  .booking-ticket__close { top: -16px; right: -10px; width: 46px; height: 46px; font-size: 28px; }
-}
-@media (max-width: 480px) {
-  /* The two buttons stack full width instead of wrapping their labels onto two lines. */
-  .booking-ticket__actions { flex-direction: column; gap: 10px; }
-  .booking-ticket__actions > button { flex: none; width: 100%; font-size: 14.5px; }
+.booking-ticket__close img { display: block; width: 100%; height: auto; opacity: 0; }
+.booking-ticket__close:hover { background: rgba(255, 255, 255, .25); }
+.booking-ticket__close:focus-visible { outline: 3px solid var(--pink); outline-offset: 2px; }
+@media (max-width: 899px) and (orientation: portrait) {
+  /* Portrait ticket: the cat above it (.23 of its width) plus the ticket (1.887) and its tilt take about 80%
+     of the visible height, with room around it. Landscape phones keep the landscape ticket, capped above. */
+  .booking-ticket {
+    --ticket-w: min(320px, calc(100vw - 72px), calc((100vh - 24px) * .4));
+    padding: calc(var(--ticket-w) * .23) 18px 24px;
+  }
+  @supports (height: 100dvh) {
+    .booking-ticket { --ticket-w: min(320px, calc(100vw - 72px), calc((100dvh - 24px) * .4)); }
+  }
+  .booking-ticket__card {
+    --ticket-tilt: -2.5deg;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 80.6% 19.4%;
+    width: var(--ticket-w);
+    aspect-ratio: 763 / 1440;
+    background-image: url("assets/booking/confirmation/ticket-shell-mobile.webp");
+  }
+  .booking-ticket__card::before { content: none; }
+  .booking-ticket__main { justify-content: center; padding: 9cqw 6.5cqw 4cqw; }
+  .booking-ticket__heading { justify-items: center; }
+  .booking-ticket__eyebrow { margin-bottom: 1.2cqw; font-size: max(10px, 3.3cqw); }
+  .booking-ticket__main h2 { gap: 1.5cqw; font-size: 8.4cqw; }
+  .booking-ticket__title-heart { width: 7cqw; height: 6.3cqw; transform: rotate(10deg) translateY(-2.2cqw); }
+  .booking-ticket__thanks { margin-top: 3.2cqw; font-size: max(12px, 4.4cqw); }
+  .booking-ticket__note { margin-top: .8cqw; font-size: max(10.5px, 3.6cqw); text-wrap: balance; }
+  .booking-ticket__note-heart { width: 3.6cqw; height: 3.2cqw; }
+  .booking-ticket__info { grid-template-columns: minmax(0, 1fr); margin-top: 6.5cqw; padding: .4cqw 3.4cqw; border-radius: 5cqw; }
+  .booking-ticket__row { grid-template-columns: auto minmax(0, 1fr); column-gap: 4cqw; row-gap: .8cqw; padding: 3.2cqw .6cqw; }
+  .booking-ticket__row + .booking-ticket__row { border-top: 1.5px dashed #f0a3b8; border-left: 0; }
+  .booking-ticket__row-icon { grid-row: 1 / 3; width: 9cqw; }
+  .booking-ticket__row dt { font-size: max(9px, 3.2cqw); }
+  .booking-ticket__row dd { grid-column: 2; font-size: max(11px, 4.4cqw); }
+  .booking-ticket__cta { width: 100%; min-width: 0; min-height: 13.5cqw; margin-top: 6.5cqw; font-size: max(13px, 4.8cqw); gap: 3cqw; }
+  .booking-ticket__cta svg { width: 7cqw; height: 7cqw; }
+  .booking-ticket__stub { grid-template-columns: 1fr 1fr; align-items: center; gap: 0; padding: 2cqw 7cqw 9cqw; }
+  .booking-ticket__brand { gap: .6cqw; }
+  .booking-ticket__crown { width: 11cqw; }
+  .booking-ticket__brand strong { font-size: 11cqw; }
+  .booking-ticket__brand-heart { top: -1.4cqw; right: -4.4cqw; width: 4cqw; }
+  .booking-ticket__brand small { font-size: max(8px, 2.8cqw); }
+  .booking-ticket__scan { align-self: stretch; align-content: start; padding: 3.5cqw 0 0 5cqw; border-top: 0; border-left: 1.5px dashed #f0a3b8; }
+  .booking-ticket__barcode { width: 30cqw; height: 12cqw; }
+  .booking-ticket__scan-heart { display: none; }
+  .booking-ticket__card > .booking-ticket__deco { display: block; }
+  .booking-ticket__cat { top: -21cqw; left: 11%; width: 42cqw; }
+  .booking-ticket__bow { top: -4cqw; left: -8cqw; width: 22cqw; transform: rotate(-16deg); }
+  .booking-ticket__hearts { top: -18cqw; left: 53%; width: 15cqw; }
+  .booking-ticket__sparkles--title { top: 10.5%; left: 3cqw; width: 8cqw; }
+  .booking-ticket__flower { right: 30cqw; bottom: 9.5cqw; width: 8cqw; transform: rotate(-8deg); }
+  .booking-ticket__tape { right: 7.5cqw; bottom: 9cqw; width: 20cqw; transform: rotate(-6deg); }
+  .booking-ticket__close { top: -5cqw; right: -4cqw; width: 14cqw; }
+  .booking-ticket__close img { opacity: 1; }
+  .booking-ticket__close:hover { background: none; filter: brightness(1.03) saturate(1.1); }
 }
 @media (prefers-reduced-motion: reduce) {
   .booking-sending,
