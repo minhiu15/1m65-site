@@ -157,22 +157,20 @@ function barcodeSvg(code){
 function ticketHtml(){
   const art=function(className,file){return '<img class="booking-ticket__deco '+className+'" src="'+TICKET_ART+file+'" alt="" aria-hidden="true" decoding="async">';};
   const when=state.slot?slotLabel(state.slot)+" · "+state.date.split("-").reverse().join("/"):"";
-  const names=selectedServices().map(function(service){return service.name;}).join(" + "),minutes=totals().minutes;
   const row=function(icon,label,value){return '<div class="booking-ticket__row"><img class="booking-ticket__row-icon" src="'+TICKET_ART+icon+'" alt="" aria-hidden="true" decoding="async"><dt>'+label+'</dt><dd>'+value+'</dd></div>';};
   return '<div class="booking-ticket__card" tabindex="-1" aria-labelledby="booking-ticket-title">'
     +art("booking-ticket__cat","cat-peeking.webp")+art("booking-ticket__bow","pink-bow.webp")+'<span class="booking-ticket__deco booking-ticket__hearts" aria-hidden="true">'+["star","heart-big","heart-small"].map(function(piece){return '<img class="booking-ticket__heart-piece booking-ticket__heart-piece--'+piece+'" src="'+TICKET_ART+'ticket-'+piece+'.webp" alt="" decoding="async">';}).join("")+'</span>'
     +ticketSparkles("booking-ticket__sparkles booking-ticket__sparkles--title")
     +'<button type="button" class="booking-ticket__close" data-close-modal aria-label="Đóng"><img src="'+TICKET_ART+'close-button.webp" alt="" decoding="async"></button>'
     +'<div class="booking-ticket__main"><div class="booking-ticket__heading"><p class="booking-ticket__eyebrow">Đã đặt hẹn</p>'
-    +'<h2 id="booking-ticket-title">Đặt lịch thành công!'+'</h2></div>'
+    +'<h2 id="booking-ticket-title">Đặt lịch thành công!</h2></div>'
     +'<p class="booking-ticket__thanks">Cảm ơn bạn đã đặt lịch tại 1M65.</p>'
-    +'<p class="booking-ticket__note">Lịch đã được xác nhận, hẹn gặp bạn ở tiệm <span class="booking-ticket__nowrap">nhé '+ticketHeart("booking-ticket__note-heart")+'</span></p>'
+    +'<p class="booking-ticket__note"><span class="booking-ticket__nowrap">Nhu Nhi đã giữ chỗ cho bạn rồi,</span> <span class="booking-ticket__nowrap">hẹn gặp bạn ở tiệm nhé '+ticketHeart("booking-ticket__note-heart")+'</span></p>'
     +'<dl class="booking-ticket__info">'
     +row("calendar-icon.webp","Mã lịch hẹn",'<span class="booking-ticket__code">'+esc(state.reference)+'</span>')
     +(when?row("clock-icon.webp","Lịch hẹn",esc(when)):"")
-    +(names?row("service-icon.webp","Dịch vụ",'<span class="booking-ticket__service">'+esc(names)+'</span><span class="booking-ticket__duration">~'+minutes+' phút</span>'):"")
     +'</dl>'
-    +'<button class="booking-ticket__cta" type="button" data-booking-manage>'+TICKET_ICONS.calendar+'Xem lịch của bạn</button></div>'
+    +'<button class="booking-ticket__cta button-primary" type="button" data-booking-manage>'+TICKET_ICONS.calendar+'Xem lịch của bạn</button></div>'
     +'<div class="booking-ticket__stub" aria-hidden="true"><div class="booking-ticket__brand">'+TICKET_ICONS.crown+'<strong>1M65'+ticketHeart("booking-ticket__brand-heart")+'</strong><small>NAIL · LASH · SPA</small></div>'
     +'<div class="booking-ticket__scan">'+barcodeSvg(state.reference)+'</div></div></div>';
 }
@@ -206,7 +204,8 @@ async function availability(){
   }catch(_){if(current!==requestId)return;state.slots=[];state.blocked=[];state.day=null;state.error="Chưa tải được lịch trống. Bạn thử lại giúp tụi mình nha.";}
   finally{if(current===requestId){state.loading=false;render();}}
 }
-function open(options,trigger){reset(options);setStage("");render();exp().openModal(document.querySelector("#booking-modal-v2"),trigger);}
+// The ticket's handwriting face is fetched while the form is filled in, so the ticket never flashes a fallback.
+function open(options,trigger){reset(options);setStage("");render();exp().openModal(document.querySelector("#booking-modal-v2"),trigger);if(document.fonts)document.fonts.load('700 1em "Baloo 2"',"Đặt lịch thành công").catch(function(){});}
 function toggle(id){if(state.selected.includes(id))state.selected=state.selected.filter(function(item){return item!==id;});else if(state.selected.length>=8)return exp().toast("Mỗi lịch chọn tối đa 8 dịch vụ nha");else state.selected=state.selected.concat(id);state.error="";render();}
 function back(){
   state.calendarOpen=false;

@@ -113,7 +113,8 @@ body.is-embedded{background:#fcf3ee}
   background-repeat:no-repeat!important;
   box-shadow:none!important;
 }
-@media(max-width:800px){#lookup-button{justify-self:center}}
+/* One fixed size everywhere, so the paper shell is never stretched: narrow screens centre it under the fields. */
+@media(max-width:800px){#lookup-form #lookup-button{flex:0 0 190px;width:190px;margin:3px auto 0}}
 /* Keep the white fill solid while a rose shadow draws the outline outside it. */
 .button.primary{
   --pink-button-text-outline:rgba(183,68,101,.78);

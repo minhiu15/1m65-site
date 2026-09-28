@@ -1,6 +1,9 @@
 @import url("scrollbars.css?v=20260918-1");
 @font-face{font-family:Nunito;src:url(../assets/fonts/Nunito-Variable.ttf) format("truetype");font-style:normal;font-weight:200 1000;font-display:swap}
-@font-face{font-family:Quicksand;src:url(../assets/fonts/Quicksand-Variable.ttf) format("truetype");font-style:normal;font-weight:300 700;font-display:swap}
+@font-face{font-family:Quicksand;src:url(../assets/fonts/Quicksand-Variable.ttf) format("truetype");font-style:normal;font-weight:300 700;font-display:swap}
+@font-face{font-family:"Baloo 2";src:url(../assets/fonts/Baloo2-vietnamese.woff2) format("woff2");font-style:normal;font-weight:400 800;font-display:swap;unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:"Baloo 2";src:url(../assets/fonts/Baloo2-latin-ext.woff2) format("woff2");font-style:normal;font-weight:400 800;font-display:swap;unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:"Baloo 2";src:url(../assets/fonts/Baloo2-latin.woff2) format("woff2");font-style:normal;font-weight:400 800;font-display:swap;unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 :root{--paper:#fcf3ee;--paper-2:#fff9f7;--white:#fff;--cocoa:#4f382e;--ink:#5d463d;--muted:#8b746b;--pink:#e85e7c;--pink-strong:#d9476d;--pink-soft:#f8d8df;--lavender:#b493dd;--lavender-soft:#f1e8fa;--peach:#efa87f;--line:#f0d4d1;--shadow:0 24px 70px -44px rgba(93,56,65,.42);--radius-lg:34px;--radius-md:24px;--content:1440px;--header:86px}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:var(--header);background:var(--paper)}
@@ -7544,8 +7547,8 @@ main,
   .signature-layout .service-card--featured[data-card-variant="signature"] .service-card-copy { padding-top: 0; }
   .signature-layout .service-card--featured[data-card-variant="signature"] h3 { width: fit-content; }
   .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge {
-    top: -26px;
-    right: -4px;
+    top: -31px;                 /* out toward the card's top-right corner, as the owner asked */
+    right: -10px;
     width: 78px;
     height: 97.5px;
     padding: 28px 7px 37.75px 8.5px;
@@ -7573,10 +7576,10 @@ main,
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="left"] { grid-template-columns: 112px minmax(0, 1fr); padding: 16px 16px 16px 18px; }
   .signature-layout .service-card[data-card-variant="signature"] .service-photo-wrap { width: 112px; }
   /* Narrow phones: hang the badge 8px further past the card edge so "design" keeps clear of it. */
-  .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge { right: -12px; }
+  .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge { right: -18px; }
 }
 @media (max-width: 374px) {
-  .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge { right: -17px; }
+  .signature-layout .service-card--featured[data-card-variant="signature"] > .featured-badge { right: -23px; }
   /* Keeps the duration pill and sale ticket on one row on 360px Android phones. */
   .signature-layout .service-card[data-card-variant="signature"] .service-duration-row > .service-duration { padding-inline: 7px 9px; }
   .signature-layout .service-card[data-card-variant="signature"]::after { width: 44px; height: 25px; }
@@ -7618,9 +7621,10 @@ main,
   .signature-layout .service-card[data-card-variant="signature"]:not(.service-card--featured):has(> .signature-sale)::after { display: none; }
 }
 @media (max-width: 600px) {
-  /* The smaller phone sticker hangs higher, over the extra room its card gets above it. */
+  /* The smaller phone sticker hangs higher, over the extra room its card gets above it (7px lower than it
+     first was, as the owner asked). */
   .signature-layout .service-card[data-card-variant="signature"] > .signature-sale {
-    top: -30px;
+    top: -23px;
     left: -12px;
     width: 72px;
     height: 60px;
@@ -8135,7 +8139,10 @@ main,
 /* The ticket is sized by the screen's height as well as its width, so the cat, the ticket and a little
    breathing room always fit on one screen (100dvh follows a phone's visible area under its browser bars).
    The landscape ticket plus the cat and its -6deg tilt is about 0.66 of its width tall. */
+/* The ticket's words in a round, hand-lettered face (Baloo 2, OFL; Vietnamese and Latin subsets only); the
+   booking code and time keep the plain rounded face so they stay easy to read and copy. */
 .booking-ticket {
+  --font-ticket-hand: "Baloo 2", var(--font-signature-display);
   --ticket-w: min(900px, calc(100vw - 72px), calc((100vh - 36px) * 1.35));
   position: absolute;
   inset: 0;
@@ -8162,7 +8169,7 @@ main,
   width: var(--ticket-w);
   aspect-ratio: 1800 / 852;
   background: url("assets/booking/confirmation/ticket-shell-desktop.webp") center / 100% 100% no-repeat;
-  filter: drop-shadow(0 22px 30px rgba(79, 47, 46, .26));
+  filter: drop-shadow(0 1px 1px rgba(79, 47, 46, .22)) drop-shadow(0 22px 30px rgba(79, 47, 46, .26));   /* paper's edge, then its lift */
   color: #4a2a26;
   transform: rotate(var(--ticket-tilt));
   pointer-events: auto;
@@ -8190,7 +8197,7 @@ main,
 .booking-ticket__eyebrow {
   margin: 0 0 .6cqw;
   color: #e0527f;
-  font: 800 max(10px, 1.45cqw)/1.2 var(--font-signature-body);
+  font: 700 max(10px, 1.45cqw)/1.2 var(--font-ticket-hand);
   letter-spacing: .1em;
   text-transform: uppercase;
 }
@@ -8199,21 +8206,22 @@ main,
   align-items: center;
   gap: .8cqw;
   margin: 0;
-  font: 700 5.3cqw/1.05 var(--font-signature-display);
-  letter-spacing: -.01em;
+  font: 700 5.6cqw/1.1 var(--font-ticket-hand);
+  letter-spacing: 0;
   white-space: nowrap;
-  color: #4a2a26;
+  color: #6f3b2f;
 }
-.booking-ticket__thanks { margin: 1.4cqw 0 0; font: 700 max(12px, 2cqw)/1.35 var(--font-signature-body); color: #354a63; }
-.booking-ticket__note { margin: .5cqw 0 0; font: 600 max(11px, 1.65cqw)/1.4 var(--font-signature-body); color: #4b566a; }
+.booking-ticket__thanks { margin: 1.4cqw 0 0; font: 600 max(12px, 2.1cqw)/1.35 var(--font-ticket-hand); color: #354a63; }
+.booking-ticket__note { margin: .5cqw 0 0; font: 500 max(11px, 1.75cqw)/1.4 var(--font-ticket-hand); color: #4b566a; }
 .booking-ticket__note-heart { width: 1.8cqw; height: 1.6cqw; vertical-align: -.1em; }
 .booking-ticket__nowrap { white-space: nowrap; }
 .booking-ticket__info {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-flow: column;                        /* the code and, when known, the time: equal columns */
+  grid-auto-columns: minmax(0, 1fr);
   width: 100%;
-  margin: 2.4cqw 0 0;
-  padding: 1.6cqw .8cqw;
+  margin: 2.8cqw 0 0;
+  padding: 2cqw .8cqw;
   border: 1.5px dashed #f0a3b8;
   border-radius: 2.6cqw;
   background: rgba(252, 222, 232, .55);
@@ -8231,7 +8239,7 @@ main,
 }
 .booking-ticket__row + .booking-ticket__row { border-left: 1.5px dashed #f0a3b8; }
 .booking-ticket__row-icon { grid-column: 2; width: 3.4cqw; height: auto; }
-.booking-ticket__row dt { grid-column: 3; font: 700 max(9px, 1.2cqw)/1.2 var(--font-signature-body); letter-spacing: .06em; text-transform: uppercase; color: #6b4f52; }
+.booking-ticket__row dt { grid-column: 3; font: 700 max(9px, 1.2cqw)/1.2 var(--font-ticket-hand); letter-spacing: .06em; text-transform: uppercase; color: #6b4f52; }
 .booking-ticket__row dd { grid-column: 1 / -1; justify-self: center; margin: 0; font: 700 max(11px, 1.6cqw)/1.3 var(--font-signature-body); color: #4a2a26; }
 .booking-ticket__code {
   display: inline-block;
@@ -8242,37 +8250,34 @@ main,
   font-family: var(--font-signature-display);
   white-space: nowrap;
 }
-.booking-ticket__service { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-.booking-ticket__duration { display: block; font-weight: 600; color: #6b4f52; }
+/* The site's pink paper button (.button-primary, nine-sliced), at the ticket's size: the shorter cut of the
+   paper suits this flat button, with corners about a third of its height, as on the booking footer. */
 .booking-ticket__cta {
+  --button-shell-rect: url("assets/gallery/ui_shells/primary_button_rounded_rect_paper_short_v1.webp");
+  --shell-corner: 2.3cqw;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 1.4cqw;
   min-width: 36cqw;
   min-height: 5.6cqw;
-  margin-top: 2.4cqw;
+  margin-top: 2.8cqw;
   padding: 0 4cqw;
-  border: 1.5px solid #cf3d6e;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #ef6d97 0%, #dd4a7c 100%);
-  color: #fff;
-  font: 700 max(13px, 2.1cqw)/1 var(--font-signature-body);
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .28), 0 1.2cqw 2.4cqw -1.4cqw rgba(200, 55, 100, .8);
+  font: 700 max(13px, 2.1cqw)/1 var(--font-signature-display);
   cursor: pointer;
-  transition: transform .15s ease, filter .15s ease;
 }
 .booking-ticket__cta svg { width: 2.8cqw; height: 2.8cqw; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.booking-ticket__cta:hover { transform: translateY(-1px); filter: brightness(1.04); }
 .booking-ticket__cta:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
 .booking-ticket__stub {
   position: relative;
   z-index: 1;
   display: grid;
-  align-content: center;
+  grid-template-rows: 1fr 1fr;                     /* two equal halves: their seam is the stub's middle */
+  align-items: center;
   justify-items: center;
-  gap: 2.2cqw;
-  padding: 5cqw 3.2cqw 5cqw 1.6cqw;
+  /* Top and bottom stop at the pink lines, so the seam (the divider) is midway down the paper; the centre
+     line is 86.1%, midway between the perforation and the right pink line. */
+  padding: 1.45cqw 4.05cqw 1.5cqw 1.6cqw;
   color: #4a2a26;
 }
 .booking-ticket__brand { display: grid; justify-items: center; gap: .5cqw; }
@@ -8281,14 +8286,17 @@ main,
 .booking-ticket__brand strong { position: relative; font: 700 7.2cqw/1 var(--font-signature-display); letter-spacing: -.02em; }
 .booking-ticket__brand-heart { position: absolute; top: -.8cqw; right: -2.4cqw; width: 2cqw; transform: rotate(14deg); }
 .booking-ticket__brand small { font: 800 max(9px, 1.45cqw)/1 var(--font-signature-body); letter-spacing: .12em; }
-.booking-ticket__scan { display: grid; justify-items: center; gap: 1cqw; width: 100%; padding-top: 2.4cqw; border-top: 1.5px dashed #f0a3b8; }
-.booking-ticket__barcode { width: 17cqw; height: 9cqw; fill: #4a2a26; }
+/* The barcode fills the lower half, centred in it; the divider sits on the half's top edge. */
+.booking-ticket__scan { position: relative; display: grid; align-self: stretch; align-content: center; justify-items: center; width: 100%; }
+/* The divider is as long as the barcode and on the same centre line, clear of the perforation and the nips. */
+.booking-ticket__scan::before { content: ""; position: absolute; top: 0; left: 50%; width: 17cqw; translate: -50% 0; border-top: 1.5px dashed #f0a3b8; }
+.booking-ticket__barcode { width: 17cqw; height: 11cqw; fill: #4a2a26; }
 .booking-ticket__card > .booking-ticket__deco { position: absolute; z-index: 2; height: auto; pointer-events: none; }
 /* The phone layout's cat corner, scaled to the wide ticket: the cat's paws over the top edge, the bow on the
    corner, hearts off its ear. */
 .booking-ticket__cat { top: -9.4cqw; left: 6cqw; width: 19cqw; }
 /* The bow's knot (49%, 33% of the art, before its -16deg turn) sits on the paper's outline where the corner
-   diagonal crosses it: 2.2cqw in on this shell's cut corner, 1.7cqw on the phone shell's rounded one. */
+   diagonal crosses it: 2.2cqw in on this shell's cut corner. Phones tuck it further in, knot about 9cqw in. */
 .booking-ticket__bow { top: -.72cqw; left: -2.35cqw; width: 10cqw; transform: rotate(-16deg); }
 .booking-ticket__hearts { top: -8.2cqw; left: 24.2cqw; width: 6.8cqw; }
 .booking-ticket__sparkles--title { top: 21%; left: 2.4cqw; width: 4.4cqw; }
@@ -8319,6 +8327,15 @@ main,
   cursor: pointer;
 }
 .booking-ticket__close img { display: block; width: 100%; height: auto; }
+/* Three short, thin strokes (a pink edge round a pastel core) fan out from the close button's top right, like a
+   doodle's emphasis marks, each jittering on its own beat like the hearts by the cat (animated inside the SVG). */
+.booking-ticket__close::after {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -100 200 200" fill="none" stroke-linecap="round"><style>g{transform-box:fill-box;transform-origin:center;animation:d 1s steps(1) infinite}g+g{animation-duration:1.3s;animation-delay:-.4s;animation-direction:reverse}g+g+g{animation-duration:1.6s;animation-delay:-.9s;animation-direction:alternate}%40keyframes d{0%25,100%25{transform:rotate(-5deg) scale(1)}25%25{transform:rotate(4deg) scale(1.07)}50%25{transform:rotate(-2deg) scale(.96)}75%25{transform:rotate(6deg) scale(1.03)}}</style><g><path d="M31.8 -50.9L38.7 -61.9" stroke="%23ec7fa2" stroke-width="7.5"/><path d="M31.8 -50.9L38.7 -61.9" stroke="%23fbcdda" stroke-width="3.2"/></g><g><path d="M55.2 -28.1L69.5 -35.4" stroke="%23ec7fa2" stroke-width="7.5"/><path d="M55.2 -28.1L69.5 -35.4" stroke="%23fbcdda" stroke-width="3.2"/></g><g><path d="M61.8 4.3L75.8 5.3" stroke="%23ec7fa2" stroke-width="7.5"/><path d="M61.8 4.3L75.8 5.3" stroke="%23fbcdda" stroke-width="3.2"/></g></svg>') center / 100% 100% no-repeat;
+  pointer-events: none;
+}
 .booking-ticket__close:hover { filter: brightness(1.03) saturate(1.1); }
 .booking-ticket__close:focus-visible { outline: 3px solid var(--pink); outline-offset: 2px; }
 @media (max-width: 899px) and (orientation: portrait) {
@@ -8340,30 +8357,32 @@ main,
     background-image: url("assets/booking/confirmation/ticket-shell-mobile.webp");
   }
   .booking-ticket__main { justify-content: center; padding: 9cqw 6.5cqw .5cqw; }
-  .booking-ticket__eyebrow { margin-bottom: 1.2cqw; font-size: max(10px, 3.3cqw); }
-  .booking-ticket__main h2 { gap: 1.5cqw; font-size: 8.4cqw; }
-  .booking-ticket__thanks { margin-top: 4cqw; font-size: max(12px, 4.4cqw); }
+  .booking-ticket__eyebrow { margin-bottom: 1.8cqw; font-size: max(10px, 3.3cqw); }
+  .booking-ticket__main h2 { gap: 1.5cqw; font-size: 8.6cqw; }
+  .booking-ticket__thanks { margin-top: 5cqw; font-size: max(12px, 4.4cqw); }
   .booking-ticket__note { margin-top: .8cqw; font-size: max(10.5px, 3.6cqw); text-wrap: balance; }
   .booking-ticket__note-heart { width: 3.6cqw; height: 3.2cqw; }
-  .booking-ticket__info { grid-template-columns: minmax(0, 1fr); margin-top: 8cqw; padding: .4cqw 3.4cqw; border-radius: 5cqw; }
-  .booking-ticket__row { grid-template-columns: auto minmax(0, 1fr); align-content: center; column-gap: 4cqw; row-gap: .8cqw; padding: 3.6cqw .6cqw; text-align: left; }
+  .booking-ticket__info { grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); margin-top: 11cqw; padding: 1.2cqw 3.4cqw; border-radius: 5cqw; }
+  .booking-ticket__row { grid-template-columns: auto minmax(0, 1fr); align-content: center; column-gap: 4cqw; row-gap: 1cqw; padding: 5.4cqw .6cqw; text-align: left; }
   .booking-ticket__row + .booking-ticket__row { border-top: 1.5px dashed #f0a3b8; border-left: 0; }
-  .booking-ticket__row-icon { grid-row: 1 / 3; grid-column: 1; width: 9cqw; }
-  .booking-ticket__row dt { grid-column: 2; font-size: max(9px, 3.2cqw); }
-  .booking-ticket__row dd { grid-column: 2; justify-self: stretch; font-size: max(11px, 4.4cqw); }
-  .booking-ticket__cta { width: 100%; min-width: 0; min-height: 13.5cqw; margin-top: 8cqw; font-size: max(13px, 4.8cqw); gap: 3cqw; }
+  .booking-ticket__row-icon { grid-row: 1 / 3; grid-column: 1; width: 10.5cqw; }
+  .booking-ticket__row dt { grid-column: 2; font-size: max(9px, 3.5cqw); }
+  .booking-ticket__row dd { grid-column: 2; justify-self: stretch; font-size: max(11px, 4.9cqw); }
+  .booking-ticket__cta { --shell-corner: 6.2cqw; width: 100%; min-width: 0; min-height: 15cqw; margin-top: 11cqw; font-size: max(13px, 4.8cqw); gap: 3cqw; }
   .booking-ticket__cta svg { width: 7cqw; height: 7cqw; }
-  .booking-ticket__stub { grid-template-columns: 1fr 1fr; align-items: center; gap: 0; padding: 2.8cqw 7cqw 8.1cqw; }
+  .booking-ticket__stub { grid-template-columns: 1fr 1fr; grid-template-rows: none; align-items: center; gap: 0; padding: 2.8cqw 7cqw 8.1cqw; }
   .booking-ticket__brand { gap: .6cqw; margin-right: 4.6cqw; }        /* centred in its half, a touch left for the heart */
   .booking-ticket__crown { width: 11cqw; }
   .booking-ticket__brand strong { font-size: 11cqw; }
   .booking-ticket__brand-heart { top: -1.4cqw; right: -4.4cqw; width: 4cqw; }
   .booking-ticket__brand small { font-size: max(8px, 2.8cqw); }
-  .booking-ticket__scan { align-self: stretch; align-content: center; padding: 0 0 0 4cqw; border-top: 0; border-left: 1.5px dashed #f0a3b8; }
+  .booking-ticket__scan { align-self: stretch; align-content: center; padding: 0 0 0 4cqw; }
+  /* Upright, as tall as the barcode, midway between the brand and the barcode: clear of the bottom punch. */
+  .booking-ticket__scan::before { top: 50%; left: 0; width: 0; height: 12cqw; translate: 0 -50%; border-top: 0; border-left: 1.5px dashed #f0a3b8; }
   .booking-ticket__barcode { width: 30cqw; height: 12cqw; }
-  .booking-ticket__cat { top: -21cqw; left: 11%; width: 42cqw; }
-  .booking-ticket__bow { top: -4.73cqw; left: -8.3cqw; width: 22cqw; transform: rotate(-16deg); }
-  .booking-ticket__hearts { top: -18cqw; left: 53%; width: 15cqw; }
+  .booking-ticket__cat { top: -21cqw; left: 16%; width: 42cqw; }
+  .booking-ticket__bow { top: -2.6cqw; left: -1cqw; width: 22cqw; transform: rotate(-16deg); }   /* tucked into the corner */
+  .booking-ticket__hearts { top: -18cqw; left: 58%; width: 15cqw; }
   .booking-ticket__sparkles--title { top: 10.5%; left: 3cqw; width: 8cqw; }
   .booking-ticket__close { top: -5cqw; right: -4cqw; width: 14cqw; }
 }
@@ -8376,4 +8395,5 @@ main,
   .booking-sending__ring,
   .modal.is-ticket .booking-ticket__card,
   .booking-ticket__heart-piece { animation: none; }
+  .booking-ticket__close::after { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -100 200 200" fill="none" stroke-linecap="round"><g><path d="M31.8 -50.9L38.7 -61.9" stroke="%23ec7fa2" stroke-width="7.5"/><path d="M31.8 -50.9L38.7 -61.9" stroke="%23fbcdda" stroke-width="3.2"/></g><g><path d="M55.2 -28.1L69.5 -35.4" stroke="%23ec7fa2" stroke-width="7.5"/><path d="M55.2 -28.1L69.5 -35.4" stroke="%23fbcdda" stroke-width="3.2"/></g><g><path d="M61.8 4.3L75.8 5.3" stroke="%23ec7fa2" stroke-width="7.5"/><path d="M61.8 4.3L75.8 5.3" stroke="%23fbcdda" stroke-width="3.2"/></g></svg>'); }
 }
