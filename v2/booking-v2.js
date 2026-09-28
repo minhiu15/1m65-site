@@ -45,7 +45,7 @@ function reset(options){
   state.step=1;state.category=next.serviceId?categoryOf(next.serviceId):"nail";
   state.selected=next.serviceId&&byId(next.serviceId)?[next.serviceId]:[];
   state.date=isoToday();state.calendarOpen=false;state.calendarMonth="";state.preferred=next.slot||"";state.slots=[];state.blocked=[];state.day=null;state.slot="";
-  state.loading=false;state.pending=false;state.error="";state.name="";state.phone="";state.note="";state.status="";state.reference="";
+  state.loading=false;state.pending=false;state.error="";state.name="";state.phone="";state.note="";state.status="";state.reference="";state.billKey="";
   state.photos=[];state.photoBusy=0;state.photoError="";state.photoWarning="";state.picker=false;
   requestId+=1;
 }
@@ -140,6 +140,7 @@ function setStage(name){
 // titles, booking data, the button, 1M65 and the barcode stay live.
 const TICKET_ART="assets/booking/confirmation/";
 const TICKET_ICONS={
+  download:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></svg>',
   calendar:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h2M12 14h2M16 14h.5M8 17h2M12 17h2"/></svg>',
   crown:'<svg class="booking-ticket__crown" viewBox="0 0 64 44" aria-hidden="true"><path d="M8 36L4 12l15 12L32 5l13 19 15-12-4 24z"/><path d="M9 41h46"/><circle cx="4" cy="11" r="3"/><circle cx="32" cy="4" r="3"/><circle cx="60" cy="11" r="3"/></svg>'
 };
@@ -153,6 +154,14 @@ function barcodeSvg(code){
   let x=0,bars="";
   String(code||"").split("").forEach(function(character){const value=character.charCodeAt(0);for(let bit=0;bit<3;bit++){const width=1+((value>>bit)&1)*2;bars+='<rect x="'+x+'" width="'+width+'" height="56"/>';x+=width+1+((value>>(bit+3))&1);}});
   return '<svg class="booking-ticket__barcode" viewBox="0 0 '+Math.max(1,x)+' 56" preserveAspectRatio="none" aria-hidden="true">'+bars+'</svg>';
+}
+// The bill (bill.js: the QR, the "Phiếu đặt lịch" picture, its download) loads while the booking is sent; the
+// stub keeps the drawn barcode and the ticket skips its download button if it cannot load.
+let billLib=null,billLoading=null;
+function loadBill(){return billLoading||(billLoading=import("./bill.js?v=20260928-1").then(function(lib){billLib=lib;return lib;},function(){billLoading=null;return null;}));}
+function ticketBill(){
+  const services=selectedServices().map(function(service){return {name:service.name,price:price(service)};});
+  return {reference:state.reference,name:state.name.trim(),phone:billLib.maskPhone(vnPhone(state.phone)),note:state.note.trim(),startAt:state.slot,status:"confirmed",services:services,total:totals().price,url:billLib.billUrl(state.reference,state.billKey)};
 }
 function ticketHtml(){
   const art=function(className,file){return '<img class="booking-ticket__deco '+className+'" src="'+TICKET_ART+file+'" alt="" aria-hidden="true" decoding="async">';};
@@ -170,9 +179,10 @@ function ticketHtml(){
     +row("calendar-icon.webp","Mã lịch hẹn",'<span class="booking-ticket__code">'+esc(state.reference)+'</span>')
     +(when?row("clock-icon.webp","Lịch hẹn",esc(when)):"")
     +'</dl>'
-    +'<button class="booking-ticket__cta button-primary" type="button" data-booking-manage>'+TICKET_ICONS.calendar+'Xem lịch của bạn</button></div>'
+    +'<div class="booking-ticket__actions"><button class="booking-ticket__cta button-primary" type="button" data-booking-manage>'+TICKET_ICONS.calendar+'Xem lịch của bạn</button>'
+    +(billLib?'<button class="booking-ticket__download" type="button" data-booking-download>'+TICKET_ICONS.download+'Tải phiếu</button>':'')+'</div></div>'
     +'<div class="booking-ticket__stub" aria-hidden="true"><div class="booking-ticket__brand">'+TICKET_ICONS.crown+'<strong>1M65'+ticketHeart("booking-ticket__brand-heart")+'</strong><small>NAIL · LASH · SPA</small></div>'
-    +'<div class="booking-ticket__scan">'+barcodeSvg(state.reference)+'</div></div></div>';
+    +'<div class="booking-ticket__scan">'+(billLib?billLib.qrSvg(billLib.billUrl(state.reference,state.billKey),"booking-ticket__qr"):barcodeSvg(state.reference))+'</div></div></div>';
 }
 function showTicket(){
   const modal=bookingModal(),holder=modal&&modal.querySelector("[data-booking-ticket]");if(!holder)return;
@@ -227,17 +237,17 @@ async function submit(){
   if(name.length<2){state.error="Bạn nhập giúp tiệm họ tên từ 2 ký tự nhé.";render();document.querySelector("[data-booking-name]")?.focus();return;}
   if(!/^0\d{9}$/.test(phone)){state.error="Số điện thoại cần đủ 10 số, bắt đầu bằng 0 hoặc +84.";render();document.querySelector("[data-booking-phone]")?.focus();return;}
   state.pending=true;state.error="";render();
-  const started=Date.now();setStage("sending");
+  const started=Date.now();setStage("sending");const billReady=loadBill();
   try{
     if(!window.mewTurnstileBooking||typeof window.mewTurnstileBooking.getToken!=="function"){const error=new Error("turnstile_unavailable");error.code="turnstile_unavailable";throw error;}
     const token=await window.mewTurnstileBooking.getToken();
     const body=await request("create",{serviceId:state.selected[0],serviceIds:state.selected.slice(),startAt:state.slot,customerName:name,customerPhone:phone,customerNote:state.note.trim(),turnstileToken:token,website:website,referencePhotos:state.photos.map(function(photo){return photo.kind==="upload"?{kind:"upload",data:photo.data}:{kind:"gallery",src:photo.src,title:photo.title};})});
-    state.status="done";state.reference=String((body.appointment&&body.appointment.reference)||"Đã xác nhận");
+    state.status="done";state.reference=String((body.appointment&&body.appointment.reference)||"Đã xác nhận");state.billKey=String(body.billKey||"");
     const missing=state.photos.length-Number(body.photosSaved||0);
     state.photoWarning=state.photos.length&&missing>0?"Lịch đã xác nhận, nhưng "+missing+" ảnh mẫu chưa gửi được. Bạn nhắn Zalo ảnh đó cho tiệm giúp tụi mình nhé.":"";
     // Let the spinner show for a beat even on a fast network, draw the tick, then fly the ticket in.
     await wait(Math.max(0,900-(Date.now()-started)));
-    setStage("confirmed");await wait(1050);
+    setStage("confirmed");await wait(1050);await billReady;
     showTicket();
   }catch(error){
     setStage("");
@@ -317,6 +327,8 @@ document.addEventListener("click",function(event){
   if(target.closest("[data-booking-back]")){back();return;}
   if(target.closest("[data-booking-next]")){next();return;}
   if(target.closest("[data-booking-reset]")){reset();setStage("");render();return;}
+  const download=target.closest("[data-booking-download]");
+  if(download&&billLib){download.disabled=true;billLib.downloadBill(ticketBill()).catch(function(){exp().toast("Chưa tải được phiếu. Bạn thử lại giúp tụi mình nha.");}).then(function(){download.disabled=false;});return;}
   const manage=target.closest("[data-booking-manage]");if(manage){const reference=state.reference;exp().closeModal(document.querySelector("#booking-modal-v2"),false);exp().openManager(reference,manage);}
 });
 document.addEventListener("input",function(event){
@@ -344,8 +356,9 @@ if(typeof location!=="undefined"&&document.body&&/^(localhost|127\.0\.0\.1|\[::1
   replay.addEventListener("click",function(){
     const modal=bookingModal();if(!modal)return;
     reset();state.status="done";state.selected=["ve"];state.reference="1M65-260927-CD102D";state.date=offsetDate(1);state.slot=new Date(state.date+"T10:00:00+07:00").toISOString();
+    state.name="Nguyễn Thị Mai";state.phone="0987654321";
     if(modal.hidden)exp().openModal(modal,replay);
-    setStage("");showTicket();
+    loadBill().then(function(){setStage("");showTicket();});
   });
   document.body.append(replay);
 }
