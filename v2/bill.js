@@ -1,8 +1,9 @@
 // The booking bill ("Phiếu đặt lịch"), after the owner's reference. It is drawn on a canvas so the page
 // behind the ticket's QR code and the picture customers download are the same image, growing with the
-// number of services. Paper, frame, table, icons and QR are drawn here; the cat, bow, hearts, flowers and
-// tape are the owner's art.
+// number of services. Table, icons and QR are drawn here; the paper, cat, bow, hearts and flowers are the
+// owner's art.
 import qrcode from "./vendor/qrcode.mjs";
+import { ESTIMATE_NOTE, hasUnitPricing, unitPrice } from "./price-units.js?v=20260928-1";
 
 export const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const ART = new URL("assets/booking/", import.meta.url).href;
@@ -12,7 +13,7 @@ const STORE = [
   ["pin", "Địa chỉ: Lý Thái Tổ, Đại Phước, Đồng Nai"],
   ["clock", "Giờ mở cửa: 09:00 - 18:00 (tất cả các ngày)"]
 ];
-const W = 1024, X0 = 36, X1 = 988, TOP = 150;
+const W = 1024, TOP = 150;
 const INK = "#4a2a26", TITLE = "#6f3b2f", PINK = "#e0527f", DEEP_PINK = "#d23f6f", LINE = "#f0a3b8", NAVY = "#354a63", MUTED = "#7b6568";
 const HAND = '"Baloo 2", Quicksand, sans-serif', BODY = "Nunito, system-ui, sans-serif", ROUND = 'Quicksand, "Baloo 2", sans-serif', SCRIPT = '"Great Vibes", cursive';
 const HEART_PATH = "M0 6.5C-3 4-8 .8-8-2.8C-8-5.6-5.8-7.4-3.6-7.4C-2-7.4-.6-6.5 0-5.2C.6-6.5 2-7.4 3.6-7.4C5.8-7.4 8-5.6 8-2.8C8 .8 3 4 0 6.5Z";
@@ -36,14 +37,15 @@ export function billUrl(reference, key) {
   return url.href;
 }
 
+// Level L: the code is never covered, and the fewer, larger modules still scan when the ticket or bill is small.
 function qrCode(text) {
-  const qr = qrcode(0, "M");
+  const qr = qrcode(0, "L");
   qr.addData(text);
   qr.make();
   return qr;
 }
 
-// Dark runs of each row become one path segment; a two-module quiet zone on cream keeps it scannable.
+// Dark runs of each row become one path segment. No backing: the light paper round it is the quiet zone.
 export function qrSvg(text, className) {
   const qr = qrCode(text), count = qr.getModuleCount(), size = count + 4;
   let path = "";
@@ -55,7 +57,7 @@ export function qrSvg(text, className) {
       path += "M" + start + " " + row + "h" + (col - start + 1) + "v1h-" + (col - start + 1) + "z";
     }
   }
-  return '<svg class="' + className + '" viewBox="-2 -2 ' + size + " " + size + '" shape-rendering="crispEdges" aria-hidden="true"><rect x="-2" y="-2" width="' + size + '" height="' + size + '" rx="1.2" fill="#fffdf9"/><path d="' + path + '" fill="' + INK + '"/></svg>';
+  return '<svg class="' + className + '" viewBox="-2 -2 ' + size + " " + size + '" shape-rendering="crispEdges" aria-hidden="true"><path d="' + path + '" fill="' + INK + '"/></svg>';
 }
 
 let fontsReady;
@@ -177,73 +179,25 @@ function icon(ctx, name, cx, cy, size) {
   ctx.restore();
 }
 
-// The ticket's outline: rounded corners, small nips down both sides, a notch at each end of the stub's
-// perforation, and one punch in the top and bottom edges.
-function paperPath(bottom, stubY) {
-  const path = new Path2D(), corner = 18, nip = 8, notch = 22, stub = 24;
-  const cuts = [];
-  for (let y = TOP + 64; y < bottom - 50; y += 58) if (Math.abs(y - stubY) > 52) cuts.push([y, nip]);
-  cuts.push([stubY, stub]);
-  cuts.sort(function (a, b) { return a[0] - b[0]; });
-  const topX = X0 + (X1 - X0) * .68, bottomX = (X0 + X1) / 2;
-  path.moveTo(X0 + corner, TOP);
-  path.lineTo(topX - notch, TOP); path.arc(topX, TOP, notch, Math.PI, 0, true);
-  path.lineTo(X1 - corner, TOP); path.arcTo(X1, TOP, X1, TOP + corner, corner);
-  cuts.forEach(function (cut) { path.lineTo(X1, cut[0] - cut[1]); path.arc(X1, cut[0], cut[1], -Math.PI / 2, Math.PI / 2, true); });
-  path.lineTo(X1, bottom - corner); path.arcTo(X1, bottom, X1 - corner, bottom, corner);
-  path.lineTo(bottomX + notch, bottom); path.arc(bottomX, bottom, notch, 0, Math.PI, true);
-  path.lineTo(X0 + corner, bottom); path.arcTo(X0, bottom, X0, bottom - corner, corner);
-  cuts.slice().reverse().forEach(function (cut) { path.lineTo(X0, cut[0] + cut[1]); path.arc(X0, cut[0], cut[1], Math.PI / 2, -Math.PI / 2, true); });
-  path.lineTo(X0, TOP + corner); path.arcTo(X0, TOP, X0 + corner, TOP, corner);
-  path.closePath();
-  return path;
-}
-
-// Warm cream paper: a fine grain tile, soft mottling and a few fibres, all from a fixed seed so every bill matches.
-function paper(ctx, path, bottom) {
-  let seed = 1065;
-  const random = function () { seed = seed * 16807 % 2147483647; return seed / 2147483647; };
+// The owner's paper (bill-paper.webp, 1024×1536, drawn 1:1). Its side nips repeat every 88px, so a longer bill
+// repeats one band of it (728–816, the edges straight at both cuts) instead of stretching a nip. The sheet is
+// put together off-screen first so its shadow falls once, under the whole paper.
+const PAPER_TOP = 42, PAPER_BOTTOM = 1488, BAND = 728, BAND_HEIGHT = 88;
+function paper(ctx, art, bands) {
+  if (!art) return;
+  const scale = ctx.getTransform().a, height = 1536 + bands * BAND_HEIGHT, sheet = document.createElement("canvas");
+  sheet.width = Math.round(W * scale);
+  sheet.height = Math.round(height * scale);
+  const pen = sheet.getContext("2d");
+  pen.scale(scale, scale);
+  pen.drawImage(art, 0, 0, W, BAND, 0, 0, W, BAND);
+  for (let band = 0; band < bands; band += 1) pen.drawImage(art, 0, BAND, W, BAND_HEIGHT, 0, BAND + band * BAND_HEIGHT, W, BAND_HEIGHT);
+  pen.drawImage(art, 0, BAND, W, 1536 - BAND, 0, BAND + bands * BAND_HEIGHT, W, 1536 - BAND);
   ctx.save();
   ctx.shadowColor = "rgba(120, 70, 70, .2)";
   ctx.shadowBlur = 30;
   ctx.shadowOffsetY = 12;
-  ctx.fillStyle = "#fdf7ee";
-  ctx.fill(path);
-  ctx.restore();
-  ctx.save();
-  ctx.clip(path);
-  const tile = document.createElement("canvas");
-  tile.width = tile.height = 160;
-  const tileCtx = tile.getContext("2d"), grain = tileCtx.createImageData(160, 160);
-  for (let index = 0; index < grain.data.length; index += 4) {
-    grain.data[index] = 120; grain.data[index + 1] = 84; grain.data[index + 2] = 60; grain.data[index + 3] = random() * 11;
-  }
-  tileCtx.putImageData(grain, 0, 0);
-  ctx.fillStyle = ctx.createPattern(tile, "repeat");
-  ctx.fillRect(X0, TOP, X1 - X0, bottom - TOP);
-  for (let blot = 0; blot < 16; blot += 1) {
-    const x = X0 + random() * (X1 - X0), y = TOP + random() * (bottom - TOP), radius = 120 + random() * 160;
-    const glow = ctx.createRadialGradient(x, y, 0, x, y, radius);
-    glow.addColorStop(0, "rgba(220, 180, 150, .035)");
-    glow.addColorStop(1, "rgba(214, 170, 150, 0)");
-    ctx.fillStyle = glow;
-    ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
-  }
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = "rgba(160, 118, 96, .12)";
-  for (let fibre = 0; fibre < 70; fibre += 1) {
-    const x = X0 + random() * (X1 - X0), y = TOP + random() * (bottom - TOP), angle = random() * Math.PI * 2, length = 8 + random() * 22;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.quadraticCurveTo(x + Math.cos(angle + .6) * length / 2, y + Math.sin(angle + .6) * length / 2, x + Math.cos(angle) * length, y + Math.sin(angle) * length);
-    ctx.stroke();
-  }
-  ctx.lineWidth = 16;
-  ctx.strokeStyle = "rgba(244, 196, 208, .5)";
-  ctx.stroke(path);
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = "rgba(232, 150, 174, .55)";
-  ctx.stroke(path);
+  ctx.drawImage(sheet, 0, TOP - PAPER_TOP, W, height);
   ctx.restore();
 }
 
@@ -295,7 +249,6 @@ function section(ctx, top, height, iconName, label) {
   icon(ctx, iconName, 150, top + 41, 28);
   type(ctx, "700 24px " + HAND, DEEP_PINK);
   ctx.fillText(label, 184, top + 50);
-  heart(ctx, 122 + width + 20, top + 41, 20, false);
 }
 
 // Integer device pixels per module, so the modules never blur into each other.
@@ -305,10 +258,6 @@ function drawQr(ctx, text, x, y, size) {
   const left = Math.round(matrix.e + x * matrix.a + (size * matrix.a - full) / 2), top = Math.round(matrix.f + y * matrix.d + (size * matrix.d - full) / 2);
   ctx.save();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.fillStyle = "#fffdf9";
-  ctx.beginPath();
-  ctx.roundRect(left, top, full, full, cell * 1.2);
-  ctx.fill();
   ctx.fillStyle = INK;
   for (let row = 0; row < count; row += 1) for (let col = 0; col < count; col += 1) if (qr.isDark(row, col)) ctx.fillRect(left + (col + 2) * cell, top + (row + 2) * cell, cell, cell);
   ctx.restore();
@@ -319,43 +268,49 @@ function money(value) { return Number(value || 0).toLocaleString("vi-VN") + "đ"
 // bill: { reference, name, phone (already masked), note, startAt, status, services: [{ name, price }], total, url }
 export async function renderBill(bill, scale) {
   await loadFonts();
-  const [cat, bow, star, heartBig, heartSmall, flower, bouquet, tape] = await Promise.all([
-    "confirmation/cat-peeking.webp", "confirmation/pink-bow.webp", "confirmation/ticket-star.webp", "confirmation/ticket-heart-big.webp",
-    "confirmation/ticket-heart-small.webp", "bill/single-flower.webp", "bill/flower-bouquet.webp", "bill/gingham-tape.webp"
+  const [sheet, cat, bow, star, heartBig, heartSmall, flower, bouquet] = await Promise.all([
+    "bill/bill-paper.webp", "confirmation/cat-peeking.webp", "confirmation/pink-bow.webp", "confirmation/ticket-star.webp", "confirmation/ticket-heart-big.webp",
+    "confirmation/ticket-heart-small.webp", "bill/single-flower.webp", "bill/flower-bouquet.webp"
   ].map(image));
   const start = new Date(bill.startAt);
   const date = new Intl.DateTimeFormat("vi-VN", { timeZone: TZ, day: "2-digit", month: "2-digit", year: "numeric" }).format(start);
   const time = new Intl.DateTimeFormat("vi-VN", { timeZone: TZ, hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(start);
   const services = bill.services && bill.services.length ? bill.services : [{ name: "Dịch vụ", price: bill.total }];
 
-  // Lay out first (the note may wrap, the table grows with the services), then size the canvas.
+  // Lay out first (the note may wrap, the table grows with the services), then add paper bands until the stub
+  // fits below the store; one or two services with a one-line note fit the sheet as drawn. The stub keeps to
+  // the paper's foot, so a band's spare room opens above it.
   const canvas = document.createElement("canvas"), ctx = canvas.getContext("2d");
   type(ctx, "600 24px " + BODY, INK);
   const noteLines = wrap(ctx, bill.note || "Không có", 370, 2);
-  const s1 = 436, s1Height = 96 + 4 * 44 + noteLines.length * 34 + 18;
-  const s2 = s1 + s1Height + 26, rowsTop = s2 + 134, totalTop = rowsTop + services.length * 52 + 16, s2Height = totalTop + 80 + 26 - s2;
-  const s3 = s2 + s2Height + 26, s3Height = 100 + 2 * 44 + 34;
-  const stubY = s3 + s3Height + 44, bottom = stubY + 262, height = bottom + 36;
+  // Designs priced per nail, stone or charm make the total an estimate; one small note under it says how.
+  const estimate = hasUnitPricing(services.map(function (service) { return service.id || ""; }));
+  type(ctx, "500 17px " + BODY, MUTED);
+  const estimateLines = estimate ? wrap(ctx, ESTIMATE_NOTE.replace(/₫/g, "đ"), 744, 3) : [];
+  const estimateHeight = estimateLines.length ? estimateLines.length * 24 + 8 : 0;
+  // Each card keeps the same room round its content: 26px under the label, 26px after the last line (PAD
+  // counts that line's descent). The three gaps below the cards share the paper a band leaves spare.
+  const PAD = 32, GAP = 16, STUB = 250, s1 = 424, rowsHeight = services.length * 50;
+  const s1Height = 109 + 4 * 42 + (noteLines.length - 1) * 34 + PAD, s2Height = 128 + rowsHeight + 14 + 76 + estimateHeight + 26, s3Height = 109 + 2 * 40 + PAD;
+  const cards = s1Height + s2Height + s3Height;
+  const bands = Math.max(0, Math.ceil((s1 + cards + 3 * GAP + STUB - (TOP - PAPER_TOP + PAPER_BOTTOM)) / BAND_HEIGHT));
+  const bottom = TOP - PAPER_TOP + PAPER_BOTTOM + bands * BAND_HEIGHT, stubY = bottom - STUB, height = bottom + 30;
+  const gap = (stubY - s1 - cards) / 3, s2 = s1 + s1Height + gap, s3 = s2 + s2Height + gap;
+  const rowsTop = s2 + 128, totalTop = rowsTop + rowsHeight + 14;
   const ratio = scale || 1.5;
   canvas.width = Math.round(W * ratio);
   canvas.height = Math.round(height * ratio);
   ctx.scale(ratio, ratio);
-  ctx.fillStyle = "#fff5f6";
-  ctx.fillRect(0, 0, W, height);
 
-  const outline = paperPath(bottom, stubY);
-  paper(ctx, outline, bottom);
-  dashedBox(ctx, X0 + 24, TOP + 24, X1 - X0 - 48, stubY - TOP - 48, 18, [12, 9], "#f2a9bd", 2.5);
-  dashedBox(ctx, X0 + 24, stubY + 24, X1 - X0 - 48, bottom - stubY - 48, 18, [12, 9], "#f2a9bd", 2.5);
+  paper(ctx, sheet, bands);
 
   // Heading: title and brand, thanks and wishes.
   sparkle(ctx, 110, 262, 30);
   sparkle(ctx, 134, 300, 16);
   type(ctx, "800 78px " + HAND, TITLE);
   ctx.fillText("Phiếu đặt lịch", 158, 300);
-  heart(ctx, 158 + ctx.measureText("Phiếu đặt lịch").width + 34, 258, 40, false);
   ctx.save();
-  ctx.translate(804, 190);
+  ctx.translate(794, 190);
   ctx.scale(1.5, 1.5);
   ctx.lineWidth = 3;
   ctx.lineJoin = "round";
@@ -365,32 +320,30 @@ export async function renderBill(bill, scale) {
   [[4, 11], [32, 4], [60, 11]].forEach(function (dot) { ctx.beginPath(); ctx.arc(dot[0], dot[1], 3, 0, Math.PI * 2); ctx.fill(); });
   ctx.restore();
   type(ctx, "700 82px " + ROUND, INK, "center");
-  ctx.fillText("1M65", 852, 326);
-  heart(ctx, 932, 262, 24, true);
+  ctx.fillText("1M65", 842, 326);
+  heart(ctx, 938, 250, 22, true);
   type(ctx, "800 17px " + BODY, INK, "center");
-  ctx.fillText("NAIL · LASH · SPA", 852, 354);
+  ctx.fillText("NAIL · LASH · SPA", 842, 354);
   type(ctx, "700 31px " + HAND, NAVY, "center");
   ctx.fillText("Cảm ơn bạn đã lựa chọn 1M65!", 430, 356);
   type(ctx, "500 22px " + BODY, "#4b566a", "center");
-  const wish = "Hẹn gặp bạn vào thời gian sắp tới. Chúc bạn luôn xinh đẹp!";
-  ctx.fillText(wish, 500, 404);
-  heart(ctx, 500 + ctx.measureText(wish).width / 2 + 22, 397, 20, false);
+  ctx.fillText("Hẹn gặp bạn vào thời gian sắp tới. Chúc bạn luôn xinh đẹp!", 500, 404);
 
   // Customer.
   section(ctx, s1, s1Height, "person", "THÔNG TIN KHÁCH HÀNG");
   const rows = [["Họ và tên", bill.name], ["Số điện thoại", bill.phone || "—"], ["Ngày đặt lịch", date], ["Giờ đặt lịch", time]];
   rows.forEach(function (row, index) {
-    const y = s1 + 118 + index * 44;
+    const y = s1 + 109 + index * 42;
     type(ctx, "500 23px " + BODY, MUTED);
     ctx.fillText(row[0], 140, y);
     type(ctx, "600 24px " + BODY, INK);
     ctx.fillText(fit(ctx, row[1] || "", 370), 358, y);
   });
   type(ctx, "500 23px " + BODY, MUTED);
-  ctx.fillText("Ghi chú", 140, s1 + 118 + 4 * 44);
+  ctx.fillText("Ghi chú", 140, s1 + 109 + 4 * 42);
   type(ctx, "600 24px " + BODY, INK);
-  noteLines.forEach(function (line, index) { ctx.fillText(line, 358, s1 + 118 + 4 * 44 + index * 34); });
-  dashedLine(ctx, 326, s1 + 88, 326, s1 + s1Height - 22);
+  noteLines.forEach(function (line, index) { ctx.fillText(line, 358, s1 + 109 + 4 * 42 + index * 34); });
+  dashedLine(ctx, 326, s1 + 86, 326, s1 + s1Height - 24);
   place(ctx, flower, 772, s1 + 128, 108, -8);
   sparkle(ctx, 764, s1 + 120, 28);
   heart(ctx, 884, s1 + 108, 26, false);
@@ -399,25 +352,38 @@ export async function renderBill(bill, scale) {
   // Services.
   section(ctx, s2, s2Height, "calendar", "THÔNG TIN DỊCH VỤ");
   ctx.beginPath();
-  ctx.roundRect(132, s2 + 84, 760, 50, 12);
+  ctx.roundRect(132, s2 + 80, 760, 48, 12);
   ctx.fillStyle = "#fbdde7";
   ctx.fill();
   type(ctx, "700 23px " + HAND, "#c2336a");
-  ctx.fillText("Dịch vụ", 156, s2 + 117);
+  ctx.fillText("Dịch vụ", 156, s2 + 112);
   ctx.textAlign = "center";
-  ctx.fillText("Số lượng", 596, s2 + 117);
+  ctx.fillText("Số lượng", 596, s2 + 112);
   ctx.textAlign = "right";
-  ctx.fillText("Giá", 866, s2 + 117);
+  ctx.fillText("Giá", 866, s2 + 112);
   services.forEach(function (service, index) {
-    const y = rowsTop + index * 52 + 34;
-    if (index) dashedLine(ctx, 140, rowsTop + index * 52, 884, rowsTop + index * 52);
+    const y = rowsTop + index * 50 + 33;
+    if (index) dashedLine(ctx, 140, rowsTop + index * 50, 884, rowsTop + index * 50);
+    const shown = unitPrice(service.id, service.price, "đ");
+    type(ctx, "500 17px " + BODY, MUTED);
+    const detail = shown.perNail ? " · " + shown.perNail : "", detailWidth = ctx.measureText(detail).width;
     type(ctx, "500 23px " + BODY, INK);
-    ctx.fillText(fit(ctx, service.name, 380), 156, y);
+    const name = fit(ctx, service.name, 380 - detailWidth);
+    ctx.fillText(name, 156, y);
+    if (detail) {
+      const nameWidth = ctx.measureText(name).width;
+      type(ctx, "500 17px " + BODY, MUTED);
+      ctx.fillText(detail, 156 + nameWidth, y);
+      type(ctx, "500 23px " + BODY, INK);
+    }
     ctx.textAlign = "center";
     ctx.fillText("1", 596, y);
-    ctx.textAlign = "right";
-    ctx.font = "600 23px " + BODY;
-    ctx.fillText(money(service.price), 866, y);
+    type(ctx, "500 17px " + BODY, MUTED, "right");
+    const unit = shown.unit ? "/" + shown.unit : "";
+    ctx.fillText(unit, 866, y);
+    const unitWidth = unit ? ctx.measureText(unit).width + 2 : 0;
+    type(ctx, "600 23px " + BODY, INK, "right");
+    ctx.fillText(shown.price, 866 - unitWidth, y);
   });
   dashedLine(ctx, 132, totalTop - 6, 892, totalTop - 6);
   ctx.beginPath();
@@ -434,53 +400,44 @@ export async function renderBill(bill, scale) {
   type(ctx, "800 27px " + ROUND, PINK, "center");
   ctx.fillText("$", 178, totalTop + 51);
   type(ctx, "700 32px " + HAND, INK);
-  ctx.fillText("Tổng tiền", 220, totalTop + 53);
+  ctx.fillText(estimate ? "Tổng tạm tính" : "Tổng tiền", 220, totalTop + 53);
   type(ctx, "800 42px " + HAND, PINK, "right");
   ctx.fillText(money(bill.total), 850, totalTop + 56);
   heart(ctx, 880, totalTop + 26, 22, false);
+  type(ctx, "500 17px " + BODY, MUTED);
+  estimateLines.forEach(function (line, index) { ctx.fillText(line, 140, totalTop + 104 + index * 24); });
 
   // Store.
   section(ctx, s3, s3Height, "pin", "THÔNG TIN CỬA HÀNG");
   STORE.forEach(function (row, index) {
-    const y = s3 + 118 + index * 44;
+    const y = s3 + 109 + index * 40;
     icon(ctx, row[0], 160, y - 8, 26);
     type(ctx, "500 22px " + BODY, INK);
     ctx.fillText(row[1], 196, y);
   });
+
+  // Stub: bouquet, "Hẹn gặp bạn!" with its swoosh, and the QR with the booking code.
+  dashedLine(ctx, 82, stubY, 942, stubY);
+  place(ctx, bouquet, 100, stubY + 32, 118, -6);
+  sparkle(ctx, 250, stubY + 64, 22);
   ctx.save();
-  ctx.translate(786, s3 + 118);
+  ctx.translate(414, stubY + 124);
   ctx.rotate(-8 * Math.PI / 180);
-  type(ctx, "400 48px " + SCRIPT, PINK, "center");
+  type(ctx, "400 62px " + SCRIPT, PINK, "center");
   ctx.fillText("Hẹn gặp bạn!", 0, 0);
   ctx.beginPath();
-  ctx.moveTo(-84, 30);
-  ctx.quadraticCurveTo(0, 14, 78, 20);
-  ctx.lineWidth = 2.5;
+  ctx.moveTo(-112, 36);
+  ctx.quadraticCurveTo(0, 17, 104, 26);
+  ctx.lineWidth = 3;
   ctx.lineCap = "round";
   ctx.strokeStyle = PINK;
   ctx.stroke();
   ctx.restore();
-  heart(ctx, 872, s3 + 146, 22, false);
-
-  // Stub: bouquet, thanks, and the QR with the booking code.
-  dashedLine(ctx, X0 + 30, stubY, X1 - 30, stubY);
-  place(ctx, bouquet, 104, stubY + 44, 128, -6);
-  ctx.save();
-  ctx.translate(430, stubY + 118);
-  ctx.rotate(-7 * Math.PI / 180);
-  type(ctx, "400 46px " + SCRIPT, "#5b3a3d", "center");
-  ctx.fillText("Cảm ơn bạn", 0, 0);
-  ctx.fillText("đã tin tưởng 1M65!", 0, 56);
-  const line = ctx.measureText("đã tin tưởng 1M65!").width;
-  ctx.restore();
-  heart(ctx, 430 + line / 2 + 30, stubY + 138, 22, false);
-  sparkle(ctx, 262, stubY + 76, 22);
-  heart(ctx, 520, stubY + 214, 20, false);
-  dashedLine(ctx, 612, stubY + 40, 612, bottom - 40);
-  drawQr(ctx, bill.url, 682, stubY + 36, 164);
+  heart(ctx, 548, stubY + 134, 24, false);
+  dashedLine(ctx, 604, stubY + 26, 604, bottom - 36);
+  drawQr(ctx, bill.url, 682, stubY + 16, 168);
   type(ctx, "700 19px " + ROUND, INK, "center");
-  ctx.fillText(bill.reference, 764, stubY + 228);
-  place(ctx, tape, 858, bottom - 108, 124, -32);
+  ctx.fillText(bill.reference, 766, stubY + 208);
 
   // The owner's cat on the top edge, the bow on the corner, the hearts off the cat's ear.
   place(ctx, bow, 34, 96, 190, -14);
@@ -512,13 +469,13 @@ export function saveBill(canvas, reference) {
       if (!blob) { reject(new Error("bill_render_failed")); return; }
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = "phieu-dat-lich-" + reference + ".jpg";
+      link.download = "phieu-dat-lich-" + reference + ".png";
       document.body.append(link);
       link.click();
       link.remove();
       setTimeout(function () { URL.revokeObjectURL(link.href); }, 10000);
       resolve();
-    }, "image/jpeg", .92);   // the paper's grain makes a PNG several MB; a JPEG of it stays well under 1MB
+    }, "image/png");   // transparent round the paper, so the saved bill sits on any background
   });
 }
 

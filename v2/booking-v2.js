@@ -1,3 +1,4 @@
+import { ESTIMATE_NOTE, hasUnitPricing, unitPrice } from "./price-units.js?v=20260928-1";
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
 const REMOVED_SERVICE_IDS = new Set(["goi-thao"]);
@@ -31,6 +32,10 @@ function duration(service){return Number(service.durationMinutes||service.durati
 function price(service){return Number(service.price||0);}
 function money(value){return Number(value||0).toLocaleString("vi-VN")+"₫";}
 function durationText(value){const minutes=Number(value||0);if(!minutes)return "—";const hours=Math.floor(minutes/60),rest=minutes%60;return hours?hours+" giờ"+(rest?" "+rest+" phút":""):rest+" phút";}
+// Designs priced per nail, stone or charm make the total an estimate: it says so, with one line on how.
+function unitPriced(){return hasUnitPricing(state.selected);}
+function estimateLabel(){return unitPriced()?'<small class="booking-estimate-label">Tạm tính</small>':"";}
+function estimateNote(){return unitPriced()?'<p class="booking-estimate-note">'+ESTIMATE_NOTE+'</p>':"";}
 function selectedServices(){return state.selected.map(byId).filter(Boolean);}
 function totals(){return selectedServices().reduce(function(out,service){out.price+=price(service);out.minutes+=duration(service);return out;},{price:0,minutes:0});}
 function isoToday(){
@@ -56,13 +61,14 @@ function stepOne(){
     const selected=state.selected.includes(service.id);
     const discount=Number(service.discountPercent||0);
     const badgeHtml=discount>0?'<span class="sale-badge">-'+discount+'%</span>':'';
-    const priceHtml=discount>0?'<del>'+money(service.originalPrice)+'</del><strong>'+money(service.price)+'</strong>':'<strong>'+money(service.price)+'</strong>';
+    const shown=unitPrice(service.id,service.price);
+    const priceHtml=(discount>0?'<del>'+money(service.originalPrice)+'</del>':'')+'<strong'+(shown.range?' class="is-range"':'')+'>'+shown.price+'</strong>'+(shown.line?'<small class="booking-service-unit">'+shown.line+'</small>':'');
     const saleLabel=discount>0?' aria-label="'+esc(service.name+', giảm '+discount+'%, '+duration(service)+' phút, giá '+money(service.price))+'"':'';
-    return '<button type="button" class="booking-service-option '+(selected?"is-selected ":"")+(discount>0?"has-sale":"")+'" data-booking-service="'+esc(service.id)+'" aria-pressed="'+selected+'"'+saleLabel+'><div class="booking-service-copy"><h3>'+esc(service.name)+'</h3><p><span class="booking-service-duration">'+duration(service)+' phút</span></p></div><span class="booking-service-side"><span class="booking-service-price"><span class="booking-service-offer-slot" aria-hidden="true">'+badgeHtml+'</span><span class="booking-service-price-card">'+priceHtml+'</span></span><span class="booking-check" aria-hidden="true">'+(selected?"✓":"")+'</span></span></button>';
+    return '<button type="button" class="booking-service-option '+(selected?"is-selected ":"")+(discount>0?"has-sale":"")+'" data-booking-service="'+esc(service.id)+'" aria-pressed="'+selected+'"'+saleLabel+'><div class="booking-service-copy"><h3>'+esc(service.name)+'</h3><p><span class="booking-service-duration">'+duration(service)+' phút</span>'+'</p></div><span class="booking-service-side"><span class="booking-service-price"><span class="booking-service-offer-slot" aria-hidden="true">'+badgeHtml+'</span><span class="booking-service-price-card">'+priceHtml+'</span></span><span class="booking-check" aria-hidden="true">'+(selected?"✓":"")+'</span></span></button>';
   }).join("");
   const picked=selectedServices().map(function(service){return '<button type="button" data-booking-remove="'+esc(service.id)+'">'+esc(service.name)+' ×</button>';}).join("");
   const total=totals();
-  return '<div class="booking-step" data-booking-step="1"><div class="booking-categories" role="tablist" aria-label="Nhóm dịch vụ">'+categoryHtml+'</div><div class="booking-service-grid">'+cards+'</div>'+(picked?'<div class="booking-picked" aria-label="Dịch vụ đã chọn">'+picked+'</div>':'')+'<div class="booking-total"><span><strong>'+state.selected.length+'/8 dịch vụ</strong><br><small>Tổng thời lượng '+durationText(total.minutes)+'</small></span><strong>'+money(total.price)+'</strong></div></div>';
+  return '<div class="booking-step" data-booking-step="1"><div class="booking-categories" role="tablist" aria-label="Nhóm dịch vụ">'+categoryHtml+'</div><div class="booking-service-grid">'+cards+'</div>'+(picked?'<div class="booking-picked" aria-label="Dịch vụ đã chọn">'+picked+'</div>':'')+'<div class="booking-total"><span><strong>'+state.selected.length+'/8 dịch vụ</strong><br><small>Tổng thời lượng '+durationText(total.minutes)+'</small></span><strong>'+estimateLabel()+money(total.price)+'</strong></div>'+estimateNote()+'</div>';
 }
 function schedule(){
   const available=new Map(state.slots.map(function(item){const start=item.start_at||item.startAt;return [slotLabel(start),start];}));
@@ -117,7 +123,7 @@ function pickerView(){
 function stepThree(){
   const total=totals(),names=selectedServices().map(function(service){return service.name;}).join(" + ");
   const time=state.slot?dateLabel(state.date)+" · "+slotLabel(state.slot):"Chưa chọn giờ";
-  return '<div class="booking-step" data-booking-step="3">'+(state.error?'<div class="booking-empty" role="alert">'+esc(state.error)+'</div>':'')+'<div class="booking-confirm-card"><div><strong>'+esc(names)+'</strong><br><small>'+esc(time)+' · '+durationText(total.minutes)+'</small></div><strong>'+money(total.price)+'</strong></div><div class="booking-form"><label>Họ và tên<input type="text" autocomplete="name" data-booking-name maxlength="80" required value="'+esc(state.name)+'" placeholder="Tên của bạn"></label><label>Số điện thoại<input type="tel" inputmode="tel" autocomplete="tel" data-booking-phone maxlength="16" required value="'+esc(state.phone)+'" placeholder="0xxxxxxxxx"></label><label>Ghi chú<textarea rows="2" data-booking-note maxlength="500" placeholder="Mẫu mong muốn hoặc điều tiệm cần biết">'+esc(state.note)+'</textarea></label><label class="sr-only">Website<input type="text" tabindex="-1" autocomplete="off" data-booking-website></label></div>'+photoField()+'</div>';
+  return '<div class="booking-step" data-booking-step="3">'+(state.error?'<div class="booking-empty" role="alert">'+esc(state.error)+'</div>':'')+'<div class="booking-confirm-card"><div><strong>'+esc(names)+'</strong><br><small>'+esc(time)+' · '+durationText(total.minutes)+'</small></div><strong>'+estimateLabel()+money(total.price)+'</strong></div>'+estimateNote()+'<div class="booking-form"><label>Họ và tên<input type="text" autocomplete="name" data-booking-name maxlength="80" required value="'+esc(state.name)+'" placeholder="Tên của bạn"></label><label>Số điện thoại<input type="tel" inputmode="tel" autocomplete="tel" data-booking-phone maxlength="16" required value="'+esc(state.phone)+'" placeholder="0xxxxxxxxx"></label><label>Ghi chú<textarea rows="2" data-booking-note maxlength="500" placeholder="Mẫu mong muốn hoặc điều tiệm cần biết">'+esc(state.note)+'</textarea></label><label class="sr-only">Website<input type="text" tabindex="-1" autocomplete="off" data-booking-website></label></div>'+photoField()+'</div>';
 }
 // After "Xác nhận đặt hẹn" the form steps aside for a short sequence: a spinner while the booking is
 // sent, a tick once it is confirmed, then the booking ticket flies in. Reduced motion skips the waits.
@@ -158,9 +164,9 @@ function barcodeSvg(code){
 // The bill (bill.js: the QR, the "Phiếu đặt lịch" picture, its download) loads while the booking is sent; the
 // stub keeps the drawn barcode and the ticket skips its download button if it cannot load.
 let billLib=null,billLoading=null;
-function loadBill(){return billLoading||(billLoading=import("./bill.js?v=20260928-1").then(function(lib){billLib=lib;return lib;},function(){billLoading=null;return null;}));}
+function loadBill(){return billLoading||(billLoading=import("./bill.js?v=20260928-3").then(function(lib){billLib=lib;return lib;},function(){billLoading=null;return null;}));}
 function ticketBill(){
-  const services=selectedServices().map(function(service){return {name:service.name,price:price(service)};});
+  const services=selectedServices().map(function(service){return {id:service.id,name:service.name,price:price(service)};});
   return {reference:state.reference,name:state.name.trim(),phone:billLib.maskPhone(vnPhone(state.phone)),note:state.note.trim(),startAt:state.slot,status:"confirmed",services:services,total:totals().price,url:billLib.billUrl(state.reference,state.billKey)};
 }
 function ticketHtml(){
@@ -199,7 +205,7 @@ function render(){
   const titles=["Bạn muốn làm gì hôm nay?","Mình ghé tiệm lúc nào?","Cho tiệm biết tên bạn nhé"];
   eyebrow.textContent="Đặt hẹn · bước "+state.step+"/3";title.textContent=titles[state.step-1];body.innerHTML=state.step===1?stepOne():(state.step===2?stepTwo():stepThree());back.textContent=state.step===1?"Để sau":"Quay lại";next.disabled=state.pending||state.loading;
   next.textContent=state.pending?(state.photos.some(function(photo){return photo.kind==="upload";})?"Đang gửi ảnh…":"Đang xác nhận…"):(state.step===1?(state.selected.length?"Chọn ngày & giờ":"Chọn dịch vụ trước"):(state.step===2?"Nhập thông tin":"Xác nhận đặt hẹn"));
-  const total=totals();summary.textContent=state.selected.length+" dịch vụ · "+durationText(total.minutes)+" · "+money(total.price)+(state.step===3&&state.photos.length?" · "+state.photos.length+" ảnh mẫu":"");
+  const total=totals();summary.textContent=state.selected.length+" dịch vụ · "+durationText(total.minutes)+" · "+(unitPriced()?"tạm tính ":"")+money(total.price)+(state.step===3&&state.photos.length?" · "+state.photos.length+" ảnh mẫu":"");
 }
 async function request(action,payload){
   const response=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(Object.assign({action:action},payload||{}))});

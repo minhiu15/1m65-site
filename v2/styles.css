@@ -2338,6 +2338,14 @@ main,
   color: #7066aa;
 }
 
+/* A design priced per nail, stone or charm (price-units.js): a line under the price says how it is counted
+   ("full bàn · 7.000₫/ngón", "mỗi viên"); a charm's price range sits a size smaller to stay on one line. */
+.shared-service-row__unit,
+.service-price-unit { margin-top: 3px; font-size: 10.5px; font-weight: 700; color: #80685f; white-space: nowrap; }
+.shared-service-row__pricing strong.is-range { font-size: 15px; letter-spacing: -.02em; white-space: nowrap; }
+@media (max-width: 900px) { .shared-service-row__unit { grid-column: 1 / -1; margin-top: 0; } }
+@media (max-width: 600px) { .shared-service-row__unit { font-size: 9px; } .shared-service-row__pricing strong.is-range { font-size: 13px; } }
+
 .shared-service-row__photo {
   width: 148px;
   height: 108px;
@@ -6326,6 +6334,12 @@ main,
 .booking-service-price-card del { color: var(--muted); font-size: 9px; }
 .booking-service-price-card strong { color: #ff4d78; font-size: 10px; }
 .booking-service-option:not(.has-sale) .booking-service-price-card strong { color: var(--cocoa); }
+/* Designs priced per nail, stone or charm (price-units.js): the unit after the price, the per-nail price by the
+   duration, and "Tạm tính" over the total with one line on how it adds up. */
+.booking-service-unit { display: block; margin-top: 2px; font-size: 9.5px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.booking-service-price-card strong.is-range { font-size: .72em; }
+.booking-estimate-label { display: block; margin-bottom: 3px; color: var(--muted); font: 800 10px/1 Nunito, system-ui, sans-serif; letter-spacing: .06em; text-align: right; text-transform: uppercase; }
+.booking-estimate-note { margin: -8px 4px 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
 
 @media (min-width: 601px) and (max-width: 900px) {
   .booking-service-grid { grid-template-columns: minmax(0, 1fr); }

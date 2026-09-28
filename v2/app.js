@@ -1,3 +1,5 @@
+import { unitPrice } from "./price-units.js?v=20260928-1";
+
 const BOOKING_ENDPOINT = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 
 const tabDefs = [
@@ -36,8 +38,8 @@ const fallbackServices = [
   ["matmeo", "Mắt mèo", 50000, 20, "Hiệu ứng chiều sâu", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
   ["guong", "Tráng gương", 50000, 20, "Bề mặt ánh kim", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
   ["ombre", "Ombre", 50000, 25, "Chuyển màu mềm mại", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
-  ["da", "Đính đá", 20000, 15, "Tính theo mẫu và số viên", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
-  ["charm", "Charm", 20000, 15, "Tuỳ mẫu charm", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
+  ["da", "Đính đá", 2000, 15, "Tính theo mẫu và số viên", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
+  ["charm", "Charm", 10000, 15, "Tuỳ mẫu charm", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
   ["sticker", "Sticker", 5000, 10, "Dán nhanh, nhiều mẫu", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
   ["ve", "Vẽ tay", 15000, 25, "Tuỳ độ chi tiết", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
   ["xacu", "Ẩn xà cừ / Kim tuyến", 10000, 15, "Ánh nhẹ dưới lớp gel", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
@@ -96,6 +98,8 @@ const nailCareDescriptions = {
   "noi-gel": "Đắp gel tạo độ cứng và form móng chuẩn đẹp.",
   "noi-bot": "Đắp bột giúp móng cứng chắc, độ bền cao.",
 };
+// The design menu prices some finishes per nail or per piece; the list shows each unit, this says how it adds up.
+const designPriceNote = "Flash, mắt mèo, tráng gương, ombre: giá full bàn, làm lẻ tính theo ngón. Đính đá tính theo viên, charm theo mẫu.";
 const nailCareNotes = [
   "Giá trên chưa bao gồm sơn.",
   "Mẫu càng chi tiết, tụi mình báo giá trước khi làm.",
@@ -132,9 +136,10 @@ const saleDiscount = (service) => {
 };
 
 function renderPrice(service) {
-  const onSale = saleDiscount(service) > 0;
+  const onSale = saleDiscount(service) > 0, shown = unitPrice(service.id, service.price);
   return `<span class="service-price${onSale ? " service-price--sale" : ""}">
-    <strong class="service-price-current">${money(service.price)}</strong>
+    <strong class="service-price-current">${shown.price}</strong>
+    ${shown.line ? `<span class="service-price-unit">${shown.line}</span>` : ""}
     ${onSale ? `<del class="service-price-original">${money(service.originalPrice)}</del>` : ""}
   </span>`;
 }
@@ -223,6 +228,7 @@ function sharedServiceRow(service) {
   const discount = Number(service.discountPercent || 0);
   const original = Number(service.originalPrice || service.price || 0);
   const hasDiscount = discount > 0 && original > Number(service.price || 0);
+  const shown = unitPrice(service.id, service.price);
   return `<article class="shared-service-row ${hasDiscount ? "has-sale" : ""}" data-card-variant="shared-list">
     <div class="shared-service-row__copy">
       <div class="shared-service-row__copy-main">
@@ -236,7 +242,8 @@ function sharedServiceRow(service) {
       </div>
       <div class="shared-service-row__pricing">
         ${hasDiscount ? `<del>${money(original)}</del>` : ""}
-        <strong>${money(service.price)}</strong>
+        <strong${shown.range ? ' class="is-range"' : ""}>${shown.price}</strong>
+        ${shown.line ? `<span class="shared-service-row__unit">${shown.line}</span>` : ""}
       </div>
     </div>
     <button class="service-booking-hitarea" type="button" data-book-service="${service.id}" aria-label="Đặt lịch ${service.name}"></button>
@@ -248,7 +255,7 @@ function renderSharedGroup(id, animate = false) {
   const services = group.ids.map(serviceById).filter(Boolean);
   const noteLines = id === "nail" ? nailCareNotes : [
     group.note,
-    ...(id === "design" ? [nailCareNotes[1]] : []),
+    ...(id === "design" ? [designPriceNote, nailCareNotes[1]] : []),
     nailCareNotes[2],
   ];
   return `<div class="shared-service-layout shared-service-layout--${id}${animate ? " is-entering" : ""}" data-template="shared-service-list" data-service-group="${id}">
