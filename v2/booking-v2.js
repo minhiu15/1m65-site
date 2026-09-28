@@ -147,7 +147,7 @@ const TICKET_HEART="M0 6.5C-3 4-8 .8-8-2.8C-8-5.6-5.8-7.4-3.6-7.4C-2-7.4-.6-6.5 
 const TICKET_STAR="M0-7C.6-2.2 2.2-.6 7 0C2.2.6.6 2.2 0 7C-.6 2.2-2.2.6-7 0C-2.2-.6-.6-2.2 0-7Z";
 // Outline sparkles in the art's amber, two to a cluster like the reference.
 function ticketSparkles(className){return '<svg class="booking-ticket__deco '+className+'" viewBox="-9 -9 30 28" aria-hidden="true"><g fill="#fff4d6" stroke="#f0a43a" stroke-width="1.3" stroke-linejoin="round"><path d="'+TICKET_STAR+'"/><path d="'+TICKET_STAR+'" transform="translate(13 12) scale(.6)"/></g></svg>';}
-function ticketHeart(className,outline){return '<svg class="'+className+'" viewBox="-9.5 -9 19 17" aria-hidden="true"><path d="'+TICKET_HEART+'" fill="'+(outline?"none":"#f38bab")+'" stroke="#e8628d" stroke-width="'+(outline?"1.6":"1")+'" stroke-linejoin="round"/></svg>';}
+function ticketHeart(className){return '<svg class="'+className+'" viewBox="-9.5 -9 19 17" aria-hidden="true"><path d="'+TICKET_HEART+'" fill="#f38bab" stroke="#e8628d" stroke-width="1" stroke-linejoin="round"/></svg>';}
 // A decorative barcode drawn from the booking code, so every ticket's bars differ.
 function barcodeSvg(code){
   let x=0,bars="";
@@ -160,22 +160,21 @@ function ticketHtml(){
   const names=selectedServices().map(function(service){return service.name;}).join(" + "),minutes=totals().minutes;
   const row=function(icon,label,value){return '<div class="booking-ticket__row"><img class="booking-ticket__row-icon" src="'+TICKET_ART+icon+'" alt="" aria-hidden="true" decoding="async"><dt>'+label+'</dt><dd>'+value+'</dd></div>';};
   return '<div class="booking-ticket__card" tabindex="-1" aria-labelledby="booking-ticket-title">'
-    +art("booking-ticket__cat","cat-peeking.webp")+art("booking-ticket__bow","pink-bow.webp")+art("booking-ticket__hearts","hearts-sparkles.webp")
+    +art("booking-ticket__cat","cat-peeking.webp")+art("booking-ticket__bow","pink-bow.webp")+'<span class="booking-ticket__deco booking-ticket__hearts" aria-hidden="true">'+["star","heart-big","heart-small"].map(function(piece){return '<img class="booking-ticket__heart-piece booking-ticket__heart-piece--'+piece+'" src="'+TICKET_ART+'ticket-'+piece+'.webp" alt="" decoding="async">';}).join("")+'</span>'
     +ticketSparkles("booking-ticket__sparkles booking-ticket__sparkles--title")
-    +art("booking-ticket__flower","single-flower.webp")+art("booking-ticket__tape","gingham-tape.webp")
     +'<button type="button" class="booking-ticket__close" data-close-modal aria-label="Đóng"><img src="'+TICKET_ART+'close-button.webp" alt="" decoding="async"></button>'
     +'<div class="booking-ticket__main"><div class="booking-ticket__heading"><p class="booking-ticket__eyebrow">Đã đặt hẹn</p>'
-    +'<h2 id="booking-ticket-title">Đặt lịch thành công!'+ticketHeart("booking-ticket__title-heart",true)+'</h2></div>'
+    +'<h2 id="booking-ticket-title">Đặt lịch thành công!'+'</h2></div>'
     +'<p class="booking-ticket__thanks">Cảm ơn bạn đã đặt lịch tại 1M65.</p>'
-    +'<p class="booking-ticket__note">Lịch đã được xác nhận, hẹn gặp bạn ở tiệm <span class="booking-ticket__nowrap">nhé '+ticketHeart("booking-ticket__note-heart",false)+'</span></p>'
+    +'<p class="booking-ticket__note">Lịch đã được xác nhận, hẹn gặp bạn ở tiệm <span class="booking-ticket__nowrap">nhé '+ticketHeart("booking-ticket__note-heart")+'</span></p>'
     +'<dl class="booking-ticket__info">'
     +row("calendar-icon.webp","Mã lịch hẹn",'<span class="booking-ticket__code">'+esc(state.reference)+'</span>')
     +(when?row("clock-icon.webp","Lịch hẹn",esc(when)):"")
     +(names?row("service-icon.webp","Dịch vụ",'<span class="booking-ticket__service">'+esc(names)+'</span><span class="booking-ticket__duration">~'+minutes+' phút</span>'):"")
     +'</dl>'
     +'<button class="booking-ticket__cta" type="button" data-booking-manage>'+TICKET_ICONS.calendar+'Xem lịch của bạn</button></div>'
-    +'<div class="booking-ticket__stub" aria-hidden="true"><div class="booking-ticket__brand">'+TICKET_ICONS.crown+'<strong>1M65'+ticketHeart("booking-ticket__brand-heart",false)+'</strong><small>NAIL · LASH · SPA</small></div>'
-    +'<div class="booking-ticket__scan">'+barcodeSvg(state.reference)+'<span class="booking-ticket__scan-heart">♥</span></div></div></div>';
+    +'<div class="booking-ticket__stub" aria-hidden="true"><div class="booking-ticket__brand">'+TICKET_ICONS.crown+'<strong>1M65'+ticketHeart("booking-ticket__brand-heart")+'</strong><small>NAIL · LASH · SPA</small></div>'
+    +'<div class="booking-ticket__scan">'+barcodeSvg(state.reference)+'</div></div></div>';
 }
 function showTicket(){
   const modal=bookingModal(),holder=modal&&modal.querySelector("[data-booking-ticket]");if(!holder)return;
