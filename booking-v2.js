@@ -221,7 +221,15 @@ async function availability(){
   finally{if(current===requestId){state.loading=false;render();}}
 }
 // The ticket's handwriting face is fetched while the form is filled in, so the ticket never flashes a fallback.
-function open(options,trigger){reset(options);setStage("");render();exp().openModal(document.querySelector("#booking-modal-v2"),trigger);if(document.fonts)document.fonts.load('700 1em "Baloo 2"',"Đặt lịch thành công").catch(function(){});}
+// The ticket's paper (a CSS background, so otherwise fetched only once the ticket is on screen) and its stickers
+// are fetched and decoded while the form is filled in, so the ticket lands whole instead of paperless for a second.
+let ticketArt=null;
+function preloadTicketArt(){
+  if(ticketArt)return;
+  const shell=matchMedia("(max-width: 899px) and (orientation: portrait)").matches?"ticket-shell-mobile.webp":"ticket-shell-desktop.webp";
+  ticketArt=[shell,"cat-peeking.webp","pink-bow.webp","ticket-star.webp","ticket-heart-big.webp","ticket-heart-small.webp","close-button.webp","calendar-icon.webp","clock-icon.webp"].map(function(file){const image=new Image();image.src=TICKET_ART+file;image.decode().catch(function(){});return image;});
+}
+function open(options,trigger){reset(options);setStage("");render();exp().openModal(document.querySelector("#booking-modal-v2"),trigger);if(document.fonts)document.fonts.load('700 1em "Baloo 2"',"Đặt lịch thành công").catch(function(){});preloadTicketArt();}
 function toggle(id){if(state.selected.includes(id))state.selected=state.selected.filter(function(item){return item!==id;});else if(state.selected.length>=8)return exp().toast("Mỗi lịch chọn tối đa 8 dịch vụ nha");else state.selected=state.selected.concat(id);state.error="";render();}
 function back(){
   state.calendarOpen=false;
@@ -363,7 +371,7 @@ if(typeof location!=="undefined"&&document.body&&/^(localhost|127\.0\.0\.1|\[::1
     const modal=bookingModal();if(!modal)return;
     reset();state.status="done";state.selected=["ve"];state.reference="1M65-260927-CD102D";state.date=offsetDate(1);state.slot=new Date(state.date+"T10:00:00+07:00").toISOString();
     state.name="Nguyễn Thị Mai";state.phone="0987654321";
-    if(modal.hidden)exp().openModal(modal,replay);
+    preloadTicketArt();if(modal.hidden)exp().openModal(modal,replay);
     loadBill().then(function(){setStage("");showTicket();});
   });
   document.body.append(replay);
