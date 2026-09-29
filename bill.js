@@ -64,7 +64,7 @@ export function qrSvg(text, className) {
 let fontsReady;
 function loadFonts() {
   if (!fontsReady) {
-    const script = new FontFace("Great Vibes", "url(" + new URL("../assets/fonts/GreatVibes-Regular.ttf", import.meta.url).href + ")");
+    const script = new FontFace("Great Vibes", "url(" + new URL("assets/fonts/GreatVibes-Regular.ttf", import.meta.url).href + ")");
     document.fonts.add(script);
     const sample = "Phiếu đặt lịch Cảm ơn bạn đã lựa chọn ƯĐđ ạẹợữ 0123456789";
     fontsReady = Promise.all([script.load()].concat(["800 40px " + HAND, "700 40px " + HAND, "600 20px " + BODY, "500 20px " + BODY, "700 40px " + ROUND].map(function (spec) { return document.fonts.load(spec, sample); }))).catch(function () {});
@@ -501,7 +501,7 @@ export function saveBill(canvas, reference) {
       if (!blob) { reject(new Error("bill_render_failed")); return; }
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = "phieu-dat-lich-" + reference + ".png";
+      link.download = reference + ".png";
       document.body.append(link);
       link.click();
       link.remove();

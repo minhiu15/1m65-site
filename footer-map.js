@@ -2,8 +2,8 @@
   "use strict";
 
   const SALON_LOCATION = Object.freeze({ lat: 10.7308045, lng: 106.824314 });
-  const LEAFLET_CSS = "../leaflet.css?v=1.9.4";
-  const LEAFLET_JS = "../leaflet.js?v=1.9.4";
+  const LEAFLET_CSS = "leaflet.css?v=1.9.4";
+  const LEAFLET_JS = "leaflet.js?v=1.9.4";
   let leafletRequested = false;
 
   // Leaflet (~42 KB gzip plus OSM tiles) loads only when the footer map nears the viewport.

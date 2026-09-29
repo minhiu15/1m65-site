@@ -1,4 +1,4 @@
-import "./booking-v2.js?v=20260929-7";
+import "./booking-v2.js?v=20260929-8";
 
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
@@ -297,7 +297,7 @@ function renderReviews(reviews) {
 async function loadReviews() {
   renderReviews(fallbackReviews);
   try {
-    const response = await fetch("../google-reviews.json",{cache:"no-store"});
+    const response = await fetch("google-reviews.json",{cache:"no-store"});
     if (!response.ok) return;
     const data = await response.json();
     const reviews = Array.isArray(data.reviews) ? data.reviews.filter(function(review){return Number(review.rating)===5 && String(review.text||"").trim();}).map(function(review){return [String(review.text).trim(),String(review.name||"Khách hàng Google"),"Google · 5 sao"];}) : [];

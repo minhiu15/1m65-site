@@ -10,9 +10,14 @@
     // path segment on github.io (a project site) and "/" on the shop's own domain.
     function notFoundTarget(host, path) {
       var root = /\.github\.io$/.test(host) ? "/" + (path.split("/")[1] || "") + "/" : "/";
-      // "/admin/" and other pages typed with a trailing slash: the same page without it.
-      var retry = path.length > root.length && /[^/]\/$/.test(path) ? path.slice(0, -1) : null;
-      return { root: root, retry: retry };
+      var target = path;
+      // V2 used to live under /v2/ before it became the site: old links (bill QR codes too) drop the "v2/".
+      if (path.slice(0, root.length + 2) === root + "v2" && /^(\/|$)/.test(path.slice(root.length + 2))) target = root + path.slice(root.length + 3);
+      // The admin lives once, at the site root: "/v2/admin", "/admin/" and the like all go there.
+      if (/\/admin(\.html)?\/?$/.test(target)) target = root + "admin";
+      // Other pages typed with a trailing slash: the same page without it.
+      else if (target.length > root.length && /[^/]\/$/.test(target)) target = target.slice(0, -1);
+      return { root: root, retry: target !== path ? target : null };
     }
     (function () {
       var target = notFoundTarget(location.hostname, location.pathname);
@@ -68,7 +73,7 @@
       position: absolute;
       inset: 0;
       z-index: -1;
-      border-image: url(v2/assets/gallery/ui_shells/primary_button_rounded_rect_paper_v1.webp) 92 fill / 20px / 4.35px stretch;
+      border-image: url(assets/gallery/ui_shells/primary_button_rounded_rect_paper_v1.webp) 92 fill / 20px / 4.35px stretch;
     }
     .home:hover { filter: brightness(1.025) saturate(1.05); transform: translateY(-1px); }
     .home:focus-visible { outline: 3px solid #d9476d; outline-offset: 4px; }

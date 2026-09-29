@@ -10,9 +10,12 @@
   <link rel="icon" href="favicon.svg">
   <link rel="stylesheet" href="manage-booking.css?v=20260921-1">
   <link rel="stylesheet" href="rose-theme.css?v=20260903webp1">
+  <link rel="stylesheet" href="manage-booking-v2.css?v=20260928-1">
+  <link rel="stylesheet" href="paw-cursor.css?v=20260922-1">
   <script src="turnstile-config.js?v=20260807a"></script>
   <script src="turnstile-booking.js?v=20260807a"></script>
   <script src="manage-booking.js?v=20260925-1" defer></script>
+  <script src="paw-cursor.js?v=20260922-3" defer></script>
 </head>
 <body>
   <div class="ambient-doodles" aria-hidden="true">
@@ -22,23 +25,23 @@
   </div>
   <main class="page-shell">
     <header class="page-header">
-      <a class="brand" href="index.html" aria-label="Về trang chủ 1M65 Nails">
+      <a class="brand" href="./" aria-label="Về trang chủ 1M65 Nails V2">
         <span class="brand-paw" aria-hidden="true">
           <svg viewBox="0 0 40 40"><g><ellipse cx="10.6" cy="17.6" rx="5" ry="6.2" transform="rotate(-18 10.6 17.6)"></ellipse><ellipse cx="17" cy="13.4" rx="5" ry="6.4"></ellipse><ellipse cx="23.6" cy="13.4" rx="5" ry="6.4"></ellipse><ellipse cx="30" cy="17.6" rx="5" ry="6.2" transform="rotate(18 30 17.6)"></ellipse><path d="M20 21.4c6.6 0 11.4 4 11.4 8.4 0 4.2-5.1 6.6-11.4 6.6S8.6 34 8.6 29.8c0-4.4 4.8-8.4 11.4-8.4z"></path></g></svg>
         </span>
         <span class="brand-copy"><strong>1M65</strong><small>Nails, Eyelashes, Shampoo</small></span>
       </a>
-      <a class="back-link" href="index.html"><span aria-hidden="true">←</span> Về trang chủ</a>
+      <a class="back-link" href="./"><span aria-hidden="true">←</span> Về trang chủ</a>
     </header>
 
     <section class="intro" aria-labelledby="page-title">
       <div class="intro-copy">
-        <p class="eyebrow"><span aria-hidden="true">♡</span> Lịch hẹn của bạn</p>
+        <p class="eyebrow"><img class="inline-heart-icon" src="assets/booking/booking_heart_outline_pink.webp" alt="" aria-hidden="true" decoding="async"> Lịch hẹn của bạn</p>
         <h1 id="page-title">Hẹn với tiệm,<br><span>mình cùng xem lại nha.</span></h1>
         <p>Nhập số điện thoại và tên bạn đã dùng khi đặt lịch, tiệm sẽ tìm các lịch hẹn đang có của bạn để mình xem, dời hoặc hủy lịch.</p>
       </div>
       <div class="intro-note" aria-hidden="true">
-        <img src="doodles/cat-stamp.webp" alt="">
+        <img src="assets/services/nail-care/cats/header_cat_peeking.webp" alt="">
         <p>Mọi thay đổi đều được<br>gửi ngay về cho tiệm.</p>
       </div>
     </section>
@@ -75,7 +78,7 @@
     <section id="appointment-list-view" class="appointment-list-view" aria-labelledby="appointment-list-title" hidden>
       <div class="appointment-list-heading">
         <div>
-          <p class="eyebrow"><span aria-hidden="true">♡</span> Lịch đang đặt</p>
+          <p class="eyebrow"><img class="inline-heart-icon" src="assets/booking/booking_heart_outline_pink.webp" alt="" aria-hidden="true" decoding="async"> Lịch đang đặt</p>
           <h2 id="appointment-list-title">Chọn lịch bạn muốn xem</h2>
         </div>
         <p id="appointment-list-count" class="appointment-list-count"></p>
@@ -145,7 +148,7 @@
       </div>
     </section>
 
-    <footer class="support-footer"><span aria-hidden="true">♡</span> Cần tiệm hỗ trợ? Liên hệ trực tiếp với 1M65 Nails để tụi mình xử lý giúp nha.</footer>
+    <footer class="support-footer"><img class="inline-heart-icon" src="assets/booking/booking_heart_outline_pink.webp" alt="" aria-hidden="true" decoding="async"> Cần tiệm hỗ trợ? Liên hệ trực tiếp với 1M65 Nails để tụi mình xử lý giúp nha.</footer>
   </main>
 </body>
 </html>

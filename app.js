@@ -65,7 +65,7 @@ const groupDefs = {
   classic: {
     title: "CLASSIC",
     note: "Màu trơn trong trẻo, bóng căng và dịu dàng theo đúng gu của bạn.",
-    accent: "../doodles/hearts.webp",
+    accent: "doodles/hearts.webp",
     ids: ["son-cung", "gel-hn", "gel-thach"],
   },
   design: {
@@ -77,13 +77,13 @@ const groupDefs = {
   mi: {
     title: "EYELASHES",
     note: "Uốn và nối mi theo dáng mắt, nhẹ nhàng nhưng vẫn thật có điểm nhấn.",
-    accent: "../doodles/hand-mirror.webp",
+    accent: "doodles/hand-mirror.webp",
     ids: ["uon-mi", "uon-mi-den", "mi-classic", "mi-tho", "mi-volume", "mi-sole", "mi-duoi"],
   },
   goi: {
     title: "SHAMPOO",
     note: "Một khoảng nghỉ êm cho tóc, da đầu và đôi vai được thả lỏng.",
-    accent: "../doodles/teacup.webp",
+    accent: "doodles/teacup.webp",
     ids: ["goi-thuong", "goi-phuchoi", "goi-duongsinh"],
   },
 };
@@ -182,7 +182,7 @@ function renderServiceNote(lines) {
     <div class="service-note-label"><strong>Lưu ý nhé</strong></div>
     <ul>${lines.map((line, index) => `<li data-note-tone="${index % 3}">${line}</li>`).join("")}</ul>
     <span class="service-note-decor" aria-hidden="true">
-      <img class="service-note-decor__sparkle" src="../doodles/star-lavender.webp" alt="" decoding="async" loading="lazy">
+      <img class="service-note-decor__sparkle" src="doodles/star-lavender.webp" alt="" decoding="async" loading="lazy">
     </span>
   </aside>`;
 }
