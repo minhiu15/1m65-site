@@ -1,6 +1,6 @@
 // The page a ticket's QR code opens: asks booking-api for the bill (the link's reference and key), draws it
 // and lets the customer save it.
-import { API, billUrl, renderBill, saveBill } from "./bill.js?v=20260928-3";
+import { API, billUrl, renderBill, saveBill } from "./bill.js?v=20260929-7";
 
 const status = document.querySelector("[data-bill-status]");
 const frame = document.querySelector("[data-bill-frame]");
