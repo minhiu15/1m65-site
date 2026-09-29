@@ -495,9 +495,28 @@ export async function renderBill(bill, scale) {
   return canvas;
 }
 
+// A saved bill sits on the site's blush backdrop with a soft shadow: phone photo viewers paint a PNG's
+// transparency white, which read as a white box behind the paper. The bill drawn on the page stays transparent.
+function onBackdrop(bill) {
+  const pad = Math.round(bill.width * 0.07), out = document.createElement("canvas");
+  out.width = bill.width + pad * 2;
+  out.height = bill.height + pad * 2;
+  const ctx = out.getContext("2d"), wash = ctx.createLinearGradient(0, 0, out.width, out.height);
+  wash.addColorStop(0, "#fde7ee");
+  wash.addColorStop(0.55, "#fdf7f3");
+  wash.addColorStop(1, "#efe6fb");
+  ctx.fillStyle = wash;
+  ctx.fillRect(0, 0, out.width, out.height);
+  ctx.shadowColor = "rgba(201, 73, 110, 0.22)";
+  ctx.shadowBlur = pad * 0.5;
+  ctx.shadowOffsetY = pad * 0.18;
+  ctx.drawImage(bill, pad, pad);
+  return out;
+}
+
 export function saveBill(canvas, reference) {
   return new Promise(function (resolve, reject) {
-    canvas.toBlob(function (blob) {
+    onBackdrop(canvas).toBlob(function (blob) {
       if (!blob) { reject(new Error("bill_render_failed")); return; }
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
@@ -507,7 +526,7 @@ export function saveBill(canvas, reference) {
       link.remove();
       setTimeout(function () { URL.revokeObjectURL(link.href); }, 10000);
       resolve();
-    }, "image/png");   // transparent round the paper, so the saved bill sits on any background
+    }, "image/png");
   });
 }
 

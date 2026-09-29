@@ -1,4 +1,4 @@
-import "./booking-v2.js?v=20260929-9";
+import "./booking-v2.js?v=20260929-17";
 
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
@@ -50,6 +50,8 @@ const REVIEW_TRANSITION_MS = 620;
 const reviewMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
 document.addEventListener("pointerdown",function(){lastInputWasPointer=true;},true);
+// iOS Safari only applies :active (the pressed look below) while some touchstart listener exists.
+document.addEventListener("touchstart",function(){},{passive:true});
 document.addEventListener("keydown",function(){
   lastInputWasPointer=false;
 },true);
@@ -139,19 +141,41 @@ function toast(message) {
   node.hidden = false;
   toastTimer = setTimeout(function(){node.hidden = true;}, 3200);
 }
-window.__v2Experience = { openModal: openModal, closeModal: closeModal, toast: toast, esc: esc, gallery: gallery };
+window.__v2Experience = { openModal: openModal, closeModal: closeModal, toast: toast, esc: esc, gallery: gallery, galleryThumb: galleryThumb };
 
 function initialGalleryCount() {
   return matchMedia("(max-width: 600px)").matches ? 6 : 10;
 }
+// Grid tiles show thumbnails (scripts/make-gallery-thumbs.mjs): the original photos, decoded at tile size, made
+// phones re-decode them and blink while scrolling, and made switching tabs stutter. The lightbox opens the original.
+function galleryThumb(src, width) {
+  return "assets/gallery/thumbs/" + src.split("/").pop().replace(/\.\w+$/, "-" + width + ".webp");
+}
 function tile(item, index) {
-  return '<button type="button" class="gallery-tile" data-gallery-index="'+index+'" aria-label="Xem lớn: '+esc(item[2])+'"><img src="'+esc(item[1])+'" alt="" loading="lazy" decoding="async"><span class="sr-only">'+esc(item[2])+'</span></button>';
+  const small = esc(galleryThumb(item[1], 480)), large = esc(galleryThumb(item[1], 800));
+  return '<button type="button" class="gallery-tile" data-gallery-index="'+index+'" aria-label="Xem lớn: '+esc(item[2])+'"><img src="'+small+'" srcset="'+small+' 480w, '+large+' 800w" sizes="(max-width: 600px) 40vw, 300px" alt="" loading="lazy" decoding="async"><span class="sr-only">'+esc(item[2])+'</span></button>';
 }
 function galleryEmptyState() {
-  return '<div class="gallery-empty" role="status"><picture class="gallery-empty__art" aria-hidden="true"><source srcset="assets/gallery/empty/gallery-empty-polaroids.webp" type="image/webp"><img src="assets/gallery/empty/gallery-empty-polaroids.png" alt="" loading="lazy" decoding="async"></picture><h3>Chưa có ảnh ở mục này</h3><p>Tụi mình đang chuẩn bị những khoảnh khắc xinh<br>để chia sẻ cùng bạn. Ghé lại sau nhé ♡</p></div>';
+  return '<div class="gallery-empty" role="status"><picture class="gallery-empty__art" aria-hidden="true"><source srcset="assets/gallery/empty/gallery-empty-polaroids.webp" type="image/webp"><img src="assets/gallery/empty/gallery-empty-polaroids.png" alt="" decoding="async"></picture><h3>Chưa có ảnh ở mục này</h3><p>Tụi mình đang chuẩn bị những khoảnh khắc xinh<br>để chia sẻ cùng bạn. Ghé lại sau nhé ♡</p></div>';
 }
 function filteredGallery() {
   return gallery.filter(function(item){return item[0] === galleryFilter;});
+}
+// Each grid keeps the tiles it has built, per tab: switching back, or a resize (phones fire one whenever the address
+// bar slides away while scrolling), reuses the same img elements, so photos never go blank and re-decode.
+const galleryTiles = new Map();
+function fillGalleryGrid(grid, key, empty, markup) {
+  grid.classList.toggle("is-empty", empty);
+  if (grid.dataset.galleryKey === key) return;
+  let nodes = galleryTiles.get(key);
+  if (!nodes) {
+    const holder = document.createElement("template");
+    holder.innerHTML = empty ? galleryEmptyState() : markup();
+    nodes = Array.from(holder.content.childNodes);
+    galleryTiles.set(key, nodes);
+  }
+  grid.replaceChildren.apply(grid, nodes);
+  grid.dataset.galleryKey = key;
 }
 function renderGallery() {
   document.querySelectorAll("[data-gallery-filter],[data-gallery-modal-filter]").forEach(function(button){
@@ -166,15 +190,9 @@ function renderGallery() {
   const more = document.querySelector("[data-open-gallery]");
   const hint = document.querySelector("[data-gallery-hint]");
   const empty = items.length === 0;
-  const emptyMarkup = empty ? galleryEmptyState() : "";
-  if (main) {
-    main.classList.toggle("is-empty",empty);
-    main.innerHTML = empty ? emptyMarkup : items.slice(0,count).map(tile).join("");
-  }
-  if (full) {
-    full.classList.toggle("is-empty",empty);
-    full.innerHTML = empty ? emptyMarkup : items.map(tile).join("");
-  }
+  if (main) fillGalleryGrid(main, "main|" + galleryFilter + "|" + count, empty, function(){ return items.slice(0,count).map(tile).join(""); });
+  // The popup's grid is filled when the popup is open (opening it renders the gallery again).
+  if (full && !(full.closest(".modal") || {}).hidden) fillGalleryGrid(full, "full|" + galleryFilter, empty, function(){ return items.map(tile).join(""); });
   if (more) more.hidden = items.length <= count;
   if (hint) hint.hidden = items.length === 0;
   if (more && more.parentElement) more.parentElement.hidden = empty;
@@ -328,9 +346,10 @@ async function loadHomeAvailability() {
     buttons.forEach(function(button){const status=button.querySelector("small");if(status)status.textContent="Mở lịch";});
   }
 }
+// The manager is a page of its own in an iframe; the popup shows a loading paw over it until that page loads.
 function openManager(reference,trigger) {
   const frame = document.querySelector("[data-manager-frame]");
-  if (frame) {const query=new URLSearchParams({embed:"1",view:"v2"});if(reference)query.set("reference",reference);frame.src="manage-booking.html?"+query.toString();}
+  if (frame) {const query=new URLSearchParams({embed:"1",view:"v2"});if(reference)query.set("reference",reference);const panel=frame.parentElement;panel.classList.add("is-loading");frame.addEventListener("load",function(){panel.classList.remove("is-loading");},{once:true});frame.src="manage-booking.html?"+query.toString();}
   openModal(document.querySelector("#manager-modal"),trigger);
 }
 window.__v2Experience.openManager = openManager;
@@ -338,7 +357,7 @@ window.__v2Experience.openManager = openManager;
 document.addEventListener("click",function(event){
   const target=event.target;
   const close=target.closest("[data-close-modal]");if(close)return closeModal(close.closest(".modal"));
-  const openGallery=target.closest("[data-open-gallery]");if(openGallery){renderGallery();openModal(document.querySelector("#gallery-modal"),openGallery);return;}
+  const openGallery=target.closest("[data-open-gallery]");if(openGallery){openModal(document.querySelector("#gallery-modal"),openGallery);renderGallery();return;}
   const filter=target.closest("[data-gallery-filter],[data-gallery-modal-filter]");if(filter){galleryFilter=filter.dataset.galleryFilter||filter.dataset.galleryModalFilter;renderGallery();return;}
   const photoZoom=target.closest("[data-photo-zoom]");if(photoZoom){openPhotoZoom(photoZoom.dataset.photoZoom,photoZoom.dataset.photoZoomCaption,photoZoom);return;}
   const galleryTile=target.closest("[data-gallery-index]");if(galleryTile){openLightbox(Number(galleryTile.dataset.galleryIndex),galleryTile);return;}
@@ -346,12 +365,12 @@ document.addEventListener("click",function(event){
   if(target.closest("[data-lightbox-next]")){updateLightbox(lightboxIndex+1);return;}
   if(target.closest("[data-review-prev]")){moveReview(-1);scheduleReviewAutoplay();return;}
   if(target.closest("[data-review-next]")){moveReview(1);scheduleReviewAutoplay();return;}
-  const galleryBook=target.closest("[data-gallery-book]");if(galleryBook){const origin=rootReturnFocus()||galleryBook;closeModal(document.querySelector("#gallery-modal"),false);window.__v2Booking.open({},origin);return;}
-  const lightboxBook=target.closest("[data-lightbox-book]");if(lightboxBook){const origin=rootReturnFocus()||lightboxBook;closeModal(document.querySelector("#gallery-lightbox"),false);window.__v2Booking.open({},origin);return;}
+  const galleryBook=target.closest("[data-gallery-book]");if(galleryBook){const origin=rootReturnFocus()||galleryBook;closeModal(document.querySelector("#gallery-modal"),false);window.__v2Booking.open({defer:true},origin);return;}
+  const lightboxBook=target.closest("[data-lightbox-book]");if(lightboxBook){const origin=rootReturnFocus()||lightboxBook;closeModal(document.querySelector("#gallery-lightbox"),false);window.__v2Booking.open({defer:true},origin);return;}
   const faq=target.closest("[data-faq-list] button");if(faq){const expanded=faq.getAttribute("aria-expanded")==="true";faq.setAttribute("aria-expanded",String(!expanded));return;}
   const manager=target.closest("[data-open-manager]");if(manager)openManager("",manager);
 });
-document.addEventListener("1m65:v2:open-booking",function(event){window.__v2Booking.open(event.detail||{},document.activeElement);});
+document.addEventListener("1m65:v2:open-booking",function(event){window.__v2Booking.open(Object.assign({defer:true},event.detail),document.activeElement);});
 document.addEventListener("keydown",function(event){
   if(event.key==="Escape"&&activeModal){event.preventDefault();closeModal(activeModal);return;}
   const drawer=document.querySelector("#mobile-drawer");
@@ -370,6 +389,24 @@ document.addEventListener("visibilitychange",scheduleReviewAutoplay);
 if (reviewMotion.addEventListener) reviewMotion.addEventListener("change",scheduleReviewAutoplay);
 window.init1m65FooterMap?.(document.querySelector("[data-footer-map]"));
 renderGallery();
+// Once the page is idle, fetch and decode what the other gallery tabs show first (their thumbnails, the empty-tab
+// art), so the first switch to another tab shows its pictures at once.
+const galleryPreload = [];
+(window.requestIdleCallback || function(run){ setTimeout(run, 1500); })(function(){
+  const count = initialGalleryCount(), art = new Image();
+  art.src = "assets/gallery/empty/gallery-empty-polaroids.webp";
+  galleryPreload.push(art);
+  ["nail", "mi", "khac"].filter(function(id){ return id !== galleryFilter; }).forEach(function(id){
+    gallery.filter(function(item){ return item[0] === id; }).slice(0, count).forEach(function(item){
+      const image = new Image(), small = galleryThumb(item[1], 480);
+      image.sizes = "(max-width: 600px) 40vw, 300px";
+      image.srcset = small + " 480w, " + galleryThumb(item[1], 800) + " 800w";
+      image.src = small;
+      galleryPreload.push(image);
+    });
+  });
+  galleryPreload.forEach(function(image){ image.decode().catch(function(){}); });
+});
 loadReviews();
 loadHomeAvailability();
 
@@ -381,13 +418,15 @@ document.addEventListener("pointerdown",function(event){
   active.blur();
 },true);
 
-// One pill per tab bar glides to the chosen tab (Services and the page Gallery) instead of jumping. It is
+// One pill per tab bar glides to the chosen tab (Services, the page Gallery and its popup) instead of jumping. It is
 // placed on the active tab's own pill and copies its look, so every breakpoint keeps its sizing.
 function syncTabSlider(bar,animate){
   const active=bar.querySelector(":scope > .is-active");if(!active)return;
   let pill=bar.querySelector(":scope > .tab-slider");
   if(!pill){pill=document.createElement("span");pill.className="tab-slider";pill.setAttribute("aria-hidden","true");bar.append(pill);animate=false;}
-  bar.classList.add("has-tab-slider");
+  // Only when missing: classList.add rewrites the attribute even if the class is there, and the observer below
+  // would then resync every frame, forcing a layout each time (it ran for good on every bar).
+  if(!bar.classList.contains("has-tab-slider"))bar.classList.add("has-tab-slider");
   const shell=getComputedStyle(active,"::before"),box=bar.getBoundingClientRect(),rect=active.getBoundingClientRect(),inset=function(side){return parseFloat(shell[side])||0;};
   const x=rect.left-box.left-bar.clientLeft+inset("left"),y=rect.top-box.top-bar.clientTop+inset("top");
   pill.style.transition=animate?"":"none";
@@ -397,8 +436,9 @@ function syncTabSlider(bar,animate){
 function watchTabSlider(bar){
   let frame=0;const queue=function(animate){cancelAnimationFrame(frame);frame=requestAnimationFrame(function(){syncTabSlider(bar,animate);});};
   new MutationObserver(function(){queue(true);}).observe(bar,{subtree:true,childList:true,attributes:true,attributeFilter:["class"]});
-  addEventListener("resize",function(){queue(false);});
+  // A bar in a closed popup has no size yet; it is placed once the popup opens (and on any resize).
+  new ResizeObserver(function(){queue(false);}).observe(bar);
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){queue(false);});
   queue(false);
 }
-document.querySelectorAll("[data-service-tabs], .gallery-content-panel > [data-gallery-filters]").forEach(watchTabSlider);
+document.querySelectorAll("[data-service-tabs], .gallery-content-panel > [data-gallery-filters], [data-gallery-modal-filters]").forEach(watchTabSlider);

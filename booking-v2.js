@@ -100,7 +100,7 @@ function stepTwo(){
 function photoField(){
   const tiles=state.photos.map(function(photo,index){
     const gallery=photo.kind==="gallery",label=gallery?photo.title:"Ảnh của bạn";
-    return '<figure class="booking-photo"><img src="'+esc(gallery?photo.src:photo.data)+'" alt="'+esc(label)+'" decoding="async"><figcaption>'+esc(label)+'</figcaption><button type="button" data-booking-photo-remove="'+index+'" aria-label="Bỏ ảnh '+esc(label)+'">×</button></figure>';
+    return '<figure class="booking-photo"><img src="'+esc(gallery?thumb(photo.src):photo.data)+'" alt="'+esc(label)+'" decoding="async"><figcaption>'+esc(label)+'</figcaption><button type="button" data-booking-photo-remove="'+index+'" aria-label="Bỏ ảnh '+esc(label)+'">×</button></figure>';
   }).join("")+new Array(state.photoBusy).fill('<span class="booking-photo is-busy" role="status" aria-label="Đang xử lý ảnh"></span>').join("");
   const room=MAX_PHOTOS-state.photos.length-state.photoBusy;
   const actions=room>0?'<div class="booking-photo-actions"><label class="booking-photo-button"><input type="file" accept="image/*" multiple data-booking-photo-input>Tải ảnh lên</label><button type="button" class="booking-photo-button" data-booking-photo-picker>Chọn từ thư viện</button></div>':'';
@@ -108,6 +108,8 @@ function photoField(){
 }
 // After an async photo step only the photo block is redrawn, so a customer typing her name keeps her caret.
 function refreshPhotos(){const block=document.querySelector("[data-booking-photos]");if(block&&!state.picker)block.outerHTML=photoField();else render();}
+// Gallery picks show the grid's small thumbnail; the booking still sends the original photo's path.
+function thumb(src){return exp().galleryThumb?exp().galleryThumb(src,480):src;}
 function pickerView(){
   const items=Array.isArray(exp().gallery)?exp().gallery:[];
   const filters=Object.keys(PICKER_LABELS).filter(function(id){return items.some(function(item){return item[0]===id;});});
@@ -116,7 +118,7 @@ function pickerView(){
   const tabs=filters.map(function(id){return '<button type="button" class="'+(id===state.pickerFilter?"is-active":"")+'" data-booking-picker-filter="'+id+'" aria-pressed="'+(id===state.pickerFilter)+'">'+PICKER_LABELS[id]+'</button>';}).join("");
   const grid=items.filter(function(item){return item[0]===state.pickerFilter;}).map(function(item){
     const selected=chosen.has(item[1]);
-    return '<button type="button" class="booking-pick'+(selected?" is-selected":"")+'" data-booking-pick="'+esc(item[1])+'" data-booking-pick-title="'+esc(item[2])+'" aria-pressed="'+selected+'"'+(!selected&&full?" disabled":"")+'><img src="'+esc(item[1])+'" alt="" loading="lazy" decoding="async"><span>'+esc(item[2])+'</span><i aria-hidden="true">'+(selected?"✓":"")+'</i></button>';
+    return '<button type="button" class="booking-pick'+(selected?" is-selected":"")+'" data-booking-pick="'+esc(item[1])+'" data-booking-pick-title="'+esc(item[2])+'" aria-pressed="'+selected+'"'+(!selected&&full?" disabled":"")+'><img src="'+esc(thumb(item[1]))+'" alt="" loading="lazy" decoding="async"><span>'+esc(item[2])+'</span><i aria-hidden="true">'+(selected?"✓":"")+'</i></button>';
   }).join("");
   return '<div class="booking-step booking-picker" data-booking-step="picker"><div class="booking-categories booking-picker__tabs" role="group" aria-label="Lọc thư viện">'+tabs+'</div><p class="booking-picker__hint">Chạm để chọn mẫu bạn thích · còn '+Math.max(0,MAX_PHOTOS-state.photos.length-state.photoBusy)+' chỗ</p><div class="booking-pick-grid">'+grid+'</div></div>';
 }
@@ -144,11 +146,16 @@ function setStage(name){
 // The owner's ticket art lives in assets/booking/confirmation (the decorated wide ticket, plus the portrait
 // shell and the cat, bow, hearts, flower, tape and close button that dress it on phones, and the row icons);
 // titles, booking data, the button, 1M65 and the barcode stay live.
+// Hand-drawn, like the ticket's pink outline: a slow wobble plus small bumps along the edges (both smooth
+// displacements, so strokes never tear), then the edge is re-sharpened (resampling had softened it), so the
+// stub's crown and 1M65 stay crisp and solid.
+const TICKET_HAND_FILTER='<svg class="booking-ticket__filters" width="0" height="0" aria-hidden="true" focusable="false"><filter id="booking-ticket-hand" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="wobble"/><feDisplacementMap in="SourceGraphic" in2="wobble" scale="2.5" xChannelSelector="R" yChannelSelector="G" result="wobbled"/><feTurbulence type="fractalNoise" baseFrequency="0.16" numOctaves="1" seed="3" result="bumps"/><feDisplacementMap in="wobbled" in2="bumps" scale="1.1" xChannelSelector="R" yChannelSelector="G" result="bumpy"/><feComponentTransfer in="bumpy"><feFuncA type="linear" slope="2.4" intercept="-.55"/></feComponentTransfer></filter></svg>';
 const TICKET_ART="assets/booking/confirmation/";
 const TICKET_ICONS={
   download:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></svg>',
   calendar:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h2M12 14h2M16 14h.5M8 17h2M12 17h2"/></svg>',
-  crown:'<svg class="booking-ticket__crown" viewBox="0 0 64 44" aria-hidden="true"><path d="M8 36L4 12l15 12L32 5l13 19 15-12-4 24z"/><path d="M9 41h46"/><circle cx="4" cy="11" r="3"/><circle cx="32" cy="4" r="3"/><circle cx="60" cy="11" r="3"/></svg>'
+  // Drawn as if by hand: each side bows a little, the base line wanders, the tips are slightly uneven blobs.
+  crown:'<svg class="booking-ticket__crown" viewBox="0 0 64 44" aria-hidden="true"><path d="M8.6 36.2Q6.4 24.5 4.3 12.4Q11.8 17.4 19.2 23.6Q25.2 13.8 32.2 5.4Q38.3 14.6 44.6 23.9Q52.2 17.9 59.6 12.2Q58.4 24.4 55.8 36.1Q32.4 34.4 8.6 36.2z"/><path d="M9.4 41.3Q21 40.1 32.3 40.9T54.8 40.5"/><path d="M1.3 11.1Q1.6 8.2 4.3 8.2Q7.2 8.5 7 11.3Q6.6 13.9 3.9 13.8Q1.2 13.5 1.3 11.1z"/><path d="M29.2 4.2Q29.5 1.1 32.3 1.3Q35.1 1.5 34.9 4.4Q34.5 7.1 31.8 6.9Q29.1 6.6 29.2 4.2z"/><path d="M57.1 11.3Q57.2 8.5 60 8.4Q62.8 8.6 62.7 11.2Q62.4 13.9 59.6 13.9Q57 13.7 57.1 11.3z"/></svg>'
 };
 const TICKET_HEART="M0 6.5C-3 4-8 .8-8-2.8C-8-5.6-5.8-7.4-3.6-7.4C-2-7.4-.6-6.5 0-5.2C.6-6.5 2-7.4 3.6-7.4C5.8-7.4 8-5.6 8-2.8C8 .8 3 4 0 6.5Z";
 const TICKET_STAR="M0-7C.6-2.2 2.2-.6 7 0C2.2.6.6 2.2 0 7C-.6 2.2-2.2.6-7 0C-2.2-.6-.6-2.2 0-7Z";
@@ -164,7 +171,7 @@ function barcodeSvg(code){
 // The bill (bill.js: the QR, the "Phiếu đặt lịch" picture, its download) loads while the booking is sent; the
 // stub keeps the drawn barcode and the ticket skips its download button if it cannot load.
 let billLib=null,billLoading=null;
-function loadBill(){return billLoading||(billLoading=import("./bill.js?v=20260929-8").then(function(lib){billLib=lib;return lib;},function(){billLoading=null;return null;}));}
+function loadBill(){return billLoading||(billLoading=import("./bill.js?v=20260929-9").then(function(lib){billLib=lib;return lib;},function(){billLoading=null;return null;}));}
 function ticketBill(){
   const services=selectedServices().map(function(service){return {id:service.id,name:service.name,price:price(service)};});
   return {reference:state.reference,name:state.name.trim(),phone:billLib.maskPhone(vnPhone(state.phone)),note:state.note.trim(),startAt:state.slot,status:"confirmed",services:services,total:totals().price,url:billLib.billUrl(state.reference,state.billKey)};
@@ -187,7 +194,7 @@ function ticketHtml(){
     +'</dl>'
     +'<div class="booking-ticket__actions"><button class="booking-ticket__cta button-primary" type="button" data-booking-manage>'+TICKET_ICONS.calendar+'Xem lịch của bạn</button>'
     +(billLib?'<button class="booking-ticket__download" type="button" data-booking-download>'+TICKET_ICONS.download+'Tải phiếu</button>':'')+'</div></div>'
-    +'<div class="booking-ticket__stub" aria-hidden="true"><div class="booking-ticket__brand">'+TICKET_ICONS.crown+'<strong>1M65'+ticketHeart("booking-ticket__brand-heart")+'</strong><small>NAIL - EYE - SHA</small></div>'
+    +'<div class="booking-ticket__stub" aria-hidden="true">'+TICKET_HAND_FILTER+'<div class="booking-ticket__brand">'+TICKET_ICONS.crown+'<strong>1M65'+ticketHeart("booking-ticket__brand-heart")+'</strong><small>NAIL - EYE - SHA</small></div>'
     +'<div class="booking-ticket__scan">'+(billLib?billLib.qrSvg(billLib.billUrl(state.reference,state.billKey),"booking-ticket__qr"):barcodeSvg(state.reference))+'</div></div></div>';
 }
 function showTicket(){
@@ -229,7 +236,13 @@ function preloadTicketArt(){
   const shell=matchMedia("(max-width: 899px) and (orientation: portrait)").matches?"ticket-shell-mobile.webp":"ticket-shell-desktop.webp";
   ticketArt=[shell,"cat-peeking.webp","pink-bow.webp","ticket-star.webp","ticket-heart-big.webp","ticket-heart-small.webp","close-button.webp","calendar-icon.webp","clock-icon.webp"].map(function(file){const image=new Image();image.src=TICKET_ART+file;image.decode().catch(function(){});return image;});
 }
-function open(options,trigger){reset(options);setStage("");render();exp().openModal(document.querySelector("#booking-modal-v2"),trigger);if(document.fonts)document.fonts.load('700 1em "Baloo 2"',"Đặt lịch thành công").catch(function(){});preloadTicketArt();}
+// A tap opens the popup at once with a loading paw, and the service grid is built on the next frame, so the
+// first frame answers the tap instead of waiting for the grid (options.defer; scripts calling open() get it built).
+const LOADING_PAW='<div class="popup-loading" role="status" aria-label="Đang mở"><img src="assets/ui/cat_paw_cursor_upright.webp" alt="" decoding="async"></div>';
+function open(options,trigger){reset(options);setStage("");
+  if(options&&options.defer){const body=document.querySelector("[data-booking-body]"),eyebrow=document.querySelector("[data-booking-eyebrow]"),title=document.querySelector("[data-booking-title]");if(body)body.innerHTML=LOADING_PAW;if(eyebrow)eyebrow.textContent="Đặt hẹn · bước 1/3";if(title)title.textContent="Bạn muốn làm gì hôm nay?";requestAnimationFrame(function(){requestAnimationFrame(render);});}
+  else render();
+  exp().openModal(document.querySelector("#booking-modal-v2"),trigger);if(document.fonts)document.fonts.load('700 1em "Baloo 2"',"Đặt lịch thành công").catch(function(){});preloadTicketArt();}
 function toggle(id){if(state.selected.includes(id))state.selected=state.selected.filter(function(item){return item!==id;});else if(state.selected.length>=8)return exp().toast("Mỗi lịch chọn tối đa 8 dịch vụ nha");else state.selected=state.selected.concat(id);state.error="";render();}
 function back(){
   state.calendarOpen=false;
@@ -371,8 +384,8 @@ if(typeof location!=="undefined"&&document.body&&/^(localhost|127\.0\.0\.1|\[::1
     const modal=bookingModal();if(!modal)return;
     reset();state.status="done";state.selected=["ve"];state.reference="1M65-260927-CD102D";state.date=offsetDate(1);state.slot=new Date(state.date+"T10:00:00+07:00").toISOString();
     state.name="Nguyễn Thị Mai";state.phone="0987654321";
-    preloadTicketArt();if(modal.hidden)exp().openModal(modal,replay);
-    loadBill().then(function(){setStage("");showTicket();});
+    // The popup opens in the same task as the ticket, so its empty form never shows behind it.
+    preloadTicketArt();loadBill().then(function(){if(modal.hidden)exp().openModal(modal,replay);setStage("");showTicket();});
   });
   document.body.append(replay);
 }
