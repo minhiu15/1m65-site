@@ -164,14 +164,18 @@ input:user-invalid + .field-error{display:block}
 .mfa-remember input:checked + .check-box{border-color:var(--pink);background:var(--pink);color:#fff}
 .mfa-remember input:focus-visible + .check-box{outline:3px solid rgba(232,94,124,.35);outline-offset:2px}
 .mfa-form .btn-paper{height:52px}
+/* The sign-in buttons keep the paper button's own proportions instead of stretching across the card. */
+#login-form .btn-paper,.mfa-form .btn-paper,.mfa-form .btn-ghost{align-self:center;width:200px}
 
 /* ============ Frame: sidebar, content, tab bar ============ */
 .dashboard{display:flex;align-items:flex-start;min-height:100vh}
 .side{position:sticky;top:0;display:flex;flex-direction:column;gap:18px;flex:none;width:248px;height:100vh;padding:24px 18px 20px;overflow:hidden auto;border-right:1.5px dashed rgba(232,94,124,.35);background:#fffaf7}
-.side-brand{display:flex;align-items:flex-end;gap:8px;padding:0 6px;text-decoration:none}
+.side-brand{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:0 6px;text-decoration:none}
 .side-brand img{display:block;width:92px}
-.side-brand span{padding-bottom:10px;font:600 16px/1 var(--hand);color:var(--pink-deep)}
-.side-create{flex:none;height:46px;padding:0 8px}
+.side-brand span{padding-left:4px;font:600 16px/1 var(--hand);color:var(--cocoa)}
+/* The create button is the site's cream paper pill, so it does not read as one more pink nav pill. */
+.side-create{flex:none;height:46px;padding:0 8px;border-image:url("assets/gallery/ui_shells/gallery_tab_disabled_LOCKED.webp") 139 fill / 23px / 0 stretch;text-shadow:none}
+.side-create,.side-create:hover{color:var(--pink-text)}
 .side-nav{display:flex;flex-direction:column;gap:16px}
 .side-group{display:flex;flex-direction:column;gap:4px}
 .side-group-label{margin:0 0 4px;padding:0 12px;font:800 12px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:#a08a82}
@@ -217,14 +221,14 @@ input:user-invalid + .field-error{display:block}
 .status-pill.is-busy{background:#fff6db;color:#6f4a0c}
 .status-pill.is-error{background:#fde6ec;color:#a8243f;white-space:normal}
 .ov-row{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:20px}
-.hello{position:relative;display:flex;flex-direction:column;gap:12px;min-height:206px;padding:24px 28px;overflow:hidden;border:1.5px solid rgba(232,94,124,.35);border-radius:28px;background-color:#fff5f6;background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.3) 0 22px,transparent 22px 44px),repeating-linear-gradient(90deg,rgba(247,178,196,.3) 0 22px,transparent 22px 44px)}
+.hello{display:flex;flex-direction:column;gap:12px;margin:3px;padding:0 6px;border:26px solid transparent;border-image:url("assets/admin/hello-shell.svg") 44 / 30px / 3px round;background-origin:border-box;background-color:#fff5f6;background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.3) 0 22px,transparent 22px 44px),repeating-linear-gradient(90deg,rgba(247,178,196,.3) 0 22px,transparent 22px 44px)}
 .hello .eyebrow{margin:0}
 .hello h2{font-size:40px;line-height:1}
-.hello-stickers{display:flex;flex-wrap:wrap;gap:8px;max-width:760px;padding-right:200px}
-.sticker{padding:8px 12px;border:1.5px dashed rgba(232,94,124,.5);border-radius:14px;background:var(--card);color:var(--ink);font:600 14px/1 var(--body)}
-.sticker b{font:700 17px/1 var(--display);color:var(--cocoa)}
-.sticker-skeleton{width:110px;height:36px;border-style:solid;border-color:transparent;background:linear-gradient(90deg,#f6ece8,#fbf3f0,#f6ece8)}
-.hello-cat{position:absolute;right:24px;bottom:-6px;width:200px;pointer-events:none}
+.hello-stickers{display:grid;grid-template-columns:repeat(6,minmax(max-content,1fr));gap:8px;margin-top:auto}
+.sticker{display:flex;flex-direction:column;justify-content:center;gap:5px;min-height:58px;padding:9px 12px;border:1.5px dashed rgba(232,94,124,.5);border-radius:14px;background:var(--card);color:var(--ink);font:600 13px/1.15 var(--body)}
+.sticker b{font:700 19px/1 var(--display);color:var(--cocoa)}
+.sticker b,.sticker span{white-space:nowrap}
+.sticker-skeleton{border-style:solid;border-color:transparent;background:linear-gradient(90deg,#f6ece8,#fbf3f0,#f6ece8)}
 .next-card{display:flex;flex-direction:column;gap:8px;min-height:200px;margin:3px;padding:0 8px 2px;border:26px solid transparent;border-image:url("assets/services/signature-shared/decor/signature_card_shell_yellow.svg") 44 fill / 30px / 3px round}
 .next-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:-2px}
 .next-flag{padding:5px 10px;border-radius:999px;background:var(--pink);color:#fff;font:800 13px/1 var(--body);white-space:nowrap}
@@ -586,8 +590,9 @@ input:user-invalid + .field-error{display:block}
   .cd-cat{right:64px;top:8px}
   .cd-close{display:grid;position:absolute;right:16px;top:16px}
   .dd-bow{display:none}
-  .hello-cat{width:160px}
-  .hello-stickers{padding-right:150px}
+  .hello-stickers{display:flex;flex-wrap:wrap}
+  .sticker{flex:1 1 calc(30% - 8px)}
+  .sticker:nth-child(4){flex-basis:calc(36% - 8px)}
   .service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .step-when{grid-template-columns:minmax(0,1fr)}
   .blocker-grid{grid-template-columns:minmax(0,1fr) 340px}
@@ -656,7 +661,7 @@ input:user-invalid + .field-error{display:block}
   .side{position:fixed;inset:0 auto 0 0;z-index:60;align-items:stretch;gap:8px;width:310px;max-width:86vw;height:auto;padding:60px 18px 26px;border:0;border-radius:0 30px 30px 0;overscroll-behavior:contain;translate:-105% 0;visibility:hidden;transition:translate .26s cubic-bezier(.22,.8,.25,1),visibility 0s .26s}
   .menu-open .side{translate:0 0;visibility:visible;transition-delay:0s}
   .dashboard > .scrim{display:block}
-  .side-brand{margin-bottom:10px}
+  .side-brand{align-items:flex-start;margin-bottom:10px}
   .side-brand img{width:96px}
   .side-brand span,.side-label,.side-who,.side-cat{display:block}
   .side-create,.side-link svg,.logout svg{display:none}
@@ -712,12 +717,12 @@ input:user-invalid + .field-error{display:block}
   .m-logo{width:auto;height:40px}
   .m-head .avatar{width:44px;height:44px}
   #sec-overview,.ov-row{gap:14px}
-  .hello{gap:8px;min-height:0;padding:18px 18px 14px;border-radius:24px;background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.3) 0 16px,transparent 16px 32px),repeating-linear-gradient(90deg,rgba(247,178,196,.3) 0 16px,transparent 16px 32px)}
-  .hello h2{max-width:170px;font-size:28px;line-height:1.05}
-  .hello-cat{right:8px;top:20px;bottom:auto;width:120px}
-  .hello-stickers{flex-wrap:nowrap;gap:6px;max-width:none;margin:4px -18px 0 0;padding-right:18px;overflow-x:auto;scrollbar-width:none}
-  .sticker{flex:none;padding:7px 10px;border-radius:12px;font-size:13px;white-space:nowrap}
-  .sticker b{font-size:15px}
+  .hello{gap:8px;padding:0;border-width:22px;border-image-width:26px;background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.3) 0 16px,transparent 16px 32px),repeating-linear-gradient(90deg,rgba(247,178,196,.3) 0 16px,transparent 16px 32px)}
+  .hello h2{font-size:28px;line-height:1.05}
+  .hello-stickers{gap:6px;margin-top:4px}
+  .sticker{min-width:0;min-height:54px;padding:8px 10px;border-radius:12px}
+  .sticker span{white-space:normal}
+  .sticker b{font-size:17px}
   .next-card{position:relative;gap:6px;min-height:0;margin:0;padding:14px 16px;border:0;border-image:none;border-radius:20px;background:#fff4cf;box-shadow:0 10px 20px -14px rgba(79,47,46,.5)}
   .next-card::before{content:"";position:absolute;top:-6px;left:50%;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff9fb8,#d9476d)}
   .next-top{margin:0}

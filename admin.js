@@ -584,7 +584,7 @@
   }
 
   function renderSummarySkeletons() {
-    elements.summary.replaceChildren(...Array.from({ length: 4 }, () => {
+    elements.summary.replaceChildren(...Array.from({ length: 6 }, () => {
       const sticker = node('span', 'sticker sticker-skeleton');
       sticker.setAttribute('aria-hidden', 'true');
       return sticker;
@@ -1305,17 +1305,19 @@
     const estimate = active.reduce((total, item) => total + Number(item.price || 0), 0);
     const dropped = todayAppointments.length - active.length;
     elements.dashboardTitle.textContent = active.length ? `Hôm nay có ${active.length} lịch` : 'Hôm nay chưa có lịch nào';
+    // Always the same six tiles, so the grid keeps its shape: number on top, what it counts underneath.
+    const booked = duration < 60 ? `${duration}′` : `${Math.floor(duration / 60)}h${String(duration % 60).padStart(2, '0')}`;
     const stickers = [
       [`${completed}/${active.length}`, 'đã xong'],
       [String(remaining), 'sắp tới'],
-      [formatDuration(duration), 'đã đặt'],
+      [booked, 'đã đặt'],
       [currency(estimate), 'tạm tính'],
       [String(overviewTodayBlocks().length), 'khung khóa'],
-      ...(dropped ? [[String(dropped), 'hủy / không đến']] : [])
+      [String(dropped), 'hủy / không đến']
     ];
     elements.summary.replaceChildren(...stickers.map(([value, label]) => {
       const sticker = node('span', 'sticker');
-      sticker.append(node('b', '', value), document.createTextNode(` ${label}`));
+      sticker.append(node('b', '', value), node('span', '', label));
       return sticker;
     }));
   }
