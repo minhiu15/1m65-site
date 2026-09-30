@@ -48,6 +48,8 @@
   // Locks are read this far ahead: the booking window, so the calendar can stripe every closed day.
   const BLOCK_LOOKAHEAD_DAYS = 31;
   const DISCOUNT_STEPS = [0, 10, 15, 20, 25, 30];
+  // Coming back to Tổng quan within this time shows what is loaded without asking the server again.
+  const OVERVIEW_FRESH_MS = 60 * 1000;
   const ICONS = {
     close: 'M6 6l12 12M18 6 6 18',
     lock: 'M8 10.5h8a2.5 2.5 0 0 1 2.5 2.5v4.5A2.5 2.5 0 0 1 16 20H8a2.5 2.5 0 0 1-2.5-2.5V13A2.5 2.5 0 0 1 8 10.5zM8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5',
@@ -185,6 +187,7 @@
   let overviewAppointments = [];
   let overviewBlocks = [];
   let overviewLoading = false;
+  let overviewLoadedAt = 0;
   let blocks = [];
   let blockDayAppointments = [];
   let selectedBlockSlots = new Set();
@@ -356,6 +359,7 @@
 
   function showLogin(message = '') {
     appointments = [];
+    overviewLoadedAt = 0;
     setMenuOpen(false);
     elements.dashboardView.hidden = true;
     elements.loginView.hidden = false;
@@ -424,7 +428,7 @@
     setMenuOpen(false);
     setMessage(elements.dashboardMessage);
     updateActiveNavigation(sectionHash, true);
-    if (sectionHash === '#sec-overview' && session) loadOverview();
+    if (sectionHash === '#sec-overview' && session && Date.now() - overviewLoadedAt > OVERVIEW_FRESH_MS) loadOverview();
   }
 
   function initializeSectionNavigation() {
@@ -1498,7 +1502,8 @@
   async function loadOverview() {
     if (!session || overviewLoading) return;
     overviewLoading = true;
-    renderSummarySkeletons();
+    // Skeletons only before the first answer; a refresh keeps the page and swaps the new numbers in.
+    if (!overviewLoadedAt) renderSummarySkeletons();
     elements.overviewStatus.textContent = 'Đang tải…';
     elements.overviewStatus.className = 'status-pill is-busy';
     const today = dateInTimeZone();
@@ -1519,13 +1524,16 @@
       overviewAppointments = Array.isArray(appointmentData.appointments) ? appointmentData.appointments : [];
       overviewBlocks = (Array.isArray(blockData.blocks) ? blockData.blocks : [])
         .sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
+      overviewLoadedAt = Date.now();
       renderOverview();
     } catch (error) {
-      elements.summary.replaceChildren();
-      elements.overviewNextChip.replaceChildren();
-      elements.overviewTimeline.classList.add('is-empty');
-      elements.overviewTimeline.replaceChildren(emptyState('Không tải được lịch hôm nay', 'Kiểm tra mạng rồi bấm Tải lại.'));
-      elements.overviewWeekStrip.replaceChildren();
+      if (!overviewLoadedAt) {
+        elements.summary.replaceChildren();
+        elements.overviewNextChip.replaceChildren();
+        elements.overviewTimeline.classList.add('is-empty');
+        elements.overviewTimeline.replaceChildren(emptyState('Không tải được lịch hôm nay', 'Kiểm tra mạng rồi bấm Tải lại.'));
+        elements.overviewWeekStrip.replaceChildren();
+      }
       elements.overviewStatus.textContent = errorMessage(error.message);
       elements.overviewStatus.className = 'status-pill is-error';
     } finally {
@@ -2020,7 +2028,8 @@
     elements.refreshButton.textContent = 'Đang tải…';
     elements.appointmentList.setAttribute('aria-busy', 'true');
     closeWeekPopover();
-    renderAppointmentSkeletons();
+    // Skeletons only when there is nothing to show yet; otherwise the list dims until the answer arrives.
+    if (!appointments.length) renderAppointmentSkeletons();
     const range = { from: `${from}T00:00:00+07:00`, to: `${addDays(through, 1)}T00:00:00+07:00` };
     try {
       // Every status comes down once; the status chips, the search and the week view only redraw it.

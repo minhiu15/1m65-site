@@ -42,7 +42,8 @@ p{margin:0}
 .eyebrow{margin:0 0 6px;font:800 13px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--pink-deep)}
 .hint{font:600 13px/1.4 var(--body);color:var(--muted)}
 .text-link{font:700 14px var(--display);color:var(--pink-deep)}
-.text-link.wavy{text-decoration-style:wavy}
+/* A slow, shallow wave under the link: the browser's own wavy underline is too tight. */
+.text-link.wavy{padding-bottom:6px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 5'%3E%3Cpath d='M0 2.5q4.5-2 9 0t9 0' fill='none' stroke='%23c2336a' stroke-width='1.2'/%3E%3C/svg%3E") repeat-x 0 100% / 18px 5px;text-decoration:none}
 
 /* Buttons: the primary one is the site's pink paper, nine-sliced so its corners keep their painted shape. */
 .btn-paper{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border:4px solid transparent;border-image:url("assets/gallery/ui_shells/primary_button_rounded_rect_paper_v1.webp") 92 fill / 20px / 0 stretch;background:none;color:#fff;font:700 15px/1 var(--display);text-decoration:none;text-shadow:var(--ink-shadow);white-space:nowrap;cursor:pointer;transition:scale .12s}
@@ -170,12 +171,9 @@ input:user-invalid + .field-error{display:block}
 /* ============ Frame: sidebar, content, tab bar ============ */
 .dashboard{display:flex;align-items:flex-start;min-height:100vh}
 .side{position:sticky;top:0;display:flex;flex-direction:column;gap:18px;flex:none;width:248px;height:100vh;padding:24px 18px 20px;overflow:hidden auto;border-right:1.5px dashed rgba(232,94,124,.35);background:#fffaf7}
-.side-brand{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:0 6px;text-decoration:none}
+.side-brand{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none}
 .side-brand img{display:block;width:92px}
-.side-brand span{padding-left:4px;font:600 16px/1 var(--hand);color:var(--cocoa)}
-/* The create button is the site's cream paper pill, so it does not read as one more pink nav pill. */
-.side-create{flex:none;height:46px;padding:0 8px;border-image:url("assets/gallery/ui_shells/gallery_tab_disabled_LOCKED.webp") 139 fill / 23px / 0 stretch;text-shadow:none}
-.side-create,.side-create:hover{color:var(--pink-text)}
+.side-brand span{font:600 16px/1 var(--hand);color:var(--cocoa)}
 .side-nav{display:flex;flex-direction:column;gap:16px}
 .side-group{display:flex;flex-direction:column;gap:4px}
 .side-group-label{margin:0 0 4px;padding:0 12px;font:800 12px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:#a08a82}
@@ -242,8 +240,8 @@ input:user-invalid + .field-error{display:block}
 .next-empty b{display:block;font:700 18px/1.2 var(--display);color:var(--cocoa)}
 .next-empty p{margin-top:4px;font:600 14px/1.4 var(--body);color:var(--ink)}
 .today-card{gap:14px}
-.timeline{position:relative;height:612px}
-.timeline.is-empty{display:flex;flex-direction:column;gap:10px;height:auto}
+.timeline{position:relative;height:612px;margin:12px 0 8px}
+.timeline.is-empty{display:flex;flex-direction:column;gap:10px;height:auto;margin:0}
 .tl-hour{position:absolute;left:0;right:0;top:var(--top);display:flex;align-items:flex-start;gap:10px}
 .tl-hour span{width:46px;color:var(--muted);font:700 13px/1 var(--body);translate:0 -6px}
 .tl-hour::after{content:"";flex:1;border-top:1px dashed rgba(232,94,124,.25)}
@@ -265,25 +263,27 @@ input:user-invalid + .field-error{display:block}
 .tl-now span{position:absolute;right:0;top:-24px;padding:3px 8px;border-radius:999px;background:var(--pink);color:#fff;font:800 13px/1 var(--body)}
 .ov-side{display:flex;flex-direction:column;gap:20px;min-width:0}
 .ov-side .card{gap:10px}
+/* The Signature tab's pastel cards: a tinted sheet inside a wavy pencil line, one colour per card. */
+.shell-card{margin:3px;padding:0 8px 2px;border:26px solid transparent;border-radius:0;background:none}
+.shell-mint{border-image:url("assets/services/signature-shared/decor/signature_card_shell_mint.svg") 44 fill / 30px / 3px round}
+.shell-lavender{border-image:url("assets/services/signature-shared/decor/signature_card_shell_lavender.svg") 44 fill / 30px / 3px round}
 .week-strip{display:flex;flex-direction:column;gap:10px}
 .week-row{display:grid;grid-template-columns:44px 1fr 60px;align-items:center;gap:12px;padding:8px 10px;border:0;border-radius:14px;background:none;text-align:left}
-.week-row:hover{background:#fff6f8}
-.week-row.is-today{background:#fff0f4}
+.week-row:hover{background:rgba(255,255,255,.5)}
+.week-row.is-today{background:rgba(255,255,255,.8)}
 .week-day{color:var(--muted);font:800 13px/1 var(--body);text-transform:uppercase}
 .week-day b{display:block;font:700 16px/1.4 var(--display);color:var(--cocoa)}
-.week-bar{height:10px;overflow:hidden;border-radius:999px;background:#f8e7ec}
+.week-bar{height:10px;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.85)}
 .week-bar i{display:block;width:var(--fill);height:100%;border-radius:999px;background:#f3a7bc}
 .week-count{color:var(--muted);font:700 14px var(--body);text-align:right}
 .week-row.is-today .week-day,.week-row.is-today .week-count{color:var(--pink-deep)}
 .week-row.is-today .week-bar i{background:var(--pink)}
-.locked-card{position:relative}
 .locked-list{display:flex;flex-direction:column;gap:10px}
-.locked-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:repeating-linear-gradient(135deg,#fbf4f5 0 8px,#fdeef2 8px 16px)}
+.locked-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.75)}
 .locked-row div{flex:1;min-width:0}
 .locked-row b{display:block;font:700 15px var(--display);color:var(--cocoa)}
 .locked-row div span{display:block;margin-top:2px;font:600 13px var(--body);color:var(--muted)}
 .locked-span{color:#a8305a;font:700 13px var(--body);white-space:nowrap}
-.locked-cup{position:absolute;right:16px;bottom:-18px;width:60px;pointer-events:none}
 
 /* ============ Lịch hẹn ============ */
 .view-seg{flex:none;width:260px}
@@ -298,7 +298,8 @@ input:user-invalid + .field-error{display:block}
 .filter-search{width:230px;margin-left:auto}
 .filter-dates{display:flex;align-items:flex-end;flex-basis:100%;gap:12px}
 .filter-dates label{width:210px}
-.appointment-list{padding-bottom:8px}
+.appointment-list{padding-bottom:8px;transition:opacity .15s}
+.appointment-list[aria-busy="true"]{opacity:.55}
 .appt-head,.appt-row{display:grid;grid-template-columns:96px minmax(0,1.1fr) minmax(0,1.5fr) 74px 96px 126px;gap:12px}
 .day-title{display:flex;align-items:baseline;gap:10px;padding:12px 18px 6px;font-size:16px}
 .day-title small{color:var(--muted);font:700 13px var(--body)}
@@ -603,10 +604,8 @@ input:user-invalid + .field-error{display:block}
 /* ============ Tablet: the sidebar is an icon rail ============ */
 @media (max-width:1199px){
   .side{align-items:center;gap:16px;width:76px;padding:20px 12px 16px}
-  .side-brand{padding:0}
   .side-brand img{width:52px}
   .side-brand span,.side-label,.side-count,.side-group-label,.side-who,.side-cat{display:none}
-  .side-create{width:46px;padding:0;font-size:20px}
   .side-nav{gap:10px}
   .side-link{justify-content:center;width:46px;padding:0}
   .side-foot{display:flex;flex-direction:column;align-items:center;gap:8px;padding-top:0}
@@ -661,10 +660,10 @@ input:user-invalid + .field-error{display:block}
   .side{position:fixed;inset:0 auto 0 0;z-index:60;align-items:stretch;gap:8px;width:310px;max-width:86vw;height:auto;padding:60px 18px 26px;border:0;border-radius:0 30px 30px 0;overscroll-behavior:contain;translate:-105% 0;visibility:hidden;transition:translate .26s cubic-bezier(.22,.8,.25,1),visibility 0s .26s}
   .menu-open .side{translate:0 0;visibility:visible;transition-delay:0s}
   .dashboard > .scrim{display:block}
-  .side-brand{align-items:flex-start;margin-bottom:10px}
+  .side-brand{margin-bottom:10px}
   .side-brand img{width:96px}
   .side-brand span,.side-label,.side-who,.side-cat{display:block}
-  .side-create,.side-link svg,.logout svg{display:none}
+  .side-link svg,.logout svg{display:none}
   .side-nav,.side-group{gap:8px}
   .side-link{justify-content:flex-start;width:auto;height:50px;padding:0 12px;border:0;color:var(--cocoa);font-size:16px}
   .side-link[aria-current]{border-image:none;background:var(--pink-soft);color:var(--pink-text);text-shadow:none}
@@ -698,7 +697,8 @@ input:user-invalid + .field-error{display:block}
   .tab-icon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
   .tab-bar a[aria-current]{color:var(--pink-deep)}
   .tab-bar a[aria-current] .tab-icon{background:var(--pink-soft)}
-  .tab-bar a:nth-child(3) .tab-icon{width:54px;height:54px;margin-top:-22px;border:4px solid transparent;border-image:url("assets/gallery/ui_shells/primary_button_rounded_rect_paper_v1.webp") 92 fill / 27px / 0 stretch;background:none;color:#fff;box-shadow:0 8px 16px -8px rgba(217,71,109,.6)}
+  /* The round create button is the site's pink pill texture: its ends are true half circles, so 54px makes a circle. */
+  .tab-bar a:nth-child(3) .tab-icon{width:54px;height:54px;margin-top:-22px;border:4px solid transparent;border-image:url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.webp") 139 fill / 32px / 5px stretch;background:none;color:#fff}
 
   /* Bottom sheets: appointment details, the price editor, a customer. */
   .split > .scrim,#discount-scrim:not([hidden]){display:block}
@@ -719,6 +719,7 @@ input:user-invalid + .field-error{display:block}
   #sec-overview,.ov-row{gap:14px}
   .hello{gap:8px;padding:0;border-width:22px;border-image-width:26px;background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.3) 0 16px,transparent 16px 32px),repeating-linear-gradient(90deg,rgba(247,178,196,.3) 0 16px,transparent 16px 32px)}
   .hello h2{font-size:28px;line-height:1.05}
+  .shell-card{margin:0;padding:0;border-width:22px;border-radius:0;border-image-width:26px}
   .hello-stickers{gap:6px;margin-top:4px}
   .sticker{min-width:0;min-height:54px;padding:8px 10px;border-radius:12px}
   .sticker span{white-space:normal}
@@ -733,7 +734,7 @@ input:user-invalid + .field-error{display:block}
   .next-actions .btn-ghost{flex:1;height:47px;font-size:15px}
   .today-card{gap:10px;padding:0;border:0;border-radius:0;background:none}
   .card-head h2{font-size:19px}
-  .timeline,.timeline.is-empty{display:flex;flex-direction:column;gap:8px;height:auto}
+  .timeline,.timeline.is-empty{display:flex;flex-direction:column;gap:8px;height:auto;margin:0}
   .tl-hour,.tl-block,.tl-now,.tl-price{display:none}
   .tl-item{position:static;align-items:center;gap:12px;height:auto;padding:10px 12px;border-radius:16px;box-shadow:none}
   .tl-time{width:46px;line-height:1.1}
