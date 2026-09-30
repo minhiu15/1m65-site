@@ -200,8 +200,8 @@
     }
   });
 
-  // panel dời lịch được admin.js tạo động → theo dõi để bọc luôn
-  const list = document.querySelector('#appointment-list');
+  // panel dời lịch được admin.js tạo động trong ngăn chi tiết → theo dõi để bọc luôn
+  const list = document.querySelector('#detail-drawer');
   if (list) new MutationObserver(() => scan(list)).observe(list, { childList: true, subtree: true });
 
   scan();

@@ -39,6 +39,20 @@
       serviceIds: ['goi-thuong', 'goi-phuchoi', 'goi-duongsinh']
     }
   ];
+  // Pastel note colours, handed out in order so a day reads as a row of different slips.
+  const TONES = ['y', 'p', 'b', 'y', 'p', 'm', 'l', 'o', 'b', 'm'];
+  const DOW = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+  // The day the timelines draw: opening to closing, in minutes.
+  const DAY_START = 9 * 60;
+  const DAY_END = 18 * 60;
+  // Locks are read this far ahead: the booking window, so the calendar can stripe every closed day.
+  const BLOCK_LOOKAHEAD_DAYS = 31;
+  const DISCOUNT_STEPS = [0, 10, 15, 20, 25, 30];
+  const ICONS = {
+    close: 'M6 6l12 12M18 6 6 18',
+    lock: 'M8 10.5h8a2.5 2.5 0 0 1 2.5 2.5v4.5A2.5 2.5 0 0 1 16 20H8a2.5 2.5 0 0 1-2.5-2.5V13A2.5 2.5 0 0 1 8 10.5zM8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5',
+    phone: 'M6.5 4h3l1.5 4-2 1.3a10 10 0 0 0 5.7 5.7l1.3-2 4 1.5v3a2 2 0 0 1-2.2 2A16 16 0 0 1 4.5 6.2 2 2 0 0 1 6.5 4z'
+  };
 
   const elements = {
     loginView: document.querySelector('#login-view'),
@@ -46,46 +60,82 @@
     loginForm: document.querySelector('#login-form'),
     loginButton: document.querySelector('#login-button'),
     loginMessage: document.querySelector('#login-message'),
+    loginStep: document.querySelector('#login-step'),
+    loginTitle: document.querySelector('#login-title'),
+    loginSub: document.querySelector('#login-sub'),
+    loginFoot: document.querySelector('#login-foot'),
     mfaForm: document.querySelector('#mfa-form'),
     mfaEnroll: document.querySelector('#mfa-enroll'),
     mfaQr: document.querySelector('#mfa-qr'),
     mfaSecret: document.querySelector('#mfa-secret'),
     mfaUri: document.querySelector('#mfa-uri'),
     mfaCode: document.querySelector('#mfa-code'),
+    mfaBoxes: document.querySelector('#mfa-boxes'),
     mfaRemember: document.querySelector('#mfa-remember'),
     mfaButton: document.querySelector('#mfa-button'),
     mfaCancel: document.querySelector('#mfa-cancel'),
     dashboardMessage: document.querySelector('#dashboard-message'),
+    adminName: document.querySelector('#admin-name'),
     adminIdentity: document.querySelector('#admin-identity'),
-    fromDate: document.querySelector('#from-date'),
-    toDate: document.querySelector('#to-date'),
-    statusFilter: document.querySelector('#status-filter'),
-    refreshButton: document.querySelector('#refresh-button'),
-    logoutButton: document.querySelector('#logout-button'),
-    account: document.querySelector('#account'),
-    headerActions: document.querySelector('#header-actions'),
-    overviewAccount: document.querySelector('#overview-account'),
     adminAvatar: document.querySelector('#admin-avatar'),
+    mobileAvatar: document.querySelector('#m-avatar'),
+    logoutButton: document.querySelector('#logout-button'),
+    menuButton: document.querySelector('#menu-button'),
+    sideScrim: document.querySelector('#side-scrim'),
+    navCountSchedule: document.querySelector('#nav-count-schedule'),
+    navCountBlock: document.querySelector('#nav-count-block'),
+    navCountDiscounts: document.querySelector('#nav-count-discounts'),
+    navCountCustomers: document.querySelector('#nav-count-customers'),
+    overviewGreeting: document.querySelector('#overview-greeting'),
+    overviewSearch: document.querySelector('#overview-search'),
+    overviewStatus: document.querySelector('#overview-status'),
+    overviewReload: document.querySelector('#overview-reload'),
     overviewDateLabel: document.querySelector('#overview-date-label'),
     overviewNextChip: document.querySelector('#overview-next-chip'),
     overviewTimeline: document.querySelector('#overview-timeline'),
     dashboardTitle: document.querySelector('#dashboard-title'),
     overviewWeekStrip: document.querySelector('#overview-week-strip'),
+    overviewBlocks: document.querySelector('#overview-blocks'),
     summary: document.querySelector('#summary'),
-    appointmentList: document.querySelector('#appointment-list'),
+    scheduleTitleText: document.querySelector('#schedule-title-text'),
+    weekNav: document.querySelector('#week-nav'),
+    weekPrev: document.querySelector('#week-prev'),
+    weekToday: document.querySelector('#week-today'),
+    weekNext: document.querySelector('#week-next'),
+    scheduleSearchToggle: document.querySelector('#schedule-search-toggle'),
+    scheduleReload: document.querySelector('#schedule-reload'),
+    scheduleFilters: document.querySelector('#schedule-filters'),
+    rangeLabel: document.querySelector('#range-label'),
+    statusFilter: document.querySelector('#status-filter'),
+    scheduleSearch: document.querySelector('#schedule-search'),
     filterDates: document.querySelector('#filter-dates'),
+    fromDate: document.querySelector('#from-date'),
+    toDate: document.querySelector('#to-date'),
+    refreshButton: document.querySelector('#refresh-button'),
+    appointmentList: document.querySelector('#appointment-list'),
+    weekGrid: document.querySelector('#week-grid'),
+    detailScrim: document.querySelector('#detail-scrim'),
+    detailDrawer: document.querySelector('#detail-drawer'),
     adminBookingForm: document.querySelector('#admin-booking-form'),
+    adminServiceCount: document.querySelector('#admin-service-count'),
     adminServiceTabs: document.querySelector('#admin-service-tabs'),
     adminServiceCategoryHint: document.querySelector('#admin-service-category-hint'),
     adminServiceGrid: document.querySelector('#admin-service-grid'),
     adminServiceSummary: document.querySelector('#admin-service-summary'),
     adminBookingDate: document.querySelector('#admin-booking-date'),
+    adminBookingCalendar: document.querySelector('#admin-booking-calendar'),
+    adminSlotTitle: document.querySelector('#admin-slot-title'),
+    adminSlotDuration: document.querySelector('#admin-slot-duration'),
     adminBookingSlotGrid: document.querySelector('#admin-booking-slot-grid'),
     adminCustomerName: document.querySelector('#admin-customer-name'),
     adminCustomerPhone: document.querySelector('#admin-customer-phone'),
     adminCustomerNote: document.querySelector('#admin-customer-note'),
     adminBookingMessage: document.querySelector('#admin-booking-message'),
     adminCreateBookingButton: document.querySelector('#admin-create-booking-button'),
+    createBarTotal: document.querySelector('#create-bar-total'),
+    createBarMeta: document.querySelector('#create-bar-meta'),
+    createBarNext: document.querySelector('#create-bar-next'),
+    blockDayStrip: document.querySelector('#block-day-strip'),
     blockDate: document.querySelector('#block-date'),
     blockReason: document.querySelector('#block-reason'),
     allDayButton: document.querySelector('#all-day-button'),
@@ -95,8 +145,20 @@
     blockMessage: document.querySelector('#block-message'),
     blockList: document.querySelector('#block-list'),
     discountSearch: document.querySelector('#discount-search'),
+    discountFilters: document.querySelector('#discount-filters'),
     discountServiceList: document.querySelector('#discount-service-list'),
-    discountMessage: document.querySelector('#discount-message')
+    discountMessage: document.querySelector('#discount-message'),
+    discountScrim: document.querySelector('#discount-scrim'),
+    discountSheet: document.querySelector('#discount-sheet'),
+    customersCount: document.querySelector('#customers-count'),
+    customerSearch: document.querySelector('#customer-search'),
+    customerList: document.querySelector('#customer-list'),
+    customerScrim: document.querySelector('#customer-scrim'),
+    customerDetail: document.querySelector('#customer-detail'),
+    confirmDialog: document.querySelector('#confirm-dialog'),
+    confirmTitle: document.querySelector('#confirm-title'),
+    confirmText: document.querySelector('#confirm-text'),
+    confirmOk: document.querySelector('#confirm-ok')
   };
   const sectionLinks = [...document.querySelectorAll('a.section-link[href^="#sec-"]')];
   const navigationSections = [...document.querySelectorAll('.admin-view[id^="sec-"]')];
@@ -105,13 +167,21 @@
     '#sec-schedule': 'Lịch hẹn',
     '#sec-create': 'Tạo lịch',
     '#sec-block': 'Khóa lịch',
-    '#sec-discounts': 'Ưu đãi'
+    '#sec-discounts': 'Ưu đãi',
+    '#sec-customers': 'Khách hàng'
   };
-  const compactMedia = window.matchMedia('(max-width: 900px)');
+  // Phones get the tab bar, the bottom sheets and the one-step-at-a-time create flow.
+  const phoneMedia = window.matchMedia('(max-width: 767px)');
+  // Under 1440px the detail drawers lie over the page instead of sitting beside the table.
+  const overlayMedia = window.matchMedia('(max-width: 1439px)');
 
   let session = readSession();
   let pendingMfa = null; // password-only (AAL1) token + factor, kept in memory until the 6-digit code is verified
   let appointments = [];
+  let scheduleBlocks = [];
+  let scheduleView = 'list';
+  let scheduleStatus = '';
+  let detailId = '';
   let overviewAppointments = [];
   let overviewBlocks = [];
   let overviewLoading = false;
@@ -129,6 +199,11 @@
   let adminConfigLoading = true;
   let adminCreatePending = false;
   let adminAvailabilityRequestId = 0;
+  let adminCalendarMonth = '';
+  let createStep = 1;
+  let discountFilter = 'all';
+  let discountSheetId = '';
+  let customerKey = '';
   const discountDrafts = new Map();
   const discountSavingIds = new Set();
   // Units for designs priced per nail, stone or charm (shared with the site); without it prices stay one number.
@@ -139,6 +214,8 @@
     renderDiscountServices();
   }).catch(() => {});
   const rangeChips = [...document.querySelectorAll('[data-range]')];
+  const viewButtons = [...document.querySelectorAll('[data-view]')];
+  const stepButtons = [...document.querySelectorAll('[data-step-go]')];
 
   // Tab-scoped by default; "Ghi nhớ thiết bị" (explicit opt-in after MFA) keeps it for 30 days.
   function readSession() {
@@ -180,9 +257,11 @@
     input.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
-  function setMessage(target, message = '', success = false) {
+  // Red by default; green for a result, yellow while waiting ("…") or when the admin only has to pick again.
+  function setMessage(target, message = '', success = false, warning = false) {
     target.textContent = message;
     target.classList.toggle('success', success);
+    target.classList.toggle('warning', !success && (warning || message.endsWith('…')));
   }
 
   function errorMessage(code) {
@@ -193,7 +272,7 @@
       invalid_appointment_status: 'Trạng thái lịch không hợp lệ.',
       appointment_not_found: 'Không tìm thấy lịch hẹn.',
       appointment_not_reschedulable: 'Chỉ có thể dời lịch đang chờ hoặc đã xác nhận.',
-      slot_unavailable: 'Khung giờ này không còn trống. Vui lòng chọn giờ khác.',
+      slot_unavailable: 'Giờ này vừa có khách đặt. Chọn giờ khác nha.',
       too_many_requests: 'Bạn thử đăng nhập quá nhiều lần. Vui lòng chờ một lúc.',
       human_verification_failed: 'Chưa xác minh được bạn là người thật. Vui lòng thử đăng nhập lại.',
       invalid_mfa_code: 'Mã 6 số chưa đúng hoặc đã hết hạn. Lấy mã mới trong app rồi thử lại.',
@@ -205,7 +284,7 @@
       block_reason_too_long: 'Lý do khóa lịch dài quá 120 ký tự.',
       block_not_found: 'Khoảng khóa này không còn tồn tại.',
       invalid_customer_name: 'Tên khách cần từ 2 đến 80 ký tự.',
-      invalid_customer_phone: 'Số điện thoại phải gồm 10 số và bắt đầu bằng 0.',
+      invalid_customer_phone: 'Số điện thoại gồm 10 số, bắt đầu bằng 0.',
       customer_note_too_long: 'Ghi chú dài quá 500 ký tự.',
       date_outside_booking_window: 'Ngày hẹn nằm ngoài thời gian cho phép đặt.',
       start_time_is_in_the_past: 'Giờ hẹn đã qua. Vui lòng chọn giờ khác.',
@@ -259,13 +338,29 @@
     }
   }
 
+  // The sign-in card has three faces: password, the 6-digit code, and first-time enrolment with the QR code.
+  function setLoginStage(stage) {
+    const mfa = stage !== 'password';
+    elements.loginView.classList.toggle('is-mfa', mfa);
+    elements.loginStep.textContent = mfa ? 'Bước 2/2' : 'Studio admin';
+    elements.loginTitle.textContent = stage === 'enroll' ? 'Bật xác thực 2 lớp' : mfa ? 'Nhập mã 6 số' : 'Chào bạn trở lại';
+    elements.loginSub.textContent = stage === 'enroll'
+      ? 'Lần đầu đăng nhập: quét mã QR rồi nhập mã 6 số.'
+      : 'Mở app xác thực trên điện thoại để lấy mã.';
+    elements.loginSub.hidden = !mfa;
+    elements.loginFoot.hidden = stage !== 'code';
+    elements.loginForm.hidden = mfa;
+    elements.mfaForm.hidden = !mfa;
+    elements.mfaEnroll.hidden = stage !== 'enroll';
+  }
+
   function showLogin(message = '') {
     appointments = [];
+    setMenuOpen(false);
     elements.dashboardView.hidden = true;
     elements.loginView.hidden = false;
     elements.loginForm.reset();
-    elements.loginForm.hidden = false;
-    elements.mfaForm.hidden = true;
+    setLoginStage('password');
     pendingMfa = null;
     setMessage(elements.loginMessage, message);
   }
@@ -274,9 +369,12 @@
     elements.loginView.hidden = true;
     elements.dashboardView.hidden = false;
     const admin = session?.admin || {};
-    elements.adminIdentity.textContent = [admin.displayName, admin.email].filter(Boolean).join(' · ');
-    elements.adminAvatar.textContent = initials(admin.displayName || admin.email);
-    placeAccount();
+    const avatar = initials(admin.displayName || admin.email);
+    elements.adminName.textContent = admin.displayName || 'Chủ tiệm';
+    elements.adminIdentity.textContent = admin.email || '';
+    elements.adminAvatar.textContent = avatar;
+    elements.mobileAvatar.textContent = avatar;
+    elements.overviewGreeting.textContent = greeting();
     updateActiveNavigation(window.location.hash || '#sec-overview');
   }
 
@@ -285,10 +383,21 @@
     return (letters.length > 1 ? letters[0] + letters[letters.length - 1] : letters[0] || 'AD').toUpperCase();
   }
 
-  // Wide screens keep the account in the header; phones move it to the end of Tổng quan.
-  function placeAccount() {
-    const home = compactMedia.matches ? elements.overviewAccount : elements.headerActions;
-    if (home && elements.account.parentElement !== home) home.append(elements.account);
+  function greeting() {
+    const hour = Math.floor(currentMinuteInTimeZone() / 60);
+    const part = hour < 11 ? 'sáng' : hour < 14 ? 'trưa' : hour < 18 ? 'chiều' : 'tối';
+    return `Chào buổi ${part}, ${session?.admin?.displayName || 'chủ tiệm'}`;
+  }
+
+  // On phones the sidebar is a slide-in menu opened from Tổng quan.
+  function setMenuOpen(open) {
+    elements.dashboardView.classList.toggle('menu-open', open);
+    elements.sideScrim.hidden = !open;
+    elements.menuButton.setAttribute('aria-expanded', String(open));
+  }
+
+  function activeSection() {
+    return `#${navigationSections.find((section) => !section.hidden)?.id || 'sec-overview'}`;
   }
 
   function updateActiveNavigation(sectionHash, scrollToTop = false) {
@@ -312,6 +421,8 @@
 
   function navigateToSection(sectionHash) {
     if (window.location.hash !== sectionHash) window.history.pushState(null, '', sectionHash);
+    setMenuOpen(false);
+    setMessage(elements.dashboardMessage);
     updateActiveNavigation(sectionHash, true);
     if (sectionHash === '#sec-overview' && session) loadOverview();
   }
@@ -336,6 +447,15 @@
     if (!priceUnits) return currency(service.price);
     const shown = priceUnits.unitPrice(service.id, service.price, 'đ');
     return `${shown.price}${shown.unit ? `/${shown.unit}` : ''}`;
+  }
+
+  // "mỗi viên", "full bàn": how a unit-priced design is counted; empty for a service priced per booking.
+  function unitLabel(serviceId, price) {
+    return priceUnits ? priceUnits.unitPrice(serviceId, price, 'đ').line.split(' · ')[0] : '';
+  }
+
+  function isEstimate(serviceIds) {
+    return Boolean(priceUnits?.hasUnitPricing(serviceIds));
   }
 
   function serviceOriginalPrice(service) {
@@ -381,6 +501,11 @@
     }).format(new Date(value));
   }
 
+  function minuteOfDay(value) {
+    const [hours, minutes] = localTime(value).split(':').map(Number);
+    return hours * 60 + minutes;
+  }
+
   function currentMinuteInTimeZone() {
     const parts = new Intl.DateTimeFormat('en-GB', {
       timeZone: TIME_ZONE, hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
@@ -391,6 +516,19 @@
     return Number(parts.hour) * 60 + Number(parts.minute);
   }
 
+  function dayMonth(dateText) {
+    return `${dateText.slice(8, 10)}/${dateText.slice(5, 7)}`;
+  }
+
+  // "T5 01/10"
+  function shortDate(dateText) {
+    return `${DOW[new Date(`${dateText}T00:00:00Z`).getUTCDay()]} ${dayMonth(dateText)}`;
+  }
+
+  function appointmentDate(item) {
+    return dateInTimeZone(new Date(item.startAt));
+  }
+
   function node(tag, className = '', text = '') {
     const item = document.createElement(tag);
     if (className) item.className = className;
@@ -398,67 +536,110 @@
     return item;
   }
 
-  function skeletonLine(className = '') {
-    return node('span', `skeleton-line ${className}`.trim());
+  function button(className, text = '') {
+    const item = node('button', className, text);
+    item.type = 'button';
+    return item;
   }
 
-  function noteTone(index) {
-    return ['yellow', 'pink', 'blue'][index % 3];
+  function image(className, src, width, height) {
+    const item = node('img', className);
+    item.src = src;
+    item.alt = '';
+    item.width = width;
+    item.height = height;
+    item.decoding = 'async';
+    return item;
   }
 
-  function noteSkeletons(count) {
-    return Array.from({ length: count }, (_, index) => {
-      const note = node('div', `note note--${noteTone(index)} note--skeleton`);
-      note.setAttribute('aria-hidden', 'true');
-      note.append(skeletonLine('short'), skeletonLine('wide'), skeletonLine('medium'));
-      return note;
+  function icon(path, size, strokeWidth = 2) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const shape = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    Object.entries({
+      viewBox: '0 0 24 24', width: size, height: size, fill: 'none', stroke: 'currentColor',
+      'stroke-width': strokeWidth, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'aria-hidden': 'true'
+    }).forEach(([name, value]) => svg.setAttribute(name, value));
+    shape.setAttribute('d', path);
+    svg.append(shape);
+    return svg;
+  }
+
+  // A pair of spans for copy that differs between the wide layouts and the phone.
+  function responsiveText(wide, phone) {
+    return [node('span', 'd-only', wide), node('span', 'm-only', phone)];
+  }
+
+  function skeletons(count) {
+    return Array.from({ length: count }, () => {
+      const block = node('span', 'skeleton');
+      block.setAttribute('aria-hidden', 'true');
+      return block;
     });
   }
 
   function renderAppointmentSkeletons() {
-    const grid = node('div', 'note-grid');
-    grid.append(...noteSkeletons(4));
-    elements.appointmentList.replaceChildren(grid);
+    const list = node('div', 'skeleton-list');
+    list.append(...skeletons(4));
+    elements.appointmentList.replaceChildren(list);
   }
 
   function renderSummarySkeletons() {
     elements.summary.replaceChildren(...Array.from({ length: 4 }, () => {
       const sticker = node('span', 'sticker sticker-skeleton');
       sticker.setAttribute('aria-hidden', 'true');
-      sticker.append(skeletonLine('wide'));
       return sticker;
     }));
-    elements.overviewTimeline.replaceChildren(...noteSkeletons(4));
-    elements.overviewWeekStrip.replaceChildren(...Array.from({ length: 7 }, () => {
-      const day = node('div', 'week-day week-day-skeleton');
-      day.setAttribute('aria-hidden', 'true');
-      day.append(skeletonLine('medium'), skeletonLine('short'));
-      return day;
-    }));
+    elements.overviewNextChip.replaceChildren(...skeletons(2));
+    elements.overviewTimeline.classList.add('is-empty');
+    elements.overviewTimeline.replaceChildren(...skeletons(4));
+    elements.overviewWeekStrip.replaceChildren(...skeletons(3));
   }
 
   function statusBadge(item) {
     return node('span', `badge ${item.status}`, STATUS_LABELS[item.status] || item.status);
   }
 
-  // The cat and one short line wherever a list is empty; the optional action opens another section.
+  function inactive(item) {
+    return item.status === 'cancelled' || item.status === 'no_show';
+  }
+
+  // Nhu Nhi and one short line wherever a list is empty; the optional action opens another section.
   function emptyState(title, text = '', action = null) {
     const box = node('div', 'empty');
-    const cat = node('img', 'empty-cat');
-    cat.src = 'assets/booking/confirmation/cat-peeking.webp';
-    cat.alt = '';
-    cat.width = 480;
-    cat.height = 335;
-    cat.decoding = 'async';
-    box.append(cat, node('strong', '', title));
-    if (text) box.append(node('p', '', text));
+    const copy = node('div');
+    copy.append(node('strong', '', title));
+    if (text) copy.append(node('p', '', text));
     if (action) {
-      const button = node('button', 'btn primary compact', action.label);
-      button.type = 'button';
-      button.addEventListener('click', () => navigateToSection(action.section));
-      box.append(button);
+      const open = button('btn-ghost', action.label);
+      open.addEventListener('click', () => navigateToSection(action.section));
+      copy.append(open);
     }
+    box.append(image('', 'mascot/nhu-nhi-sit-soft-v2.webp', 512, 512), copy);
     return box;
+  }
+
+  // Every lock, unlock, cancel, reschedule and create goes through this dialog; resolves true only on the pink button.
+  function confirmAction(title, text = '', okLabel = 'Xác nhận') {
+    return new Promise((resolve) => {
+      if (elements.confirmDialog.open) {
+        resolve(false);
+        return;
+      }
+      elements.confirmTitle.textContent = title;
+      elements.confirmText.textContent = text;
+      elements.confirmText.hidden = !text;
+      elements.confirmOk.textContent = okLabel;
+      elements.confirmDialog.returnValue = '';
+      elements.confirmDialog.addEventListener('close', () => {
+        resolve(elements.confirmDialog.returnValue === 'ok');
+      }, { once: true });
+      elements.confirmDialog.showModal();
+    });
+  }
+
+  function setCount(target, value) {
+    target.textContent = value ? String(value) : '';
+    target.hidden = !value;
   }
 
   function selectedAdminServices() {
@@ -486,29 +667,71 @@
       || adminAvailabilityLoading
       || adminSelectedServiceIds.size === 0
       || !adminSelectedStartAt;
+    elements.createBarNext.textContent = createStep === 1 ? 'Chọn giờ →' : 'Thông tin khách →';
+    elements.createBarNext.disabled = createStep === 1 ? adminSelectedServiceIds.size === 0 : !adminSelectedStartAt;
   }
 
+  // Phones walk the three steps one at a time; wider screens show them all and ignore the step.
+  function setCreateStep(step) {
+    createStep = step;
+    elements.adminBookingForm.dataset.step = String(step);
+    stepButtons.forEach((item) => {
+      if (Number(item.dataset.stepGo) === step) item.setAttribute('aria-current', 'step');
+      else item.removeAttribute('aria-current');
+    });
+    updateAdminCreateButton();
+  }
+
+  // The slip on the right (and the phone's sticky bar): when, what, how long and how much.
   function renderAdminServiceSummary() {
     const services = selectedAdminServices();
+    const duration = services.reduce((sum, service) => sum + Number(service.durationMinutes || 0), 0);
+    const price = services.reduce((sum, service) => sum + Number(service.price || 0), 0);
+    const estimate = isEstimate(services.map((service) => service.id));
+    const date = elements.adminBookingDate.value;
+    elements.adminServiceCount.textContent = `${services.length}/8 dịch vụ`;
+    elements.adminSlotTitle.textContent = `Giờ còn trống${date ? ` · ${shortDate(date)}` : ''}`;
+    elements.adminSlotDuration.textContent = services.length ? `cho ${duration} phút` : '';
+    elements.createBarTotal.textContent = services.length ? `${currency(price)}${estimate ? ' tạm tính' : ''}` : 'Chưa chọn dịch vụ';
+    elements.createBarMeta.textContent = `${services.length}/8 dịch vụ${services.length ? ` · ${duration} phút` : ''}`;
     if (!services.length) {
-      elements.adminServiceSummary.textContent = 'Chưa chọn dịch vụ.';
+      elements.adminServiceSummary.replaceChildren(node('p', 'hint', 'Chưa chọn dịch vụ.'));
       updateAdminCreateButton();
       return;
     }
-    const duration = services.reduce((sum, service) => sum + Number(service.durationMinutes || 0), 0);
-    const price = services.reduce((sum, service) => sum + Number(service.price || 0), 0);
-    const estimate = Boolean(priceUnits?.hasUnitPricing(services.map((service) => service.id)));
-    elements.adminServiceSummary.textContent = `${services.length} dịch vụ · ${duration} phút · ${estimate ? 'tạm tính ' : ''}${currency(price)}`;
+    const when = adminSelectedStartAt
+      ? `${shortDate(date)} · ${localTime(adminSelectedStartAt)} – ${minutesToTime(minuteOfDay(adminSelectedStartAt) + duration)}`
+      : `${shortDate(date)} · chưa chọn giờ`;
+    const total = node('div', 'slip-total');
+    total.append(node('span', '', `${estimate ? 'Tạm tính' : 'Tổng tiền'} · ${duration} phút`), node('b', '', currency(price)));
+    elements.adminServiceSummary.replaceChildren(
+      node('p', 'slip-when', when),
+      ...services.map((service) => {
+        const unit = unitLabel(service.id, service.price);
+        const line = node('div', 'slip-line');
+        line.append(
+          node('span', '', `${service.name}${unit ? ` · ${unit}` : ''} · ${service.durationMinutes}'`),
+          node('span', '', currency(service.price))
+        );
+        return line;
+      }),
+      node('div', 'slip-tear'),
+      total
+    );
+    if (estimate) {
+      elements.adminServiceSummary.append(node('p', 'hint', 'Giá tạm tính: có dịch vụ tính theo bàn, viên đá hoặc charm. Tiệm chốt giá khi làm.'));
+    }
     updateAdminCreateButton();
   }
 
   function renderAdminServices() {
     const services = Array.isArray(bookingConfig?.services) ? bookingConfig.services : [];
+    setCount(elements.navCountDiscounts, services.filter((service) => normalizeDiscountInput(service.discountPercent) > 0).length);
     if (!services.length) {
       elements.adminServiceTabs.replaceChildren();
       elements.adminServiceCategoryHint.textContent = '';
       elements.adminServiceGrid.replaceChildren(node(
-        'p', 'admin-slot-empty', adminConfigLoading ? 'Đang tải danh sách dịch vụ…' : 'Chưa tải được danh sách dịch vụ.'
+        'p', 'slot-empty', adminConfigLoading ? 'Đang tải danh sách dịch vụ…' : 'Chưa tải được danh sách dịch vụ.'
       ));
       renderAdminServiceSummary();
       return;
@@ -519,31 +742,33 @@
     }
     const activeCategory = categories.find((category) => category.id === activeAdminServiceCategory);
     elements.adminServiceTabs.replaceChildren(...categories.map((category) => {
-      const button = node('button', 'admin-service-tab');
+      const tab = button('');
       const selectedCount = category.services.filter((service) => adminSelectedServiceIds.has(service.id)).length;
-      button.type = 'button';
-      button.role = 'tab';
-      button.setAttribute('aria-selected', String(category.id === activeAdminServiceCategory));
-      button.append(node('span', '', category.label));
-      if (selectedCount) button.append(node('span', 'admin-service-tab-count', String(selectedCount)));
-      button.addEventListener('click', () => {
+      tab.role = 'tab';
+      tab.setAttribute('aria-selected', String(category.id === activeAdminServiceCategory));
+      tab.append(node('span', '', category.label));
+      if (selectedCount) tab.append(node('b', 'seg-count', String(selectedCount)));
+      tab.addEventListener('click', () => {
         activeAdminServiceCategory = category.id;
         renderAdminServices();
       });
-      return button;
+      return tab;
     }));
     elements.adminServiceCategoryHint.textContent = activeCategory?.hint || '';
     elements.adminServiceGrid.replaceChildren(...(activeCategory?.services || []).map((service) => {
       const selected = adminSelectedServiceIds.has(service.id);
-      const button = node('button', 'admin-service-option');
-      button.type = 'button';
-      button.setAttribute('aria-pressed', String(selected));
-      button.disabled = !selected && adminSelectedServiceIds.size >= 8;
-      button.append(
+      const option = button('admin-service-option');
+      const copy = node('span', 'so-copy');
+      const check = node('span', 'so-check');
+      check.setAttribute('aria-hidden', 'true');
+      option.setAttribute('aria-pressed', String(selected));
+      option.disabled = !selected && adminSelectedServiceIds.size >= 8;
+      copy.append(
         node('strong', '', service.name),
         node('span', '', `${service.durationMinutes} phút · ${priceText(service)}`)
       );
-      button.addEventListener('click', () => {
+      option.append(copy, check);
+      option.addEventListener('click', () => {
         if (selected) adminSelectedServiceIds.delete(service.id);
         else if (adminSelectedServiceIds.size < 8) adminSelectedServiceIds.add(service.id);
         adminSelectedStartAt = '';
@@ -551,114 +776,244 @@
         renderAdminSlots();
         loadAdminAvailability();
       });
-      return button;
+      return option;
     }));
     renderAdminServiceSummary();
+  }
+
+  function discountDraft(service) {
+    const savedOriginalPrice = serviceOriginalPrice(service);
+    const savedPercent = normalizeDiscountInput(service.discountPercent);
+    const draft = discountDrafts.get(service.id) || {};
+    const originalPrice = draft.originalPrice == null ? savedOriginalPrice : normalizeOriginalPriceInput(draft.originalPrice);
+    const percent = draft.discountPercent == null ? savedPercent : normalizeDiscountInput(draft.discountPercent);
+    return {
+      savedOriginalPrice, savedPercent, originalPrice, percent,
+      changed: percent !== savedPercent || originalPrice !== savedOriginalPrice
+    };
+  }
+
+  // A charm's "10.000–20.000đ" stays a range; every other price is one number.
+  function shownPrice(service, price) {
+    return priceUnits ? priceUnits.unitPrice(service.id, price, 'đ').price : currency(price);
+  }
+
+  function numberField(shellClass, inputClass, value, max, step, suffix, label) {
+    const shell = node('span', shellClass);
+    const input = node('input', inputClass);
+    input.type = 'number';
+    input.min = '0';
+    input.max = String(max);
+    input.step = String(step);
+    input.inputMode = 'numeric';
+    input.value = String(value);
+    input.setAttribute('aria-label', label);
+    shell.append(input, node('b', '', suffix));
+    return { shell, input };
+  }
+
+  function renderDiscountFilters(categories, services) {
+    const onSale = services.filter((service) => normalizeDiscountInput(service.discountPercent) > 0).length;
+    const chips = [
+      ['all', `Tất cả ${services.length}`],
+      ...categories.map((category) => [category.id, `${category.label} ${category.services.length}`]),
+      ['sale', `Đang giảm ${onSale}`]
+    ];
+    elements.discountFilters.replaceChildren(...chips.map(([id, label]) => {
+      const chip = button('chip', label);
+      chip.setAttribute('aria-pressed', String(discountFilter === id));
+      chip.addEventListener('click', () => {
+        discountFilter = id;
+        renderDiscountServices();
+      });
+      return chip;
+    }));
   }
 
   function renderDiscountServices() {
     if (!elements.discountServiceList) return;
     const services = Array.isArray(bookingConfig?.services) ? bookingConfig.services : [];
     const query = String(elements.discountSearch?.value || '').trim().toLocaleLowerCase('vi-VN');
-    const visibleServices = services.filter((service) => (
-      !query || String(service.name || '').toLocaleLowerCase('vi-VN').includes(query)
-    ));
     if (!services.length) {
+      elements.discountFilters.replaceChildren();
       elements.discountServiceList.replaceChildren(node(
-        'p', 'admin-slot-empty', adminConfigLoading ? 'Đang tải danh sách dịch vụ…' : 'Chưa tải được danh sách dịch vụ.'
+        'p', 'slot-empty', adminConfigLoading ? 'Đang tải danh sách dịch vụ…' : 'Chưa tải được danh sách dịch vụ.'
       ));
       return;
     }
-    if (!visibleServices.length) {
-      elements.discountServiceList.replaceChildren(node('p', 'admin-slot-empty', 'Không tìm thấy dịch vụ phù hợp.'));
+    const categories = adminServiceCategories();
+    renderDiscountFilters(categories, services);
+    const visible = (service) => (!query || String(service.name || '').toLocaleLowerCase('vi-VN').includes(query))
+      && (discountFilter !== 'sale' || normalizeDiscountInput(service.discountPercent) > 0);
+    const groups = categories
+      .filter((category) => discountFilter === 'all' || discountFilter === 'sale' || category.id === discountFilter)
+      .map((category) => ({ ...category, services: category.services.filter(visible) }))
+      .filter((category) => category.services.length);
+    if (!groups.length) {
+      elements.discountServiceList.replaceChildren(node('p', 'slot-empty', 'Không tìm thấy dịch vụ phù hợp.'));
       return;
     }
-    elements.discountServiceList.replaceChildren(...visibleServices.map((service) => {
-      const savedOriginalPrice = serviceOriginalPrice(service);
-      const savedPercent = normalizeDiscountInput(service.discountPercent);
-      const draft = discountDrafts.get(service.id) || {};
-      const draftOriginalPrice = draft.originalPrice == null
-        ? savedOriginalPrice : normalizeOriginalPriceInput(draft.originalPrice);
-      const draftPercent = draft.discountPercent == null
-        ? savedPercent : normalizeDiscountInput(draft.discountPercent);
-      const previewPrice = discountedPrice(draftOriginalPrice, draftPercent);
-      const changed = draftPercent !== savedPercent || draftOriginalPrice !== savedOriginalPrice;
-      const saving = discountSavingIds.has(service.id);
-      const card = node('article', 'discount-service-card');
-      card.classList.toggle('has-active-sale', savedPercent > 0);
-
-      const identity = node('div', 'discount-service-identity');
-      identity.append(node('strong', '', service.name));
-      const line = priceUnits ? priceUnits.unitPrice(service.id, service.price, 'đ').line : '';
-      identity.append(node('span', '', `${service.durationMinutes} phút${line ? ` · ${line}` : ''}`));
-      if (savedPercent > 0) identity.append(node('span', 'discount-active-badge', `Đang giảm ${savedPercent}%`));
-
-      const pricingControls = node('div', 'discount-pricing-controls');
-      const priceControl = node('label', 'discount-input-label discount-price-label');
-      priceControl.append(node('span', '', 'Giá gốc'));
-      const priceShell = node('span', 'discount-price-input-shell');
-      const priceInput = node('input', 'discount-original-input');
-      priceInput.type = 'number';
-      priceInput.min = '0';
-      priceInput.max = '2000000000';
-      priceInput.step = '1000';
-      priceInput.inputMode = 'numeric';
-      priceInput.value = String(draftOriginalPrice);
-      priceInput.setAttribute('aria-label', `Giá gốc của ${service.name}`);
-      priceInput.disabled = saving;
-      priceShell.append(priceInput, node('b', '', 'đ'));
-      priceControl.append(priceShell);
-
-      const control = node('label', 'discount-input-label');
-      control.append(node('span', '', 'Giảm giá'));
-      const inputShell = node('span', 'discount-input-shell');
-      const input = node('input', 'discount-percent-input');
-      input.type = 'number';
-      input.min = '0';
-      input.max = '100';
-      input.step = '1';
-      input.inputMode = 'numeric';
-      input.value = String(draftPercent);
-      input.setAttribute('aria-label', `Phần trăm giảm cho ${service.name}`);
-      input.disabled = saving;
-      inputShell.append(input, node('b', '', '%'));
-      control.append(inputShell);
-      pricingControls.append(priceControl, control);
-
-      const preview = node('div', 'discount-price-preview');
-      const previewLabel = node('span', 'discount-preview-label', draftPercent > 0 ? 'Giá sau giảm' : 'Giá hiện tại');
-      const previewValue = node('strong', 'discount-preview-price', currency(previewPrice));
-      const originalValue = node('span', `discount-original-price${draftPercent > 0 ? ' is-crossed' : ''}`, `Giá gốc ${currency(draftOriginalPrice)}`);
-      preview.append(previewLabel, previewValue, originalValue);
-
-      const confirmButton = node('button', 'btn primary discount-confirm', saving ? 'Đang lưu…' : 'Xác nhận');
-      confirmButton.type = 'button';
-      confirmButton.disabled = saving || !changed;
-
-      const updateDraftPreview = () => {
-        if (input.value === '' || priceInput.value === '') {
-          confirmButton.disabled = true;
-          return;
-        }
-        const percent = normalizeDiscountInput(input.value);
-        const originalPrice = normalizeOriginalPriceInput(priceInput.value);
-        if (Number(input.value) !== percent) input.value = String(percent);
-        if (Number(priceInput.value) !== originalPrice) priceInput.value = String(originalPrice);
-        discountDrafts.set(service.id, { discountPercent: percent, originalPrice });
-        previewLabel.textContent = percent > 0 ? 'Giá sau giảm' : 'Giá hiện tại';
-        previewValue.textContent = currency(discountedPrice(originalPrice, percent));
-        originalValue.textContent = `Giá gốc ${currency(originalPrice)}`;
-        originalValue.classList.toggle('is-crossed', percent > 0);
-        confirmButton.disabled = saving || (
-          percent === savedPercent && originalPrice === savedOriginalPrice
-        );
-      };
-      input.addEventListener('input', updateDraftPreview);
-      priceInput.addEventListener('input', updateDraftPreview);
-      confirmButton.addEventListener('click', () => saveServicePricing(service.id));
-      card.append(identity, pricingControls, preview, confirmButton);
-      return card;
+    const head = node('div', 't-head disc-head');
+    head.append(...['Dịch vụ', 'Phút', 'Giá gốc', 'Giảm', 'Giá hiển thị', ''].map((label) => node('span', '', label)));
+    elements.discountServiceList.replaceChildren(head, ...groups.map((category) => {
+      const group = node('section', 'disc-group');
+      const title = node('h3', 'disc-group-title', category.label);
+      title.append(node('span', '', ` · ${category.hint}`));
+      group.append(title, ...category.services.map((service) => discountRow(service)));
+      return group;
     }));
+  }
+
+  function discountRow(service) {
+    const { savedOriginalPrice, savedPercent, originalPrice, percent, changed } = discountDraft(service);
+    const saving = discountSavingIds.has(service.id);
+    const card = node('article', 'discount-service-card');
+    card.classList.toggle('has-active-sale', savedPercent > 0);
+    card.classList.toggle('is-dirty', changed);
+
+    const identity = node('div', 'discount-service-identity');
+    const copy = node('div');
+    const line = priceUnits ? priceUnits.unitPrice(service.id, service.price, 'đ').line : '';
+    const state = () => (card.classList.contains('is-dirty') ? 'Chưa lưu' : savedPercent > 0 ? 'Đang giảm' : '');
+    const phoneLine = node('span', 'm-only', `${service.durationMinutes}′ · ${state() || 'giá gốc'}`);
+    copy.append(node('strong', '', service.name), node('span', 'd-only', line || `${service.durationMinutes} phút`), phoneLine);
+    identity.append(copy);
+    if (savedPercent > 0) identity.append(node('span', 'sale-cloud', `-${savedPercent}%`));
+
+    const price = numberField('discount-price-input-shell', 'discount-original-input', originalPrice, 2000000000, 1000, 'đ', `Giá gốc của ${service.name}`);
+    const discount = numberField('discount-input-shell', 'discount-percent-input', percent, 100, 1, '%', `Phần trăm giảm cho ${service.name}`);
+    const priceInput = price.input;
+    const input = discount.input;
+    priceInput.disabled = saving;
+    input.disabled = saving;
+
+    const preview = node('div', 'discount-price-preview');
+    const previewValue = node('strong', 'discount-preview-price', shownPrice(service, discountedPrice(originalPrice, percent)));
+    const originalValue = node('span', `discount-original-price${percent > 0 ? ' is-crossed' : ''}`, currency(originalPrice));
+    preview.append(previewValue, originalValue);
+
+    const actions = node('div', 'discount-actions');
+    const tag = node('span', 'discount-tag', state());
+    const confirmButton = button('btn-paper discount-confirm', saving ? 'Đang lưu…' : 'Xác nhận');
+    confirmButton.disabled = saving || !changed;
+    actions.append(tag, confirmButton);
+
+    const updateDraftPreview = () => {
+      if (input.value === '' || priceInput.value === '') {
+        confirmButton.disabled = true;
+        return;
+      }
+      const nextPercent = normalizeDiscountInput(input.value);
+      const nextPrice = normalizeOriginalPriceInput(priceInput.value);
+      if (Number(input.value) !== nextPercent) input.value = String(nextPercent);
+      if (Number(priceInput.value) !== nextPrice) priceInput.value = String(nextPrice);
+      const dirty = nextPercent !== savedPercent || nextPrice !== savedOriginalPrice;
+      if (dirty) discountDrafts.set(service.id, { discountPercent: nextPercent, originalPrice: nextPrice });
+      else discountDrafts.delete(service.id);
+      previewValue.textContent = shownPrice(service, discountedPrice(nextPrice, nextPercent));
+      originalValue.textContent = currency(nextPrice);
+      originalValue.classList.toggle('is-crossed', nextPercent > 0);
+      card.classList.toggle('is-dirty', dirty);
+      tag.textContent = state();
+      confirmButton.disabled = saving || !dirty;
+    };
+    input.addEventListener('input', updateDraftPreview);
+    priceInput.addEventListener('input', updateDraftPreview);
+    confirmButton.addEventListener('click', () => saveServicePricing(service.id));
+    // The phone shows one compact line per service and edits it in a bottom sheet.
+    card.addEventListener('click', () => {
+      if (phoneMedia.matches) openDiscountSheet(service.id);
+    });
+    card.append(identity, node('span', 'discount-duration', String(service.durationMinutes)), price.shell, discount.shell, preview, actions);
+    return card;
+  }
+
+  function closeDiscountSheet(discard = false) {
+    if (discard && discountSheetId) discountDrafts.delete(discountSheetId);
+    discountSheetId = '';
+    elements.discountSheet.hidden = true;
+    elements.discountScrim.hidden = true;
+    renderDiscountServices();
+  }
+
+  function openDiscountSheet(serviceId) {
+    const service = (bookingConfig?.services || []).find((item) => item.id === serviceId);
+    if (!service) return;
+    discountSheetId = serviceId;
+    const category = adminServiceCategories().find((item) => item.services.some((entry) => entry.id === serviceId));
+    const draft = discountDraft(service);
+    let originalPrice = draft.originalPrice;
+    let percent = draft.percent;
+
+    const head = node('div', 'ds-head');
+    const title = node('div');
+    title.append(
+      node('p', 'eyebrow', `${category?.label || 'Dịch vụ'} · ${service.durationMinutes} phút`),
+      node('h2', '', service.name)
+    );
+    head.append(title, image('', 'doodles/polish-bottle.webp', 372, 512));
+
+    const priceLabel = node('label', 'ds-field', 'Giá gốc');
+    const price = numberField('discount-price-input-shell', 'discount-original-input', originalPrice, 2000000000, 1000, 'đ', `Giá gốc của ${service.name}`);
+    priceLabel.append(price.shell);
+
+    const percentGroup = node('div', 'ds-field');
+    const chips = node('div', 'pct-chips');
+    percentGroup.append(node('span', '', 'Giảm giá'), chips);
+
+    const preview = node('div', 'ds-preview');
+    const before = node('div');
+    const oldPrice = node('p', 'ds-old');
+    before.append(node('p', '', 'Giá mới trên website'), oldPrice);
+    const after = node('div', 'ds-new');
+    const cloud = node('span', 'sale-cloud');
+    const newPrice = node('b');
+    after.append(cloud, newPrice);
+    preview.append(before, after);
+
+    const actions = node('div', 'ds-actions');
+    const later = button('btn-ghost', 'Để sau');
+    const save = button('btn-paper', 'Xác nhận giá mới');
+    actions.append(later, save);
+
+    const update = () => {
+      const dirty = percent !== draft.savedPercent || originalPrice !== draft.savedOriginalPrice;
+      if (dirty) discountDrafts.set(serviceId, { discountPercent: percent, originalPrice });
+      else discountDrafts.delete(serviceId);
+      chips.replaceChildren(...[...new Set([...DISCOUNT_STEPS, percent])].sort((a, b) => a - b).map((value) => {
+        const chip = button('', `${value}%`);
+        chip.setAttribute('aria-pressed', String(value === percent));
+        chip.addEventListener('click', () => {
+          percent = value;
+          update();
+        });
+        return chip;
+      }));
+      oldPrice.textContent = currency(originalPrice);
+      oldPrice.hidden = percent === 0;
+      cloud.textContent = `-${percent}%`;
+      cloud.hidden = percent === 0;
+      newPrice.textContent = shownPrice(service, discountedPrice(originalPrice, percent));
+      save.disabled = !dirty || discountSavingIds.has(serviceId);
+    };
+    price.input.addEventListener('input', () => {
+      if (price.input.value === '') return;
+      originalPrice = normalizeOriginalPriceInput(price.input.value);
+      update();
+    });
+    later.addEventListener('click', () => closeDiscountSheet(true));
+    save.addEventListener('click', async () => {
+      save.disabled = true;
+      await saveServicePricing(serviceId);
+      closeDiscountSheet();
+    });
+    update();
+    elements.discountSheet.replaceChildren(
+      head, priceLabel, percentGroup, preview,
+      node('p', 'hint', 'Chỉ áp dụng cho booking mới sau khi xác nhận. Lịch đã đặt giữ giá cũ.'), actions
+    );
+    elements.discountSheet.hidden = false;
+    elements.discountScrim.hidden = false;
   }
 
   async function saveServicePricing(serviceId) {
@@ -697,35 +1052,105 @@
     }
   }
 
-  function renderAdminSlots() {
-    if (adminAvailabilityLoading) {
-      elements.adminBookingSlotGrid.replaceChildren(node('p', 'admin-slot-empty', 'Đang tải giờ trống…'));
-      updateAdminCreateButton();
-      return;
-    }
-    if (!adminSelectedServiceIds.size) {
-      elements.adminBookingSlotGrid.replaceChildren(node('p', 'admin-slot-empty', 'Chọn dịch vụ trước để xem giờ trống.'));
-      updateAdminCreateButton();
-      return;
-    }
-    if (!adminAvailableSlots.length) {
-      elements.adminBookingSlotGrid.replaceChildren(node('p', 'admin-slot-empty', 'Ngày này không còn giờ phù hợp.'));
-      updateAdminCreateButton();
-      return;
-    }
-    elements.adminBookingSlotGrid.replaceChildren(...adminAvailableSlots.map((slot) => {
-      const button = node('button', 'slot-chip', slot.label);
-      button.type = 'button';
-      const selected = slot.startAt === adminSelectedStartAt;
-      button.classList.toggle('selected', selected);
-      button.setAttribute('aria-pressed', String(selected));
-      button.addEventListener('click', () => {
-        adminSelectedStartAt = slot.startAt;
-        renderAdminSlots();
+  // Days a lock covers from opening to closing: striped in the calendars, "nghỉ" in the week lists.
+  function blockIsAllDay(block) {
+    const date = dateInTimeZone(new Date(block.startAt));
+    return new Date(block.startAt) <= new Date(`${date}T${minutesToTime(DAY_START)}:00+07:00`)
+      && new Date(block.endAt) >= new Date(`${date}T${minutesToTime(DAY_END)}:00+07:00`);
+  }
+
+  function closedDates(list = overviewBlocks) {
+    return new Set(list.filter(blockIsAllDay).map((block) => dateInTimeZone(new Date(block.startAt))));
+  }
+
+  function blockReason(block) {
+    const reason = String(block.reason || '').trim();
+    return !reason || reason === 'tiệm hôm nay nghỉ' ? 'tiệm nghỉ' : reason;
+  }
+
+  function blockWhen(block) {
+    const range = blockIsAllDay(block) ? 'cả ngày' : `${localTime(block.startAt)} – ${localTime(block.endAt)}`;
+    return `${shortDate(dateInTimeZone(new Date(block.startAt)))} · ${range}`;
+  }
+
+  // Where a lock sits on a day's timeline, clipped to the salon's hours.
+  function blockMinutes(block, date) {
+    const start = dateInTimeZone(new Date(block.startAt)) < date ? DAY_START : minuteOfDay(block.startAt);
+    const end = dateInTimeZone(new Date(block.endAt)) > date ? DAY_END : minuteOfDay(block.endAt);
+    return { start: Math.max(DAY_START, start), end: Math.min(DAY_END, end) };
+  }
+
+  // The month on the create form: every day of the booking window is a button, closed days are striped.
+  function renderAdminCalendar() {
+    const today = dateInTimeZone();
+    const value = elements.adminBookingDate.value || today;
+    const min = elements.adminBookingDate.min || today;
+    const max = elements.adminBookingDate.max || addDays(today, 30);
+    const month = adminCalendarMonth || value.slice(0, 7);
+    const [year, monthNumber] = month.split('-').map(Number);
+    const closed = closedDates();
+    const shift = (step) => new Date(Date.UTC(year, monthNumber - 1 + step, 1)).toISOString().slice(0, 7);
+
+    const head = node('div', 'mc-head');
+    const nav = node('div', 'mc-nav');
+    const previous = button('', '‹');
+    const next = button('', '›');
+    previous.setAttribute('aria-label', 'Tháng trước');
+    next.setAttribute('aria-label', 'Tháng sau');
+    previous.disabled = month <= min.slice(0, 7);
+    next.disabled = month >= max.slice(0, 7);
+    previous.addEventListener('click', () => { adminCalendarMonth = shift(-1); renderAdminCalendar(); });
+    next.addEventListener('click', () => { adminCalendarMonth = shift(1); renderAdminCalendar(); });
+    nav.append(previous, next);
+    head.append(node('b', '', `Tháng ${monthNumber} · ${year}`), nav);
+
+    const grid = node('div', 'mc-grid');
+    grid.append(...[...DOW.slice(1), DOW[0]].map((day) => node('span', '', day)));
+    const lead = (new Date(Date.UTC(year, monthNumber - 1, 1)).getUTCDay() + 6) % 7;
+    const daysInMonth = new Date(Date.UTC(year, monthNumber, 0)).getUTCDate();
+    const first = addDays(`${month}-01`, -lead);
+    for (let index = 0; index < Math.ceil((lead + daysInMonth) / 7) * 7; index += 1) {
+      const date = addDays(first, index);
+      const day = button('mc-day', String(Number(date.slice(8, 10))));
+      day.disabled = date < min || date > max;
+      day.classList.toggle('is-today', date === today);
+      day.classList.toggle('is-blocked', closed.has(date));
+      day.classList.toggle('is-on', date === value);
+      day.setAttribute('aria-label', `${shortDate(date)}${closed.has(date) ? ' · tiệm nghỉ' : ''}`);
+      day.setAttribute('aria-pressed', String(date === value));
+      day.addEventListener('click', () => {
+        adminCalendarMonth = '';
+        setDateValue(elements.adminBookingDate, date);
+        renderAdminCalendar();
+        loadAdminAvailability();
       });
-      return button;
-    }));
-    updateAdminCreateButton();
+      grid.append(day);
+    }
+    elements.adminBookingCalendar.replaceChildren(head, grid);
+  }
+
+  function renderAdminSlots() {
+    const grid = elements.adminBookingSlotGrid;
+    if (adminAvailabilityLoading) {
+      grid.replaceChildren(node('p', 'slot-empty', 'Đang tải giờ trống…'));
+    } else if (!adminSelectedServiceIds.size) {
+      grid.replaceChildren(node('p', 'slot-empty', 'Chọn dịch vụ trước để xem giờ trống.'));
+    } else if (!adminAvailableSlots.length) {
+      grid.replaceChildren(node('p', 'slot-empty', 'Ngày này không còn giờ phù hợp.'));
+    } else {
+      grid.replaceChildren(...adminAvailableSlots.map((slot) => {
+        const chip = button('slot-chip', slot.label);
+        const selected = slot.startAt === adminSelectedStartAt;
+        chip.classList.toggle('selected', selected);
+        chip.setAttribute('aria-pressed', String(selected));
+        chip.addEventListener('click', () => {
+          adminSelectedStartAt = slot.startAt;
+          renderAdminSlots();
+        });
+        return chip;
+      }));
+    }
+    renderAdminServiceSummary();
   }
 
   async function loadAdminBookingConfig() {
@@ -746,6 +1171,7 @@
       adminConfigLoading = false;
       renderAdminServices();
       renderDiscountServices();
+      renderAdminCalendar();
       renderAdminSlots();
     }
   }
@@ -795,7 +1221,11 @@
     const customerPhone = elements.adminCustomerPhone.value.replace(/\D/g, '');
     const date = elements.adminBookingDate.value;
     const time = localTime(adminSelectedStartAt);
-    if (!window.confirm(`Tạo lịch ${time} ngày ${date} cho ${customerName}?`)) return;
+    if (!await confirmAction(
+      `Tạo lịch ${time} ${shortDate(date)} cho ${customerName}?`,
+      `${services.map((service) => service.name).join(' + ')} · ${customerPhone}`,
+      'Tạo lịch'
+    )) return;
     adminCreatePending = true;
     updateAdminCreateButton();
     setMessage(elements.adminBookingMessage, 'Đang tạo lịch…');
@@ -815,6 +1245,7 @@
       adminSelectedServiceIds.clear();
       adminSelectedStartAt = '';
       adminAvailableSlots = [];
+      setCreateStep(1);
       renderAdminServices();
       renderAdminSlots();
       if (date < elements.fromDate.value || date > elements.toDate.value) {
@@ -822,9 +1253,9 @@
         setDateValue(elements.toDate, date);
       }
       await Promise.all([loadAppointments(), loadOverview()]);
-      setMessage(elements.adminBookingMessage, `Đã tạo lịch ${reference}.`, true);
+      setMessage(elements.adminBookingMessage, `Đã tạo lịch ${reference} cho ${customerName}.`, true);
     } catch (error) {
-      setMessage(elements.adminBookingMessage, errorMessage(error.message));
+      setMessage(elements.adminBookingMessage, errorMessage(error.message), false, error.message === 'slot_unavailable');
       if (error.message === 'slot_unavailable') await loadAdminAvailability();
     } finally {
       adminCreatePending = false;
@@ -841,8 +1272,15 @@
     return overviewAppointments.filter((item) => dateInTimeZone(new Date(item.startAt)) === today);
   }
 
+  function overviewTodayBlocks() {
+    const today = dateInTimeZone();
+    const dayStart = new Date(`${today}T00:00:00+07:00`);
+    const dayEnd = new Date(`${addDays(today, 1)}T00:00:00+07:00`);
+    return overviewBlocks.filter((block) => new Date(block.startAt) < dayEnd && new Date(block.endAt) > dayStart);
+  }
+
   function formatDuration(minutes) {
-    const value = Math.max(0, Number(minutes || 0));
+    const value = Math.max(0, Math.round(Number(minutes || 0)));
     const hours = Math.floor(value / 60);
     const remainder = value % 60;
     if (!hours) return `${remainder} phút`;
@@ -864,18 +1302,20 @@
     const remaining = active.filter((item) => item.status !== 'completed'
       && new Date(item.endAt).getTime() > now).length;
     const duration = active.reduce((total, item) => total + Number(item.durationMinutes || 0), 0);
+    const estimate = active.reduce((total, item) => total + Number(item.price || 0), 0);
     const dropped = todayAppointments.length - active.length;
     elements.dashboardTitle.textContent = active.length ? `Hôm nay có ${active.length} lịch` : 'Hôm nay chưa có lịch nào';
     const stickers = [
       [`${completed}/${active.length}`, 'đã xong'],
       [String(remaining), 'sắp tới'],
       [formatDuration(duration), 'đã đặt'],
-      [String(overviewBlocks.length), 'khung đang khóa'],
+      [currency(estimate), 'tạm tính'],
+      [String(overviewTodayBlocks().length), 'khung khóa'],
       ...(dropped ? [[String(dropped), 'hủy / không đến']] : [])
     ];
     elements.summary.replaceChildren(...stickers.map(([value, label]) => {
       const sticker = node('span', 'sticker');
-      sticker.append(node('strong', '', value), document.createTextNode(` ${label}`));
+      sticker.append(node('b', '', value), document.createTextNode(` ${label}`));
       return sticker;
     }));
   }
@@ -887,43 +1327,97 @@
       .sort((a, b) => new Date(a.startAt) - new Date(b.startAt))[0] || null;
   }
 
-  function overviewTimelineItems() {
-    const ordered = overviewTodayAppointments().sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
-    if (ordered.length <= 6) return ordered;
+  // The "Tiếp theo" slip: who is coming next, how soon, with a call button and the way into the details.
+  function renderOverviewNext() {
     const next = nextOverviewAppointment();
-    if (!next) return ordered.slice(-6);
-    const nextIndex = ordered.findIndex((item) => item.id === next.id);
-    const start = Math.max(0, Math.min(nextIndex - 2, ordered.length - 6));
-    return ordered.slice(start, start + 6);
+    if (!next) {
+      const copy = node('div', 'next-empty');
+      copy.append(node('b', '', 'Không còn lịch sắp tới hôm nay'), node('p', '', 'Nhu Nhi ngủ trưa được rồi. Tạo lịch khi khách gọi nhé.'));
+      elements.overviewNextChip.replaceChildren(copy);
+      return;
+    }
+    const wait = formatDuration((new Date(next.startAt).getTime() - Date.now()) / 60000);
+    const top = node('div', 'next-top');
+    const flag = node('span', 'next-flag', 'Tiếp theo · ');
+    flag.append(node('span', 'd-only', 'còn '), document.createTextNode(wait));
+    const time = node('span', 'next-time', localTime(next.startAt));
+    time.append(node('span', 'd-only', `–${localTime(next.endAt)}`));
+    top.append(flag, time);
+
+    const service = node('p', 'next-service', next.service);
+    service.append(node('span', 'd-only', ` · ${currency(next.price)}`));
+    if (next.customerNote) service.append(node('span', 'm-only', ` · ${next.customerNote}`));
+
+    const actions = node('div', 'next-actions');
+    const call = node('a', 'btn-ghost', 'Gọi ');
+    call.href = `tel:${String(next.customerPhone).replace(/[^0-9+]/g, '')}`;
+    call.append(...responsiveText(next.customerPhone, 'khách'));
+    const open = button('btn-ghost');
+    open.append(...responsiveText('Mở chi tiết', 'Chi tiết'));
+    open.addEventListener('click', () => openDetail(next));
+    actions.append(call, open);
+
+    elements.overviewNextChip.replaceChildren(top, node('p', 'next-name', next.customerName), service);
+    if (next.customerNote) elements.overviewNextChip.append(node('p', 'next-note d-only', `Ghi chú: ${next.customerNote}`));
+    elements.overviewNextChip.append(actions);
   }
 
+  // Today drawn from opening to closing: every appointment at its hour, locks striped, a line at "now".
   function renderOverviewTimeline() {
+    const today = dateInTimeZone();
     const next = nextOverviewAppointment();
-    if (!overviewTodayAppointments().length) {
+    const items = overviewTodayAppointments().sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
+    elements.overviewTimeline.classList.toggle('is-empty', !items.length);
+    if (!items.length) {
       elements.overviewTimeline.replaceChildren(emptyState(
-        'Hôm nay chưa có lịch hẹn', 'Bạn có thể tạo lịch mới ngay khi khách gọi hoặc nhắn tin.',
+        'Hôm nay chưa có lịch hẹn', 'Nhu Nhi ngủ trưa được rồi. Tạo lịch khi khách gọi nhé.',
         { label: 'Tạo lịch cho khách', section: '#sec-create' }
       ));
       return;
     }
-    elements.overviewTimeline.replaceChildren(...overviewTimelineItems().map((item, index) => {
-      const note = node('article', `note note--${noteTone(index)} status-${item.status}`);
-      note.append(
-        node('span', 'note-time', timeParts(item.startAt).time),
-        node('strong', 'note-name', item.customerName),
-        node('span', 'note-service', item.service),
-        statusBadge(item)
-      );
-      if (next?.id === item.id) {
-        note.classList.add('is-next');
-        note.append(node('span', 'note-flag', 'Tiếp theo'));
-      }
+    const place = (element, start, end, minimum) => {
+      const from = Math.min(Math.max(start, DAY_START), DAY_END - 30);
+      element.style.setProperty('--top', `${(from - DAY_START) / 30 * 34}px`);
+      element.style.setProperty('--h', `${Math.max(minimum, (Math.min(end, DAY_END) - from) / 30 * 34 - 3)}px`);
+    };
+    const hours = Array.from({ length: (DAY_END - DAY_START) / 60 + 1 }, (_, index) => {
+      const row = node('div', 'tl-hour');
+      row.style.setProperty('--top', `${index * 68}px`);
+      row.append(node('span', '', minutesToTime(DAY_START + index * 60)));
+      return row;
+    });
+    const locked = overviewTodayBlocks().map((block) => {
+      const { start, end } = blockMinutes(block, today);
+      const row = node('div', 'tl-block');
+      place(row, start, end, 26);
+      row.append(icon(ICONS.lock, 15), document.createTextNode(`${minutesToTime(start)}–${minutesToTime(end)} · ${blockReason(block)} · đã khóa`));
+      return row;
+    });
+    const notes = items.map((item, index) => {
+      const note = button(`tl-item tone-${TONES[index % TONES.length]} status-${item.status}`);
+      const start = minuteOfDay(item.startAt);
+      place(note, start, start + Number(item.durationMinutes || 30), 32);
+      note.classList.toggle('is-next', next?.id === item.id);
+      note.classList.toggle('is-off', inactive(item));
+      const time = node('span', 'tl-time', localTime(item.startAt));
+      time.append(node('span', 'd-only', `–${localTime(item.endAt)}`));
+      const main = node('span', 'tl-main');
+      main.append(node('b', 'tl-name', item.customerName), node('span', 'tl-service', item.service));
+      note.append(time, main, node('span', 'tl-price', currency(item.price)), statusBadge(item));
+      note.addEventListener('click', () => openDetail(item));
       return note;
-    }));
+    });
+    const minute = currentMinuteInTimeZone();
+    const now = node('div', 'tl-now');
+    now.style.setProperty('--top', `${(minute - DAY_START) / 30 * 34}px`);
+    now.append(node('span', '', `Bây giờ ${minutesToTime(minute)}`));
+    elements.overviewTimeline.replaceChildren(...hours, ...locked, ...notes);
+    if (minute >= DAY_START && minute <= DAY_END) elements.overviewTimeline.append(now);
   }
 
   function renderOverviewWeek() {
     const today = dateInTimeZone();
+    const closed = closedDates();
     const countByDate = overviewAppointments.reduce((result, item) => {
       if (!activeOverviewAppointment(item)) return result;
       const date = dateInTimeZone(new Date(item.startAt));
@@ -932,47 +1426,80 @@
     }, {});
     const days = Array.from({ length: 7 }, (_, index) => addDays(today, index));
     elements.overviewWeekStrip.replaceChildren(...days.map((date, index) => {
-      const dateObject = new Date(`${date}T12:00:00+07:00`);
-      const weekday = index === 0 ? 'Hôm nay' : new Intl.DateTimeFormat('vi-VN', { timeZone: TIME_ZONE, weekday: 'short' }).format(dateObject);
-      const dayMonth = new Intl.DateTimeFormat('vi-VN', { timeZone: TIME_ZONE, day: '2-digit', month: '2-digit' }).format(dateObject);
       const count = countByDate[date] || 0;
-      const button = node('button', 'week-day');
+      const label = closed.has(date) && !count ? 'nghỉ' : `${count} lịch`;
+      const button = node('button', 'week-row');
       button.type = 'button';
       button.classList.toggle('is-today', index === 0);
       button.classList.toggle('is-empty', count === 0);
-      button.setAttribute('aria-label', `${weekday} ${dayMonth}: ${count} lịch. Xem lịch ngày này`);
-      button.append(node('span', 'week-day-name', weekday), node('strong', '', dayMonth), node('span', 'week-day-count', `${count} lịch`));
+      button.setAttribute('aria-label', `${shortDate(date)}: ${label}. Xem lịch ngày này`);
+      const day = node('span', 'week-day', shortDate(date).split(' ')[0]);
+      day.append(node('b', '', dayMonth(date)));
+      const bar = node('span', 'week-bar');
+      const fill = node('i');
+      // ponytail: five appointments fill the bar; tune if the salon's full day changes
+      fill.style.setProperty('--fill', `${Math.min(100, count * 20)}%`);
+      bar.append(fill);
+      button.append(day, bar, node('span', 'week-count', label));
       button.addEventListener('click', () => showScheduleFor(date, date));
       return button;
     }));
   }
 
+  function renderOverviewBlocks() {
+    if (!overviewBlocks.length) {
+      elements.overviewBlocks.replaceChildren(node('p', 'hint', 'Chưa có khung giờ nào đang khóa.'));
+      return;
+    }
+    elements.overviewBlocks.replaceChildren(...overviewBlocks.slice(0, 4).map((block) => {
+      const row = node('div', 'locked-row');
+      const copy = node('div');
+      copy.append(node('b', '', blockWhen(block)), node('span', '', blockReason(block)));
+      const span = blockIsAllDay(block)
+        ? `${minutesToTime(DAY_START)}–${minutesToTime(DAY_END)}`
+        : formatDuration((new Date(block.endAt) - new Date(block.startAt)) / 60000);
+      row.append(copy, node('span', 'locked-span', span));
+      return row;
+    }));
+    if (overviewBlocks.length > 4) {
+      elements.overviewBlocks.append(node('p', 'hint', `và ${overviewBlocks.length - 4} khung khóa khác`));
+    }
+  }
+
   function showScheduleFor(from, to) {
     setDateValue(elements.fromDate, from);
     setDateValue(elements.toDate, to);
+    scheduleView = 'list';
     navigateToSection('#sec-schedule');
     loadAppointments();
   }
 
   function renderOverview() {
-    const today = dateInTimeZone();
-    const next = nextOverviewAppointment();
-    elements.overviewDateLabel.textContent = overviewDateTitle(today);
-    elements.overviewNextChip.textContent = next
-      ? `Lịch tiếp theo ${timeParts(next.startAt).time} · ${next.customerName}`
-      : 'Không còn lịch sắp tới hôm nay';
+    elements.overviewGreeting.textContent = greeting();
+    // "Thứ Tư, 30/09" on the phone, with the year where there is room.
+    const dateTitle = overviewDateTitle(dateInTimeZone());
+    elements.overviewDateLabel.replaceChildren(dateTitle.slice(0, -5), node('span', 'd-only', dateTitle.slice(-5)));
+    elements.overviewStatus.textContent = `Đã tải ${overviewAppointments.length} lịch · ${minutesToTime(currentMinuteInTimeZone())}`;
+    elements.overviewStatus.className = 'status-pill';
+    setCount(elements.navCountSchedule, overviewAppointments.length);
+    setCount(elements.navCountBlock, overviewBlocks.length);
     renderOverviewSummary();
+    renderOverviewNext();
     renderOverviewTimeline();
     renderOverviewWeek();
+    renderOverviewBlocks();
+    renderBlocks();
+    renderBlockDays();
+    renderAdminCalendar();
   }
 
   async function loadOverview() {
     if (!session || overviewLoading) return;
     overviewLoading = true;
     renderSummarySkeletons();
-    elements.overviewNextChip.textContent = 'Đang cập nhật lịch hôm nay…';
+    elements.overviewStatus.textContent = 'Đang tải…';
+    elements.overviewStatus.className = 'status-pill is-busy';
     const today = dateInTimeZone();
-    const tomorrow = addDays(today, 1);
     try {
       const [appointmentData, blockData] = await Promise.all([
         adminRequest({
@@ -984,163 +1511,185 @@
         adminRequest({
           action: 'admin_list_blocks',
           from: `${today}T00:00:00+07:00`,
-          to: `${tomorrow}T00:00:00+07:00`
+          to: `${addDays(today, BLOCK_LOOKAHEAD_DAYS)}T00:00:00+07:00`
         })
       ]);
       overviewAppointments = Array.isArray(appointmentData.appointments) ? appointmentData.appointments : [];
-      overviewBlocks = Array.isArray(blockData.blocks) ? blockData.blocks : [];
+      overviewBlocks = (Array.isArray(blockData.blocks) ? blockData.blocks : [])
+        .sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
       renderOverview();
     } catch (error) {
       elements.summary.replaceChildren();
-      elements.overviewTimeline.replaceChildren(emptyState('Không tải được lịch hôm nay', 'Vui lòng thử tải lại trang.'));
+      elements.overviewNextChip.replaceChildren();
+      elements.overviewTimeline.classList.add('is-empty');
+      elements.overviewTimeline.replaceChildren(emptyState('Không tải được lịch hôm nay', 'Kiểm tra mạng rồi bấm Tải lại.'));
       elements.overviewWeekStrip.replaceChildren();
-      elements.overviewNextChip.textContent = errorMessage(error.message);
+      elements.overviewStatus.textContent = errorMessage(error.message);
+      elements.overviewStatus.className = 'status-pill is-error';
     } finally {
       overviewLoading = false;
     }
   }
 
-  function statusActions(item, details) {
-    const actions = node('div', 'note-actions');
+  function statusActions(item) {
+    const actions = node('div', 'dd-actions');
     const add = (label, className, handler) => {
-      const button = node('button', `pill ${className}`, label);
-      button.type = 'button';
-      button.addEventListener('click', () => handler(button));
-      actions.append(button);
+      const action = button(className, label);
+      action.addEventListener('click', () => handler(action));
+      actions.append(action);
     };
     if (item.status === 'confirmed') {
-      add('Dời lịch', 'reschedule-button', (button) => openReschedulePanel(item, details, button));
-      add('Hoàn thành', 'complete-button', (button) => completeAppointment(item, button));
+      add('Đánh dấu hoàn thành', 'btn-paper complete-button', (action) => completeAppointment(item, action));
     }
     if (item.status === 'completed') {
-      add('Reset trạng thái', 'reset-status', (button) => resetCompleted(item, button));
+      add(STATUS_ACTIONS.confirmed, 'btn-ghost reset-status', (action) => resetCompleted(item, action));
     } else {
       Object.keys(STATUS_LABELS)
         .filter((value) => value !== 'completed' && value !== item.status)
-        .forEach((value) => add(STATUS_ACTIONS[value], `status-${value}`, (button) => updateStatus(item, value, button)));
+        .forEach((value) => add(
+          STATUS_ACTIONS[value],
+          `btn-ghost status-${value}${value === 'cancelled' ? ' danger' : ''}`,
+          (action) => updateStatus(item, value, action)
+        ));
     }
     return actions;
   }
 
-  function appointmentCard(item, index = 0) {
-    const start = timeParts(item.startAt);
-    const end = timeParts(item.endAt);
-    const card = node('article', `note note--${noteTone(index)} status-${item.status}`);
-    const safeKey = String(item.id || item.reference || Math.random()).replace(/[^a-z0-9_-]/gi, '-');
-    const detailsId = `appointment-details-${safeKey}`;
+  function closeDetail() {
+    detailId = '';
+    elements.detailDrawer.hidden = true;
+    elements.detailScrim.hidden = true;
+    elements.appointmentList.querySelector('.appt-row.is-selected')?.classList.remove('is-selected');
+  }
+
+  // One appointment in full: beside the table on wide screens, over it on tablets, a bottom sheet on phones.
+  function renderDetail(item) {
+    const date = appointmentDate(item);
+    const start = localTime(item.startAt);
+    const end = localTime(item.endAt);
+    const phoneHref = `tel:${String(item.customerPhone).replace(/[^0-9+]/g, '')}`;
     // Reference photos the customer attached: signed Storage links for uploads, site paths for gallery picks.
     const photos = Array.isArray(item.referencePhotos) ? item.referencePhotos.filter((photo) => photo?.url) : [];
+    const services = Array.isArray(item.services) && item.services.length
+      ? item.services : [{ id: '', name: item.service, price: item.price }];
+    const estimate = isEstimate(services.map((service) => service.id));
 
-    const toggle = node('button', 'note-toggle');
-    toggle.type = 'button';
-    toggle.setAttribute('aria-expanded', 'false');
-    toggle.setAttribute('aria-controls', detailsId);
-    const chevron = node('span', 'note-chevron', '⌄');
-    chevron.setAttribute('aria-hidden', 'true');
-    toggle.append(
-      node('span', 'note-time', start.time),
-      node('strong', 'note-name', item.customerName),
-      node('span', 'note-service', `${item.service}${photos.length ? ` · ${photos.length} ảnh mẫu` : ''}`),
-      statusBadge(item),
-      chevron
+    const top = node('div', 'dd-top');
+    const close = button('dd-close');
+    close.title = 'Đóng';
+    close.setAttribute('aria-label', 'Đóng chi tiết lịch');
+    close.append(icon(ICONS.close, 16));
+    close.addEventListener('click', closeDetail);
+    top.append(node('span', 'ref-pill', item.reference), statusBadge(item), close);
+
+    const who = node('div', 'dd-who');
+    const name = node('div');
+    const phone = node('a', 'dd-phone d-only', `${item.customerPhone} · bấm gọi`);
+    phone.href = phoneHref;
+    name.append(
+      node('h2', '', item.customerName), phone,
+      node('p', 'dd-when m-only', `${shortDate(date)} · ${start}–${end} · ${item.durationMinutes}′`)
     );
+    const call = node('a', 'dd-call m-only');
+    call.href = phoneHref;
+    call.title = `Gọi ${item.customerPhone}`;
+    call.setAttribute('aria-label', `Gọi ${item.customerPhone}`);
+    call.append(icon(ICONS.phone, 22));
+    who.append(name, call);
 
-    const details = node('div', 'note-details');
-    details.id = detailsId;
-    details.hidden = true;
-    const detailList = node('dl', 'note-detail-grid');
-    const detailItem = (label, value, className = '') => {
-      const group = node('div', className);
-      group.append(node('dt', '', label), node('dd', '', value));
+    const facts = node('div', 'dd-facts d-only');
+    const fact = (label, value) => {
+      const group = node('div');
+      group.append(node('p', 'dd-label', label), node('p', 'dd-value', value));
       return group;
     };
-    const phoneGroup = node('div');
-    phoneGroup.append(node('dt', '', 'Số điện thoại'));
-    const phoneValue = node('dd');
-    const phone = node('a', '', item.customerPhone);
-    phone.href = `tel:${String(item.customerPhone).replace(/[^0-9+]/g, '')}`;
-    phoneValue.append(phone);
-    phoneGroup.append(phoneValue);
-    const estimate = Boolean(priceUnits?.hasUnitPricing((item.services || []).map((service) => service.id)));
-    detailList.append(
-      detailItem('Mã lịch', item.reference, 'note-detail-reference'),
-      phoneGroup,
-      detailItem('Ngày và giờ', `${start.time} – ${end.time} · ${start.date}`, 'note-detail-wide'),
-      detailItem('Dịch vụ', item.service, 'note-detail-wide'),
-      detailItem('Thời lượng', `${item.durationMinutes} phút`),
-      detailItem(estimate ? 'Tạm tính' : 'Tổng tiền', currency(item.price)),
-      detailItem('Thợ thực hiện', item.staff || 'Chưa chỉ định'),
-      detailItem('Ghi chú', item.customerNote || 'Không có ghi chú', 'note-detail-wide')
-    );
+    facts.append(fact('Ngày & giờ', `${shortDate(date)} · ${start}–${end}`), fact('Thợ thực hiện', item.staff || 'Chưa chỉ định'));
+
+    const lines = node('div', 'dd-lines');
+    lines.append(...services.map((service) => {
+      const line = node('div', 'dd-line');
+      const label = node('span', '', service.name);
+      const unit = service.id ? unitLabel(service.id, service.price) : '';
+      if (unit) label.append(node('i', '', ` · ${unit}`));
+      line.append(label, node('span', '', currency(service.price)));
+      return line;
+    }));
+    const total = node('div', 'dd-total');
+    const totalLabel = node('span', '', estimate ? 'Tạm tính' : 'Tổng tiền');
+    totalLabel.append(node('span', 'd-only', ` · ${item.durationMinutes} phút`));
+    total.append(totalLabel, node('b', '', currency(item.price)));
+    lines.append(total);
+
+    elements.detailDrawer.replaceChildren(image('dd-bow', 'assets/booking/confirmation/pink-bow.webp', 360, 306), top, who, facts, lines);
+    if (item.customerNote) elements.detailDrawer.append(node('p', 'sticky-note', `"${item.customerNote}"`));
     if (photos.length) {
-      const photoGroup = node('div', 'note-detail-photos note-detail-wide');
-      const photoValue = node('dd');
+      const group = node('div', 'dd-photos');
+      const strip = node('div', 'dd-photo-strip');
       photos.forEach((photo, photoIndex) => {
         const label = photo.kind === 'gallery' ? (photo.title || 'Mẫu trong thư viện') : `Ảnh khách gửi ${photoIndex + 1}`;
-        const link = node('a', 'appointment-photo');
+        const link = node('a', 'dd-photo');
         link.href = photo.url;
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
-        const image = node('img');
-        image.src = photo.url;
-        image.alt = label;
-        image.loading = 'lazy';
-        link.append(image, node('span', '', label));
-        photoValue.append(link);
+        link.title = label;
+        const picture = node('img');
+        picture.src = photo.url;
+        picture.alt = label;
+        picture.loading = 'lazy';
+        link.append(picture);
+        strip.append(link);
       });
-      photoGroup.append(node('dt', '', 'Ảnh mẫu'), photoValue);
-      detailList.append(photoGroup);
+      group.append(node('p', 'dd-label d-only', `Ảnh mẫu khách gửi · ${photos.length}`), strip);
+      elements.detailDrawer.append(group);
     }
-    details.append(detailList, statusActions(item, details));
-
-    toggle.addEventListener('click', () => {
-      const expanded = toggle.getAttribute('aria-expanded') !== 'true';
-      toggle.setAttribute('aria-expanded', String(expanded));
-      details.hidden = !expanded;
-      card.classList.toggle('is-open', expanded);
-    });
-
-    card.append(toggle, details);
-    return card;
+    elements.detailDrawer.append(statusActions(item));
+    if (item.status === 'confirmed') elements.detailDrawer.append(reschedulePanel(item));
+    elements.detailDrawer.hidden = false;
+    elements.detailScrim.hidden = false;
   }
 
-  function openReschedulePanel(item, card, trigger) {
-    document.querySelectorAll('.reschedule-panel').forEach((panel) => panel.remove());
-    document.querySelectorAll('.reschedule-button').forEach((button) => { button.disabled = false; });
-    trigger.disabled = true;
+  // Opens an appointment's details from anywhere; the drawer lives on the Lịch hẹn screen.
+  function openDetail(item) {
+    detailId = item.id;
+    closeWeekPopover();
+    if (activeSection() !== '#sec-schedule') navigateToSection('#sec-schedule');
+    renderDetail(item);
+    // Laid over the page the drawer takes the focus; beside the table it is brought into view.
+    if (overlayMedia.matches) elements.detailDrawer.querySelector('.dd-close').focus();
+    else elements.detailDrawer.scrollIntoView({ block: 'nearest' });
+    if (appointments.some((entry) => entry.id === item.id)) {
+      renderAppointments();
+      return;
+    }
+    const date = appointmentDate(item);
+    setDateValue(elements.fromDate, date);
+    setDateValue(elements.toDate, date);
+    loadAppointments();
+  }
 
+  // Moves a confirmed appointment to another free 30-minute slot; the server re-checks conflicts and locks.
+  function reschedulePanel(item) {
     const panel = node('section', 'reschedule-panel');
     panel.setAttribute('aria-label', `Dời lịch ${item.reference}`);
-    const heading = node('div', 'reschedule-heading');
-    heading.append(
-      node('strong', '', `Dời lịch ${item.reference}`),
-      node('span', '', 'Chọn ngày mới rồi chọn một giờ còn trống.')
-    );
+    const heading = node('div', 'rs-head');
+    const title = node('b', '', 'Dời lịch');
+    title.append(node('span', 'd-only', ' sang giờ trống'));
+    heading.append(title, node('span', 'rs-duration d-only', `${item.durationMinutes} phút`));
 
-    const dateLabel = node('label', 'reschedule-date-label', 'Ngày mới');
+    const dateLabel = node('label', 'rs-date');
     const dateInput = node('input');
     dateInput.type = 'date';
     dateInput.min = dateInTimeZone();
     dateInput.max = addDays(dateInput.min, Number(bookingConfig?.advanceBookingDays || 30));
-    const currentDate = dateInTimeZone(new Date(item.startAt));
+    const currentDate = appointmentDate(item);
     dateInput.value = currentDate < dateInput.min ? dateInput.min : currentDate;
-    dateLabel.append(dateInput);
+    dateLabel.append(node('span', 'sr-only', 'Ngày mới'), dateInput);
 
-    const slotArea = node('div', 'reschedule-slot-area');
-    const slotLabel = node('p', 'field-label', 'Giờ mới');
-    const slotGrid = node('div', 'reschedule-slot-grid');
+    const slotGrid = node('div', 'rs-slots');
     const message = node('p', 'message reschedule-message');
-    slotArea.append(slotLabel, slotGrid, message);
-
-    const actions = node('div', 'reschedule-actions');
-    const cancel = node('button', 'btn ghost compact', 'Đóng');
-    cancel.type = 'button';
-    const submit = node('button', 'btn primary compact', 'Xác nhận dời lịch');
-    submit.type = 'button';
+    const submit = button('rs-submit d-only', 'Chọn giờ mới');
     submit.disabled = true;
-    actions.append(cancel, submit);
-    panel.append(heading, dateLabel, slotArea, actions);
-    card.append(panel);
+    panel.append(heading, dateLabel, slotGrid, message, submit);
 
     let selectedStartAt = '';
     let requestId = 0;
@@ -1148,26 +1697,29 @@
 
     function renderSlots(loading = false) {
       submit.disabled = loading || !selectedStartAt;
+      submit.textContent = selectedStartAt
+        ? `Dời sang ${localTime(selectedStartAt)} · ${shortDate(dateInput.value)}` : 'Chọn giờ mới';
       if (loading) {
-        slotGrid.replaceChildren(node('p', 'admin-slot-empty', 'Đang tải giờ trống…'));
+        slotGrid.replaceChildren(node('p', 'slot-empty', 'Đang tải giờ trống…'));
         return;
       }
       if (!availableSlots.length) {
-        slotGrid.replaceChildren(node('p', 'admin-slot-empty', 'Ngày này không có giờ khác phù hợp.'));
+        slotGrid.replaceChildren(node('p', 'slot-empty', 'Ngày này không có giờ khác phù hợp.'));
         return;
       }
       slotGrid.replaceChildren(...availableSlots.map((slot) => {
-        const button = node('button', 'slot-chip', slot.label);
-        button.type = 'button';
+        const chip = button('slot-chip', slot.label);
         const selected = slot.startAt === selectedStartAt;
-        button.classList.toggle('selected', selected);
-        button.setAttribute('aria-pressed', String(selected));
-        button.addEventListener('click', () => {
+        chip.classList.toggle('selected', selected);
+        chip.setAttribute('aria-pressed', String(selected));
+        chip.addEventListener('click', () => {
           selectedStartAt = slot.startAt;
           setMessage(message);
           renderSlots();
+          // The phone sheet has no "Dời sang…" button: picking a slot goes straight to the confirmation.
+          if (phoneMedia.matches) move();
         });
-        return button;
+        return chip;
       }));
     }
 
@@ -1200,21 +1752,16 @@
       }
     }
 
-    dateInput.addEventListener('change', loadSlots);
-    cancel.addEventListener('click', () => {
-      requestId += 1;
-      panel.remove();
-      trigger.disabled = false;
-    });
-    submit.addEventListener('click', async () => {
+    async function move() {
       if (!selectedStartAt) return;
       const oldTime = timeParts(item.startAt);
       const newTime = localTime(selectedStartAt);
-      if (!window.confirm(
-        `Dời lịch ${item.reference} từ ${oldTime.time} ${oldTime.date} sang ${newTime} ngày ${dateInput.value}?`
+      if (!await confirmAction(
+        `Dời lịch ${item.reference}?`,
+        `Dời lịch ${item.reference} từ ${oldTime.time} ${oldTime.date} sang ${newTime} ngày ${shortDate(dateInput.value)}.`,
+        'Dời lịch'
       )) return;
       submit.disabled = true;
-      cancel.disabled = true;
       setMessage(message, 'Đang dời lịch…');
       try {
         await adminRequest({
@@ -1225,14 +1772,16 @@
         await Promise.all([loadAppointments(), loadOverview()]);
         setMessage(elements.dashboardMessage, `Đã dời lịch ${item.reference}.`, true);
       } catch (error) {
-        setMessage(message, errorMessage(error.message));
-        cancel.disabled = false;
+        setMessage(message, errorMessage(error.message), false, error.message === 'slot_unavailable');
         if (error.message === 'slot_unavailable') await loadSlots();
         else submit.disabled = !selectedStartAt;
       }
-    });
+    }
 
+    dateInput.addEventListener('change', loadSlots);
+    submit.addEventListener('click', move);
     loadSlots();
+    return panel;
   }
 
   function dayTitle(dateText) {
@@ -1242,34 +1791,213 @@
     return dateText === dateInTimeZone() ? `Hôm nay · ${label}` : label;
   }
 
-  function renderAppointments() {
-    if (!appointments.length) {
+  function matchesQuery(item, query) {
+    return !query || [item.customerName, item.customerPhone, item.reference]
+      .some((value) => String(value || '').toLocaleLowerCase('vi-VN').includes(query));
+  }
+
+  function renderStatusChips(list) {
+    const chips = [['', 'Tất cả'], ...Object.entries(STATUS_LABELS)];
+    elements.statusFilter.replaceChildren(...chips.map(([value, label]) => {
+      const chip = button('status-chip', `${label} `);
+      chip.append(node('b', '', String(value ? list.filter((item) => item.status === value).length : list.length)));
+      chip.setAttribute('aria-pressed', String(scheduleStatus === value));
+      chip.addEventListener('click', () => {
+        scheduleStatus = value;
+        renderAppointments();
+      });
+      return chip;
+    }));
+  }
+
+  function appointmentRow(item, index) {
+    const photos = Array.isArray(item.referencePhotos) ? item.referencePhotos.filter((photo) => photo?.url).length : 0;
+    const row = button(`appt-row tone-${TONES[index % TONES.length]} status-${item.status}`);
+    row.classList.toggle('is-off', inactive(item));
+    row.classList.toggle('is-selected', item.id === detailId);
+    const time = node('span', 'ar-time');
+    const clock = node('span');
+    clock.append(
+      node('b', '', localTime(item.startAt)),
+      node('small', 'd-only', localTime(item.endAt)),
+      node('small', 'm-only', `${item.durationMinutes}′`)
+    );
+    time.append(clock);
+    const who = node('span', 'ar-who');
+    who.append(node('b', 'ar-name', item.customerName), node('span', 'ar-phone', item.customerPhone));
+    const service = node('span', 'ar-service', item.service);
+    if (photos) service.append(node('span', 'photo-tag', `${photos} ảnh mẫu`));
+    const price = node('span', 'ar-price', currency(item.price));
+    if (photos) price.append(node('span', 'm-only', ` · ${photos} ảnh mẫu`));
+    row.append(time, who, service, node('span', 'ar-duration', String(item.durationMinutes)), price, statusBadge(item));
+    row.addEventListener('click', () => openDetail(item));
+    return row;
+  }
+
+  function renderAppointmentList(visible) {
+    if (!visible.length) {
       elements.appointmentList.replaceChildren(emptyState(
-        'Chưa có lịch nào trong khoảng này', 'Thử chọn khoảng ngày khác hoặc đổi trạng thái.'
+        appointments.length ? 'Không có lịch nào khớp bộ lọc' : 'Ngày này chưa có lịch',
+        appointments.length ? 'Thử đổi trạng thái hoặc từ khóa tìm kiếm.' : 'Nhu Nhi ngủ trưa được rồi. Tạo lịch khi khách gọi nhé.'
       ));
       return;
     }
     const days = new Map();
-    appointments.forEach((item) => {
-      const date = dateInTimeZone(new Date(item.startAt));
+    visible.forEach((item) => {
+      const date = appointmentDate(item);
       if (!days.has(date)) days.set(date, []);
       days.get(date).push(item);
     });
-    elements.appointmentList.replaceChildren(...[...days].map(([date, items]) => {
+    const head = node('div', 't-head appt-head');
+    head.append(...['Giờ', 'Khách', 'Dịch vụ', 'Phút', 'Tạm tính', 'Trạng thái'].map((label) => node('span', '', label)));
+    elements.appointmentList.replaceChildren(head, ...[...days].map(([date, items]) => {
       const group = node('section', 'day-group');
       const title = node('h3', 'day-title', dayTitle(date));
       title.append(node('small', '', `${items.length} lịch`));
-      const grid = node('div', 'note-grid');
-      grid.append(...items.map((item, index) => appointmentCard(item, index)));
-      group.append(title, grid);
+      group.append(title, ...items.map((item) => appointmentRow(item, appointments.indexOf(item))));
       return group;
     }));
+  }
+
+  function closeWeekPopover() {
+    elements.weekGrid.querySelector('.week-pop')?.remove();
+  }
+
+  // The quick card over the week grid: enough to answer the phone, with the way into the full details.
+  function openWeekPopover(item, anchor) {
+    closeWeekPopover();
+    const photos = Array.isArray(item.referencePhotos) ? item.referencePhotos.filter((photo) => photo?.url).length : 0;
+    const estimate = isEstimate((item.services || []).map((service) => service.id));
+    const pop = node('div', 'week-pop');
+    pop.setAttribute('role', 'dialog');
+    pop.setAttribute('aria-label', `Lịch ${item.reference}`);
+    const top = node('div', 'wp-top');
+    top.append(node('span', 'wp-ref', item.reference), statusBadge(item));
+    pop.append(
+      top,
+      node('b', 'wp-title', `${item.customerName} · ${localTime(item.startAt)}–${localTime(item.endAt)}`),
+      node('span', 'wp-service', `${item.service} · ${currency(item.price)}${estimate ? ' tạm tính' : ''}${photos ? ` · ${photos} ảnh mẫu` : ''}`)
+    );
+    if (item.customerNote) pop.append(node('span', 'wp-note', `Ghi chú: ${item.customerNote}`));
+    const actions = node('div', 'wp-actions');
+    const call = node('a', 'btn-ghost', 'Gọi');
+    call.href = `tel:${String(item.customerPhone).replace(/[^0-9+]/g, '')}`;
+    const details = button('btn-ghost', 'Chi tiết');
+    details.addEventListener('click', () => openDetail(item));
+    actions.append(call, details);
+    pop.append(actions);
+    const grid = elements.weekGrid.getBoundingClientRect();
+    const box = anchor.getBoundingClientRect();
+    pop.style.setProperty('--x', `${Math.max(8, Math.min(box.left - grid.left + 40, grid.width - 343))}px`);
+    pop.style.setProperty('--y', `${box.top - grid.top + Math.min(53, box.height + 6)}px`);
+    elements.weekGrid.append(pop);
+  }
+
+  // Seven days from the range's first day, 32px per half hour; nothing here needs another request.
+  function renderWeek() {
+    const today = dateInTimeZone();
+    const days = Array.from({ length: 7 }, (_, index) => addDays(elements.fromDate.value, index));
+    const closed = closedDates(scheduleBlocks);
+    const next = nextOverviewAppointment();
+    const inWeek = appointments.filter((item) => days.includes(appointmentDate(item)));
+    elements.scheduleTitleText.textContent = `${dayMonth(days[0])} – ${dayMonth(days[6])} · ${inWeek.length} lịch`;
+    const place = (element, start, end, minimum) => {
+      const from = Math.min(Math.max(start, DAY_START), DAY_END - 30);
+      element.style.setProperty('--top', `${(from - DAY_START) / 30 * 32}px`);
+      element.style.setProperty('--h', `${Math.max(minimum, (Math.min(end, DAY_END) - from) / 30 * 32 - 3)}px`);
+    };
+    const heads = days.map((date) => {
+      const count = inWeek.filter((item) => appointmentDate(item) === date).length;
+      const head = node('div', 'wk-head');
+      head.classList.toggle('is-today', date === today);
+      head.append(
+        node('p', 'wk-dow', new Intl.DateTimeFormat('vi-VN', { timeZone: TIME_ZONE, weekday: 'long' }).format(new Date(`${date}T12:00:00+07:00`))),
+        node('p', 'wk-date', dayMonth(date)),
+        node('p', 'wk-count', closed.has(date) && !count ? 'tiệm nghỉ' : `${count} lịch`)
+      );
+      return head;
+    });
+    const hours = node('div', 'wk-hours');
+    hours.append(...Array.from({ length: (DAY_END - DAY_START) / 60 + 1 }, (_, index) => {
+      const label = node('span', '', minutesToTime(DAY_START + index * 60));
+      label.style.setProperty('--top', `${index * 64}px`);
+      return label;
+    }));
+    const columns = days.map((date) => {
+      const column = node('div', 'wk-col');
+      column.classList.toggle('is-today', date === today);
+      const dayStart = new Date(`${date}T00:00:00+07:00`);
+      const dayEnd = new Date(`${addDays(date, 1)}T00:00:00+07:00`);
+      scheduleBlocks.filter((block) => new Date(block.startAt) < dayEnd && new Date(block.endAt) > dayStart).forEach((block) => {
+        const { start, end } = blockMinutes(block, date);
+        const locked = node('div', 'wk-block', `Đã khóa · ${blockReason(block)}`);
+        place(locked, start, end, 26);
+        column.append(locked);
+      });
+      inWeek.filter((item) => appointmentDate(item) === date).forEach((item) => {
+        const note = button(`wk-item tone-${TONES[appointments.indexOf(item) % TONES.length]}`);
+        const start = minuteOfDay(item.startAt);
+        place(note, start, start + Number(item.durationMinutes || 30), 38);
+        note.classList.toggle('is-off', inactive(item));
+        note.classList.toggle('is-next', next?.id === item.id);
+        note.setAttribute('aria-label', `${localTime(item.startAt)} ${item.customerName}, ${STATUS_LABELS[item.status] || item.status}`);
+        // The given name is the last word of a Vietnamese name; that is what fits a narrow column.
+        note.append(node('b', '', localTime(item.startAt)), node('span', '', String(item.customerName).trim().split(/\s+/).pop()));
+        note.addEventListener('click', () => openWeekPopover(item, note));
+        column.append(note);
+      });
+      const minute = currentMinuteInTimeZone();
+      if (date === today && minute >= DAY_START && minute <= DAY_END) {
+        const now = node('div', 'wk-now');
+        now.style.setProperty('--top', `${(minute - DAY_START) / 30 * 32}px`);
+        column.append(now);
+      }
+      return column;
+    });
+    elements.weekGrid.replaceChildren(node('span'), ...heads, hours, ...columns);
+  }
+
+  function renderAppointments() {
+    const week = scheduleView === 'week' && !phoneMedia.matches;
+    const query = elements.scheduleSearch.value.trim().toLocaleLowerCase('vi-VN');
+    const searched = appointments.filter((item) => matchesQuery(item, query));
+    viewButtons.forEach((item) => item.setAttribute('aria-pressed', String((item.dataset.view === 'week') === week)));
+    elements.appointmentList.hidden = week;
+    elements.weekGrid.hidden = !week;
+    elements.weekNav.hidden = !week;
+    elements.scheduleFilters.hidden = week;
+    elements.rangeLabel.textContent = `${dayMonth(elements.fromDate.value)} → ${dayMonth(elements.toDate.value)}`;
+    renderStatusChips(searched);
+    if (week) {
+      renderWeek();
+    } else {
+      elements.scheduleTitleText.textContent = 'Quản lý lịch hẹn';
+      renderAppointmentList(searched.filter((item) => !scheduleStatus || item.status === scheduleStatus));
+    }
+    renderCustomers();
+  }
+
+  function setScheduleView(view) {
+    scheduleView = view;
+    const weekEnd = addDays(elements.fromDate.value, 6);
+    if (view === 'week' && elements.toDate.value !== weekEnd) {
+      setDateValue(elements.toDate, weekEnd);
+      loadAppointments();
+      return;
+    }
+    renderAppointments();
+  }
+
+  function showWeekFrom(date) {
+    setDateValue(elements.fromDate, date);
+    setDateValue(elements.toDate, addDays(date, 6));
+    loadAppointments();
   }
 
   function currentRange() {
     const today = dateInTimeZone();
     if (elements.fromDate.value === today && elements.toDate.value === today) return 'today';
-    if (elements.fromDate.value === today && elements.toDate.value === addDays(today, 7)) return 'week';
+    if (elements.fromDate.value === today && elements.toDate.value === addDays(today, 6)) return 'week';
     return 'custom';
   }
 
@@ -1289,25 +2017,29 @@
     elements.refreshButton.disabled = true;
     elements.refreshButton.textContent = 'Đang tải…';
     elements.appointmentList.setAttribute('aria-busy', 'true');
+    closeWeekPopover();
     renderAppointmentSkeletons();
-    setMessage(elements.dashboardMessage, 'Đang tải lịch…');
+    const range = { from: `${from}T00:00:00+07:00`, to: `${addDays(through, 1)}T00:00:00+07:00` };
     try {
-      const data = await adminRequest({
-        action: 'admin_list',
-        from: `${from}T00:00:00+07:00`,
-        to: `${addDays(through, 1)}T00:00:00+07:00`,
-        status: elements.statusFilter.value || null
-      });
-      appointments = Array.isArray(data.appointments) ? data.appointments : [];
+      // Every status comes down once; the status chips, the search and the week view only redraw it.
+      const [data, blockData] = await Promise.all([
+        adminRequest({ action: 'admin_list', ...range, status: null }),
+        adminRequest({ action: 'admin_list_blocks', ...range })
+      ]);
+      appointments = (Array.isArray(data.appointments) ? data.appointments : [])
+        .sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
+      scheduleBlocks = Array.isArray(blockData.blocks) ? blockData.blocks : [];
       renderAppointments();
-      setMessage(elements.dashboardMessage, `Đã tải ${appointments.length} lịch.`, true);
+      const open = appointments.find((item) => item.id === detailId);
+      if (open) renderDetail(open);
+      else closeDetail();
     } catch (error) {
       if (error.status === 401 || error.message === 'admin_access_denied') {
         storeSession(null);
         showLogin(errorMessage(error.message));
         return;
       }
-      elements.appointmentList.replaceChildren(node('div', 'empty error-empty', 'Không tải được lịch hẹn. Vui lòng thử lại.'));
+      elements.appointmentList.replaceChildren(emptyState('Không tải được lịch', 'Kiểm tra mạng rồi bấm Tải lại.'));
       setMessage(elements.dashboardMessage, errorMessage(error.message));
     } finally {
       elements.refreshButton.disabled = false;
@@ -1321,7 +2053,9 @@
       setMessage(elements.dashboardMessage, 'Trạng thái chưa thay đổi.');
       return;
     }
-    if (status === 'cancelled' && !window.confirm(`Hủy lịch ${item.reference}? Khung giờ này sẽ được mở lại cho khách khác.`)) return;
+    if (status === 'cancelled' && !await confirmAction(
+      `Hủy lịch ${item.reference}?`, 'Khung giờ này sẽ được mở lại cho khách khác.', 'Hủy lịch'
+    )) return;
     button.disabled = true;
     setMessage(elements.dashboardMessage, `Đang cập nhật ${item.reference}…`);
     try {
@@ -1339,12 +2073,12 @@
   }
 
   async function completeAppointment(item, button) {
-    if (!window.confirm(`Xác nhận lịch ${item.reference} đã hoàn thành?`)) return;
+    if (!await confirmAction(`Xác nhận lịch ${item.reference} đã hoàn thành?`, `${item.customerName} · ${item.service}`, 'Hoàn thành')) return;
     await applyDirectStatus(item, 'completed', button, `Đã hoàn thành ${item.reference}.`);
   }
 
   async function resetCompleted(item, button) {
-    if (!window.confirm(`Reset lịch ${item.reference} về trạng thái Đã xác nhận?`)) return;
+    if (!await confirmAction(`Reset lịch ${item.reference} về trạng thái Đã xác nhận?`, '', 'Khôi phục')) return;
     await applyDirectStatus(item, 'confirmed', button, `Đã reset ${item.reference}.`);
   }
 
@@ -1365,6 +2099,121 @@
     }
   }
 
+  // Customers are the loaded appointments grouped by phone number: read-only, there is no customer API.
+  function customerGroups() {
+    const groups = new Map();
+    appointments.forEach((item) => {
+      const key = String(item.customerPhone || '').replace(/\D/g, '') || `name:${item.customerName}`;
+      if (!groups.has(key)) groups.set(key, { key, tone: TONES[groups.size % TONES.length], items: [] });
+      groups.get(key).items.push(item);
+    });
+    return [...groups.values()].map((group) => {
+      const latest = group.items[group.items.length - 1];
+      return {
+        ...group, latest, name: latest.customerName, phone: latest.customerPhone,
+        total: group.items.reduce((sum, item) => sum + Number(item.price || 0), 0)
+      };
+    });
+  }
+
+  function closeCustomer() {
+    customerKey = '';
+    elements.customerDetail.hidden = true;
+    elements.customerScrim.hidden = true;
+    elements.customerList.querySelector('.cust-row.is-selected')?.classList.remove('is-selected');
+  }
+
+  function renderCustomerDetail(customer) {
+    const phone = node('a', '', `${customer.phone} · Gọi`);
+    phone.href = `tel:${String(customer.phone).replace(/[^0-9+]/g, '')}`;
+    const who = node('div', 'cd-who');
+    who.append(node('h2', '', customer.name), phone);
+    const stats = node('div', 'cd-stats');
+    const stat = (value, label) => {
+      const box = node('div');
+      box.append(node('b', '', value), node('span', '', label));
+      return box;
+    };
+    stats.append(stat(String(customer.items.length), 'lịch đã đặt'), stat(currency(customer.total), 'tạm tính'));
+    const close = button('dd-close cd-close');
+    close.setAttribute('aria-label', 'Đóng thông tin khách');
+    close.append(icon(ICONS.close, 16));
+    close.addEventListener('click', closeCustomer);
+    elements.customerDetail.replaceChildren(
+      image('cd-cat', 'mascot/nhu-nhi-heart-soft-v2.webp', 512, 512), close,
+      node('span', `cd-avatar tone-${customer.tone}`, String(customer.name).trim().split(/\s+/).pop()[0]?.toUpperCase() || '?'),
+      who, stats
+    );
+    const noted = [...customer.items].reverse().find((item) => item.customerNote);
+    if (noted) {
+      elements.customerDetail.append(node('p', 'cd-label', 'Ghi chú gần nhất'), node('p', 'sticky-note', `"${noted.customerNote}"`));
+    }
+    elements.customerDetail.append(node('p', 'cd-label', 'Lịch sử'), ...[...customer.items].reverse().map((item) => {
+      const row = node('div', 'cd-history');
+      row.append(
+        node('b', '', `${shortDate(appointmentDate(item))} · ${localTime(item.startAt)} · ${item.durationMinutes} phút`),
+        node('span', '', `${item.service} · ${STATUS_LABELS[item.status] || item.status}`)
+      );
+      return row;
+    }));
+    const create = button('btn-ghost cd-create', 'Tạo lịch mới cho khách này');
+    create.addEventListener('click', () => {
+      elements.adminCustomerName.value = customer.name;
+      elements.adminCustomerPhone.value = String(customer.phone || '').replace(/\D/g, '').slice(0, 10);
+      setCreateStep(1);
+      navigateToSection('#sec-create');
+    });
+    elements.customerDetail.append(create);
+    elements.customerDetail.hidden = false;
+    elements.customerScrim.hidden = false;
+  }
+
+  function renderCustomers() {
+    const all = customerGroups();
+    const query = elements.customerSearch.value.trim().toLocaleLowerCase('vi-VN');
+    const visible = all.filter((customer) => !query
+      || [customer.name, customer.phone].some((value) => String(value || '').toLocaleLowerCase('vi-VN').includes(query)));
+    elements.customersCount.textContent = `${all.length} khách trong khoảng đang tải`;
+    setCount(elements.navCountCustomers, all.length);
+    if (!visible.length) {
+      closeCustomer();
+      elements.customerList.replaceChildren(emptyState(
+        all.length ? 'Không tìm thấy khách phù hợp' : 'Chưa có khách trong khoảng đang tải',
+        all.length ? 'Thử tên hoặc số điện thoại khác.' : 'Đổi khoảng ngày ở Lịch hẹn để xem khách của những ngày khác.'
+      ));
+      return;
+    }
+    const head = node('div', 't-head cust-head');
+    head.append(...['Khách', 'SĐT', 'Lịch', 'Lịch gần nhất', 'Trạng thái', 'Tạm tính'].map((label) => node('span', '', label)));
+    elements.customerList.replaceChildren(head, ...visible.map((customer) => {
+      const latest = `${shortDate(appointmentDate(customer.latest))} · ${localTime(customer.latest.startAt)}`;
+      const row = node('div', `cust-row tone-${customer.tone}`);
+      row.classList.toggle('is-selected', customer.key === customerKey);
+      const initial = node('i', 'cust-initial', String(customer.name).trim().split(/\s+/).pop()[0]?.toUpperCase() || '?');
+      initial.setAttribute('aria-hidden', 'true');
+      const name = button('cust-name', customer.name);
+      const phone = node('a', 'cust-phone', customer.phone);
+      phone.href = `tel:${String(customer.phone).replace(/[^0-9+]/g, '')}`;
+      row.append(
+        initial, name, phone,
+        node('span', 'cust-visits', String(customer.items.length)),
+        node('span', 'cust-latest', latest),
+        statusBadge(customer.latest),
+        node('span', 'cust-total', currency(customer.total)),
+        node('span', 'cust-sub m-only', `${customer.phone} · ${latest}`)
+      );
+      row.addEventListener('click', (event) => {
+        if (event.target.closest('a')) return;
+        customerKey = customer.key;
+        renderCustomers();
+      });
+      return row;
+    }));
+    const selected = visible.find((customer) => customer.key === customerKey);
+    if (selected) renderCustomerDetail(selected);
+    else closeCustomer();
+  }
+
   function createSlotButtons() {
     const buttons = [];
     const selectedDate = elements.blockDate.value;
@@ -1374,7 +2223,7 @@
     if (selectedDate === today) {
       firstMinute = Math.max(9 * 60, Math.floor(currentMinuteInTimeZone() / 30) * 30 + 30);
     }
-    for (let minutes = firstMinute; minutes <= 17 * 60; minutes += 30) {
+    for (let minutes = firstMinute; minutes <= 17 * 60 + 30; minutes += 30) {
       const button = node('button', 'slot-chip', minutesToTime(minutes));
       button.type = 'button';
       button.dataset.minutes = String(minutes);
@@ -1398,6 +2247,7 @@
       });
       buttons.push(button);
     }
+    if (!buttons.length) buttons.push(node('p', 'slot-empty', 'Ngày này không còn khung giờ nào để khóa.'));
     elements.blockSlotGrid.replaceChildren(...buttons);
   }
 
@@ -1422,6 +2272,11 @@
     );
   }
 
+  // "12:00 – 13:00" for a run of chosen slots, several runs joined by commas.
+  function selectedRangeText() {
+    return selectedRanges().map((range) => `${localTime(range.startAt)} – ${localTime(range.endAt)}`).join(', ');
+  }
+
   function updateBlockSelection() {
     elements.allDayButton.setAttribute('aria-pressed', String(blockWholeDay));
     const selectable = [];
@@ -1440,9 +2295,16 @@
     });
     elements.allDayButton.disabled = blockDayLoading || (!blockWholeDay && selectable.length === 0);
     const count = selectedBlockSlots.size;
-    elements.blockSelection.textContent = blockWholeDay
-      ? 'Đã chọn khóa cả ngày.'
-      : count ? `Đã chọn ${count} khung 30 phút.` : 'Chưa chọn khung giờ.';
+    const day = elements.blockDate.value ? shortDate(elements.blockDate.value) : '';
+    if (blockWholeDay) {
+      elements.blockSelection.replaceChildren(node('b', '', 'Đã chọn khóa cả ngày'), node('span', 'm-only', day));
+    } else if (count) {
+      const title = node('b');
+      title.append(...responsiveText(`Đã chọn ${count} khung · ${selectedRangeText()}`, `${count} khung đã chọn`));
+      elements.blockSelection.replaceChildren(title, node('span', 'm-only', `${day} · ${selectedRangeText()}`));
+    } else {
+      elements.blockSelection.replaceChildren(node('b', '', 'Chưa chọn khung giờ.'));
+    }
     elements.createBlockButton.disabled = blockDayLoading || (!blockWholeDay && count === 0);
   }
 
@@ -1476,25 +2338,39 @@
     }));
   }
 
+  // The phone picks the day from a strip of the next two weeks instead of the date field.
+  function renderBlockDays() {
+    const today = dateInTimeZone();
+    const closed = closedDates();
+    elements.blockDayStrip.replaceChildren(...Array.from({ length: 14 }, (_, index) => {
+      const date = addDays(today, index);
+      const chip = button('day-chip');
+      chip.classList.toggle('is-today', index === 0);
+      chip.classList.toggle('is-blocked', closed.has(date));
+      chip.setAttribute('aria-pressed', String(date === elements.blockDate.value));
+      chip.setAttribute('aria-label', `${shortDate(date)}${closed.has(date) ? ' · đã khóa cả ngày' : ''}`);
+      chip.append(node('span', '', shortDate(date).split(' ')[0]), node('b', '', date.slice(8, 10)));
+      chip.addEventListener('click', () => {
+        setDateValue(elements.blockDate, date);
+        elements.blockDate.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      return chip;
+    }));
+  }
+
+  // Every lock still ahead, plus the chosen day's own (it may lie beyond the look-ahead window).
   function renderBlocks() {
-    if (!blocks.length) {
-      elements.blockList.replaceChildren(node('p', 'block-empty', 'Ngày này chưa có khoảng khóa.'));
+    const known = new Map([...overviewBlocks, ...blocks].map((block) => [block.id, block]));
+    const list = [...known.values()].sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
+    if (!list.length) {
+      elements.blockList.replaceChildren(node('p', 'block-empty', 'Chưa có khoảng khóa nào.'));
       return;
     }
-    elements.blockList.replaceChildren(...blocks.map((block) => {
+    elements.blockList.replaceChildren(...list.map((block) => {
       const row = node('div', 'block-row');
       const details = node('div');
-      const startDate = dateInTimeZone(new Date(block.startAt));
-      const allDay = localTime(block.startAt) === '00:00'
-        && localTime(block.endAt) === '00:00'
-        && dateInTimeZone(new Date(block.endAt)) === addDays(startDate, 1);
-      details.append(node('strong', '', allDay
-        ? 'Cả ngày'
-        : `${localTime(block.startAt)} – ${localTime(block.endAt)}`));
-      const reason = String(block.reason || '').trim();
-      details.append(node('span', '', !reason || reason === 'tiệm hôm nay nghỉ' ? 'tiệm nghỉ' : reason));
-      const remove = node('button', 'unlock-button', 'Mở khóa');
-      remove.type = 'button';
+      details.append(node('strong', '', blockWhen(block)), node('span', '', blockReason(block)));
+      const remove = button('btn-ghost unlock-button', 'Mở khóa');
       remove.addEventListener('click', () => deleteBlock(block, remove));
       row.append(details, remove);
       return row;
@@ -1508,15 +2384,8 @@
     selectedBlockSlots.clear();
     createSlotButtons();
     updateBlockSelection();
+    renderBlockDays();
     elements.blockList.setAttribute('aria-busy', 'true');
-    elements.blockList.replaceChildren(...Array.from({ length: 2 }, () => {
-      const row = node('div', 'block-row block-row-skeleton');
-      row.setAttribute('aria-hidden', 'true');
-      const details = node('div');
-      details.append(skeletonLine('medium'), skeletonLine('wide'));
-      row.append(details, skeletonLine('unlock-shape'));
-      return row;
-    }));
     setMessage(elements.blockMessage, 'Đang tải lịch khóa…');
     try {
       const from = `${date}T00:00:00+07:00`;
@@ -1544,15 +2413,20 @@
   async function createBlocks() {
     const ranges = selectedRanges();
     if (!ranges.length) return;
-    const description = blockWholeDay ? 'cả ngày' : `${selectedBlockSlots.size} khung đã chọn`;
-    if (!window.confirm(`Xác nhận khóa ${description} ngày ${elements.blockDate.value}?`)) return;
+    const day = shortDate(elements.blockDate.value);
+    const reason = elements.blockReason.value.trim() || 'tiệm nghỉ';
+    if (!await confirmAction(
+      blockWholeDay ? `Khóa cả ngày ${day}?` : `Khóa ${selectedBlockSlots.size} khung giờ ngày ${day}?`,
+      `${blockWholeDay ? 'Cả ngày' : selectedRangeText()} · khách sẽ thấy "${reason}". Lịch đã đặt không bị ảnh hưởng.`,
+      'Khóa lịch'
+    )) return;
     elements.createBlockButton.disabled = true;
     setMessage(elements.blockMessage, 'Đang khóa lịch…');
     try {
       await adminRequest({
         action: 'admin_create_blocks',
         ranges,
-        reason: elements.blockReason.value.trim() || 'tiệm nghỉ'
+        reason
       });
       selectedBlockSlots.clear();
       blockWholeDay = false;
@@ -1567,7 +2441,9 @@
   }
 
   async function deleteBlock(block, button) {
-    if (!window.confirm('Mở khóa khoảng thời gian này để khách có thể đặt lại?')) return;
+    if (!await confirmAction(
+      'Mở khóa khoảng thời gian này?', `${blockWhen(block)} · khách có thể đặt lại khung giờ này.`, 'Mở khóa'
+    )) return;
     button.disabled = true;
     try {
       await adminRequest({ action: 'admin_delete_block', blockId: block.id });
@@ -1579,10 +2455,19 @@
     }
   }
 
+  // One field for the code (so the phone can autofill it), drawn as six boxes.
+  function renderMfaBoxes() {
+    const code = elements.mfaCode.value.replace(/\D/g, '').slice(0, 6);
+    if (code !== elements.mfaCode.value) elements.mfaCode.value = code;
+    [...elements.mfaBoxes.children].forEach((box, index) => {
+      box.textContent = code[index] || '';
+      box.classList.toggle('is-active', index === Math.min(code.length, 5));
+    });
+  }
+
   // Step 2 of sign-in: enrol TOTP on first sign-in (QR code), otherwise ask for the 6-digit code.
   async function startMfa(data) {
     pendingMfa = { token: data.pending?.accessToken || '', factorId: data.factorId || '' };
-    elements.mfaEnroll.hidden = data.mfa !== 'enroll';
     if (data.mfa === 'enroll') {
       const factor = await rawRequest({ action: 'admin_mfa_enroll' }, pendingMfa.token);
       pendingMfa.factorId = factor.factorId;
@@ -1590,12 +2475,10 @@
       elements.mfaSecret.textContent = factor.secret;
       elements.mfaUri.href = factor.uri;
     }
-    elements.loginForm.hidden = true;
-    elements.mfaForm.hidden = false;
+    setLoginStage(data.mfa === 'enroll' ? 'enroll' : 'code');
     elements.mfaCode.value = '';
-    setMessage(elements.loginMessage, data.mfa === 'enroll'
-      ? 'Quét mã QR rồi nhập mã 6 số để hoàn tất.'
-      : 'Nhập mã 6 số đang hiện trong app xác thực.', true);
+    renderMfaBoxes();
+    setMessage(elements.loginMessage);
     elements.mfaCode.focus();
   }
 
@@ -1626,6 +2509,7 @@
       elements.mfaButton.disabled = false;
     }
   });
+  elements.mfaCode.addEventListener('input', renderMfaBoxes);
   elements.mfaCancel.addEventListener('click', () => showLogin());
 
   elements.loginForm.addEventListener('submit', async (event) => {
@@ -1661,12 +2545,63 @@
     }
     const today = dateInTimeZone();
     setDateValue(elements.fromDate, today);
-    setDateValue(elements.toDate, chip.dataset.range === 'today' ? today : addDays(today, 7));
+    setDateValue(elements.toDate, chip.dataset.range === 'today' ? today : addDays(today, 6));
     loadAppointments();
   }));
-  elements.statusFilter.addEventListener('change', loadAppointments);
+  viewButtons.forEach((item) => item.addEventListener('click', () => setScheduleView(item.dataset.view)));
+  elements.weekPrev.addEventListener('click', () => showWeekFrom(addDays(elements.fromDate.value, -7)));
+  elements.weekNext.addEventListener('click', () => showWeekFrom(addDays(elements.fromDate.value, 7)));
+  elements.weekToday.addEventListener('click', () => showWeekFrom(dateInTimeZone()));
+  elements.scheduleSearch.addEventListener('input', renderAppointments);
+  elements.scheduleSearchToggle.addEventListener('click', () => {
+    const open = elements.scheduleFilters.classList.toggle('search-open');
+    elements.scheduleSearchToggle.setAttribute('aria-expanded', String(open));
+    if (open) elements.scheduleSearch.focus();
+  });
+  elements.scheduleReload.addEventListener('click', loadAppointments);
+  elements.overviewReload.addEventListener('click', () => Promise.all([loadOverview(), loadAppointments()]));
+  // Enter in the search on Tổng quan opens the list with the same words filled in.
+  elements.overviewSearch.addEventListener('keydown', (event) => {
+    const query = elements.overviewSearch.value.trim();
+    if (event.key !== 'Enter' || !query) return;
+    elements.scheduleSearch.value = query;
+    elements.overviewSearch.value = '';
+    scheduleView = 'list';
+    navigateToSection('#sec-schedule');
+    renderAppointments();
+  });
+  elements.detailScrim.addEventListener('click', closeDetail);
+  elements.customerSearch.addEventListener('input', renderCustomers);
+  elements.customerScrim.addEventListener('click', closeCustomer);
   elements.discountSearch?.addEventListener('input', renderDiscountServices);
-  elements.adminBookingDate.addEventListener('change', loadAdminAvailability);
+  elements.discountScrim.addEventListener('click', () => closeDiscountSheet(true));
+  elements.menuButton.addEventListener('click', () => setMenuOpen(true));
+  elements.sideScrim.addEventListener('click', () => setMenuOpen(false));
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.week-pop, .wk-item')) closeWeekPopover();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || elements.confirmDialog.open) return;
+    closeWeekPopover();
+    setMenuOpen(false);
+    if (!elements.discountSheet.hidden) closeDiscountSheet(true);
+    // Beside the table the drawer is part of the page; only the overlay and the sheet close on Escape.
+    if (overlayMedia.matches) {
+      closeDetail();
+      closeCustomer();
+    }
+  });
+  phoneMedia.addEventListener('change', renderAppointments);
+  stepButtons.forEach((item) => item.addEventListener('click', () => {
+    const step = Number(item.dataset.stepGo);
+    if (step > 1 && !adminSelectedServiceIds.size) return;
+    if (step > 2 && !adminSelectedStartAt) return;
+    setCreateStep(step);
+  }));
+  elements.createBarNext.addEventListener('click', () => {
+    setCreateStep(createStep + 1);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  });
   elements.adminCustomerPhone.addEventListener('input', () => {
     elements.adminCustomerPhone.value = elements.adminCustomerPhone.value.replace(/\D/g, '').slice(0, 10);
   });
@@ -1693,15 +2628,17 @@
 
   const today = dateInTimeZone();
   setDateValue(elements.fromDate, today);
-  setDateValue(elements.toDate, addDays(today, 7));
+  setDateValue(elements.toDate, addDays(today, 6));
   setDateValue(elements.adminBookingDate, today);
   setDateValue(elements.blockDate, today);
   initializeSectionNavigation();
-  compactMedia.addEventListener('change', placeAccount);
-  placeAccount();
+  setCreateStep(1);
+  renderMfaBoxes();
   renderAdminServices();
   renderDiscountServices();
+  renderAdminCalendar();
   renderAdminSlots();
+  renderBlockDays();
   createSlotButtons();
   updateBlockSelection();
 

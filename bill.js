@@ -9,7 +9,7 @@ export const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/bookin
 const ART = new URL("assets/booking/", import.meta.url).href;
 const TZ = "Asia/Ho_Chi_Minh";
 const STORE = [
-  ["store", "Nails, Lashes, Shampoo"],
+  ["store", "1M65 Nails, Eyelashes, Shampoo"],
   ["pin", "Địa chỉ: Lý Thái Tổ, Đại Phước, Đồng Nai"],
   ["clock", "Giờ mở cửa: 09:00 - 18:00 (tất cả các ngày)"]
 ];
@@ -194,8 +194,8 @@ function icon(ctx, name, cx, cy, size) {
   ctx.restore();
 }
 
-// The owner's paper (bill-paper.png, 1024×1536, drawn 1:1). Its side nips repeat every 88px, so a longer bill
-// repeats one band of it (728–816, the edges straight at both cuts) instead of stretching a nip. The sheet is
+// The bill's paper (bill-paper.webp, 1024×1536, drawn 1:1; design-assets/booking-confirmation/gen-bill-paper.py).
+// A longer bill repeats one 88px band of it (728–816, straight sides, joined seamlessly) instead of stretching it. The sheet is
 // put together off-screen first so its shadow falls once, under the whole paper.
 const PAPER_TOP = 42, PAPER_BOTTOM = 1488, BAND = 728, BAND_HEIGHT = 88;
 function paper(ctx, art, bands) {
@@ -303,7 +303,7 @@ export function billStubQrLayout(stubY, bottom) {
 export async function renderBill(bill, scale) {
   await loadFonts();
   const [sheet, cat, bow, star, heartBig, heartSmall, flower, bouquet] = await Promise.all([
-    "bill/bill-paper.png", "confirmation/cat-peeking.webp", "confirmation/pink-bow.webp", "confirmation/ticket-star.webp", "confirmation/ticket-heart-big.webp",
+    "bill/bill-paper.webp?v=20260930-2", "confirmation/cat-peeking.webp", "confirmation/pink-bow.webp", "confirmation/ticket-star.webp", "confirmation/ticket-heart-big.webp",
     "confirmation/ticket-heart-small.webp", "bill/single-flower.webp", "bill/flower-bouquet.webp"
   ].map(image));
   const start = new Date(bill.startAt);
@@ -495,36 +495,39 @@ export async function renderBill(bill, scale) {
   return canvas;
 }
 
-// A saved bill sits on the site's blush backdrop with a soft shadow: phone photo viewers paint a PNG's
-// transparency white, which read as a white box behind the paper. The bill drawn on the page stays transparent.
-function onBackdrop(bill) {
-  const pad = Math.round(bill.width * 0.07), out = document.createElement("canvas");
-  out.width = bill.width + pad * 2;
-  out.height = bill.height + pad * 2;
-  const ctx = out.getContext("2d"), wash = ctx.createLinearGradient(0, 0, out.width, out.height);
-  wash.addColorStop(0, "#fde7ee");
-  wash.addColorStop(0.55, "#fdf7f3");
-  wash.addColorStop(1, "#efe6fb");
-  ctx.fillStyle = wash;
-  ctx.fillRect(0, 0, out.width, out.height);
-  ctx.shadowColor = "rgba(201, 73, 110, 0.22)";
-  ctx.shadowBlur = pad * 0.5;
-  ctx.shadowOffsetY = pad * 0.18;
-  ctx.drawImage(bill, pad, pad);
-  return out;
+// The saved bill is the transparent PNG itself (no backdrop), so it can be pasted onto anything. On phones it goes
+// through the share sheet, whose "Save Image" puts the PNG in the photo library with its transparency; a download
+// link is the fallback (and the path on desktops). Photo viewers may still paint the transparent edges white or black.
+function sharesFiles(file) {
+  return typeof navigator !== "undefined" && typeof navigator.canShare === "function" && typeof navigator.share === "function"
+    && typeof matchMedia === "function" && matchMedia("(pointer: coarse)").matches && navigator.canShare({ files: [file] });
+}
+
+function downloadLink(blob, name) {
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = name;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(function () { URL.revokeObjectURL(link.href); }, 10000);
 }
 
 export function saveBill(canvas, reference) {
   return new Promise(function (resolve, reject) {
-    onBackdrop(canvas).toBlob(function (blob) {
+    canvas.toBlob(function (blob) {
       if (!blob) { reject(new Error("bill_render_failed")); return; }
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = reference + ".png";
-      document.body.append(link);
-      link.click();
-      link.remove();
-      setTimeout(function () { URL.revokeObjectURL(link.href); }, 10000);
+      const name = reference + ".png";
+      const file = typeof File === "function" ? new File([blob], name, { type: "image/png" }) : null;
+      if (file && sharesFiles(file)) {
+        navigator.share({ files: [file] }).then(resolve, function (error) {
+          // Closing the sheet is fine; if the browser refuses (the tap is too long ago), download instead.
+          if (error && error.name === "AbortError") resolve();
+          else { downloadLink(blob, name); resolve(); }
+        });
+        return;
+      }
+      downloadLink(blob, name);
       resolve();
     }, "image/png");
   });

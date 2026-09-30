@@ -3,302 +3,411 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#FBF5EE">
+  <meta name="theme-color" content="#FDF6F2">
   <meta name="robots" content="noindex, nofollow, noarchive">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://aomiaszicxqrctcgeoms.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; img-src 'self' data: https://aomiaszicxqrctcgeoms.supabase.co; style-src 'self'; script-src 'self' https://challenges.cloudflare.com; base-uri 'none'; form-action 'self'">
   <title>Quản lý lịch · 1M65 Nails</title>
   <link rel="icon" href="favicon.svg">
-  <link rel="stylesheet" href="admin.css?v=20260930-1">
+  <link rel="stylesheet" href="admin.css?v=20260930-2">
 </head>
 <body>
   <main class="shell">
 
     <!-- ================= ĐĂNG NHẬP ================= -->
     <section id="login-view" class="login-view" aria-labelledby="login-title">
-      <a class="brand login-brand" href="index.html" aria-label="Về trang chủ 1M65 Nails">
-        <img class="brand-logo" src="1m65-logo-approved-v1/1m65-wordmark-approved-v1.png" width="877" height="578" alt="" aria-hidden="true" decoding="async">
-        <span class="brand-sub">Nails, Eyelashes, Shampoo</span>
-      </a>
-
-      <div class="login-card">
-        <img class="login-cat" src="assets/booking/confirmation/cat-peeking.webp" alt="" width="480" height="335" decoding="async">
-        <img class="login-bow" src="assets/booking/confirmation/pink-bow.webp" alt="" width="360" height="306" decoding="async">
-        <p class="eyebrow">Studio admin</p>
-        <h1 id="login-title">Chào bạn trở lại</h1>
-        <p class="muted">Đăng nhập để xem lịch hẹn, tạo lịch cho khách và khóa khung giờ.</p>
-        <form id="login-form" method="post" autocomplete="on">
-          <div>
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" autocomplete="username" required>
-          </div>
-          <div>
-            <label for="password">Mật khẩu</label>
-            <input id="password" name="password" type="password" autocomplete="current-password" minlength="6" required>
-          </div>
-          <button id="login-button" class="btn primary" type="submit">Đăng nhập</button>
-        </form>
-        <form id="mfa-form" class="mfa-form" autocomplete="off" hidden>
-          <div id="mfa-enroll" class="mfa-enroll" hidden>
-            <p><strong>Bật xác thực 2 lớp</strong> — quét mã QR bằng Google Authenticator hoặc app Mật khẩu trên iPhone. Nên quét trên 2 điện thoại để dự phòng.</p>
-            <img id="mfa-qr" class="mfa-qr" alt="Mã QR để thêm tài khoản admin vào app xác thực" width="200" height="200">
-            <p class="muted">Không quét được? Nhập khoá: <code id="mfa-secret"></code></p>
-            <a id="mfa-uri" class="mfa-uri" href="#">Mở bằng app xác thực trên máy này</a>
-          </div>
-          <div>
-            <label for="mfa-code">Mã 6 số trong app xác thực</label>
-            <input id="mfa-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required>
-          </div>
-          <label class="mfa-remember"><input id="mfa-remember" type="checkbox"> Ghi nhớ thiết bị này trong 30 ngày</label>
-          <button id="mfa-button" class="btn primary" type="submit">Xác nhận</button>
-          <button id="mfa-cancel" class="btn ghost" type="button">Quay lại</button>
-        </form>
-        <p id="login-message" class="message" role="alert" aria-live="polite"></p>
+      <div class="login-intro">
+        <a class="login-logo" href="index.html" aria-label="Về trang chủ 1M65 Nails">
+          <img src="1m65-logo-approved-v1/1m65-wordmark-approved-v1.png" width="877" height="578" alt="1M65" decoding="async">
+        </a>
+        <p class="eyebrow login-eyebrow">Nails · Eyelashes · Shampoo</p>
+        <h1 class="login-hero">Bàn làm việc phía sau tiệm</h1>
+        <p class="login-blurb">Xem lịch hẹn, tạo lịch khi khách gọi, khóa khung giờ tiệm nghỉ và chỉnh ưu đãi — tất cả ở một chỗ.</p>
+        <img class="login-paws" src="doodles/paw-trail.webp" alt="" width="260" height="348" decoding="async">
       </div>
 
-      <p class="login-foot">Khu vực nội bộ · chỉ tài khoản đã được cấp quyền<br>Phiên đăng nhập chỉ tồn tại trong tab này, trừ khi bạn chọn ghi nhớ thiết bị.</p>
+      <div class="login-side">
+        <div class="login-card">
+          <img class="login-cat" src="assets/booking/confirmation/cat-peeking.webp" alt="" width="480" height="335" decoding="async">
+          <img class="login-bow" src="assets/booking/confirmation/pink-bow.webp" alt="" width="360" height="306" decoding="async">
+          <div class="login-head">
+            <p id="login-step" class="eyebrow">Studio admin</p>
+            <h2 id="login-title">Chào bạn trở lại</h2>
+            <p id="login-sub" class="login-sub" hidden>Mở app xác thực trên điện thoại để lấy mã.</p>
+          </div>
+          <form id="login-form" method="post" autocomplete="on">
+            <label for="email">Email
+              <input id="email" name="email" type="email" autocomplete="username" required>
+            </label>
+            <label for="password">Mật khẩu
+              <input id="password" name="password" type="password" autocomplete="current-password" minlength="6" required>
+            </label>
+            <button id="login-button" class="btn-paper big" type="submit">Đăng nhập</button>
+          </form>
+          <form id="mfa-form" class="mfa-form" autocomplete="off" hidden>
+            <div id="mfa-enroll" class="mfa-enroll" hidden>
+              <p>Quét mã QR bằng Google Authenticator hoặc app Mật khẩu trên iPhone. Nên quét trên 2 điện thoại để dự phòng.</p>
+              <img id="mfa-qr" class="mfa-qr" alt="Mã QR để thêm tài khoản admin vào app xác thực" width="200" height="200">
+              <p class="hint">Không quét được? Nhập khoá: <code id="mfa-secret"></code></p>
+              <a id="mfa-uri" class="text-link" href="#">Mở bằng app xác thực trên máy này</a>
+            </div>
+            <div class="otp">
+              <label class="sr-only" for="mfa-code">Mã 6 số trong app xác thực</label>
+              <input id="mfa-code" class="otp-input" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required>
+              <div id="mfa-boxes" class="otp-boxes" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <label class="mfa-remember"><input id="mfa-remember" type="checkbox"><span class="check-box" aria-hidden="true">✓</span>Ghi nhớ thiết bị này 30 ngày</label>
+            <button id="mfa-button" class="btn-paper big" type="submit">Xác nhận</button>
+            <button id="mfa-cancel" class="btn-ghost tall" type="button">Quay lại</button>
+          </form>
+          <p id="login-message" class="message" role="alert" aria-live="polite"></p>
+          <p class="login-note">Khu vực nội bộ · chỉ tài khoản đã được cấp quyền. Phiên chỉ tồn tại trong tab này, trừ khi bạn chọn ghi nhớ thiết bị.</p>
+        </div>
+        <p id="login-foot" class="login-foot" hidden>Lần đầu? Quét mã QR bằng Google Authenticator — nên quét trên 2 điện thoại để dự phòng.</p>
+      </div>
     </section>
 
     <!-- ================= DASHBOARD ================= -->
     <section id="dashboard-view" class="dashboard" hidden aria-labelledby="dashboard-title">
 
-      <header class="app-header">
-        <a class="brand app-brand" href="index.html" aria-label="Về trang chủ 1M65 Nails">
-          <img class="brand-logo" src="1m65-logo-approved-v1/1m65-wordmark-approved-v1.png" width="877" height="578" alt="" aria-hidden="true" decoding="async">
-          <span class="brand-sub">Studio admin</span>
+      <aside id="side" class="side">
+        <a class="side-brand" href="index.html" aria-label="Về trang chủ 1M65 Nails">
+          <img src="1m65-logo-approved-v1/1m65-wordmark-approved-v1.png" width="877" height="578" alt="1M65" decoding="async">
+          <span>Studio admin</span>
         </a>
-        <nav class="app-nav" aria-label="Điều hướng quản lý">
-          <a class="section-link" href="#sec-overview">Tổng quan</a>
-          <a class="section-link" href="#sec-schedule">Lịch hẹn</a>
-          <a class="section-link" href="#sec-create">Tạo lịch</a>
-          <a class="section-link" href="#sec-block">Khóa lịch</a>
-          <a class="section-link" href="#sec-discounts">Ưu đãi</a>
-        </nav>
-        <div id="header-actions" class="app-header-actions">
-          <a class="btn primary compact section-link header-create" href="#sec-create">+ Tạo lịch</a>
-          <div id="account" class="who">
-            <span id="admin-avatar" class="avatar" aria-hidden="true">AD</span>
-            <p id="admin-identity" class="muted"></p>
-            <button id="logout-button" class="btn ghost compact" type="button">Đăng xuất</button>
+        <a class="btn-paper side-create section-link" href="#sec-create" title="Tạo lịch cho khách"><span aria-hidden="true">+</span><span class="side-label">Tạo lịch cho khách</span></a>
+        <nav class="side-nav" aria-label="Điều hướng quản lý">
+          <div class="side-group">
+            <p class="side-group-label">Hằng ngày</p>
+            <a class="section-link side-link" href="#sec-overview" title="Tổng quan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/></svg><span class="side-label">Tổng quan</span><span class="side-meta">hôm nay</span></a>
+            <a class="section-link side-link" href="#sec-schedule" title="Lịch hẹn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5.5h10a3 3 0 0 1 3 3v8.5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V8.5a3 3 0 0 1 3-3zM4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg><span class="side-label">Lịch hẹn</span><span id="nav-count-schedule" class="side-count" hidden></span></a>
+            <a class="section-link side-link" href="#sec-create" title="Tạo lịch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM12 8.5v7M8.5 12h7"/></svg><span class="side-label">Tạo lịch</span></a>
           </div>
+          <div class="side-group">
+            <p class="side-group-label">Tiệm</p>
+            <a class="section-link side-link" href="#sec-block" title="Khóa lịch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 10.5h8a2.5 2.5 0 0 1 2.5 2.5v4.5A2.5 2.5 0 0 1 16 20H8a2.5 2.5 0 0 1-2.5-2.5V13A2.5 2.5 0 0 1 8 10.5zM8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg><span class="side-label">Khóa lịch</span><span id="nav-count-block" class="side-count" hidden></span></a>
+            <a class="section-link side-link" href="#sec-discounts" title="Ưu đãi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.2V5.5A1.5 1.5 0 0 1 5.5 4h6.7l7.8 7.8-8.2 8.2zM8.5 7.1a1.4 1.4 0 1 0 0 2.8 1.4 1.4 0 0 0 0-2.8z"/></svg><span class="side-label">Ưu đãi</span><span id="nav-count-discounts" class="side-count side-count-sale" hidden></span></a>
+            <a class="section-link side-link" href="#sec-customers" title="Khách hàng"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4zM3.5 19c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6M15.5 6.2a3 3 0 0 1 0 5.6M17 14.6c1.8.5 3 1.9 3.4 4.4"/></svg><span class="side-label">Khách hàng</span><span id="nav-count-customers" class="side-count side-count-quiet" hidden></span></a>
+          </div>
+        </nav>
+        <div class="side-foot">
+          <img class="side-cat" src="mascot/nhu-nhi-footer-soft-v2.webp" alt="" width="512" height="512" decoding="async">
+          <div id="account" class="side-account">
+            <span id="admin-avatar" class="avatar" aria-hidden="true">AD</span>
+            <div class="side-who">
+              <p id="admin-name" class="side-name">Chủ tiệm</p>
+              <p id="admin-identity" class="side-email"></p>
+            </div>
+          </div>
+          <button id="logout-button" class="logout" type="button" title="Đăng xuất" aria-label="Đăng xuất"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M10 16l-4-4 4-4M6 12h10"/></svg><span>Đăng xuất</span></button>
         </div>
-      </header>
-
-      <nav class="tab-bar" aria-label="Chuyển màn hình quản lý">
-        <a class="section-link" href="#sec-overview"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/></svg></span>Tổng quan</a>
-        <a class="section-link" href="#sec-schedule"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></span>Lịch hẹn</a>
-        <a class="section-link" href="#sec-create"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8.5v7M8.5 12h7"/></svg></span>Tạo lịch</a>
-        <a class="section-link" href="#sec-block"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5.5" y="10.5" width="13" height="9.5" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg></span>Khóa lịch</a>
-        <a class="section-link" href="#sec-discounts"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12.2V5.5A1.5 1.5 0 0 1 5.5 4h6.7l7.8 7.8-8.2 8.2z"/><circle cx="8.5" cy="8.5" r="1.4"/></svg></span>Ưu đãi</a>
-      </nav>
+      </aside>
+      <button id="side-scrim" class="scrim" type="button" aria-label="Đóng menu" hidden></button>
 
       <div class="app-body">
-          <p id="dashboard-message" class="message" role="status" aria-live="polite"></p>
+        <p id="dashboard-message" class="message" role="status" aria-live="polite"></p>
 
-          <!-- ---- Tổng quan ---- -->
-          <section class="panel admin-view" id="sec-overview">
+        <!-- ---- Tổng quan ---- -->
+        <section class="panel admin-view" id="sec-overview">
+          <div class="m-head">
+            <button id="menu-button" class="square-btn" type="button" aria-label="Mở menu" aria-controls="side" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+            <img class="m-logo" src="1m65-logo-approved-v1/1m65-wordmark-approved-v1.png" width="877" height="578" alt="1M65" decoding="async">
+            <span id="m-avatar" class="avatar" aria-hidden="true">AD</span>
+          </div>
+          <header class="view-head d-only">
+            <div class="view-title">
+              <p class="eyebrow">Tổng quan</p>
+              <h1 id="overview-greeting">Chào bạn, chủ tiệm</h1>
+            </div>
+            <label class="search-pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM20 20l-4.5-4.5"/></svg><input id="overview-search" type="search" autocomplete="off" placeholder="Tìm tên, SĐT hoặc mã lịch" aria-label="Tìm tên, số điện thoại hoặc mã lịch"></label>
+            <span id="overview-status" class="status-pill">Đang tải…</span>
+            <button id="overview-reload" class="icon-btn" type="button" title="Tải lại" aria-label="Tải lại"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12a7 7 0 1 1-2.1-5M19 4v4h-4"/></svg></button>
+          </header>
+
+          <div class="ov-row">
             <div class="hello">
-              <div class="hello-copy">
-                <p id="overview-date-label" class="eyebrow">Hôm nay</p>
-                <h1 id="dashboard-title">Hôm nay ở 1M65</h1>
-                <p id="overview-next-chip" class="hello-next">Đang tải lịch tiếp theo…</p>
-              </div>
+              <p id="overview-date-label" class="eyebrow">Hôm nay</p>
+              <h2 id="dashboard-title">Hôm nay ở 1M65</h2>
               <div id="summary" class="hello-stickers" aria-label="Tổng quan hôm nay"></div>
               <img class="hello-cat" src="assets/booking/confirmation/cat-peeking.webp" alt="" width="480" height="335" decoding="async">
             </div>
+            <div id="overview-next-chip" class="next-card" aria-live="polite"></div>
+          </div>
 
-            <section class="overview-today" aria-labelledby="overview-agenda-title">
-              <div class="section-title">
+          <div class="ov-row ov-main">
+            <section class="card today-card" aria-labelledby="overview-agenda-title">
+              <div class="card-head">
                 <h2 id="overview-agenda-title">Lịch hôm nay</h2>
-                <a class="text-link section-link" href="#sec-schedule">Xem toàn bộ lịch</a>
+                <a class="text-link wavy section-link" href="#sec-schedule"><span class="d-only">Xem toàn bộ lịch</span><span class="m-only">Xem hết</span></a>
               </div>
-              <div id="overview-timeline" class="note-grid" aria-live="polite"></div>
+              <div id="overview-timeline" class="timeline" aria-live="polite"></div>
             </section>
-
-            <section class="overview-week" aria-labelledby="overview-week-title">
-              <div class="section-title">
-                <h2 id="overview-week-title">7 ngày tới</h2>
-                <p class="muted">Bấm một ngày để xem lịch ngày đó</p>
-              </div>
-              <div id="overview-week-strip" class="week-strip" aria-live="polite"></div>
-            </section>
-
-            <div id="overview-account" class="account-slot"></div>
-          </section>
-
-          <!-- ---- Lịch hẹn ---- -->
-          <section class="panel admin-view" id="sec-schedule" aria-labelledby="schedule-title" hidden>
-            <div class="panel-head">
-              <div>
-                <p class="eyebrow">Lịch hẹn</p>
-                <h2 id="schedule-title">Quản lý lịch hẹn</h2>
-                <p class="muted">Bấm một lịch để xem chi tiết, đổi trạng thái hoặc dời lịch. Khoảng lọc tối đa 93 ngày.</p>
-              </div>
+            <div class="ov-side">
+              <section class="card" aria-labelledby="overview-week-title">
+                <div class="card-head">
+                  <h2 id="overview-week-title">7 ngày tới</h2>
+                  <span class="hint">bấm để xem ngày</span>
+                </div>
+                <div id="overview-week-strip" class="week-strip" aria-live="polite"></div>
+              </section>
+              <section class="card locked-card" aria-labelledby="overview-blocks-title">
+                <div class="card-head">
+                  <h2 id="overview-blocks-title">Đang khóa</h2>
+                  <a class="text-link section-link" href="#sec-block">Khóa lịch</a>
+                </div>
+                <div id="overview-blocks" class="locked-list"></div>
+                <img class="locked-cup" src="doodles/teacup.webp" alt="" width="228" height="224" decoding="async">
+              </section>
             </div>
+          </div>
+        </section>
 
-            <section class="filters" aria-label="Bộ lọc lịch hẹn">
-              <div class="filter-chips" role="group" aria-label="Khoảng ngày">
-                <button class="chip" type="button" data-range="today" aria-pressed="false">Hôm nay</button>
-                <button class="chip" type="button" data-range="week" aria-pressed="true">7 ngày tới</button>
-                <button class="chip" type="button" data-range="custom" aria-pressed="false">Chọn khoảng ngày</button>
-              </div>
-              <label for="status-filter" class="status-filter">Trạng thái
-                <select id="status-filter">
-                  <option value="">Tất cả</option>
-                  <option value="confirmed">Đã xác nhận</option>
-                  <option value="completed">Hoàn thành</option>
-                  <option value="cancelled">Đã hủy</option>
-                  <option value="no_show">Không đến</option>
-                </select>
+        <!-- ---- Lịch hẹn ---- -->
+        <section class="panel admin-view" id="sec-schedule" aria-labelledby="schedule-title" hidden>
+          <header class="view-head">
+            <div class="view-title">
+              <p class="eyebrow d-only">Lịch hẹn</p>
+              <h1 id="schedule-title"><span id="schedule-title-text" class="d-only">Quản lý lịch hẹn</span><span class="m-only">Lịch hẹn</span></h1>
+            </div>
+            <div id="week-nav" class="week-nav" hidden>
+              <button id="week-prev" class="icon-btn small" type="button" aria-label="Tuần trước">‹</button>
+              <button id="week-today" class="btn-ghost" type="button">Hôm nay</button>
+              <button id="week-next" class="icon-btn small" type="button" aria-label="Tuần sau">›</button>
+            </div>
+            <div id="view-mode" class="seg view-seg d-only" role="group" aria-label="Kiểu xem">
+              <button type="button" data-view="list" aria-pressed="true">Danh sách</button>
+              <button type="button" data-view="week" aria-pressed="false">Tuần</button>
+            </div>
+            <button id="schedule-search-toggle" class="icon-btn m-only" type="button" aria-label="Tìm" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM20 20l-4.5-4.5"/></svg></button>
+            <button id="schedule-reload" class="icon-btn m-only" type="button" aria-label="Tải lại"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12a7 7 0 1 1-2.1-5M19 4v4h-4"/></svg></button>
+          </header>
+
+          <section id="schedule-filters" class="filters" aria-label="Bộ lọc lịch hẹn">
+            <div class="filter-chips" role="group" aria-label="Khoảng ngày">
+              <button class="chip" type="button" data-range="today" aria-pressed="false">Hôm nay</button>
+              <button class="chip" type="button" data-range="week" aria-pressed="true">7 ngày<span class="d-only"> tới</span></button>
+              <button class="chip" type="button" data-range="custom" aria-pressed="false"><span class="d-only">Chọn khoảng ngày</span><span class="m-only">Khoảng ngày</span></button>
+            </div>
+            <span id="range-label" class="range-label d-only"></span>
+            <span class="filter-rule d-only" aria-hidden="true"></span>
+            <div id="status-filter" class="status-chips" role="group" aria-label="Trạng thái"></div>
+            <label class="search-pill small filter-search"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM20 20l-4.5-4.5"/></svg><input id="schedule-search" type="search" autocomplete="off" placeholder="Tên, SĐT, mã lịch" aria-label="Tìm theo tên, số điện thoại hoặc mã lịch"></label>
+            <div id="filter-dates" class="filter-dates" hidden>
+              <label for="from-date">Từ ngày
+                <input id="from-date" type="date">
               </label>
-              <div id="filter-dates" class="filter-dates" hidden>
-                <label for="from-date">Từ ngày
-                  <input id="from-date" type="date">
-                </label>
-                <label for="to-date">Đến ngày
-                  <input id="to-date" type="date">
-                </label>
-                <button id="refresh-button" class="btn primary compact" type="button">Xem lịch</button>
-              </div>
-            </section>
-
-            <section id="appointment-list" class="appointment-list" aria-live="polite"></section>
+              <label for="to-date">Đến ngày
+                <input id="to-date" type="date">
+              </label>
+              <button id="refresh-button" class="btn-ghost" type="button">Xem lịch</button>
+            </div>
           </section>
 
-          <!-- ---- Tạo lịch cho khách ---- -->
-          <section class="panel admin-view" id="sec-create" aria-labelledby="creator-title" hidden>
-            <div class="panel-head">
-              <div>
-                <p class="eyebrow">Khách gọi điện / nhắn tin</p>
-                <h2 id="creator-title">Tạo lịch cho khách</h2>
-                <p class="muted">Giá, thời lượng và giờ trống được kiểm tra trực tiếp từ hệ thống booking.</p>
-              </div>
+          <div class="split">
+            <div class="split-main">
+              <section id="appointment-list" class="table-card appointment-list" aria-live="polite"></section>
+              <section id="week-grid" class="week-grid" aria-label="Lịch theo tuần" hidden></section>
+            </div>
+            <button id="detail-scrim" class="scrim" type="button" aria-label="Đóng chi tiết lịch" hidden></button>
+            <aside id="detail-drawer" class="detail-drawer sheet" aria-label="Chi tiết lịch hẹn" hidden></aside>
+          </div>
+        </section>
+
+        <!-- ---- Tạo lịch cho khách ---- -->
+        <section class="panel admin-view" id="sec-create" aria-labelledby="creator-title" hidden>
+          <header class="view-head">
+            <div class="view-title">
+              <p class="eyebrow"><span class="d-only">Khách gọi điện / nhắn tin</span><span class="m-only">Khách gọi / nhắn tin</span></p>
+              <h1 id="creator-title">Tạo lịch cho khách</h1>
+            </div>
+          </header>
+
+          <form id="admin-booking-form" class="create-form" data-step="1">
+            <div id="create-stepper" class="stepper m-only" role="group" aria-label="Các bước tạo lịch">
+              <button type="button" data-step-go="1"><b>1</b>Dịch vụ</button><span aria-hidden="true"></span>
+              <button type="button" data-step-go="2"><b>2</b>Giờ</button><span aria-hidden="true"></span>
+              <button type="button" data-step-go="3"><b>3</b>Khách</button>
             </div>
 
-            <form id="admin-booking-form" class="admin-booking-form">
-              <section class="step-card paper">
+            <div class="create-main">
+              <section class="card step-card" data-step-panel="1">
                 <div class="step-head">
                   <span class="step-no" aria-hidden="true">1</span>
                   <h3>Chọn dịch vụ</h3>
-                  <span class="step-note">tối đa 8 dịch vụ</span>
+                  <span id="admin-service-count" class="step-note">0/8 dịch vụ</span>
                 </div>
-                <div id="admin-service-tabs" class="admin-service-tabs" role="tablist" aria-label="Nhóm dịch vụ"></div>
-                <p id="admin-service-category-hint" class="muted admin-service-category-hint"></p>
-                <div id="admin-service-grid" class="admin-service-grid" aria-label="Danh sách dịch vụ"></div>
-                <p id="admin-service-summary" class="admin-service-summary">Chưa chọn dịch vụ.</p>
+                <div id="admin-service-tabs" class="seg cat-tabs" role="tablist" aria-label="Nhóm dịch vụ"></div>
+                <p id="admin-service-category-hint" class="hint cat-hint"></p>
+                <div id="admin-service-grid" class="service-grid" aria-label="Danh sách dịch vụ"></div>
               </section>
 
-              <section class="step-card paper">
-                <div class="step-head">
-                  <span class="step-no" aria-hidden="true">2</span>
-                  <h3>Ngày &amp; giờ</h3>
+              <section class="card step-card step-when" data-step-panel="2">
+                <div class="when-cal">
+                  <div class="step-head">
+                    <span class="step-no" aria-hidden="true">2</span>
+                    <h3>Ngày &amp; giờ</h3>
+                  </div>
+                  <input id="admin-booking-date" type="hidden">
+                  <div id="admin-booking-calendar" class="month-cal" aria-label="Chọn ngày hẹn"></div>
                 </div>
-                <label for="admin-booking-date" class="date-field">Ngày hẹn
-                  <input id="admin-booking-date" type="date" required>
-                </label>
-                <div>
-                  <p class="field-label">Giờ còn trống</p>
+                <div class="when-slots">
+                  <div class="slots-head">
+                    <b id="admin-slot-title">Giờ còn trống</b>
+                    <span id="admin-slot-duration" class="hint"></span>
+                  </div>
                   <div id="admin-booking-slot-grid" class="slot-grid" aria-label="Giờ còn trống"></div>
+                  <p class="hint when-foot">Chỉ hiện giờ đủ chỗ cho toàn bộ dịch vụ đã chọn (đã tính lịch khác và khung khóa).</p>
                 </div>
               </section>
+            </div>
 
-              <section class="step-card paper">
+            <aside class="create-side" data-step-panel="3">
+              <section class="card step-card">
                 <div class="step-head">
                   <span class="step-no" aria-hidden="true">3</span>
                   <h3>Thông tin khách</h3>
                 </div>
-                <div class="admin-customer-grid">
-                  <label for="admin-customer-name">Tên khách
-                    <input id="admin-customer-name" type="text" minlength="2" maxlength="80" autocomplete="name" placeholder="2–80 ký tự" required>
-                  </label>
-                  <label for="admin-customer-phone">Số điện thoại
-                    <input id="admin-customer-phone" type="tel" inputmode="numeric" pattern="0[0-9]{9}" maxlength="10" autocomplete="tel" placeholder="0xxxxxxxxx" required>
-                  </label>
-                </div>
+                <label for="admin-customer-name">Tên khách
+                  <input id="admin-customer-name" type="text" minlength="2" maxlength="80" autocomplete="name" required>
+                </label>
+                <label for="admin-customer-phone">Số điện thoại
+                  <input id="admin-customer-phone" type="tel" inputmode="numeric" pattern="0[0-9]{9}" maxlength="10" autocomplete="tel" required>
+                  <span class="field-error">Số điện thoại gồm 10 số, bắt đầu bằng 0.</span>
+                </label>
                 <label for="admin-customer-note">Ghi chú
-                  <textarea id="admin-customer-note" maxlength="500" rows="3" placeholder="Không bắt buộc"></textarea>
+                  <textarea id="admin-customer-note" maxlength="500" rows="2" placeholder="Không bắt buộc"></textarea>
                 </label>
               </section>
-
-              <div class="admin-create-actions">
+              <section class="slip" aria-label="Phiếu hẹn tạm">
+                <img class="slip-cat" src="assets/booking/confirmation/cat-peeking.webp" alt="" width="480" height="335" decoding="async">
+                <p class="eyebrow">Phiếu hẹn tạm</p>
+                <div id="admin-service-summary" class="slip-body">Chưa chọn dịch vụ.</div>
                 <p id="admin-booking-message" class="message" role="status" aria-live="polite"></p>
-                <button id="admin-create-booking-button" class="btn primary" type="submit" disabled>Tạo lịch cho khách</button>
-              </div>
-            </form>
-          </section>
-
-          <!-- ---- Khóa khung giờ ---- -->
-          <section class="panel admin-view" id="sec-block" aria-labelledby="blocker-title" hidden>
-            <div class="panel-head">
-              <div>
-                <p class="eyebrow">Chặn lịch mới</p>
-                <h2 id="blocker-title">Khóa khung giờ</h2>
-                <p class="muted">Chặn khách đặt vào các khung tiệm không nhận. Chỉ hiện những khung 30 phút còn lại trong ngày.</p>
-              </div>
-            </div>
-
-            <p class="warn">Booking đã tồn tại vẫn giữ nguyên. Mọi lịch <strong>mới</strong> chạm vào vùng khóa sẽ bị chặn. Thao tác khóa và mở khóa đều hỏi xác nhận.</p>
-
-            <div class="blocker-grid">
-              <section class="paper block-card">
-                <div class="block-controls">
-                  <label for="block-date">Ngày cần khóa
-                    <input id="block-date" type="date">
-                  </label>
-                  <label for="block-reason">Nội dung hiển thị cho khách
-                    <input id="block-reason" type="text" maxlength="120" placeholder="Mặc định: tiệm nghỉ">
-                  </label>
-                  <button id="all-day-button" class="btn ghost" type="button" aria-pressed="false">Khóa cả ngày</button>
-                </div>
-                <p class="field-label">Chọn một hoặc nhiều khung 30 phút</p>
-                <div id="block-slot-grid" class="slot-grid" aria-label="Các khung giờ có thể khóa"></div>
-                <div class="legend" aria-hidden="true">
-                  <span><i></i>còn trống</span>
-                  <span><i class="is-selected"></i>đang chọn</span>
-                  <span><i class="is-booked"></i>đã có khách</span>
-                  <span><i class="is-blocked"></i>đã khóa</span>
-                </div>
-                <div class="block-actions">
-                  <p id="block-selection" class="muted">Chưa chọn khung giờ.</p>
-                  <button id="create-block-button" class="btn primary" type="button" disabled>Khóa lịch đã chọn</button>
-                </div>
-                <p id="block-message" class="message" role="status" aria-live="polite"></p>
+                <button id="admin-create-booking-button" class="btn-paper big" type="submit" disabled>Tạo lịch cho khách</button>
               </section>
+            </aside>
 
-              <section class="paper existing-blocks" aria-labelledby="existing-blocks-title">
-                <h3 id="existing-blocks-title">Đang khóa trong ngày</h3>
-                <div id="block-list" class="block-list"></div>
-                <p class="muted block-hint">Mở khóa sẽ hỏi xác nhận. Sau khi mở, khung giờ trở lại khả dụng nếu không vướng booking khác.</p>
-              </section>
+            <div id="create-bar" class="sticky-bar m-only">
+              <div class="sticky-copy"><b id="create-bar-total" class="sticky-total">Chưa chọn dịch vụ</b><span id="create-bar-meta">0/8 dịch vụ</span></div>
+              <button id="create-bar-next" class="btn-paper tall" type="button" disabled>Chọn giờ →</button>
             </div>
-          </section>
+          </form>
+        </section>
 
-          <!-- ---- Ưu đãi từng dịch vụ ---- -->
-          <section class="panel admin-view" id="sec-discounts" aria-labelledby="discounts-title" hidden>
-            <div class="panel-head">
-              <div>
-                <p class="eyebrow">Giá dịch vụ</p>
-                <h2 id="discounts-title">Thiết lập ưu đãi</h2>
-                <p class="muted">Chỉnh giá gốc và phần trăm giảm để xem trước giá mới. Chỉ khi bấm xác nhận, thay đổi mới xuất hiện trên website và áp dụng cho booking mới.</p>
+        <!-- ---- Khóa khung giờ ---- -->
+        <section class="panel admin-view" id="sec-block" aria-labelledby="blocker-title" hidden>
+          <header class="view-head">
+            <div class="view-title">
+              <p class="eyebrow">Chặn lịch mới</p>
+              <h1 id="blocker-title">Khóa khung giờ</h1>
+            </div>
+          </header>
+
+          <p class="warn"><span class="d-only">Booking đã tồn tại vẫn giữ nguyên. Mọi lịch <strong>mới</strong> chạm vào vùng khóa sẽ bị chặn. Thao tác khóa và mở khóa đều hỏi xác nhận.</span><span class="m-only">Lịch đã đặt giữ nguyên. Chỉ chặn lịch <strong>mới</strong>.</span></p>
+
+          <div class="blocker-grid">
+            <section class="card block-card">
+              <div id="block-day-strip" class="day-strip m-only" role="group" aria-label="Chọn ngày cần khóa"></div>
+              <div class="block-controls">
+                <label for="block-date" class="block-date-field d-only">Ngày cần khóa
+                  <input id="block-date" type="date">
+                </label>
+                <label for="block-reason"><span class="d-only">Nội dung hiển thị cho khách</span>
+                  <input id="block-reason" type="text" maxlength="120" placeholder="Mặc định: tiệm nghỉ" aria-label="Nội dung hiển thị cho khách">
+                </label>
+                <button id="all-day-button" class="btn-ghost all-day" type="button" aria-pressed="false">Khóa cả ngày</button>
               </div>
-            </div>
-            <div class="discount-toolbar">
-              <label for="discount-search">Tìm dịch vụ
-                <input id="discount-search" type="search" autocomplete="off" placeholder="Nhập tên dịch vụ">
-              </label>
-              <p class="discount-toolbar-note"><strong>0%</strong> giữ nguyên giá gốc và không hiển thị giao diện sale.</p>
-            </div>
-            <div id="discount-service-list" class="discount-service-list" aria-live="polite"></div>
-            <p id="discount-message" class="message" role="status" aria-live="polite"></p>
-          </section>
+              <p class="field-title d-only">Chọn một hoặc nhiều khung 30 phút</p>
+              <div id="block-slot-grid" class="slot-grid block-slots" aria-label="Các khung giờ có thể khóa"></div>
+              <div class="legend d-only" aria-hidden="true">
+                <span><i></i>còn trống</span>
+                <span><i class="is-selected"></i>đang chọn</span>
+                <span><i class="is-booked"></i>đã có khách</span>
+                <span><i class="is-blocked"></i>đã khóa</span>
+              </div>
+              <div class="block-actions">
+                <p id="block-selection" class="block-selection">Chưa chọn khung giờ.</p>
+                <button id="create-block-button" class="btn-paper tall" type="button" disabled>Khóa lịch<span class="d-only"> đã chọn</span></button>
+              </div>
+              <p id="block-message" class="message" role="status" aria-live="polite"></p>
+            </section>
 
+            <section class="card existing-blocks" aria-labelledby="existing-blocks-title">
+              <h3 id="existing-blocks-title">Đang khóa</h3>
+              <div id="block-list" class="block-list"></div>
+              <p class="hint">Sau khi mở, khung giờ trở lại khả dụng nếu không vướng booking khác.</p>
+            </section>
+          </div>
+        </section>
+
+        <!-- ---- Ưu đãi từng dịch vụ ---- -->
+        <section class="panel admin-view" id="sec-discounts" aria-labelledby="discounts-title" hidden>
+          <header class="view-head">
+            <div class="view-title">
+              <p class="eyebrow d-only">Giá dịch vụ</p>
+              <h1 id="discounts-title">Thiết lập ưu đãi</h1>
+              <p class="view-sub d-only">Chỉnh giá gốc và % giảm để xem trước. Chỉ khi bấm Xác nhận, giá mới xuất hiện trên website và áp dụng cho booking mới.</p>
+            </div>
+            <img class="head-doodle d-only" src="doodles/swatch-fan.webp" alt="" width="512" height="418" decoding="async">
+          </header>
+          <div class="discount-toolbar">
+            <label class="search-pill small"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM20 20l-4.5-4.5"/></svg><input id="discount-search" type="search" autocomplete="off" placeholder="Tìm dịch vụ" aria-label="Tìm dịch vụ"></label>
+            <div id="discount-filters" class="chip-row" role="group" aria-label="Nhóm dịch vụ"></div>
+            <p class="discount-toolbar-note d-only"><strong>0%</strong> giữ nguyên giá gốc, không hiện sale.</p>
+          </div>
+          <p id="discount-message" class="message" role="status" aria-live="polite"></p>
+          <div id="discount-service-list" class="table-card discount-table" aria-live="polite"></div>
+          <button id="discount-scrim" class="scrim" type="button" aria-label="Đóng bảng chỉnh giá" hidden></button>
+          <aside id="discount-sheet" class="sheet discount-sheet" aria-label="Chỉnh giá dịch vụ" hidden></aside>
+        </section>
+
+        <!-- ---- Khách hàng ---- -->
+        <section class="panel admin-view" id="sec-customers" aria-labelledby="customers-title" hidden>
+          <header class="view-head">
+            <a class="icon-btn m-only section-link" href="#sec-overview" aria-label="Quay lại Tổng quan">‹</a>
+            <div class="view-title">
+              <p class="eyebrow d-only">Khách hàng</p>
+              <h1 id="customers-title"><span id="customers-count" class="d-only">Khách hàng</span><span class="m-only">Khách hàng</span></h1>
+            </div>
+            <label class="search-pill customer-search"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM20 20l-4.5-4.5"/></svg><input id="customer-search" type="search" autocomplete="off" placeholder="Tên hoặc số điện thoại" aria-label="Tìm theo tên hoặc số điện thoại"></label>
+          </header>
+          <div class="split">
+            <div class="split-main">
+              <section id="customer-list" class="table-card customer-table" aria-live="polite"></section>
+            </div>
+            <button id="customer-scrim" class="scrim" type="button" aria-label="Đóng thông tin khách" hidden></button>
+            <aside id="customer-detail" class="customer-detail sheet" aria-label="Thông tin khách" hidden></aside>
+          </div>
+        </section>
       </div>
+
+      <nav class="tab-bar" aria-label="Chuyển màn hình quản lý">
+        <a class="section-link" href="#sec-overview"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/></svg></span>Hôm nay</a>
+        <a class="section-link" href="#sec-schedule"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 5.5h10a3 3 0 0 1 3 3v8.5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V8.5a3 3 0 0 1 3-3zM4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></span>Lịch hẹn</a>
+        <a class="section-link" href="#sec-create"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span>Tạo lịch</a>
+        <a class="section-link" href="#sec-block"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 10.5h8a2.5 2.5 0 0 1 2.5 2.5v4.5A2.5 2.5 0 0 1 16 20H8a2.5 2.5 0 0 1-2.5-2.5V13A2.5 2.5 0 0 1 8 10.5zM8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg></span>Khóa lịch</a>
+        <a class="section-link" href="#sec-discounts"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12.2V5.5A1.5 1.5 0 0 1 5.5 4h6.7l7.8 7.8-8.2 8.2zM8.5 7.1a1.4 1.4 0 1 0 0 2.8 1.4 1.4 0 0 0 0-2.8z"/></svg></span>Ưu đãi</a>
+      </nav>
     </section>
+
+    <!-- Every lock, unlock, cancel, reschedule and create asks here first. -->
+    <dialog id="confirm-dialog" class="confirm" aria-labelledby="confirm-title" aria-describedby="confirm-text">
+      <img class="confirm-cat" src="assets/booking/confirmation/cat-peeking.webp" alt="" width="480" height="335" decoding="async">
+      <form method="dialog">
+        <p class="eyebrow">Xác nhận</p>
+        <h3 id="confirm-title"></h3>
+        <p id="confirm-text" class="confirm-text"></p>
+        <div class="confirm-actions">
+          <button class="btn-ghost tall" type="submit" value="cancel">Để sau</button>
+          <button id="confirm-ok" class="btn-paper tall" type="submit" value="ok">Xác nhận</button>
+        </div>
+      </form>
+    </dialog>
   </main>
 
   <script src="turnstile-config.js?v=20260807a" defer></script>
   <script src="turnstile-booking.js?v=20260807a" defer></script>
-  <script src="admin.js?v=20260930-1" defer></script>
-  <script src="admin-datepicker.js?v=20260809-1" defer></script>
+  <script src="admin.js?v=20260930-2" defer></script>
+  <script src="admin-datepicker.js?v=20260930-1" defer></script>
 </body>
 </html>
