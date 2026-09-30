@@ -83,6 +83,7 @@
     mobileAvatar: document.querySelector('#m-avatar'),
     logoutButton: document.querySelector('#logout-button'),
     menuButton: document.querySelector('#menu-button'),
+    menuClose: document.querySelector('#menu-close'),
     sideScrim: document.querySelector('#side-scrim'),
     navCountSchedule: document.querySelector('#nav-count-schedule'),
     navCountBlock: document.querySelector('#nav-count-block'),
@@ -963,7 +964,11 @@
 
     const percentGroup = node('div', 'ds-field');
     const chips = node('div', 'pct-chips');
-    percentGroup.append(node('span', '', 'Giảm giá'), chips);
+    // The chips are the usual steps; any other percentage is typed here.
+    const custom = numberField('discount-input-shell', 'discount-percent-input', percent, 100, 1, '%', `Mức giảm khác cho ${service.name}`);
+    const customRow = node('label', 'pct-custom');
+    customRow.append(node('span', '', 'Hoặc nhập mức khác'), custom.shell);
+    percentGroup.append(node('span', '', 'Giảm giá'), chips, customRow);
 
     const preview = node('div', 'ds-preview');
     const before = node('div');
@@ -984,7 +989,9 @@
       const dirty = percent !== draft.savedPercent || originalPrice !== draft.savedOriginalPrice;
       if (dirty) discountDrafts.set(serviceId, { discountPercent: percent, originalPrice });
       else discountDrafts.delete(serviceId);
-      chips.replaceChildren(...[...new Set([...DISCOUNT_STEPS, percent])].sort((a, b) => a - b).map((value) => {
+      if (document.activeElement !== custom.input) custom.input.value = String(percent);
+      customRow.classList.toggle('is-on', !DISCOUNT_STEPS.includes(percent));
+      chips.replaceChildren(...DISCOUNT_STEPS.map((value) => {
         const chip = button('', `${value}%`);
         chip.setAttribute('aria-pressed', String(value === percent));
         chip.addEventListener('click', () => {
@@ -1003,6 +1010,12 @@
     price.input.addEventListener('input', () => {
       if (price.input.value === '') return;
       originalPrice = normalizeOriginalPriceInput(price.input.value);
+      update();
+    });
+    custom.input.addEventListener('input', () => {
+      if (custom.input.value === '') return;
+      percent = normalizeDiscountInput(custom.input.value);
+      if (Number(custom.input.value) !== percent) custom.input.value = String(percent);
       update();
     });
     later.addEventListener('click', () => closeDiscountSheet(true));
@@ -2588,6 +2601,7 @@
   elements.discountScrim.addEventListener('click', () => closeDiscountSheet(true));
   elements.menuButton.addEventListener('click', () => setMenuOpen(true));
   elements.sideScrim.addEventListener('click', () => setMenuOpen(false));
+  elements.menuClose.addEventListener('click', () => setMenuOpen(false));
   document.addEventListener('click', (event) => {
     if (!event.target.closest('.week-pop, .wk-item')) closeWeekPopover();
   });
