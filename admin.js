@@ -138,7 +138,9 @@
     createBarTotal: document.querySelector('#create-bar-total'),
     createBarMeta: document.querySelector('#create-bar-meta'),
     createBarNext: document.querySelector('#create-bar-next'),
-    blockDayStrip: document.querySelector('#block-day-strip'),
+    createBack: document.querySelector('#create-back'),
+    createReset: document.querySelector('#create-reset'),
+    blockDaySelect: document.querySelector('#block-day-select'),
     blockDate: document.querySelector('#block-date'),
     blockReason: document.querySelector('#block-reason'),
     allDayButton: document.querySelector('#all-day-button'),
@@ -148,6 +150,8 @@
     blockMessage: document.querySelector('#block-message'),
     blockList: document.querySelector('#block-list'),
     discountSearch: document.querySelector('#discount-search'),
+    discountApply: document.querySelector('#discount-apply'),
+    discountDiscard: document.querySelector('#discount-discard'),
     discountFilters: document.querySelector('#discount-filters'),
     discountServiceList: document.querySelector('#discount-service-list'),
     discountMessage: document.querySelector('#discount-message'),
@@ -161,7 +165,8 @@
     confirmDialog: document.querySelector('#confirm-dialog'),
     confirmTitle: document.querySelector('#confirm-title'),
     confirmText: document.querySelector('#confirm-text'),
-    confirmOk: document.querySelector('#confirm-ok')
+    confirmOk: document.querySelector('#confirm-ok'),
+    confirmCancel: document.querySelector('#confirm-cancel')
   };
   const sectionLinks = [...document.querySelectorAll('a.section-link[href^="#sec-"]')];
   const navigationSections = [...document.querySelectorAll('.admin-view[id^="sec-"]')];
@@ -425,6 +430,20 @@
   }
 
   function navigateToSection(sectionHash) {
+    // Edited prices are not live until confirmed: leaving Ưu đãi asks to confirm them now or stay.
+    // ponytail: the browser's own back button skips this; the drafts stay in memory and show again on return.
+    if (discountDrafts.size && activeSection() === '#sec-discounts' && sectionHash !== '#sec-discounts') {
+      confirmAction(
+        `Có ${discountDrafts.size} giá chưa xác nhận`,
+        'Giá mới chỉ lên website sau khi xác nhận. Xác nhận ngay, hoặc ở lại để xem lại.',
+        'Xác nhận', 'Ở lại'
+      ).then(async (apply) => {
+        if (!apply) return;
+        await savePricing([...discountDrafts.keys()]);
+        if (!discountDrafts.size) navigateToSection(sectionHash);
+      });
+      return;
+    }
     if (window.location.hash !== sectionHash) window.history.pushState(null, '', sectionHash);
     setMenuOpen(false);
     setMessage(elements.dashboardMessage);
@@ -624,7 +643,7 @@
   }
 
   // Every lock, unlock, cancel, reschedule and create goes through this dialog; resolves true only on the pink button.
-  function confirmAction(title, text = '', okLabel = 'Xác nhận') {
+  function confirmAction(title, text = '', okLabel = 'Xác nhận', cancelLabel = 'Để sau') {
     return new Promise((resolve) => {
       if (elements.confirmDialog.open) {
         resolve(false);
@@ -634,6 +653,7 @@
       elements.confirmText.textContent = text;
       elements.confirmText.hidden = !text;
       elements.confirmOk.textContent = okLabel;
+      elements.confirmCancel.textContent = cancelLabel;
       elements.confirmDialog.returnValue = '';
       elements.confirmDialog.addEventListener('close', () => {
         resolve(elements.confirmDialog.returnValue === 'ok');
@@ -674,17 +694,32 @@
       || !adminSelectedStartAt;
     elements.createBarNext.textContent = createStep === 1 ? 'Chọn giờ →' : 'Thông tin khách →';
     elements.createBarNext.disabled = createStep === 1 ? adminSelectedServiceIds.size === 0 : !adminSelectedStartAt;
+    elements.createReset.hidden = adminSelectedServiceIds.size === 0;
   }
 
   // Phones walk the three steps one at a time; wider screens show them all and ignore the step.
   function setCreateStep(step) {
     createStep = step;
     elements.adminBookingForm.dataset.step = String(step);
+    elements.createBack.hidden = step === 1;
     stepButtons.forEach((item) => {
       if (Number(item.dataset.stepGo) === step) item.setAttribute('aria-current', 'step');
       else item.removeAttribute('aria-current');
     });
     updateAdminCreateButton();
+  }
+
+  // Back to an empty form: after a booking is created, and from the Xóa hết button.
+  function resetAdminCreate() {
+    elements.adminCustomerName.value = '';
+    elements.adminCustomerPhone.value = '';
+    elements.adminCustomerNote.value = '';
+    adminSelectedServiceIds.clear();
+    adminSelectedStartAt = '';
+    adminAvailableSlots = [];
+    setCreateStep(1);
+    renderAdminServices();
+    renderAdminSlots();
   }
 
   // The slip on the right (and the phone's sticky bar): when, what, how long and how much.
@@ -820,7 +855,6 @@
   function renderDiscountFilters(categories, services) {
     const onSale = services.filter((service) => normalizeDiscountInput(service.discountPercent) > 0).length;
     const chips = [
-      ['all', `Tất cả ${services.length}`],
       ...categories.map((category) => [category.id, `${category.label} ${category.services.length}`]),
       ['sale', `Đang giảm ${onSale}`]
     ];
@@ -828,7 +862,7 @@
       const chip = button('chip', label);
       chip.setAttribute('aria-pressed', String(discountFilter === id));
       chip.addEventListener('click', () => {
-        discountFilter = id;
+        discountFilter = discountFilter === id ? 'all' : id;
         renderDiscountServices();
       });
       return chip;
@@ -841,6 +875,7 @@
     const query = String(elements.discountSearch?.value || '').trim().toLocaleLowerCase('vi-VN');
     if (!services.length) {
       elements.discountFilters.replaceChildren();
+      updateDiscountBar();
       elements.discountServiceList.replaceChildren(node(
         'p', 'slot-empty', adminConfigLoading ? 'Đang tải danh sách dịch vụ…' : 'Chưa tải được danh sách dịch vụ.'
       ));
@@ -848,6 +883,7 @@
     }
     const categories = adminServiceCategories();
     renderDiscountFilters(categories, services);
+    updateDiscountBar();
     const visible = (service) => (!query || String(service.name || '').toLocaleLowerCase('vi-VN').includes(query))
       && (discountFilter !== 'sale' || normalizeDiscountInput(service.discountPercent) > 0);
     const groups = categories
@@ -859,7 +895,7 @@
       return;
     }
     const head = node('div', 't-head disc-head');
-    head.append(...['Dịch vụ', 'Phút', 'Giá gốc', 'Giảm', 'Giá hiển thị', ''].map((label) => node('span', '', label)));
+    head.append(...['Dịch vụ', 'Phút', 'Giá gốc', 'Giảm', 'Giá hiển thị'].map((label) => node('span', '', label)));
     elements.discountServiceList.replaceChildren(head, ...groups.map((category) => {
       const group = node('section', 'disc-group');
       const title = node('h3', 'disc-group-title', category.label);
@@ -883,7 +919,6 @@
     const phoneLine = node('span', 'm-only', `${service.durationMinutes}′ · ${state() || 'giá gốc'}`);
     copy.append(node('strong', '', service.name), node('span', 'd-only', line || `${service.durationMinutes} phút`), phoneLine);
     identity.append(copy);
-    if (savedPercent > 0) identity.append(node('span', 'sale-cloud', `-${savedPercent}%`));
 
     const price = numberField('discount-price-input-shell', 'discount-original-input', originalPrice, 2000000000, 1000, 'đ', `Giá gốc của ${service.name}`);
     const discount = numberField('discount-input-shell', 'discount-percent-input', percent, 100, 1, '%', `Phần trăm giảm cho ${service.name}`);
@@ -895,19 +930,14 @@
     const preview = node('div', 'discount-price-preview');
     const previewValue = node('strong', 'discount-preview-price', shownPrice(service, discountedPrice(originalPrice, percent)));
     const originalValue = node('span', `discount-original-price${percent > 0 ? ' is-crossed' : ''}`, currency(originalPrice));
-    preview.append(previewValue, originalValue);
-
-    const actions = node('div', 'discount-actions');
-    const tag = node('span', 'discount-tag', state());
-    const confirmButton = button('btn-paper discount-confirm', saving ? 'Đang lưu…' : 'Xác nhận');
-    confirmButton.disabled = saving || !changed;
-    actions.append(tag, confirmButton);
+    const prices = node('div');
+    prices.append(previewValue, originalValue);
+    const cloud = node('span', 'sale-cloud', `-${percent}%`);
+    cloud.hidden = percent === 0;
+    preview.append(cloud, prices);
 
     const updateDraftPreview = () => {
-      if (input.value === '' || priceInput.value === '') {
-        confirmButton.disabled = true;
-        return;
-      }
+      if (input.value === '' || priceInput.value === '') return;
       const nextPercent = normalizeDiscountInput(input.value);
       const nextPrice = normalizeOriginalPriceInput(priceInput.value);
       if (Number(input.value) !== nextPercent) input.value = String(nextPercent);
@@ -918,19 +948,29 @@
       previewValue.textContent = shownPrice(service, discountedPrice(nextPrice, nextPercent));
       originalValue.textContent = currency(nextPrice);
       originalValue.classList.toggle('is-crossed', nextPercent > 0);
+      cloud.textContent = `-${nextPercent}%`;
+      cloud.hidden = nextPercent === 0;
       card.classList.toggle('is-dirty', dirty);
-      tag.textContent = state();
-      confirmButton.disabled = saving || !dirty;
+      updateDiscountBar();
     };
     input.addEventListener('input', updateDraftPreview);
     priceInput.addEventListener('input', updateDraftPreview);
-    confirmButton.addEventListener('click', () => saveServicePricing(service.id));
     // The phone shows one compact line per service and edits it in a bottom sheet.
     card.addEventListener('click', () => {
       if (phoneMedia.matches) openDiscountSheet(service.id);
     });
-    card.append(identity, node('span', 'discount-duration', String(service.durationMinutes)), price.shell, discount.shell, preview, actions);
+    card.append(identity, node('span', 'discount-duration', String(service.durationMinutes)), price.shell, discount.shell, preview);
     return card;
+  }
+
+  // One Xác nhận for the whole table: it wakes up with the first edited row and sends every one of them.
+  function updateDiscountBar() {
+    const count = discountDrafts.size;
+    const saving = discountSavingIds.size > 0;
+    elements.discountApply.replaceChildren(saving ? 'Đang lưu…' : 'Xác nhận');
+    if (count && !saving) elements.discountApply.append(node('b', 'seg-count', String(count)));
+    elements.discountApply.disabled = saving || !count;
+    elements.discountDiscard.disabled = saving || !count;
   }
 
   function closeDiscountSheet(discard = false) {
@@ -1021,7 +1061,7 @@
     later.addEventListener('click', () => closeDiscountSheet(true));
     save.addEventListener('click', async () => {
       save.disabled = true;
-      await saveServicePricing(serviceId);
+      await savePricing([serviceId]);
       closeDiscountSheet();
     });
     update();
@@ -1033,40 +1073,56 @@
     elements.discountScrim.hidden = false;
   }
 
-  async function saveServicePricing(serviceId) {
-    const service = (bookingConfig?.services || []).find((item) => item.id === serviceId);
-    if (!service || discountSavingIds.has(serviceId)) return;
-    const draft = discountDrafts.get(serviceId) || {};
-    const originalPrice = draft.originalPrice == null
-      ? serviceOriginalPrice(service) : normalizeOriginalPriceInput(draft.originalPrice);
-    const discountPercent = draft.discountPercent == null
-      ? normalizeDiscountInput(service.discountPercent) : normalizeDiscountInput(draft.discountPercent);
-    discountSavingIds.add(serviceId);
+  // Sends the draft of each given service; one that fails keeps its draft so it can be confirmed again.
+  // ponytail: one request per service, in turn; a batch action in booking-api if a long list ever feels slow.
+  async function savePricing(serviceIds) {
+    const pending = (bookingConfig?.services || [])
+      .filter((service) => serviceIds.includes(service.id) && !discountSavingIds.has(service.id));
+    if (!pending.length) return;
+    pending.forEach((service) => discountSavingIds.add(service.id));
     setMessage(elements.discountMessage, 'Đang cập nhật ưu đãi…');
     renderDiscountServices();
-    try {
-      const data = await adminRequest({
-        action: 'admin_update_service_pricing', serviceId, originalPrice, discountPercent
-      });
-      const updated = data.service || {};
-      bookingConfig.services = bookingConfig.services.map((item) => (
-        item.id === serviceId ? { ...item, ...updated } : item
-      ));
-      discountDrafts.delete(serviceId);
+    let saved = 0;
+    let failure = '';
+    let lastPercent = 0;
+    for (const service of pending) {
+      const serviceId = service.id;
+      const draft = discountDrafts.get(serviceId) || {};
+      const originalPrice = draft.originalPrice == null
+        ? serviceOriginalPrice(service) : normalizeOriginalPriceInput(draft.originalPrice);
+      const discountPercent = draft.discountPercent == null
+        ? normalizeDiscountInput(service.discountPercent) : normalizeDiscountInput(draft.discountPercent);
+      try {
+        const data = await adminRequest({
+          action: 'admin_update_service_pricing', serviceId, originalPrice, discountPercent
+        });
+        const updated = data.service || {};
+        bookingConfig.services = bookingConfig.services.map((item) => (
+          item.id === serviceId ? { ...item, ...updated } : item
+        ));
+        discountDrafts.delete(serviceId);
+        saved += 1;
+        lastPercent = discountPercent;
+      } catch (error) {
+        failure = failure || errorMessage(error.message);
+      }
+    }
+    pending.forEach((service) => discountSavingIds.delete(service.id));
+    if (failure) {
+      setMessage(elements.discountMessage, saved ? `Đã cập nhật ${saved}/${pending.length} dịch vụ. ${failure}` : failure);
+    } else if (pending.length > 1) {
+      setMessage(elements.discountMessage, `Đã cập nhật giá của ${saved} dịch vụ.`, true);
+    } else {
       setMessage(
         elements.discountMessage,
-        discountPercent > 0
-          ? `Đã cập nhật giá gốc và áp dụng giảm ${discountPercent}% cho ${service.name}.`
-          : `Đã cập nhật giá gốc của ${service.name}; website không hiển thị giao diện sale.`,
+        lastPercent > 0
+          ? `Đã cập nhật giá gốc và áp dụng giảm ${lastPercent}% cho ${pending[0].name}.`
+          : `Đã cập nhật giá gốc của ${pending[0].name}; website không hiển thị giao diện sale.`,
         true
       );
-      renderAdminServices();
-    } catch (error) {
-      setMessage(elements.discountMessage, errorMessage(error.message));
-    } finally {
-      discountSavingIds.delete(serviceId);
-      renderDiscountServices();
     }
+    if (saved) renderAdminServices();
+    renderDiscountServices();
   }
 
   // Days a lock covers from opening to closing: striped in the calendars, "nghỉ" in the week lists.
@@ -1256,15 +1312,7 @@
         customerNote: elements.adminCustomerNote.value.trim()
       });
       const reference = data.appointment?.reference || '';
-      elements.adminCustomerName.value = '';
-      elements.adminCustomerPhone.value = '';
-      elements.adminCustomerNote.value = '';
-      adminSelectedServiceIds.clear();
-      adminSelectedStartAt = '';
-      adminAvailableSlots = [];
-      setCreateStep(1);
-      renderAdminServices();
-      renderAdminSlots();
+      resetAdminCreate();
       if (date < elements.fromDate.value || date > elements.toDate.value) {
         setDateValue(elements.fromDate, date);
         setDateValue(elements.toDate, date);
@@ -1351,7 +1399,7 @@
     const next = nextOverviewAppointment();
     if (!next) {
       const copy = node('div', 'next-empty');
-      copy.append(node('b', '', 'Không còn lịch sắp tới hôm nay'), node('p', '', 'Nhu Nhi ngủ trưa được rồi. Tạo lịch khi khách gọi nhé.'));
+      copy.append(node('b', '', 'Không còn lịch sắp tới hôm nay'), node('p', '', 'Nhu Nhi đi ngủ được rồi. Tạo lịch khi khách gọi nhé.'));
       elements.overviewNextChip.replaceChildren(copy);
       return;
     }
@@ -1389,7 +1437,7 @@
     elements.overviewTimeline.classList.toggle('is-empty', !items.length);
     if (!items.length) {
       elements.overviewTimeline.replaceChildren(emptyState(
-        'Hôm nay chưa có lịch hẹn', 'Nhu Nhi ngủ trưa được rồi. Tạo lịch khi khách gọi nhé.',
+        'Hôm nay chưa có lịch hẹn', 'Nhu Nhi đi ngủ được rồi. Tạo lịch khi khách gọi nhé.',
         { label: 'Tạo lịch cho khách', section: '#sec-create' }
       ));
       return;
@@ -1643,7 +1691,7 @@
     total.append(totalLabel, node('b', '', currency(item.price)));
     lines.append(total);
 
-    elements.detailDrawer.replaceChildren(image('dd-bow', 'assets/booking/confirmation/pink-bow.webp', 360, 306), top, who, facts, lines);
+    elements.detailDrawer.replaceChildren(top, who, facts, lines);
     if (item.customerNote) elements.detailDrawer.append(node('p', 'sticky-note', `"${item.customerNote}"`));
     if (photos.length) {
       const group = node('div', 'dd-photos');
@@ -1861,7 +1909,7 @@
     if (!visible.length) {
       elements.appointmentList.replaceChildren(emptyState(
         appointments.length ? 'Không có lịch nào khớp bộ lọc' : 'Ngày này chưa có lịch',
-        appointments.length ? 'Thử đổi trạng thái hoặc từ khóa tìm kiếm.' : 'Nhu Nhi ngủ trưa được rồi. Tạo lịch khi khách gọi nhé.'
+        appointments.length ? 'Thử đổi trạng thái hoặc từ khóa tìm kiếm.' : 'Nhu Nhi đi ngủ được rồi. Tạo lịch khi khách gọi nhé.'
       ));
       return;
     }
@@ -2362,23 +2410,18 @@
     }));
   }
 
-  // The phone picks the day from a strip of the next two weeks instead of the date field.
+  // The phone picks the day from a dropdown of the next two weeks instead of the date field.
   function renderBlockDays() {
     const today = dateInTimeZone();
     const closed = closedDates();
-    elements.blockDayStrip.replaceChildren(...Array.from({ length: 14 }, (_, index) => {
-      const date = addDays(today, index);
-      const chip = button('day-chip');
-      chip.classList.toggle('is-today', index === 0);
-      chip.classList.toggle('is-blocked', closed.has(date));
-      chip.setAttribute('aria-pressed', String(date === elements.blockDate.value));
-      chip.setAttribute('aria-label', `${shortDate(date)}${closed.has(date) ? ' · đã khóa cả ngày' : ''}`);
-      chip.append(node('span', '', shortDate(date).split(' ')[0]), node('b', '', date.slice(8, 10)));
-      chip.addEventListener('click', () => {
-        setDateValue(elements.blockDate, date);
-        elements.blockDate.dispatchEvent(new Event('change', { bubbles: true }));
-      });
-      return chip;
+    const chosen = elements.blockDate.value;
+    const dates = Array.from({ length: 14 }, (_, index) => addDays(today, index));
+    if (chosen && !dates.includes(chosen)) dates.push(chosen);
+    elements.blockDaySelect.replaceChildren(...dates.map((date) => {
+      const option = node('option', '', `${date === today ? 'Hôm nay · ' : ''}${shortDate(date)}${closed.has(date) ? ' · đã khóa cả ngày' : ''}`);
+      option.value = date;
+      option.selected = date === chosen;
+      return option;
     }));
   }
 
@@ -2598,6 +2641,15 @@
   elements.customerSearch.addEventListener('input', renderCustomers);
   elements.customerScrim.addEventListener('click', closeCustomer);
   elements.discountSearch?.addEventListener('input', renderDiscountServices);
+  elements.discountApply.addEventListener('click', () => savePricing([...discountDrafts.keys()]));
+  elements.discountDiscard.addEventListener('click', () => {
+    discountDrafts.clear();
+    renderDiscountServices();
+  });
+  // Closing or reloading the tab would drop edited prices without a word.
+  window.addEventListener('beforeunload', (event) => {
+    if (discountDrafts.size) event.preventDefault();
+  });
   elements.discountScrim.addEventListener('click', () => closeDiscountSheet(true));
   elements.menuButton.addEventListener('click', () => setMenuOpen(true));
   elements.sideScrim.addEventListener('click', () => setMenuOpen(false));
@@ -2627,6 +2679,14 @@
     setCreateStep(createStep + 1);
     window.scrollTo({ top: 0, behavior: 'auto' });
   });
+  elements.createBack.addEventListener('click', () => {
+    setCreateStep(createStep - 1);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  });
+  elements.createReset.addEventListener('click', () => {
+    resetAdminCreate();
+    setMessage(elements.adminBookingMessage);
+  });
   elements.adminCustomerPhone.addEventListener('input', () => {
     elements.adminCustomerPhone.value = elements.adminCustomerPhone.value.replace(/\D/g, '').slice(0, 10);
   });
@@ -2644,6 +2704,10 @@
     updateBlockSelection();
   });
   elements.createBlockButton.addEventListener('click', createBlocks);
+  elements.blockDaySelect.addEventListener('change', () => {
+    setDateValue(elements.blockDate, elements.blockDaySelect.value);
+    elements.blockDate.dispatchEvent(new Event('change', { bubbles: true }));
+  });
   elements.logoutButton.addEventListener('click', async () => {
     const token = session?.accessToken || '';
     storeSession(null);

@@ -9,7 +9,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://aomiaszicxqrctcgeoms.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; img-src 'self' data: https://aomiaszicxqrctcgeoms.supabase.co; style-src 'self'; script-src 'self' https://challenges.cloudflare.com; base-uri 'none'; form-action 'self'">
   <title>Quản lý lịch · 1M65 Nails</title>
   <link rel="icon" href="favicon.svg">
-  <link rel="stylesheet" href="admin.css?v=20260930-7">
+  <link rel="stylesheet" href="admin.css?v=20260930-9">
 </head>
 <body>
   <main class="shell">
@@ -93,7 +93,6 @@
             <path class="side-wave-stitch" d="M0 20Q32 6 64 20T128 20T192 20T256 20T320 20"/>
             <path class="side-wave-edge" d="M0 30Q32 16 64 30T128 30T192 30T256 30T320 30"/>
           </svg>
-          <img class="side-cat" src="mascot/nhu-nhi-footer-soft-v2.webp" alt="" width="512" height="512" decoding="async">
           <div class="side-foot-rows">
             <div id="account" class="side-account">
               <span id="admin-avatar" class="avatar" aria-hidden="true">AD</span>
@@ -219,10 +218,12 @@
         <!-- ---- Tạo lịch cho khách ---- -->
         <section class="panel admin-view" id="sec-create" aria-labelledby="creator-title" hidden>
           <header class="view-head">
+            <button id="create-back" class="icon-btn m-only" type="button" aria-label="Quay lại bước trước" hidden>‹</button>
             <div class="view-title">
               <p class="eyebrow"><span class="d-only">Khách gọi điện / nhắn tin</span><span class="m-only">Khách gọi / nhắn tin</span></p>
               <h1 id="creator-title">Tạo lịch cho khách</h1>
             </div>
+            <button id="create-reset" class="btn-ghost create-reset" type="button" aria-label="Xóa hết lựa chọn" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12M10 11v5M14 11v5"/></svg><span class="d-only">Xóa hết</span></button>
           </header>
 
           <form id="admin-booking-form" class="create-form" data-step="1">
@@ -310,7 +311,9 @@
 
           <div class="blocker-grid">
             <section class="card block-card">
-              <div id="block-day-strip" class="day-strip m-only" role="group" aria-label="Chọn ngày cần khóa"></div>
+              <label for="block-day-select" class="block-day-field m-only">Ngày cần khóa
+                <select id="block-day-select"></select>
+              </label>
               <div class="block-controls">
                 <label for="block-date" class="block-date-field d-only">Ngày cần khóa
                   <input id="block-date" type="date">
@@ -349,14 +352,17 @@
             <div class="view-title">
               <p class="eyebrow d-only">Giá dịch vụ</p>
               <h1 id="discounts-title">Thiết lập ưu đãi</h1>
-              <p class="view-sub d-only">Chỉnh giá gốc và % giảm để xem trước. Chỉ khi bấm Xác nhận, giá mới xuất hiện trên website và áp dụng cho booking mới.</p>
+              <p class="view-sub d-only">Chỉnh giá gốc và % giảm để xem trước. Chỉ khi bấm Xác nhận, giá mới xuất hiện trên website và áp dụng cho booking mới. <strong>0%</strong> giữ nguyên giá gốc, không hiện sale.</p>
             </div>
             <img class="head-doodle d-only" src="doodles/swatch-fan.webp" alt="" width="512" height="418" decoding="async">
           </header>
           <div class="discount-toolbar">
             <label class="search-pill small"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM20 20l-4.5-4.5"/></svg><input id="discount-search" type="search" autocomplete="off" placeholder="Tìm dịch vụ" aria-label="Tìm dịch vụ"></label>
             <div id="discount-filters" class="chip-row" role="group" aria-label="Nhóm dịch vụ"></div>
-            <p class="discount-toolbar-note d-only"><strong>0%</strong> giữ nguyên giá gốc, không hiện sale.</p>
+            <div class="discount-save d-only">
+              <button id="discount-discard" class="btn-ghost" type="button" disabled>Bỏ thay đổi</button>
+              <button id="discount-apply" class="btn-paper" type="button" disabled>Xác nhận</button>
+            </div>
           </div>
           <p id="discount-message" class="message" role="status" aria-live="polite"></p>
           <div id="discount-service-list" class="table-card discount-table" aria-live="polite"></div>
@@ -395,13 +401,12 @@
 
     <!-- Every lock, unlock, cancel, reschedule and create asks here first. -->
     <dialog id="confirm-dialog" class="confirm" aria-labelledby="confirm-title" aria-describedby="confirm-text">
-      <img class="confirm-cat" src="assets/booking/confirmation/cat-peeking.webp" alt="" width="480" height="335" decoding="async">
       <form method="dialog">
         <p class="eyebrow">Xác nhận</p>
         <h3 id="confirm-title"></h3>
         <p id="confirm-text" class="confirm-text"></p>
         <div class="confirm-actions">
-          <button class="btn-ghost tall" type="submit" value="cancel">Để sau</button>
+          <button id="confirm-cancel" class="btn-ghost tall" type="submit" value="cancel">Để sau</button>
           <button id="confirm-ok" class="btn-paper tall" type="submit" value="ok">Xác nhận</button>
         </div>
       </form>
@@ -410,7 +415,7 @@
 
   <script src="turnstile-config.js?v=20260807a" defer></script>
   <script src="turnstile-booking.js?v=20260807a" defer></script>
-  <script src="admin.js?v=20260930-5" defer></script>
+  <script src="admin.js?v=20260930-6" defer></script>
   <script src="admin-datepicker.js?v=20260930-1" defer></script>
 </body>
 </html>

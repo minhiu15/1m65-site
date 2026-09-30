@@ -29,6 +29,8 @@
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;min-height:100vh;background:var(--paper);color:var(--cocoa);font:600 15px/1.5 var(--body)}
+/* The page wears the wash of the site's Dịch vụ sheet; fixed, so a long list does not stretch it. */
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(145deg,rgba(238,247,253,.78),rgba(255,248,226,.68) 48%,rgba(244,239,252,.78))}
 [hidden]{display:none !important}
 img{max-width:100%;height:auto}
 a{color:var(--pink-deep)}
@@ -46,11 +48,13 @@ p{margin:0}
 .text-link.wavy{padding-bottom:6px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 5'%3E%3Cpath d='M0 2.5q4.5-2 9 0t9 0' fill='none' stroke='%23c2336a' stroke-width='1.2'/%3E%3C/svg%3E") repeat-x 0 100% / 18px 5px;text-decoration:none}
 
 /* Buttons: the primary one is the site's pink paper, nine-sliced so its corners keep their painted shape. */
-.btn-paper{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border:4px solid transparent;border-image:url("assets/gallery/ui_shells/primary_button_rounded_rect_paper_v1.webp") 92 fill / 20px / 0 stretch;background:none;color:#fff;font:700 15px/1 var(--display);text-decoration:none;text-shadow:var(--ink-shadow);white-space:nowrap;cursor:pointer;transition:scale .12s}
+/* The paper shell has 20px of clear margin round its 72px corners (92px slices). Drawn --shell wide, it is pushed
+   out by that margin (--shell * 20 / 92), so the pink fills the button's box and matches a ghost button's height. */
+.btn-paper{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border:4px solid transparent;border-image:url("assets/gallery/ui_shells/primary_button_rounded_rect_paper_v1.webp") 92 fill / var(--shell,20px) / calc(var(--shell,20px) * 20 / 92) stretch;background:none;color:#fff;font:700 15px/1 var(--display);text-decoration:none;text-shadow:var(--ink-shadow);white-space:nowrap;cursor:pointer;transition:scale .12s}
 .btn-paper:hover{color:#fff;filter:brightness(1.03) saturate(1.06)}
 .btn-paper:active,.btn-ghost:active,.icon-btn:active{scale:.97}
 .btn-paper:disabled{opacity:.45;filter:none;cursor:not-allowed}
-.btn-paper.big{height:50px;border-image-width:22px;font-size:17px}
+.btn-paper.big{--shell:22px;height:50px;font-size:17px}
 .btn-paper.tall{height:46px}
 .btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;padding:0 16px;border:1.5px solid var(--pink-edge);border-radius:999px;background:var(--card);color:var(--pink-text);font:700 14px/1 var(--display);text-decoration:none;white-space:nowrap;cursor:pointer;transition:scale .12s}
 .btn-ghost:hover{background:#fff6f8;color:var(--pink-text)}
@@ -60,14 +64,16 @@ p{margin:0}
 .icon-btn{display:grid;place-items:center;flex:none;width:44px;height:44px;padding:0;border:1.5px solid var(--pink-edge);border-radius:50%;background:var(--card);color:var(--pink-text);font:700 16px/1 var(--display);text-decoration:none;cursor:pointer}
 .icon-btn:hover{background:#fff6f8;color:var(--pink-text)}
 .icon-btn.small{width:40px;height:40px}
-.icon-btn svg,.search-pill svg,.square-btn svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn svg,.search-pill svg,.square-btn svg,.create-reset svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 
 /* Fields */
 label{display:flex;flex-direction:column;gap:6px;font:700 14px/1.3 var(--body);color:var(--ink)}
-input,textarea{width:100%;height:44px;margin:0;padding:0 14px;border:1.5px solid var(--pink-field);border-radius:14px;background:#fff;font:600 15px var(--body);color:var(--cocoa)}
+input,select,textarea{width:100%;height:44px;margin:0;padding:0 14px;border:1.5px solid var(--pink-field);border-radius:14px;background:#fff;font:600 15px var(--body);color:var(--cocoa)}
 textarea{height:auto;padding:10px 14px;resize:none}
+/* A dropdown is a field with the pink caret of the date picker. */
+select{padding-right:38px;appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1.5 1.5 6 6l4.5-4.5' fill='none' stroke='%23c2336a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center / 12px 8px;cursor:pointer}
 input::placeholder,textarea::placeholder{color:var(--muted);opacity:1}
-input:focus,textarea:focus{border-color:var(--pink);box-shadow:0 0 0 4px rgba(232,94,124,.18);outline:0}
+input:focus,select:focus,textarea:focus{border-color:var(--pink);box-shadow:0 0 0 4px rgba(232,94,124,.18);outline:0}
 input:user-invalid{border-color:#d4486a;background:#fff7f8}
 input[type="search"]{appearance:none}
 input[type="search"]::-webkit-search-cancel-button{appearance:none}
@@ -107,7 +113,8 @@ input:user-invalid + .field-error{display:block}
 .table-card > .empty{margin:12px;border:0}
 .slot-empty{grid-column:1 / -1;margin:0;font:600 14px/1.4 var(--body);color:var(--muted)}
 .sticky-note{padding:10px 12px;border-radius:4px 4px 14px 4px;background:#fff4cf;color:#5a3d10;font:700 14px/1.4 var(--body);box-shadow:0 6px 12px -10px rgba(79,47,46,.5)}
-.scrim{position:fixed;inset:0;z-index:50;display:none;padding:0;border:0;background:rgba(79,47,46,.34);cursor:default}
+/* The veil behind sheets and the phone menu is the site's drawer backdrop: light, warm, softly blurred. */
+.scrim{position:fixed;inset:0;z-index:50;display:none;padding:0;border:0;background:rgba(79,56,46,.22);backdrop-filter:blur(2px);cursor:default}
 .sale-cloud{display:grid;place-items:center;flex:none;width:56px;height:44px;background:url("assets/services/signature-shared/decor/signature_sale_cloud.svg") center / contain no-repeat;color:#fff;font:800 13px/1 var(--body);text-shadow:0 1px 0 #c73a64;rotate:-8deg}
 
 /* Segmented tabs: a thin pink frame, the chosen segment is the pink paper pill. */
@@ -190,16 +197,15 @@ input:user-invalid + .field-error{display:block}
 .side-count{min-width:24px;height:22px;padding:0 7px;border-radius:999px;background:var(--pink-soft);color:var(--pink-text);font:800 13px/22px var(--body);text-align:center}
 .side-link[aria-current] .side-count{background:#fff}
 /* Tạo lịch is the menu's pink paper button, like the site's "Đặt lịch hẹn": the same section link, not a second button. */
-.side-link.side-cta{align-self:center;justify-content:center;width:100%;max-width:216px;height:54px;min-height:0;margin-top:8px;padding:0;border:4px solid transparent;border-image:url("assets/gallery/ui_shells/primary_button_rounded_rect_paper_v1.webp") 92 fill / 20px / 0 stretch;background:none;color:#fff;text-shadow:var(--ink-shadow)}
+.side-link.side-cta{align-self:center;justify-content:center;width:100%;max-width:216px;height:54px;min-height:0;margin-top:8px;padding:0;border:4px solid transparent;border-image:url("assets/gallery/ui_shells/primary_button_rounded_rect_paper_v1.webp") 92 fill / var(--shell,20px) / calc(var(--shell,20px) * 20 / 92) stretch;background:none;color:#fff;text-shadow:var(--ink-shadow)}
 .side-cta .side-label{flex:none}
 .side-link.side-cta:hover,.side-link.side-cta[aria-current]{background:none;color:#fff;filter:brightness(1.03) saturate(1.08)}
-.side-foot{position:relative;display:grid;margin:auto -16px 0;padding-top:34px}
+.side-foot{position:relative;display:grid;margin:auto -16px 0;padding-top:12px}
 .side-wave{display:block;width:100%;height:36px;margin-bottom:-1px;overflow:visible}
 .side-wave-fill{fill:#fdf0ef}
 .side-wave-edge,.side-wave-stitch{fill:none;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
 .side-wave-edge{stroke:#f0bfcb;stroke-width:2}
 .side-wave-stitch{stroke:#eeb0c1;stroke-width:1.6;stroke-dasharray:9 7}
-.side-cat{position:absolute;right:10px;top:-10px;width:88px;pointer-events:none}
 .side-foot-rows{display:grid;gap:12px;padding:16px 20px 22px;background:#fdf0ef}
 .side-account,.logout{display:grid;grid-template-columns:38px minmax(0,1fr);align-items:center;gap:12px}
 .avatar{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:50%;background:var(--pink-soft);color:var(--pink-text);font:800 14px var(--display)}
@@ -239,11 +245,19 @@ input:user-invalid + .field-error{display:block}
 .hello{display:flex;flex-direction:column;gap:12px;margin:3px;padding:0 6px;border:26px solid transparent;border-image:url("assets/admin/hello-shell.svg") 44 / 30px / 3px round;background-origin:border-box;background-color:#fff5f6;background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.3) 0 22px,transparent 22px 44px),repeating-linear-gradient(90deg,rgba(247,178,196,.3) 0 22px,transparent 22px 44px)}
 .hello .eyebrow{margin:0}
 .hello h2{font-size:40px;line-height:1}
-.hello-stickers{display:grid;grid-template-columns:repeat(6,minmax(max-content,1fr));gap:8px;margin-top:auto}
-.sticker{display:flex;flex-direction:column;justify-content:center;gap:5px;min-height:58px;padding:9px 12px;border:1.5px dashed rgba(232,94,124,.5);border-radius:14px;background:var(--card);color:var(--ink);font:600 13px/1.15 var(--body)}
-.sticker b{font:700 19px/1 var(--display);color:var(--cocoa)}
+/* The stat tiles are the home page's pinned slot notes: peach paper, an orange pin, each tilted a little, the
+   number in the typewriter face and its label in Quicksand. */
+.hello-stickers{display:grid;grid-template-columns:repeat(6,minmax(max-content,1fr));gap:10px;margin-top:auto;padding-top:6px}
+.sticker{position:relative;display:flex;flex-direction:column;justify-content:center;gap:6px;min-height:58px;padding:13px 12px 9px;background:#fde9d9;box-shadow:0 12px 24px -14px rgba(224,136,95,.7);color:#5c3a2d;font:700 13px/1.05 var(--display);rotate:-2.2deg}
+.sticker:nth-child(6n+2){rotate:1.7deg}
+.sticker:nth-child(6n+3){rotate:1.2deg}
+.sticker:nth-child(6n+4){rotate:-1.5deg}
+.sticker:nth-child(6n+5){rotate:1.4deg}
+.sticker:nth-child(6n){rotate:-1.8deg}
+.sticker::before{content:"";position:absolute;top:-5px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#e0885f;box-shadow:0 3px 5px rgba(43,36,64,.3)}
+.sticker b{font:600 17px/1 ui-monospace,Menlo,Consolas,monospace;color:#7d4b39}
 .sticker b,.sticker span{white-space:nowrap}
-.sticker-skeleton{border-style:solid;border-color:transparent;background:linear-gradient(90deg,#f6ece8,#fbf3f0,#f6ece8)}
+.sticker-skeleton{background:linear-gradient(90deg,#fbe3d2,#fdeee2,#fbe3d2)}
 .next-card{display:flex;flex-direction:column;gap:8px;min-height:200px;margin:3px;padding:0 8px 2px;border:26px solid transparent;border-image:url("assets/admin/card-shell-yellow.svg") 44 fill / 30px / 3px round}
 .next-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:-2px}
 .next-flag{padding:5px 10px;border-radius:999px;background:var(--pink);color:#fff;font:800 13px/1 var(--body);white-space:nowrap}
@@ -341,7 +355,6 @@ input:user-invalid + .field-error{display:block}
 
 /* The detail drawer: a card beside the table here, an overlay on tablets, a bottom sheet on phones. */
 .detail-drawer{position:relative;scroll-margin:22px 0 16px;display:flex;flex-direction:column;gap:14px;flex:none;width:447px;padding:20px 22px;border:1.5px solid rgba(232,94,124,.35);border-radius:24px;background:var(--card);box-shadow:0 24px 50px -30px rgba(79,47,46,.45)}
-.dd-bow{position:absolute;top:-22px;right:34px;width:58px;rotate:12deg;pointer-events:none}
 .dd-top{display:flex;align-items:center;gap:8px}
 .ref-pill{padding:5px 10px;border-radius:999px;background:var(--pink-soft);color:var(--pink-text);font:600 15px/1 var(--hand)}
 .dd-close{display:grid;place-items:center;flex:none;width:36px;height:36px;margin-left:auto;padding:0;border:1.5px solid var(--pink-field);border-radius:50%;background:#fff;color:var(--muted)}
@@ -493,12 +506,15 @@ input:user-invalid + .field-error{display:block}
 
 /* ============ Ưu đãi ============ */
 .discount-toolbar{position:sticky;top:0;z-index:5;display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:12px 14px;border:1.5px dashed var(--dash);border-radius:20px;background:var(--card)}
-.discount-toolbar .search-pill{width:260px;height:42px}
-.discount-toolbar-note{margin-left:auto;color:var(--muted);font:600 14px var(--body)}
-.discount-toolbar-note strong{color:var(--cocoa)}
+.discount-toolbar .search-pill{width:220px;height:42px}
+/* One Xác nhận for every edited row. Both buttons keep their place while idle, so the first edit moves nothing. */
+.discount-save{display:flex;gap:10px;margin-left:auto}
+.discount-save button{height:42px}
+.discount-save .btn-paper{min-width:136px}
+.discount-save .btn-ghost:disabled{visibility:hidden}
 .discount-table{padding-bottom:10px}
-.disc-head,.discount-service-card{display:grid;grid-template-columns:minmax(0,1.6fr) 80px 150px 110px minmax(0,1fr) 150px;gap:14px}
-.disc-head{padding:12px 20px}
+.disc-head,.discount-service-card{display:grid;grid-template-columns:minmax(0,1.6fr) 80px 150px 110px minmax(0,1fr);gap:14px}
+.disc-head{padding:12px 22px}
 .disc-head span:nth-child(5){text-align:right}
 .disc-group-title{padding:14px 20px 6px;font-size:16px}
 .disc-group-title span{color:var(--muted);font:700 13px var(--body)}
@@ -515,15 +531,10 @@ input:user-invalid + .field-error{display:block}
 .discount-percent-input::-webkit-inner-spin-button,.discount-original-input::-webkit-inner-spin-button{margin:0;appearance:none}
 .discount-input-shell b,.discount-price-input-shell b{position:absolute;right:12px;top:50%;color:var(--muted);font:700 15px var(--body);pointer-events:none;translate:0 -50%}
 .is-dirty .discount-percent-input{border-color:var(--pink);box-shadow:0 0 0 4px rgba(232,94,124,.16)}
-.discount-price-preview{text-align:right}
+.discount-price-preview{display:flex;align-items:center;justify-content:flex-end;gap:8px;text-align:right}
 .discount-preview-price{display:block;font:700 18px var(--display);color:var(--pink-deep)}
 .discount-original-price{display:none;color:var(--muted);font:600 13px var(--body);text-decoration:line-through}
 .discount-original-price.is-crossed,.is-dirty .discount-original-price{display:block}
-.discount-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px}
-.discount-tag{color:var(--pink-deep);font:800 13px/1.3 var(--body)}
-.is-dirty .discount-tag{color:#80530d}
-.discount-confirm{flex:none;height:38px;padding:0 14px;border-image-width:18px;font-size:14px;text-shadow:0 1px 0 #c73a64}
-.discount-confirm:disabled{opacity:.4}
 .discount-sheet{display:none}
 
 /* ============ Khách hàng ============ */
@@ -562,13 +573,11 @@ input:user-invalid + .field-error{display:block}
 .confirm{width:420px;max-width:calc(100vw - 32px);padding:30px 28px 24px;overflow:visible;border:1.5px dashed rgba(232,94,124,.5);border-radius:28px;background:var(--card);color:var(--cocoa);text-align:center;box-shadow:0 30px 70px -20px rgba(79,47,46,.55)}
 .confirm::backdrop{background:rgba(79,47,46,.28)}
 .confirm form{display:flex;flex-direction:column;gap:12px}
-.confirm .eyebrow{margin:12px 0 0}
-.confirm h3{font-size:24px;line-height:1.2}
+.confirm .eyebrow{margin:0}
+.confirm h3{font-size:24px;line-height:1.2;text-wrap:balance}
 .confirm-text{color:var(--ink);font:600 15px/1.5 var(--body)}
-.confirm-cat{position:absolute;top:-76px;left:50%;width:136px;translate:-50% 0;pointer-events:none}
-.confirm-actions{display:flex;gap:10px;margin-top:6px}
-.confirm-actions .btn-ghost{flex:1}
-.confirm-actions .btn-paper{flex:1.3}
+.confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.confirm-actions > *{padding:0 8px}
 
 /* ============ Date picker (admin-datepicker.js) ============ */
 .dp-wrap{position:relative;display:block}
@@ -608,7 +617,6 @@ input:user-invalid + .field-error{display:block}
   .customer-detail.sheet{width:min(400px,100vw);padding:26px 24px;border:0;border-left:1.5px solid rgba(232,94,124,.35);border-image:none;background:#f6f0fc;box-shadow:0 24px 50px -30px rgba(79,47,46,.45)}
   .cd-cat{right:64px;top:8px}
   .cd-close{display:grid;position:absolute;right:16px;top:16px}
-  .dd-bow{display:none}
   .hello-stickers{display:flex;flex-wrap:wrap}
   .sticker{flex:1 1 calc(30% - 8px)}
   .sticker:nth-child(4){flex-basis:calc(36% - 8px)}
@@ -623,11 +631,11 @@ input:user-invalid + .field-error{display:block}
 @media (max-width:1199px){
   .side{align-items:center;gap:12px;width:76px;padding:20px 12px 16px}
   .side-brand img{width:52px}
-  .side-brand span,.side-head,.side-label,.side-count,.side-arrow,.side-who,.side-cat,.side-wave,.logout-label{display:none}
+  .side-brand span,.side-head,.side-label,.side-count,.side-arrow,.side-who,.side-wave,.logout-label{display:none}
   .side-nav{align-items:center;gap:10px}
   .side-link{justify-content:center;width:46px;min-height:46px;padding:0;border-radius:14px}
   .side-link svg{display:block}
-  .side-link.side-cta{width:46px;height:46px;margin-top:4px;border-image-width:16px}
+  .side-link.side-cta{--shell:16px;width:46px;height:46px;margin-top:4px}
   .side-foot{margin:auto 0 0;padding-top:0}
   .side-foot-rows{justify-items:center;gap:8px;padding:0;background:none}
   .side-account,.logout{grid-template-columns:38px;gap:0}
@@ -650,12 +658,11 @@ input:user-invalid + .field-error{display:block}
   .wk-dow{font-size:12px;letter-spacing:0}
   .appt-head,.appt-row{grid-template-columns:84px minmax(0,1fr) minmax(0,1.4fr) 88px 116px}
   .appt-head span:nth-child(4),.ar-duration{display:none}
-  .disc-head,.discount-service-card{grid-template-columns:minmax(0,1.5fr) 118px 84px minmax(0,1fr) 96px;gap:10px}
-  .disc-head span:nth-child(2),.discount-duration,.discount-tag{display:none}
+  .disc-head,.discount-service-card{grid-template-columns:minmax(0,1.5fr) 118px 84px minmax(0,1fr);gap:10px}
+  .disc-head span:nth-child(2),.discount-duration{display:none}
   .disc-head span:nth-child(5){text-align:right}
   .cust-head,.cust-row{grid-template-columns:34px minmax(0,1.2fr) 110px minmax(0,1fr) 120px}
   .cust-head span:nth-child(3),.cust-head span:nth-child(6),.cust-visits,.cust-total{display:none}
-  .discount-toolbar-note{flex-basis:100%;margin-left:0}
   .login-intro{padding:48px 36px}
   .login-hero{font-size:40px}
 }
@@ -684,7 +691,7 @@ input:user-invalid + .field-error{display:block}
   .side-brand{display:none}
   .side-head{display:flex;margin-bottom:8px}
   .side-close{display:grid}
-  .side-label,.side-arrow,.side-who,.side-cat,.side-wave,.logout-label{display:block}
+  .side-label,.side-arrow,.side-who,.side-wave,.logout-label{display:block}
   .side-link svg{display:none}
   .side-nav{align-items:stretch;gap:9px}
   .side-link{justify-content:flex-start;width:auto;min-height:56px;padding:0 20px;border-radius:20px;font-size:16px}
@@ -692,9 +699,8 @@ input:user-invalid + .field-error{display:block}
   .side-link[aria-current] .side-count{background:none}
   .side-count-sale::after{content:" đang giảm"}
   /* Fixed 4:1 size so the paper shell never stretches with the menu width. */
-  .side-link.side-cta{justify-content:center;width:240px;max-width:100%;height:60px;min-height:0;margin-top:8px;padding:0;border-image-width:20px;font-size:16px}
-  .side-foot{margin:auto -16px 0;padding-top:40px}
-  .side-cat{right:12px;top:-8px;width:96px}
+  .side-link.side-cta{justify-content:center;width:240px;max-width:100%;height:60px;min-height:0;margin-top:8px;padding:0;--shell:20px;font-size:16px}
+  .side-foot{margin:auto -16px 0;padding-top:16px}
   .side-foot-rows{justify-items:stretch;gap:14px;padding:20px 26px max(26px,env(safe-area-inset-bottom));background:#fdf0ef}
   .side-account,.logout{grid-template-columns:38px minmax(0,1fr);gap:12px}
   .side-account .avatar,.logout-icon{border:0;box-shadow:0 8px 18px -14px rgba(121,62,78,.6)}
@@ -705,6 +711,9 @@ input:user-invalid + .field-error{display:block}
   .app-body > .message{margin:0 16px}
   .view-head{align-items:center;gap:10px;min-height:56px}
   .view-title h1{font-size:24px}
+  /* Tạo lịch: the step-back arrow, the title and a round clear button share one line. */
+  #sec-create .view-title{min-width:0}
+  .create-reset{flex:none;width:44px;height:44px;padding:0;border-color:var(--pink-field);color:var(--pink-deep)}
   .view-title .eyebrow{margin-bottom:4px}
   .icon-btn{border-color:var(--pink-field);color:var(--pink-deep)}
   .icon-btn svg{width:20px;height:20px;stroke-width:2}
@@ -731,7 +740,8 @@ input:user-invalid + .field-error{display:block}
   .sticky-copy,.block-selection{flex:1;min-width:0}
   .sticky-total{display:block;color:var(--pink-deep);font:700 18px/1.1 var(--hand)}
   .sticky-copy span,.block-selection > span{color:var(--ink);font:600 13px var(--body)}
-  .btn-paper.tall{height:48px;padding:0 18px}
+  .btn-paper.tall,.btn-ghost.tall{height:48px}
+  .btn-paper.tall{padding:0 18px}
 
   /* Tổng quan */
   .m-head{display:flex;align-items:center;justify-content:space-between;height:56px}
@@ -743,10 +753,10 @@ input:user-invalid + .field-error{display:block}
   .hello{gap:8px;padding:0;border-width:22px;border-image-width:26px;background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.3) 0 16px,transparent 16px 32px),repeating-linear-gradient(90deg,rgba(247,178,196,.3) 0 16px,transparent 16px 32px)}
   .hello h2{font-size:28px;line-height:1.05}
   .shell-card{margin:0;padding:0;border-width:22px;border-radius:0;border-image-width:26px}
-  .hello-stickers{gap:6px;margin-top:4px}
-  .sticker{min-width:0;min-height:54px;padding:8px 10px;border-radius:12px}
+  .hello-stickers{gap:9px 8px;margin-top:4px}
+  .sticker{min-width:0;min-height:54px;padding:12px 9px 8px}
   .sticker span{white-space:normal}
-  .sticker b{font-size:17px}
+  .sticker b{font-size:15px}
   .next-card{position:relative;gap:6px;min-height:0;margin:0;padding:14px 16px;border:0;border-image:none;border-radius:20px;background:#fff4cf;box-shadow:0 10px 20px -14px rgba(79,47,46,.5)}
   .next-card::before{content:"";position:absolute;top:-6px;left:50%;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff9fb8,#d9476d)}
   .next-top{margin:0}
@@ -755,7 +765,7 @@ input:user-invalid + .field-error{display:block}
   .next-name{margin:0;font-size:19px}
   .next-actions{margin-top:4px}
   .next-actions .btn-ghost{flex:1;height:47px;font-size:15px}
-  .today-card{gap:10px;padding:0;border:0;border-radius:0;background:none}
+  .today-card{gap:12px;padding:14px 12px 12px}
   .card-head h2{font-size:19px}
   .timeline,.timeline.is-empty{display:flex;flex-direction:column;gap:8px;height:auto;margin:0}
   .tl-hour,.tl-block,.tl-now,.tl-price{display:none}
@@ -804,7 +814,7 @@ input:user-invalid + .field-error{display:block}
   .sticky-note{box-shadow:none}
   .dd-photo{width:96px;height:72px;rotate:none}
   .dd-actions{order:2;margin-top:auto}
-  .dd-actions .btn-paper{height:52px;border-image-width:22px;font-size:16px}
+  .dd-actions .btn-paper{--shell:22px;height:52px;font-size:16px}
   .dd-actions .btn-ghost{height:46px}
   .reschedule-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;padding:12px;background:none}
   .rs-head b{font-size:15px}
@@ -846,13 +856,6 @@ input:user-invalid + .field-error{display:block}
   .warn{padding:10px 12px;border-radius:14px;font-size:13px}
   .blocker-grid{gap:16px;padding-bottom:84px}
   .block-card{gap:12px;padding:0;border:0;border-radius:0;background:none}
-  .day-strip{display:flex;gap:6px;margin-right:-16px;padding-right:16px;overflow-x:auto;scrollbar-width:none}
-  .day-chip{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;gap:3px;width:55px;height:65px;padding:0;border:1.5px solid rgba(232,94,124,.25);border-radius:16px;background:var(--card);color:var(--cocoa)}
-  .day-chip span{font:800 12px/1 var(--body)}
-  .day-chip b{font:700 18px/1 var(--display)}
-  .day-chip.is-today{border-color:var(--pink)}
-  .day-chip.is-blocked{background:repeating-linear-gradient(135deg,#f7eef0 0 5px,#fde4eb 5px 10px)}
-  .day-chip[aria-pressed="true"]{border-color:#d9476d;background:var(--pink);color:#fff}
   .block-controls{grid-template-columns:minmax(0,1fr);gap:12px}
   #block-reason{height:46px}
   .all-day,.all-day[aria-pressed="true"]{justify-content:space-between;width:100%;height:44px;padding:0;border:0;border-radius:0;background:none;color:var(--cocoa);font:700 15px var(--body)}
@@ -871,7 +874,7 @@ input:user-invalid + .field-error{display:block}
   .disc-group{display:flex;flex-direction:column;gap:8px}
   .disc-group-title{padding:6px 0 0}
   .discount-service-card{grid-template-columns:minmax(0,1fr) auto;gap:10px;margin:0;padding:10px 14px;border-radius:16px;cursor:pointer}
-  .discount-service-card > :not(.discount-service-identity,.discount-price-preview),.discount-service-identity .sale-cloud,.discount-original-price,.discount-original-price.is-crossed,.is-dirty .discount-original-price{display:none}
+  .discount-service-card > :not(.discount-service-identity,.discount-price-preview),.discount-price-preview .sale-cloud,.discount-original-price,.discount-original-price.is-crossed,.is-dirty .discount-original-price{display:none}
   .discount-preview-price{font-size:16px}
   .discount-sheet{display:flex;gap:14px}
   .ds-head{display:flex;align-items:flex-start;gap:10px}
@@ -897,7 +900,7 @@ input:user-invalid + .field-error{display:block}
   .ds-new b{color:var(--pink-deep);font:700 28px var(--hand)}
   .ds-actions{display:flex;gap:10px}
   .ds-actions .btn-ghost{flex:1;height:50px;font-size:15px}
-  .ds-actions .btn-paper{flex:1.6;height:50px;border-image-width:22px;font-size:16px}
+  .ds-actions .btn-paper{--shell:22px;flex:1.6;height:50px;font-size:16px}
 
   /* Khách hàng */
   #sec-customers .view-head{flex-wrap:wrap}
