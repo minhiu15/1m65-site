@@ -146,16 +146,27 @@ function setStage(name){
 // The owner's ticket art lives in assets/booking/confirmation (the decorated wide ticket, plus the portrait
 // shell and the cat, bow, hearts, flower, tape and close button that dress it on phones, and the row icons);
 // titles, booking data, the button, 1M65 and the barcode stay live.
-// Hand-drawn, like the ticket's pink outline: a slow wobble plus small bumps along the edges (both smooth
-// displacements, so strokes never tear), then the edge is re-sharpened (resampling had softened it), so the
-// stub's crown and 1M65 stay crisp and solid.
-const TICKET_HAND_FILTER='<svg class="booking-ticket__filters" width="0" height="0" aria-hidden="true" focusable="false"><filter id="booking-ticket-hand" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="wobble"/><feDisplacementMap in="SourceGraphic" in2="wobble" scale="2.5" xChannelSelector="R" yChannelSelector="G" result="wobbled"/><feTurbulence type="fractalNoise" baseFrequency="0.16" numOctaves="1" seed="3" result="bumps"/><feDisplacementMap in="wobbled" in2="bumps" scale="1.1" xChannelSelector="R" yChannelSelector="G" result="bumpy"/><feComponentTransfer in="bumpy"><feFuncA type="linear" slope="2.4" intercept="-.55"/></feComponentTransfer></filter></svg>';
+// The stub's crown and 1M65 are drawn in the ticket outline's watercolour manner: their curves are drawn by hand,
+// a stronger line over a pale wash, offset and softened (the small print below gets the same wash as a shadow).
+// No wobble filter: at their size it frayed the edges on phones and kinked the curves.
+const TICKET_HAND_FILTER='<svg class="booking-ticket__filters" width="0" height="0" aria-hidden="true" focusable="false"><filter id="booking-ticket-wash" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation=".35"/></filter></svg>';
+// One brush line per path, drawn twice: the wash under, the line over (dots are the crown's tips).
+function inkSvg(className,viewBox,paths,dots){
+  const strokes=paths.map(function(path){return '<path d="'+path+'"/>';}).join("");
+  return '<svg class="'+className+'" viewBox="'+viewBox+'" aria-hidden="true"><g class="booking-ticket__ink-wash" transform="translate(.7 .5)">'+strokes+'</g><g class="booking-ticket__ink-line">'+strokes+(dots||[]).map(function(dot){return '<circle cx="'+dot[0]+'" cy="'+dot[1]+'" r="2.3"/>';}).join("")+'</g></svg>';
+}
+const TICKET_CROWN=["M9 37C8.2 29 6.4 20 5 13C10.5 16.5 15.2 20.4 19.2 24.2C23.4 17.6 27.6 11.6 32 6C36.2 11.6 40.6 17.6 44.8 24.2C48.8 20.4 53.5 16.5 59 13C57.6 20 55.8 29 55 37C40.4 35.7 23.6 35.7 9 37Z","M10.5 41.6C22 40.5 41.5 40.7 53.5 41.7"];
+const TICKET_WORDMARK=[
+  "M5 15.5C8 14 10.4 11.6 12.4 8.6C12.7 17.8 12.6 27 12.9 36",
+  "M21 36C20.6 25 21 15.6 22.6 10C23.4 7.4 25.2 7.6 26.2 10C28.2 15.2 30.2 20.8 32.2 26.2C34.2 20.8 36.2 15.2 38.2 10C39.2 7.6 41 7.4 41.8 10C43.4 15.6 43.9 25 43.8 36",
+  "M66.2 10.4C60.4 8.6 54.4 13.2 53.4 21.8C52.6 29.6 55.8 36.4 61.4 36.2C66.4 36 68.8 31.8 68.4 27.6C68 23.2 64.4 20.6 60.6 21.2C57.2 21.8 54.8 24.4 53.8 27.4",
+  "M92.4 9.4C87.4 8.8 82.6 8.9 78.3 9.4C77.8 13 77.3 16.6 76.8 20.6C80.4 18.6 85.4 18.4 89 21C92.8 23.8 92.9 31 89.2 34.2C85.6 37.3 79.8 37 76.2 34.2"
+];
 const TICKET_ART="assets/booking/confirmation/";
 const TICKET_ICONS={
   download:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></svg>',
   calendar:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h2M12 14h2M16 14h.5M8 17h2M12 17h2"/></svg>',
-  // Drawn as if by hand: each side bows a little, the base line wanders, the tips are slightly uneven blobs.
-  crown:'<svg class="booking-ticket__crown" viewBox="0 0 64 44" aria-hidden="true"><path d="M8.6 36.2Q6.4 24.5 4.3 12.4Q11.8 17.4 19.2 23.6Q25.2 13.8 32.2 5.4Q38.3 14.6 44.6 23.9Q52.2 17.9 59.6 12.2Q58.4 24.4 55.8 36.1Q32.4 34.4 8.6 36.2z"/><path d="M9.4 41.3Q21 40.1 32.3 40.9T54.8 40.5"/><path d="M1.3 11.1Q1.6 8.2 4.3 8.2Q7.2 8.5 7 11.3Q6.6 13.9 3.9 13.8Q1.2 13.5 1.3 11.1z"/><path d="M29.2 4.2Q29.5 1.1 32.3 1.3Q35.1 1.5 34.9 4.4Q34.5 7.1 31.8 6.9Q29.1 6.6 29.2 4.2z"/><path d="M57.1 11.3Q57.2 8.5 60 8.4Q62.8 8.6 62.7 11.2Q62.4 13.9 59.6 13.9Q57 13.7 57.1 11.3z"/></svg>'
+  crown:inkSvg("booking-ticket__crown","-2 -1 68 46",TICKET_CROWN,[[5,11.2],[32,4],[59,11.2]])
 };
 const TICKET_HEART="M0 6.5C-3 4-8 .8-8-2.8C-8-5.6-5.8-7.4-3.6-7.4C-2-7.4-.6-6.5 0-5.2C.6-6.5 2-7.4 3.6-7.4C5.8-7.4 8-5.6 8-2.8C8 .8 3 4 0 6.5Z";
 const TICKET_STAR="M0-7C.6-2.2 2.2-.6 7 0C2.2.6.6 2.2 0 7C-.6 2.2-2.2.6-7 0C-2.2-.6-.6-2.2 0-7Z";
@@ -171,7 +182,7 @@ function barcodeSvg(code){
 // The bill (bill.js: the QR, the "Phiếu đặt lịch" picture, its download) loads while the booking is sent; the
 // stub keeps the drawn barcode and the ticket skips its download button if it cannot load.
 let billLib=null,billLoading=null;
-function loadBill(){return billLoading||(billLoading=import("./bill.js?v=20260929-9").then(function(lib){billLib=lib;return lib;},function(){billLoading=null;return null;}));}
+function loadBill(){return billLoading||(billLoading=import("./bill.js?v=20260929-12").then(function(lib){billLib=lib;return lib;},function(){billLoading=null;return null;}));}
 function ticketBill(){
   const services=selectedServices().map(function(service){return {id:service.id,name:service.name,price:price(service)};});
   return {reference:state.reference,name:state.name.trim(),phone:billLib.maskPhone(vnPhone(state.phone)),note:state.note.trim(),startAt:state.slot,status:"confirmed",services:services,total:totals().price,url:billLib.billUrl(state.reference,state.billKey)};
@@ -194,7 +205,7 @@ function ticketHtml(){
     +'</dl>'
     +'<div class="booking-ticket__actions"><button class="booking-ticket__cta button-primary" type="button" data-booking-manage>'+TICKET_ICONS.calendar+'Xem lịch của bạn</button>'
     +(billLib?'<button class="booking-ticket__download" type="button" data-booking-download>'+TICKET_ICONS.download+'Tải phiếu</button>':'')+'</div></div>'
-    +'<div class="booking-ticket__stub" aria-hidden="true">'+TICKET_HAND_FILTER+'<div class="booking-ticket__brand">'+TICKET_ICONS.crown+'<strong>1M65'+ticketHeart("booking-ticket__brand-heart")+'</strong><small>NAIL - EYE - SHA</small></div>'
+    +'<div class="booking-ticket__stub" aria-hidden="true">'+TICKET_HAND_FILTER+'<div class="booking-ticket__brand">'+TICKET_ICONS.crown+'<strong>'+inkSvg("booking-ticket__wordmark","0 3 98 38",TICKET_WORDMARK)+ticketHeart("booking-ticket__brand-heart")+'</strong><small>NAIL - EYE - SHAMPOO</small></div>'
     +'<div class="booking-ticket__scan">'+(billLib?billLib.qrSvg(billLib.billUrl(state.reference,state.billKey),"booking-ticket__qr"):barcodeSvg(state.reference))+'</div></div></div>';
 }
 function showTicket(){

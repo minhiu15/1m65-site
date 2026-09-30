@@ -9,7 +9,7 @@ export const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/bookin
 const ART = new URL("assets/booking/", import.meta.url).href;
 const TZ = "Asia/Ho_Chi_Minh";
 const STORE = [
-  ["store", "1M65 Nail - Lash - Spa"],
+  ["store", "Nails, Lashes, Shampoo"],
   ["pin", "Địa chỉ: Lý Thái Tổ, Đại Phước, Đồng Nai"],
   ["clock", "Giờ mở cửa: 09:00 - 18:00 (tất cả các ngày)"]
 ];
@@ -357,7 +357,7 @@ export async function renderBill(bill, scale) {
   ctx.fillText("1M65", 842, 326);
   heart(ctx, 938, 250, 22, true);
   type(ctx, "800 17px " + BODY, INK, "center");
-  ctx.fillText("NAIL - EYE - SHA", 842, 354);
+  ctx.fillText("NAIL - EYE - SHAMPOO", 842, 354);
   type(ctx, "700 31px " + HAND, NAVY);
   ctx.fillText("Cảm ơn bạn đã lựa chọn 1M65!", headingLayout.textX, 356);
   type(ctx, "500 22px " + BODY, "#4b566a");

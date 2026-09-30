@@ -8339,14 +8339,22 @@ main,
   color: #4a2a26;
 }
 .booking-ticket__brand { display: grid; justify-items: center; gap: .5cqw; }
-.booking-ticket__crown { width: 8.4cqw; height: auto; fill: none; stroke: #4a2a26; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
-.booking-ticket__crown path:nth-child(n+3) { fill: #4a2a26; stroke-width: 1; }
+/* The crown and 1M65 drawn like the ticket's watercolour outline, in the stub's cocoa ink (booking-v2.js inkSvg):
+   hand-drawn curves, a stronger line over a pale wash, offset and softened. */
+.booking-ticket__crown { width: 8.4cqw; }
+.booking-ticket__crown,
+.booking-ticket__wordmark { display: block; height: auto; fill: none; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+.booking-ticket__wordmark { width: 17cqw; }
+.booking-ticket__ink-wash { stroke: #d4bdb3; stroke-width: 5.4; opacity: .7; filter: url(#booking-ticket-wash); }
+.booking-ticket__ink-line { stroke: #4a2a26; stroke-width: 3.1; opacity: .92; }
+.booking-ticket__ink-line circle { fill: #4a2a26; stroke: none; }
+.booking-ticket__wordmark .booking-ticket__ink-wash { stroke-width: 5.2; }
+.booking-ticket__wordmark .booking-ticket__ink-line { stroke-width: 2.9; }
 /* The crown and the lettering wobble a little, as if drawn by hand (the SVG filter is in the stub's markup). */
 .booking-ticket__filters { position: absolute; width: 0; height: 0; }
-.booking-ticket__brand :is(.booking-ticket__crown, strong, small) { filter: url(#booking-ticket-hand); }
-.booking-ticket__brand strong { position: relative; font: 700 7.2cqw/1 var(--font-signature-display); letter-spacing: -.02em; }
+.booking-ticket__brand strong { position: relative; display: block; }
 .booking-ticket__brand-heart { position: absolute; top: -.8cqw; right: -2.4cqw; width: 2cqw; transform: rotate(14deg); }
-.booking-ticket__brand small { font: 800 max(9px, 1.45cqw)/1 var(--font-signature-body); letter-spacing: .12em; }
+.booking-ticket__brand small { font: 800 max(9px, 1.3cqw)/1 var(--font-signature-body); letter-spacing: .06em; white-space: nowrap; text-shadow: .06em .05em .08em #d4bdb3; }
 /* The barcode fills the lower half, centred in it; the divider sits on the half's top edge. */
 .booking-ticket__scan { position: relative; display: grid; align-self: stretch; align-content: center; justify-items: center; width: 100%; }
 /* The divider is as long as the barcode and on the same centre line, clear of the perforation and the nips. */
@@ -8441,7 +8449,11 @@ main,
   .booking-ticket__stub { grid-template-columns: 1fr 1fr; grid-template-rows: none; align-items: center; gap: 0; padding: 2.8cqw 7cqw 8.1cqw; }
   .booking-ticket__brand { gap: .6cqw; margin-right: 4.6cqw; }        /* centred in its half, a touch left for the heart */
   .booking-ticket__crown { width: 11cqw; }
-  .booking-ticket__brand strong { font-size: 11cqw; }
+  .booking-ticket__wordmark { width: 26cqw; }
+  .booking-ticket__ink-wash { stroke-width: 5.8; }
+  .booking-ticket__ink-line { stroke-width: 3.4; }
+  .booking-ticket__wordmark .booking-ticket__ink-wash { stroke-width: 5.4; }
+  .booking-ticket__wordmark .booking-ticket__ink-line { stroke-width: 3.1; }
   .booking-ticket__brand-heart { top: -1.4cqw; right: -4.4cqw; width: 4cqw; }
   .booking-ticket__brand small { font-size: max(8px, 2.8cqw); }
   .booking-ticket__scan { align-self: stretch; align-content: center; padding: 0 0 0 4cqw; }
