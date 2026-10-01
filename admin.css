@@ -141,8 +141,8 @@ input:user-invalid + .field-error{display:block}
    with its pink line and stitches drawn on top (.login-wave, same curve). */
 .login-view{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:100vh}
 .login-view::before{content:"";position:absolute;inset:0;z-index:-1;background-color:#fdf3f3;background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.34) 0 28px,transparent 28px 56px),repeating-linear-gradient(90deg,rgba(247,178,196,.34) 0 28px,transparent 28px 56px);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 800' preserveAspectRatio='none'%3E%3Cpath d='M202 0Q208.8 40 183.6 80T165.2 160T146.8 240T128.4 320T110 400T91.6 480T73.2 560T54.8 640T36.4 720T18 800H220V0Z'/%3E%3C/svg%3E") 50% 0 / 220px 100% no-repeat,linear-gradient(#000 0 0) right top / calc(50% - 109px) 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 800' preserveAspectRatio='none'%3E%3Cpath d='M202 0Q208.8 40 183.6 80T165.2 160T146.8 240T128.4 320T110 400T91.6 480T73.2 560T54.8 640T36.4 720T18 800H220V0Z'/%3E%3C/svg%3E") 50% 0 / 220px 100% no-repeat,linear-gradient(#000 0 0) right top / calc(50% - 109px) 100% no-repeat}
-.login-intro{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:80px 60px;text-align:center}
-.login-logo{display:block;width:190px}
+.login-intro{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:56px 60px;text-align:center}
+.login-logo{display:block;width:250px}
 .login-logo img{display:block;width:100%}
 .login-eyebrow{margin:0;letter-spacing:.16em}
 .login-hero{max-width:520px;font-size:52px;line-height:1.1}
@@ -694,7 +694,7 @@ input:user-invalid + .field-error{display:block}
 
   .login-view{display:block;padding-bottom:32px;background-color:#fdf3f3;background-size:auto;background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.34) 0 20px,transparent 20px 40px),repeating-linear-gradient(90deg,rgba(247,178,196,.34) 0 20px,transparent 20px 40px)}
   .login-intro{align-items:center;gap:0;padding:max(24px,env(safe-area-inset-top)) 18px 0}
-  .login-logo{width:132px}
+  .login-logo{width:156px}
   .login-eyebrow,.login-hero,.login-blurb,.login-paws{display:none}
   .login-side{padding:0 18px}
   .login-view::before,.login-wave{display:none}
