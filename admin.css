@@ -136,15 +136,18 @@ input:user-invalid + .field-error{display:block}
 .slot-chip:disabled:not(.booked,.blocked){opacity:.5;cursor:not-allowed}
 
 /* ============ Sign in ============ */
-.login-view{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;background-color:#fdf3f3;background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.34) 0 28px,transparent 28px 56px),repeating-linear-gradient(90deg,rgba(247,178,196,.34) 0 28px,transparent 28px 56px)}
-.login-intro{display:flex;flex-direction:column;justify-content:center;gap:18px;padding:80px 90px}
+/* Wide screens: the intro sits centred on the page's wash and the gingham is only the sign-in half, cut along a
+   wavy stitched edge (the mask) with its pink line and stitches drawn on top (.login-wave, same curve). */
+.login-view{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+.login-intro{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:80px 60px;text-align:center}
 .login-logo{display:block;width:190px}
 .login-logo img{display:block;width:100%}
 .login-eyebrow{margin:0;letter-spacing:.16em}
 .login-hero{max-width:520px;font-size:52px;line-height:1.1}
-.login-blurb{max-width:470px;padding:14px 18px;border-radius:16px;background:rgba(255,253,251,.85);font:600 18px/1.55 var(--body);color:var(--ink)}
+.login-blurb{max-width:470px;font:600 18px/1.55 var(--body);color:var(--ink)}
 .login-paws{width:120px;margin-top:10px}
-.login-side{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px}
+.login-side{grid-area:1/2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px 24px 24px 64px;background-color:#fdf3f3;background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.34) 0 28px,transparent 28px 56px),repeating-linear-gradient(90deg,rgba(247,178,196,.34) 0 28px,transparent 28px 56px);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 800' preserveAspectRatio='none'%3E%3Cpath d='M20 0Q36 40 20 80T20 160T20 240T20 320T20 400T20 480T20 560T20 640T20 720T20 800H40V0Z'/%3E%3C/svg%3E") 0 0 / 40px 100% no-repeat,linear-gradient(#000 0 0) 39px 0 / 100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 800' preserveAspectRatio='none'%3E%3Cpath d='M20 0Q36 40 20 80T20 160T20 240T20 320T20 400T20 480T20 560T20 640T20 720T20 800H40V0Z'/%3E%3C/svg%3E") 0 0 / 40px 100% no-repeat,linear-gradient(#000 0 0) 39px 0 / 100% 100% no-repeat}
+.login-wave{grid-area:1/2;z-index:1;width:40px;height:100%;pointer-events:none}
 .login-card{position:relative;display:flex;flex-direction:column;gap:16px;width:440px;max-width:100%;margin-top:70px;padding:38px 36px 30px;border:1.5px dashed rgba(232,94,124,.5);border-radius:30px;background:var(--card);box-shadow:0 30px 60px -30px rgba(79,47,46,.35)}
 .login-cat{position:absolute;top:-100px;left:50%;width:176px;translate:-50% 0;pointer-events:none}
 .login-bow{position:absolute;top:-34px;left:-40px;width:96px;rotate:-14deg;pointer-events:none}
@@ -687,11 +690,12 @@ input:user-invalid + .field-error{display:block}
   input,select,textarea,.dp-trigger{font-size:16px}
   .eyebrow{letter-spacing:.12em}
 
-  .login-view{display:block;padding-bottom:32px;background-size:auto;background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.34) 0 20px,transparent 20px 40px),repeating-linear-gradient(90deg,rgba(247,178,196,.34) 0 20px,transparent 20px 40px)}
+  .login-view{display:block;padding-bottom:32px;background-color:#fdf3f3;background-size:auto;background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.34) 0 20px,transparent 20px 40px),repeating-linear-gradient(90deg,rgba(247,178,196,.34) 0 20px,transparent 20px 40px)}
   .login-intro{align-items:center;gap:0;padding:max(24px,env(safe-area-inset-top)) 18px 0}
   .login-logo{width:132px}
   .login-eyebrow,.login-hero,.login-blurb,.login-paws{display:none}
-  .login-side{padding:0 18px}
+  .login-side{padding:0 18px;background:none;-webkit-mask:none;mask:none}
+  .login-wave{display:none}
   .login-card{gap:14px;width:100%;margin-top:92px;padding:34px 22px 22px;border-radius:28px;box-shadow:0 26px 50px -26px rgba(79,47,46,.4)}
   .login-cat{top:-84px;width:148px}
   .login-bow{top:-28px;left:-20px;width:74px}
