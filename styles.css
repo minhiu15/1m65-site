@@ -3828,7 +3828,7 @@ main,
   background: linear-gradient(135deg, #fffdf9 0%, #fff8f1 100%);
   color: #51342f;
   font: 700 clamp(14px, 1.06vw, 18px)/1.35 var(--font-signature-display);
-  transform: rotate(-.6deg);
+  transform: rotate(-2deg);
   box-shadow: 0 3px 6px rgba(185, 132, 113, .12);
 }
 
@@ -4276,8 +4276,7 @@ main,
 @media (max-width: 600px) {
   .home-section { padding-top: 14px; }
   .home-grid { gap: 16px; }
-  .taped-kicker { margin-bottom: 18px; padding: 12px 16px; font-size: clamp(12px, 3.3vw, 14px); }
-  .taped-kicker::before { left: -12px; top: -14px; width: 28px; height: 28px; }
+  .taped-kicker { display: none; } /* the owner keeps the note for tablet and web only */
   .home-copy h1 { font-size: clamp(40px, 12vw, 56px); line-height: 1.09; }
   .home-lede { max-width: none; margin-top: 16px; padding-left: 16px; font-size: 14px; line-height: 1.55; }
   .home-lede br { display: none; }
@@ -4548,24 +4547,29 @@ main,
   position: absolute;
   z-index: 5;
   top: calc(3% - 4px);
-  left: -41px;
+  /* Web: out over the salon photo's top-left corner, as far as the page margin allows (the photos sit
+     50vw - 660px in from the window from 1440px up; 676px leaves ~8px with a classic scrollbar). */
+  left: max(-80px, min(-41px, calc(676px - 50vw)));
   display: grid;
   place-items: center;
-  width: 170px;
-  min-height: 110px;
+  width: 180px;
+  min-height: 116px;
   margin: 0;
-  padding: 20px 18px;
+  padding: 0;
   border: 0;
   background: url("assets/about/decor/about_cloud_label.svg") center / 100% 100% no-repeat;
   color: #51342f;
-  font: 800 16px/1.18 var(--font-signature-display);
+  font: 800 14px/1.2 var(--font-signature-display);
   text-align: center;
-  transform: rotate(-3deg);
+  transform: rotate(-7deg);
   pointer-events: none;
 }
 .about-photo-bubble > span {
   display: block;
   width: 100%;
+  /* Inside the cloud's dashed line: its widest band is ~68% of the width, and the cloud's middle sits ~2% left. */
+  max-width: 68%;
+  margin-right: 4%;
   text-align: center;
   transform: rotate(1deg);
   transform-origin: center;
@@ -4882,7 +4886,7 @@ main,
   .about-intro__content { padding-inline: 22px; }
   .about-intro p { max-width: 62ch; font-size: clamp(15px, 1.8vw, 18px); }
   .about-intro__sparkles { right: clamp(10px, 2.4vw, 30px); }
-  .about-photo-bubble { top: calc(3% - 4px); left: -28px; width: 140px; min-height: 90px; padding: 16px 14px; font-size: 13px; }
+  .about-photo-bubble { top: calc(3% - 4px); left: -28px; width: 146px; min-height: 94px; font-size: 12px; line-height: 1.16; transform: rotate(-3deg); }
   .about-story {
     padding: 22px 24px 17px;
   }
@@ -4935,7 +4939,7 @@ main,
   .about-photo--main > img:first-child { border-radius: 13px; }
   .about-photo--fan { top: 12%; right: .5%; width: 66%; height: 85%; padding: 5px; border-radius: 17px; transform: rotate(4deg); }
   .about-photo--fan > img:first-child { border-radius: 12px; }
-  .about-photo-bubble { top: 6px; left: -14px; width: 100px; min-height: 66px; padding: 11px; font-size: 10px; }
+  .about-photo-bubble { top: 6px; left: -14px; width: 108px; min-height: 70px; font-size: 10px; line-height: 1.14; }
   .about-photo__sticker { width: 38px; left: -5px; bottom: -5px; }
   .story-pill { gap: 8px; padding: 10px 12px; font-size: clamp(14px, 4vw, 16px); }
   .story-pill__icon { width: 18px; height: 18px; }
@@ -4983,6 +4987,21 @@ main,
   .about-journey-grid article > div { width: min(100%, 150px); }
   .about-journey-grid h4 { min-height: 2.4em; font-size: clamp(10px, 2.8vw, 12px); }
   .about-journey-grid p { margin: 4px auto 0; font-size: clamp(7.5px, 2.05vw, 9px); line-height: 1.38; }
+}
+
+/* Tablets and small laptops: from 901px to 1439px the salon photo's tilted corner bled past the window's left edge,
+   so the whole collage steps in, the salon photo hangs a touch further out to keep half of each big photo in view,
+   and the pinned photo follows the fan's tilted edge. The cloud sits right on the salon photo's corner, which its
+   -6deg tilt pushes ~22px past its box. */
+@media (min-width: 901px) and (max-width: 1439px) {
+  .about-media__photos { margin-left: 24px; }
+  .about-photo--main { left: -5%; }
+  .about-photo--detail { right: -2px; }
+  .about-photo-bubble { left: calc(-5% - 22px); }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .about-photo-bubble { left: calc(-4.5% - 22px); }
 }
 
 
