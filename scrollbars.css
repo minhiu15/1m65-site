@@ -7,7 +7,7 @@
 html,
 body,
 body * {
-  scrollbar-width: thin;
+  scrollbar-width: auto;
   scrollbar-color: var(--brand-scroll-thumb) var(--brand-scroll-track);
 }
 
@@ -28,11 +28,11 @@ html {
     scrollbar-color: auto !important;
   }
 
-  /* 10px rail with a 2px track ring: a 6px pink thumb. */
+  /* 14px rail with a 2px track ring: a 10px pink thumb, easy to grab. */
   html::-webkit-scrollbar,
   *::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 14px;
+    height: 14px;
   }
 
   html::-webkit-scrollbar-track,

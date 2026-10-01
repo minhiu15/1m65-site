@@ -182,7 +182,8 @@ function renderServiceNote(lines) {
     <div class="service-note-label"><strong>Lưu ý nhé</strong></div>
     <ul>${lines.map((line, index) => `<li data-note-tone="${index % 3}">${line}</li>`).join("")}</ul>
     <span class="service-note-decor" aria-hidden="true">
-      <img class="service-note-decor__sparkle" src="doodles/star-lavender.webp" alt="" decoding="async" loading="lazy">
+      <img class="service-note-decor__sparkle" src="doodles/star-lavender-slim.webp" alt="" decoding="async" loading="lazy">
+      <img class="service-note-decor__sparkle service-note-decor__sparkle--small" src="doodles/star-lavender-slim.webp" alt="" decoding="async" loading="lazy">
     </span>
   </aside>`;
 }

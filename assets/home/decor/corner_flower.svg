@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Made by design-assets/home/gen-corner-flower.py -->
+  <g fill="#f7bdd0" stroke="#d98aa4" stroke-width="5"><circle cx="50.00" cy="29.00" r="18"/><circle cx="69.97" cy="43.51" r="18"/><circle cx="62.34" cy="66.99" r="18"/><circle cx="37.66" cy="66.99" r="18"/><circle cx="30.03" cy="43.51" r="18"/></g>
+  <g fill="#f7bdd0"><circle cx="50.00" cy="29.00" r="18"/><circle cx="69.97" cy="43.51" r="18"/><circle cx="62.34" cy="66.99" r="18"/><circle cx="37.66" cy="66.99" r="18"/><circle cx="30.03" cy="43.51" r="18"/></g>
+  <g fill="#fff" opacity=".45"><circle cx="43.95" cy="25.74" r="3.2"/><circle cx="71.20" cy="36.75" r="3.2"/><circle cx="69.15" cy="66.07" r="3.2"/><circle cx="40.63" cy="73.18" r="3.2"/><circle cx="25.06" cy="48.26" r="3.2"/></g>
+  <circle cx="50" cy="50" r="10.5" fill="#fff4cc" stroke="#e79ab0" stroke-width="3"/>
+</svg>

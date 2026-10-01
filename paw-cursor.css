@@ -1,7 +1,14 @@
 /* Shared cursor surface for the main V2 page and same-origin embedded flows. */
-html.paw-cursor-active,
-html.paw-cursor-active * {
+html.paw-cursor-active body,
+html.paw-cursor-active body * {
   cursor: none !important;
+}
+
+/* The window's scrollbar takes the root's cursor, and Chrome keeps a styled scrollbar's cursor even when a class
+   changes under the pointer, so the root always carries the native paw. The page itself is covered by body
+   (cursor: none, the DOM paw follows the pointer), so the native paw only shows over that scrollbar. */
+html.paw-cursor-active {
+  cursor: url("assets/ui/cat_paw_cursor_32.png") 16 16, auto !important;
 }
 
 /* Over a scrollbar the DOM paw hides (paw-cursor.js). The scrollbar would otherwise inherit cursor: none
