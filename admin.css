@@ -250,9 +250,9 @@ input:user-invalid + .field-error{display:block}
 /* The stat notes are one size: three to a row, six once the greeting is wide enough for the longest value. */
 .hello-stickers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:1fr;gap:12px;margin-top:auto;padding-top:6px}
 @media (min-width:1680px){.hello-stickers{grid-template-columns:repeat(6,minmax(0,1fr))}}
-/* Each note is the Signature blue paper with a wavy pencil edge (design-assets/admin/gen-sticker-shell.py): blue
-   reads on the pink gingham where peach did not. The shadow follows the wavy edge. */
-.sticker{position:relative;display:flex;flex-direction:column;justify-content:center;gap:6px;min-width:0;min-height:58px;padding:6px 6px 2px;border:8px solid transparent;border-image:url("assets/admin/sticker-shell.svg") 44 fill / 22px / 2px stretch;color:var(--ink);font:700 13px/1.05 var(--display);filter:drop-shadow(0 8px 7px rgba(86,128,170,.22));rotate:-2.2deg}
+/* Each note is ivory paper with a light pink wavy pencil edge (design-assets/admin/gen-sticker-shell.py): it sits
+   calmly on the pink gingham (peach was too faint, blue clashed). The shadow follows the wavy edge. */
+.sticker{position:relative;display:flex;flex-direction:column;justify-content:center;gap:6px;min-width:0;min-height:58px;padding:6px 6px 2px;border:8px solid transparent;border-image:url("assets/admin/sticker-shell.svg") 44 fill / 22px / 2px stretch;color:var(--ink);font:700 13px/1.05 var(--display);filter:drop-shadow(0 7px 7px rgba(196,90,120,.2));rotate:-2.2deg}
 .sticker:nth-child(6n+2){rotate:1.7deg}
 .sticker:nth-child(6n+3){rotate:1.2deg}
 .sticker:nth-child(6n+4){rotate:-1.5deg}
