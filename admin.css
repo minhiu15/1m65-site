@@ -742,10 +742,8 @@ input:user-invalid + .field-error{display:block}
   .tab-icon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
   .tab-bar a[aria-current]{color:var(--pink-deep)}
   .tab-bar a[aria-current] .tab-icon{background:var(--pink-soft)}
-  /* Hôm nay sits in the middle as the round button: the pink pill's two half-circle ends put together
-     (design-assets/admin/gen-round-button.py). A plain image, because a circle cut by border-image came out squashed
-     in iOS Safari. */
-  .tab-bar a:nth-child(3) .tab-icon{width:60px;height:60px;margin-top:-26px;border-radius:50%;background:url("assets/admin/round-button-pink.webp") center / 100% 100% no-repeat;color:#fff}
+  /* Hôm nay sits in the middle as a round button in the header menu tile's soft pink (styled with .m-head below). */
+  .tab-bar a:nth-child(3) .tab-icon{width:60px;height:60px;margin-top:-26px;border-radius:50%}
 
   /* Bottom sheets: appointment details, the price editor, a customer. */
   .split > .scrim,#discount-scrim:not([hidden]){display:block}
@@ -759,11 +757,14 @@ input:user-invalid + .field-error{display:block}
   .btn-paper.tall{padding:0 18px}
 
   /* Tổng quan */
-  .m-head{display:flex;align-items:center;justify-content:space-between;height:56px}
+  /* The customer site's phone header: a cream pill, the soft pink menu tile on the left, the wordmark in the middle. */
+  .m-head{position:sticky;top:10px;z-index:20;display:grid;grid-template-columns:42px 1fr 42px;align-items:center;height:60px;margin:0 -6px;padding:0 8px;border:1px solid rgba(224,79,116,.3);border-radius:22px;background:rgba(255,253,251,.94);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 14px 30px -20px rgba(117,62,76,.6);-webkit-backdrop-filter:blur(18px) saturate(1.2);backdrop-filter:blur(18px) saturate(1.2)}
+  .m-head .square-btn,.tab-bar a:nth-child(3) .tab-icon{border:1px solid rgba(224,79,116,.32);background:radial-gradient(circle at 27% 24%,rgba(255,255,255,.95) 0 3px,transparent 4px),linear-gradient(145deg,rgba(255,250,251,.98),rgba(250,211,223,.94));box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 9px 20px -14px rgba(188,61,96,.78);color:#dc4f74}
+  .m-head .square-btn{width:42px;height:42px;border-radius:15px}
+  .m-head .square-btn svg{width:18px;height:14px;stroke-width:2}
   .square-btn{display:grid;place-items:center;width:44px;height:44px;padding:0;border:1.5px solid var(--pink-field);border-radius:14px;background:var(--card);color:var(--pink-deep)}
   .square-btn svg{width:22px;height:22px;stroke-width:2}
-  .m-logo{width:auto;height:40px}
-  .m-head .avatar{width:44px;height:44px}
+  .m-logo{grid-column:2;justify-self:center;width:auto;height:44px}
   #sec-overview,.ov-row{gap:14px}
   .hello{gap:8px;padding:0;border-width:22px;border-image-width:26px;background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.3) 0 16px,transparent 16px 32px),repeating-linear-gradient(90deg,rgba(247,178,196,.3) 0 16px,transparent 16px 32px)}
   .hello h2{font-size:28px;line-height:1.05}

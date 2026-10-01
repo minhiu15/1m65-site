@@ -80,7 +80,6 @@
     adminName: document.querySelector('#admin-name'),
     adminIdentity: document.querySelector('#admin-identity'),
     adminAvatar: document.querySelector('#admin-avatar'),
-    mobileAvatar: document.querySelector('#m-avatar'),
     logoutButton: document.querySelector('#logout-button'),
     menuButton: document.querySelector('#menu-button'),
     menuClose: document.querySelector('#menu-close'),
@@ -385,7 +384,6 @@
     elements.adminName.textContent = admin.displayName || 'Chủ tiệm';
     elements.adminIdentity.textContent = admin.email || '';
     elements.adminAvatar.textContent = avatar;
-    elements.mobileAvatar.textContent = avatar;
     elements.overviewGreeting.textContent = greeting();
     updateActiveNavigation(window.location.hash || '#sec-overview');
   }
