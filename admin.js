@@ -353,7 +353,7 @@
   function setLoginStage(stage) {
     const mfa = stage !== 'password';
     elements.loginView.classList.toggle('is-mfa', mfa);
-    elements.loginStep.textContent = mfa ? 'Bước 2/2' : 'Studio admin';
+    elements.loginStep.textContent = mfa ? 'Bước 2/2' : 'Admin';
     elements.loginTitle.textContent = stage === 'enroll' ? 'Bật xác thực 2 lớp' : mfa ? 'Nhập mã 6 số' : 'Chào bạn trở lại';
     elements.loginSub.textContent = stage === 'enroll'
       ? 'Lần đầu đăng nhập: quét mã QR rồi nhập mã 6 số.'

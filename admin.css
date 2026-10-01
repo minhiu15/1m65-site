@@ -250,16 +250,17 @@ input:user-invalid + .field-error{display:block}
 /* The stat notes are one size: three to a row, six once the greeting is wide enough for the longest value. */
 .hello-stickers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:1fr;gap:12px;margin-top:auto;padding-top:6px}
 @media (min-width:1680px){.hello-stickers{grid-template-columns:repeat(6,minmax(0,1fr))}}
-/* Each note is cut from the big cards' wavy pencil shell, in peach; the shadow follows the wavy edge. */
-.sticker{position:relative;display:flex;flex-direction:column;justify-content:center;gap:6px;min-width:0;min-height:58px;padding:6px 6px 2px;border:8px solid transparent;border-image:url("assets/admin/sticker-shell.svg") 44 fill / 22px / 2px stretch;color:#5c3a2d;font:700 13px/1.05 var(--display);filter:drop-shadow(0 8px 7px rgba(224,136,95,.3));rotate:-2.2deg}
+/* Each note is the Signature blue paper with a wavy pencil edge (design-assets/admin/gen-sticker-shell.py): blue
+   reads on the pink gingham where peach did not. The shadow follows the wavy edge. */
+.sticker{position:relative;display:flex;flex-direction:column;justify-content:center;gap:6px;min-width:0;min-height:58px;padding:6px 6px 2px;border:8px solid transparent;border-image:url("assets/admin/sticker-shell.svg") 44 fill / 22px / 2px stretch;color:var(--ink);font:700 13px/1.05 var(--display);filter:drop-shadow(0 8px 7px rgba(86,128,170,.22));rotate:-2.2deg}
 .sticker:nth-child(6n+2){rotate:1.7deg}
 .sticker:nth-child(6n+3){rotate:1.2deg}
 .sticker:nth-child(6n+4){rotate:-1.5deg}
 .sticker:nth-child(6n+5){rotate:1.4deg}
 .sticker:nth-child(6n){rotate:-1.8deg}
 /* A glossy ball pin pressed in at a slant, its head on the note's top edge. */
-.sticker::before{content:"";position:absolute;top:-17px;left:50%;width:16px;height:20px;margin-left:-8px;background:url("assets/admin/pin-peach.svg") center / contain no-repeat}
-.sticker b{font:600 17px/1 ui-monospace,Menlo,Consolas,monospace;color:#7d4b39}
+.sticker::before{content:"";position:absolute;top:-17px;left:50%;width:16px;height:20px;margin-left:-8px;background:url("assets/admin/pin-pink.svg") center / contain no-repeat}
+.sticker b{font:600 17px/1 ui-monospace,Menlo,Consolas,monospace;color:var(--cocoa)}
 .sticker b{white-space:nowrap}
 .sticker-skeleton{opacity:.55}
 .next-card{display:flex;flex-direction:column;gap:8px;min-height:200px;margin:3px;padding:0 8px 2px;border:26px solid transparent;border-image:url("assets/admin/card-shell-yellow.svg") 44 fill / 30px / 3px round}
@@ -305,8 +306,11 @@ input:user-invalid + .field-error{display:block}
 .shell-lavender{border-image:url("assets/admin/card-shell-lavender.svg") 44 fill / 30px / 3px round}
 .week-strip{display:flex;flex-direction:column;gap:10px}
 .week-row{display:grid;grid-template-columns:44px 1fr 60px;align-items:center;gap:12px;padding:8px 10px;border:0;border-radius:14px;background:none;text-align:left}
-.week-row:hover{background:rgba(255,255,255,.5)}
-.week-row.is-today{background:rgba(255,255,255,.8)}
+/* On the mint card a white wash was too faint: hover and press tint the row a deeper mint, today is white with a rim. */
+.week-row:hover{background:#ddf0e5}
+.week-row:active{background:#cde8d8}
+.week-row.is-today{background:#fff;box-shadow:inset 0 0 0 1.5px #9fd3b8}
+.week-row.is-today .week-bar{background:#e4f3ea}
 .week-day{color:var(--muted);font:800 13px/1 var(--body);text-transform:uppercase}
 .week-day b{display:block;font:700 16px/1.4 var(--display);color:var(--cocoa)}
 .week-bar{height:10px;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.85)}
@@ -607,6 +611,12 @@ input:user-invalid + .field-error{display:block}
 .dp-today{background:none;color:var(--pink-deep)}
 .dp-done{background:var(--cocoa);color:#fff}
 .dp-scrim{position:fixed;inset:0;z-index:39;padding:0;border:0;background:transparent;cursor:default}
+/* The same popover as a list for <select>: the 1M65 dropdown instead of the browser's own. */
+.dp-list{display:flex;flex-direction:column;gap:2px;width:100%;max-height:min(320px,50vh);padding:6px;overflow-y:auto;overscroll-behavior:contain}
+.dp-option{flex:none;min-height:40px;padding:0 12px;border:0;border-radius:10px;background:none;color:var(--cocoa);font:600 15px var(--body);text-align:left}
+.dp-option:hover:not(:disabled){background:#fff0f4}
+.dp-option[aria-selected="true"]{background:var(--pink-soft);color:var(--pink-text);font-weight:800}
+.dp-option:disabled{opacity:.4;cursor:not-allowed}
 
 @media (min-width:768px){
   .m-only{display:none !important}
@@ -726,9 +736,10 @@ input:user-invalid + .field-error{display:block}
   .tab-icon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
   .tab-bar a[aria-current]{color:var(--pink-deep)}
   .tab-bar a[aria-current] .tab-icon{background:var(--pink-soft)}
-  /* Hôm nay sits in the middle as the round button, in the site's pink pill texture: its ends are true half circles,
-     so 54px makes a circle. */
-  .tab-bar a:nth-child(3) .tab-icon{width:54px;height:54px;margin-top:-22px;border:4px solid transparent;border-image:url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.webp") 139 fill / 32px / 5px stretch;background:none;color:#fff}
+  /* Hôm nay sits in the middle as the round button: the pink pill's two half-circle ends put together
+     (design-assets/admin/gen-round-button.py). A plain image, because a circle cut by border-image came out squashed
+     in iOS Safari. */
+  .tab-bar a:nth-child(3) .tab-icon{width:60px;height:60px;margin-top:-26px;border-radius:50%;background:url("assets/admin/round-button-pink.webp") center / 100% 100% no-repeat;color:#fff}
 
   /* Bottom sheets: appointment details, the price editor, a customer. */
   .split > .scrim,#discount-scrim:not([hidden]){display:block}
@@ -868,9 +879,12 @@ input:user-invalid + .field-error{display:block}
   .chip-row{flex-wrap:nowrap;gap:6px;width:calc(100% + 16px);margin-right:-16px;padding-right:16px;overflow-x:auto;scrollbar-width:none}
   .chip-row .chip{flex:none}
   .discount-table{display:flex;flex-direction:column;gap:8px;padding:0}
-  .disc-group{display:flex;flex-direction:column;gap:8px}
+  .disc-group{display:flex;flex-direction:column;gap:4px}
   .disc-group-title{padding:6px 0 0}
   .discount-service-card{grid-template-columns:minmax(0,1fr) auto;gap:10px;margin:0;padding:10px 14px;border-radius:16px;cursor:pointer}
+  /* A dashed rule between plain rows; rows on sale or with an unsaved price keep their own box. */
+  .discount-service-card:not(.has-active-sale,.is-dirty){border-width:0 0 1.5px;border-style:dashed;border-color:rgba(232,94,124,.22);border-radius:0}
+  .discount-service-card:not(.has-active-sale,.is-dirty):last-child{border-bottom-color:transparent}
   .discount-service-card > :not(.discount-service-identity,.discount-price-preview),.discount-price-preview .sale-cloud,.discount-original-price,.discount-original-price.is-crossed,.is-dirty .discount-original-price{display:none}
   .discount-preview-price{font-size:16px}
   .discount-sheet{display:flex;gap:14px}

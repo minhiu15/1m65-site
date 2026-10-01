@@ -188,8 +188,92 @@
     observer.observe(input, { attributes: true, attributeFilter: ['value', 'min', 'max'] });
   }
 
+  // Ô chọn (<select>) cũng được bọc theo cùng kiểu: nút giống ô ngày + danh sách thả xuống của 1M65 thay cho
+  // danh sách mặc định của trình duyệt. Vẫn ghi về select gốc và bắn 'change' như trước, admin.js không phải đổi.
+  function enhanceSelect(select) {
+    if (!select || select.dataset.dpReady === '1') return;
+    select.dataset.dpReady = '1';
+
+    const wrap = node('div', 'dp-wrap');
+    select.parentNode.insertBefore(wrap, select);
+    wrap.appendChild(select);
+    select.classList.add('dp-native');
+    select.setAttribute('tabindex', '-1');
+    select.setAttribute('aria-hidden', 'true');
+
+    const trigger = node('button', 'dp-trigger');
+    trigger.type = 'button';
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', 'false');
+    const text = node('span', 'dp-text');
+    trigger.append(text, node('span', 'caret', '▾'));
+    // Tên ô lấy từ chữ đầu của <label>, không lấy cả chữ của các lựa chọn bên trong.
+    const owner = select.closest('label');
+    const fieldName = owner && owner.firstChild && owner.firstChild.nodeType === 3 ? owner.firstChild.textContent.trim() : '';
+    if (fieldName) trigger.setAttribute('aria-label', fieldName);
+    wrap.appendChild(trigger);
+
+    function sync() {
+      const chosen = select.options[select.selectedIndex];
+      text.textContent = chosen ? chosen.textContent : '';
+    }
+
+    trigger.addEventListener('click', () => {
+      if (openPicker && openPicker.trigger === trigger) { closeOpen(); return; }
+      closeOpen();
+
+      const scrim = node('button', 'dp-scrim');
+      scrim.type = 'button';
+      scrim.setAttribute('aria-label', 'Đóng danh sách');
+      scrim.addEventListener('click', closeOpen);
+
+      const pop = node('div', 'dp-pop dp-list');
+      pop.setAttribute('role', 'listbox');
+      if (fieldName) pop.setAttribute('aria-label', fieldName);
+      [...select.options].forEach((option) => {
+        const item = node('button', 'dp-option', option.textContent);
+        item.type = 'button';
+        item.setAttribute('role', 'option');
+        item.setAttribute('aria-selected', String(option.selected));
+        item.disabled = option.disabled;
+        item.addEventListener('click', () => {
+          select.value = option.value;
+          sync();
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+          closeOpen();
+          trigger.focus();
+        });
+        pop.append(item);
+      });
+      // Mũi tên lên/xuống đi qua các lựa chọn.
+      pop.addEventListener('keydown', (event) => {
+        if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+        event.preventDefault();
+        const items = [...pop.querySelectorAll('.dp-option:not(:disabled)')];
+        const at = items.indexOf(document.activeElement);
+        const next = items[Math.min(items.length - 1, Math.max(0, at + (event.key === 'ArrowDown' ? 1 : -1)))];
+        if (next) next.focus();
+      });
+
+      wrap.append(scrim, pop);
+      trigger.setAttribute('aria-expanded', 'true');
+      openPicker = { trigger, pop, scrim };
+      const current = pop.querySelector('.dp-option[aria-selected="true"]') || pop.querySelector('.dp-option');
+      if (current) {
+        current.focus();
+        current.scrollIntoView({ block: 'nearest' });
+      }
+    });
+
+    // admin.js vẽ lại các lựa chọn (ví dụ sau khi khóa cả ngày) → cập nhật chữ trên nút
+    select.addEventListener('change', sync);
+    new MutationObserver(sync).observe(select, { childList: true, subtree: true, attributes: true });
+    sync();
+  }
+
   function scan(root) {
     (root || document).querySelectorAll('input[type=date]').forEach(enhance);
+    (root || document).querySelectorAll('select').forEach(enhanceSelect);
   }
 
   document.addEventListener('keydown', (event) => {
