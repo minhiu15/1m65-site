@@ -305,6 +305,7 @@
       service_not_found: 'Một dịch vụ không còn hoạt động. Vui lòng chọn lại.',
       invalid_original_price: 'Giá gốc phải là số nguyên không âm.',
       invalid_discount_percent: 'Phần trăm giảm giá phải là số nguyên từ 0 đến 100.',
+      invalid_duration: 'Thời gian dịch vụ phải từ 5 đến 480 phút.',
       service_selection_too_long: 'Tổng thời lượng dịch vụ quá dài.',
       request_failed: 'Không thể kết nối máy chủ. Vui lòng thử lại.'
     };
@@ -502,6 +503,13 @@
     const number = Number(value);
     if (!Number.isFinite(number)) return 0;
     return Math.min(2_000_000_000, Math.max(0, Math.round(number)));
+  }
+
+  // booking_services allows 5 to 480 minutes per service.
+  function normalizeDurationInput(value) {
+    const number = Number(value);
+    if (!Number.isFinite(number)) return 5;
+    return Math.min(480, Math.max(5, Math.round(number)));
   }
 
   function timeParts(value) {
@@ -828,9 +836,11 @@
     const draft = discountDrafts.get(service.id) || {};
     const originalPrice = draft.originalPrice == null ? savedOriginalPrice : normalizeOriginalPriceInput(draft.originalPrice);
     const percent = draft.discountPercent == null ? savedPercent : normalizeDiscountInput(draft.discountPercent);
+    const savedDuration = Number(service.durationMinutes || 0);
+    const duration = draft.durationMinutes == null ? savedDuration : normalizeDurationInput(draft.durationMinutes);
     return {
-      savedOriginalPrice, savedPercent, originalPrice, percent,
-      changed: percent !== savedPercent || originalPrice !== savedOriginalPrice
+      savedOriginalPrice, savedPercent, savedDuration, originalPrice, percent, duration,
+      changed: percent !== savedPercent || originalPrice !== savedOriginalPrice || duration !== savedDuration
     };
   }
 
@@ -913,7 +923,7 @@
   }
 
   function discountRow(service) {
-    const { savedOriginalPrice, savedPercent, originalPrice, percent, changed } = discountDraft(service);
+    const { savedOriginalPrice, savedPercent, savedDuration, originalPrice, percent, duration, changed } = discountDraft(service);
     const saving = discountSavingIds.has(service.id);
     const card = node('article', 'discount-service-card');
     card.classList.toggle('has-active-sale', savedPercent > 0);
@@ -923,16 +933,20 @@
     const copy = node('div');
     const line = priceUnits ? priceUnits.unitPrice(service.id, service.price, 'đ').line : '';
     const state = () => (card.classList.contains('is-dirty') ? 'Chưa lưu' : savedPercent > 0 ? 'Đang giảm' : '');
-    const phoneLine = node('span', 'm-only', `${service.durationMinutes}′ · ${state() || 'giá gốc'}`);
-    copy.append(node('strong', '', service.name), node('span', 'd-only', line || `${service.durationMinutes} phút`), phoneLine);
+    const phoneLine = node('span', 'm-only', `${duration}′ · ${state() || 'giá gốc'}`);
+    copy.append(node('strong', '', service.name), phoneLine);
+    if (line) copy.append(node('span', 'd-only', line));
     identity.append(copy);
 
     const price = numberField('discount-price-input-shell', 'discount-original-input', originalPrice, 2000000000, 1000, 'đ', `Giá gốc của ${service.name}`);
     const discount = numberField('discount-input-shell', 'discount-percent-input', percent, 100, 1, '%', `Phần trăm giảm cho ${service.name}`);
+    const minutes = numberField('discount-minutes-input-shell', 'discount-minutes-input', duration, 480, 5, 'phút', `Số phút của ${service.name}`);
+    minutes.input.min = '5';
     const priceInput = price.input;
     const input = discount.input;
     priceInput.disabled = saving;
     input.disabled = saving;
+    minutes.input.disabled = saving;
 
     const preview = node('div', 'discount-price-preview');
     const previewValue = node('strong', 'discount-preview-price', shownPrice(service, discountedPrice(originalPrice, percent)));
@@ -944,13 +958,15 @@
     preview.append(cloud, prices);
 
     const updateDraftPreview = () => {
-      if (input.value === '' || priceInput.value === '') return;
+      if (input.value === '' || priceInput.value === '' || minutes.input.value === '') return;
       const nextPercent = normalizeDiscountInput(input.value);
       const nextPrice = normalizeOriginalPriceInput(priceInput.value);
+      // Minutes are put back in range on blur, not while typing ("1" on the way to "15").
+      const nextDuration = normalizeDurationInput(minutes.input.value);
       if (Number(input.value) !== nextPercent) input.value = String(nextPercent);
       if (Number(priceInput.value) !== nextPrice) priceInput.value = String(nextPrice);
-      const dirty = nextPercent !== savedPercent || nextPrice !== savedOriginalPrice;
-      if (dirty) discountDrafts.set(service.id, { discountPercent: nextPercent, originalPrice: nextPrice });
+      const dirty = nextPercent !== savedPercent || nextPrice !== savedOriginalPrice || nextDuration !== savedDuration;
+      if (dirty) discountDrafts.set(service.id, { discountPercent: nextPercent, originalPrice: nextPrice, durationMinutes: nextDuration });
       else discountDrafts.delete(service.id);
       previewValue.textContent = shownPrice(service, discountedPrice(nextPrice, nextPercent));
       originalValue.textContent = currency(nextPrice);
@@ -962,11 +978,15 @@
     };
     input.addEventListener('input', updateDraftPreview);
     priceInput.addEventListener('input', updateDraftPreview);
+    minutes.input.addEventListener('input', updateDraftPreview);
+    minutes.input.addEventListener('change', () => {
+      minutes.input.value = String(normalizeDurationInput(minutes.input.value));
+    });
     // The phone shows one compact line per service and edits it in a bottom sheet.
     card.addEventListener('click', () => {
       if (phoneMedia.matches) openDiscountSheet(service.id);
     });
-    card.append(identity, node('span', 'discount-duration', String(service.durationMinutes)), price.shell, discount.shell, preview);
+    card.append(identity, minutes.shell, price.shell, discount.shell, preview);
     return card;
   }
 
@@ -996,11 +1016,12 @@
     const draft = discountDraft(service);
     let originalPrice = draft.originalPrice;
     let percent = draft.percent;
+    let duration = draft.duration;
 
     const head = node('div', 'ds-head');
     const title = node('div');
     title.append(
-      node('p', 'eyebrow', `${category?.label || 'Dịch vụ'} · ${service.durationMinutes} phút`),
+      node('p', 'eyebrow', category?.label || 'Dịch vụ'),
       node('h2', '', service.name)
     );
     head.append(title, image('', 'doodles/polish-bottle.webp', 372, 512));
@@ -1008,6 +1029,10 @@
     const priceLabel = node('label', 'ds-field', 'Giá gốc');
     const price = numberField('discount-price-input-shell', 'discount-original-input', originalPrice, 2000000000, 1000, 'đ', `Giá gốc của ${service.name}`);
     priceLabel.append(price.shell);
+    const minutesLabel = node('label', 'ds-field', 'Thời gian');
+    const minutes = numberField('discount-minutes-input-shell', 'discount-minutes-input', duration, 480, 5, 'phút', `Số phút của ${service.name}`);
+    minutes.input.min = '5';
+    minutesLabel.append(minutes.shell);
 
     const percentGroup = node('div', 'ds-field');
     const chips = node('div', 'pct-chips');
@@ -1029,12 +1054,12 @@
 
     const actions = node('div', 'ds-actions');
     const later = button('btn-ghost', 'Để sau');
-    const save = button('btn-paper', 'Xác nhận giá mới');
+    const save = button('btn-paper', 'Xác nhận thay đổi');
     actions.append(later, save);
 
     const update = () => {
-      const dirty = percent !== draft.savedPercent || originalPrice !== draft.savedOriginalPrice;
-      if (dirty) discountDrafts.set(serviceId, { discountPercent: percent, originalPrice });
+      const dirty = percent !== draft.savedPercent || originalPrice !== draft.savedOriginalPrice || duration !== draft.savedDuration;
+      if (dirty) discountDrafts.set(serviceId, { discountPercent: percent, originalPrice, durationMinutes: duration });
       else discountDrafts.delete(serviceId);
       if (document.activeElement !== custom.input) custom.input.value = String(percent);
       customRow.classList.toggle('is-on', !DISCOUNT_STEPS.includes(percent));
@@ -1059,6 +1084,14 @@
       originalPrice = normalizeOriginalPriceInput(price.input.value);
       update();
     });
+    minutes.input.addEventListener('input', () => {
+      if (minutes.input.value === '') return;
+      duration = normalizeDurationInput(minutes.input.value);
+      update();
+    });
+    minutes.input.addEventListener('change', () => {
+      minutes.input.value = String(duration);
+    });
     custom.input.addEventListener('input', () => {
       if (custom.input.value === '') return;
       percent = normalizeDiscountInput(custom.input.value);
@@ -1073,8 +1106,8 @@
     });
     update();
     elements.discountSheet.replaceChildren(
-      head, priceLabel, percentGroup, preview,
-      node('p', 'hint', 'Chỉ áp dụng cho booking mới sau khi xác nhận. Lịch đã đặt giữ giá cũ.'), actions
+      head, minutesLabel, priceLabel, percentGroup, preview,
+      node('p', 'hint', 'Chỉ áp dụng cho booking mới sau khi xác nhận. Lịch đã đặt giữ giá và thời gian cũ.'), actions
     );
     elements.discountSheet.hidden = false;
     elements.discountScrim.hidden = false;
@@ -1091,7 +1124,6 @@
     renderDiscountServices();
     let saved = 0;
     let failure = '';
-    let lastPercent = 0;
     for (const service of pending) {
       const serviceId = service.id;
       const draft = discountDrafts.get(serviceId) || {};
@@ -1099,9 +1131,11 @@
         ? serviceOriginalPrice(service) : normalizeOriginalPriceInput(draft.originalPrice);
       const discountPercent = draft.discountPercent == null
         ? normalizeDiscountInput(service.discountPercent) : normalizeDiscountInput(draft.discountPercent);
+      const durationMinutes = draft.durationMinutes == null
+        ? Number(service.durationMinutes) : normalizeDurationInput(draft.durationMinutes);
       try {
         const data = await adminRequest({
-          action: 'admin_update_service_pricing', serviceId, originalPrice, discountPercent
+          action: 'admin_update_service_pricing', serviceId, originalPrice, discountPercent, durationMinutes
         });
         const updated = data.service || {};
         bookingConfig.services = bookingConfig.services.map((item) => (
@@ -1109,7 +1143,6 @@
         ));
         discountDrafts.delete(serviceId);
         saved += 1;
-        lastPercent = discountPercent;
       } catch (error) {
         failure = failure || errorMessage(error.message);
       }
@@ -1120,11 +1153,12 @@
     } else if (pending.length > 1) {
       setMessage(elements.discountMessage, `Đã cập nhật giá của ${saved} dịch vụ.`, true);
     } else {
+      const service = bookingConfig.services.find((item) => item.id === pending[0].id) || pending[0];
+      const percent = normalizeDiscountInput(service.discountPercent);
       setMessage(
         elements.discountMessage,
-        lastPercent > 0
-          ? `Đã cập nhật giá gốc và áp dụng giảm ${lastPercent}% cho ${pending[0].name}.`
-          : `Đã cập nhật giá gốc của ${pending[0].name}; website không hiển thị giao diện sale.`,
+        `Đã cập nhật ${service.name}: ${service.durationMinutes} phút, giá gốc ${currency(serviceOriginalPrice(service))}`
+          + (percent > 0 ? `, giảm ${percent}%.` : '; website không hiển thị giao diện sale.'),
         true
       );
     }

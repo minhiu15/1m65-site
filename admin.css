@@ -512,7 +512,7 @@ input:user-invalid + .field-error{display:block}
 .discount-save .btn-paper{min-width:136px}
 .discount-save .btn-ghost:disabled{visibility:hidden}
 .discount-table{padding-bottom:10px}
-.disc-head,.discount-service-card{display:grid;grid-template-columns:minmax(0,1.6fr) 80px 150px 110px minmax(0,1fr);gap:14px}
+.disc-head,.discount-service-card{display:grid;grid-template-columns:minmax(0,1.6fr) 104px 150px 110px minmax(0,1fr);gap:14px}
 .disc-head{padding:12px 22px}
 .disc-head span:nth-child(5){text-align:right}
 .disc-group-title{padding:14px 20px 6px;font-size:16px}
@@ -524,12 +524,11 @@ input:user-invalid + .field-error{display:block}
 .discount-service-identity > div{min-width:0}
 .discount-service-identity strong{display:block;font:700 15px/1.2 var(--display);color:var(--cocoa)}
 .discount-service-identity div span{color:var(--muted);font:600 13px var(--body)}
-.discount-duration{color:var(--ink);font:700 14px var(--body)}
-.discount-input-shell,.discount-price-input-shell{position:relative;display:block}
-.discount-percent-input,.discount-original-input{height:38px;margin:0;padding:0 28px 0 12px;border-radius:12px;font:700 15px var(--body);appearance:textfield;-moz-appearance:textfield}
-.discount-percent-input::-webkit-inner-spin-button,.discount-original-input::-webkit-inner-spin-button{margin:0;appearance:none}
-.discount-input-shell b,.discount-price-input-shell b{position:absolute;right:12px;top:50%;color:var(--muted);font:700 15px var(--body);pointer-events:none;translate:0 -50%}
-.is-dirty .discount-percent-input{border-color:var(--pink);box-shadow:0 0 0 4px rgba(232,94,124,.16)}
+.discount-minutes-input-shell,.discount-input-shell,.discount-price-input-shell{position:relative;display:block}
+.discount-minutes-input,.discount-percent-input,.discount-original-input{height:38px;margin:0;padding:0 28px 0 12px;border-radius:12px;font:700 15px var(--body);appearance:textfield;-moz-appearance:textfield}
+.discount-minutes-input::-webkit-inner-spin-button,.discount-percent-input::-webkit-inner-spin-button,.discount-original-input::-webkit-inner-spin-button{margin:0;appearance:none}
+.discount-minutes-input-shell b,.discount-input-shell b,.discount-price-input-shell b{position:absolute;right:12px;top:50%;color:var(--muted);font:700 15px var(--body);pointer-events:none;translate:0 -50%}
+.discount-minutes-input{padding-right:44px}
 .discount-price-preview{display:flex;align-items:center;justify-content:flex-end;gap:8px;text-align:right}
 .discount-preview-price{display:block;font:700 18px var(--display);color:var(--pink-deep)}
 .discount-original-price{display:none;color:var(--muted);font:600 13px var(--body);text-decoration:line-through}
@@ -657,8 +656,7 @@ input:user-invalid + .field-error{display:block}
   .wk-dow{font-size:12px;letter-spacing:0}
   .appt-head,.appt-row{grid-template-columns:84px minmax(0,1fr) minmax(0,1.4fr) 88px 116px}
   .appt-head span:nth-child(4),.ar-duration{display:none}
-  .disc-head,.discount-service-card{grid-template-columns:minmax(0,1.5fr) 118px 84px minmax(0,1fr);gap:10px}
-  .disc-head span:nth-child(2),.discount-duration{display:none}
+  .disc-head,.discount-service-card{grid-template-columns:minmax(0,1.4fr) 92px 118px 84px minmax(0,1fr);gap:10px}
   .disc-head span:nth-child(5){text-align:right}
   .cust-head,.cust-row{grid-template-columns:34px minmax(0,1.2fr) 110px minmax(0,1fr) 120px}
   .cust-head span:nth-child(3),.cust-head span:nth-child(6),.cust-visits,.cust-total{display:none}
@@ -882,7 +880,8 @@ input:user-invalid + .field-error{display:block}
   .ds-head h2{font-size:22px}
   .ds-head img{width:52px}
   .ds-field{display:flex;flex-direction:column;gap:6px;color:var(--ink);font:700 14px var(--body)}
-  .ds-field .discount-original-input{height:48px;padding:0 32px 0 14px;border-radius:14px;font-size:17px}
+  .ds-field .discount-original-input,.ds-field .discount-minutes-input{height:48px;padding:0 32px 0 14px;border-radius:14px;font-size:17px}
+  .ds-field .discount-minutes-input{padding-right:56px}
   .ds-field b{right:14px}
   .pct-chips{display:flex;gap:6px}
   .pct-chips button{flex:1;height:47px;padding:0;border:1.5px solid var(--pink-field);border-radius:12px;background:var(--card);color:var(--cocoa);font:700 15px var(--body)}
