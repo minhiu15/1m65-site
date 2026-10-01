@@ -257,7 +257,8 @@ input:user-invalid + .field-error{display:block}
 .sticker:nth-child(6n+4){rotate:-1.5deg}
 .sticker:nth-child(6n+5){rotate:1.4deg}
 .sticker:nth-child(6n){rotate:-1.8deg}
-.sticker::before{content:"";position:absolute;top:-5px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#e0885f;box-shadow:0 3px 5px rgba(43,36,64,.3)}
+/* A glossy ball pin pressed in at a slant, its head on the note's top edge. */
+.sticker::before{content:"";position:absolute;top:-17px;left:50%;width:16px;height:20px;margin-left:-8px;background:url("assets/admin/pin-peach.svg") center / contain no-repeat}
 .sticker b{font:600 17px/1 ui-monospace,Menlo,Consolas,monospace;color:#7d4b39}
 .sticker b{white-space:nowrap}
 .sticker-skeleton{opacity:.55}
@@ -754,7 +755,7 @@ input:user-invalid + .field-error{display:block}
   .sticker{min-height:54px;padding:5px 3px 1px}
   .sticker b{font-size:15px}
   .next-card{position:relative;gap:6px;min-height:0;margin:0;padding:0 2px;border-width:22px;border-image-width:26px}
-  .next-card::before{content:"";position:absolute;top:-6px;left:50%;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff9fb8,#d9476d)}
+  .next-card::before{content:"";position:absolute;top:-34px;left:50%;width:18px;height:22px;margin-left:-9px;background:url("assets/admin/pin-pink.svg") center / contain no-repeat}
   .next-top{margin:0}
   .next-flag{padding:4px 9px}
   .next-time{font-size:17px}
