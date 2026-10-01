@@ -158,6 +158,7 @@
     discountScrim: document.querySelector('#discount-scrim'),
     discountSheet: document.querySelector('#discount-sheet'),
     customersCount: document.querySelector('#customers-count'),
+    customersRange: document.querySelector('#customers-range'),
     customerSearch: document.querySelector('#customer-search'),
     customerList: document.querySelector('#customer-list'),
     customerScrim: document.querySelector('#customer-scrim'),
@@ -210,7 +211,7 @@
   let adminAvailabilityRequestId = 0;
   let adminCalendarMonth = '';
   let createStep = 1;
-  let discountFilter = 'all';
+  let discountFilter = '';
   let discountSheetId = '';
   let customerKey = '';
   const discountDrafts = new Map();
@@ -627,7 +628,7 @@
     return item.status === 'cancelled' || item.status === 'no_show';
   }
 
-  // Nhu Nhi and one short line wherever a list is empty; the optional action opens another section.
+  // A title and one short line wherever a list is empty; the optional action opens another section.
   function emptyState(title, text = '', action = null) {
     const box = node('div', 'empty');
     const copy = node('div');
@@ -638,7 +639,7 @@
       open.addEventListener('click', () => navigateToSection(action.section));
       copy.append(open);
     }
-    box.append(image('', 'mascot/nhu-nhi-sit-soft-v2.webp', 512, 512), copy);
+    box.append(copy);
     return box;
   }
 
@@ -862,7 +863,7 @@
       const chip = button('chip', label);
       chip.setAttribute('aria-pressed', String(discountFilter === id));
       chip.addEventListener('click', () => {
-        discountFilter = discountFilter === id ? 'all' : id;
+        discountFilter = id;
         renderDiscountServices();
       });
       return chip;
@@ -882,12 +883,18 @@
       return;
     }
     const categories = adminServiceCategories();
+    // Like the site's service tabs one chip is always pressed, the first group until another is picked.
+    if (discountFilter !== 'sale' && !categories.some((category) => category.id === discountFilter)) {
+      discountFilter = categories[0]?.id || 'sale';
+    }
     renderDiscountFilters(categories, services);
     updateDiscountBar();
-    const visible = (service) => (!query || String(service.name || '').toLocaleLowerCase('vi-VN').includes(query))
-      && (discountFilter !== 'sale' || normalizeDiscountInput(service.discountPercent) > 0);
+    // A search looks through every group; without one the pressed chip picks a group or the services on sale.
+    const visible = (service) => (query
+      ? String(service.name || '').toLocaleLowerCase('vi-VN').includes(query)
+      : discountFilter !== 'sale' || normalizeDiscountInput(service.discountPercent) > 0);
     const groups = categories
-      .filter((category) => discountFilter === 'all' || discountFilter === 'sale' || category.id === discountFilter)
+      .filter((category) => query || discountFilter === 'sale' || category.id === discountFilter)
       .map((category) => ({ ...category, services: category.services.filter(visible) }))
       .filter((category) => category.services.length);
     if (!groups.length) {
@@ -2245,12 +2252,13 @@
     const query = elements.customerSearch.value.trim().toLocaleLowerCase('vi-VN');
     const visible = all.filter((customer) => !query
       || [customer.name, customer.phone].some((value) => String(value || '').toLocaleLowerCase('vi-VN').includes(query)));
-    elements.customersCount.textContent = `${all.length} khách trong khoảng đang tải`;
+    elements.customersCount.textContent = `${all.length} khách hàng`;
+    elements.customersRange.textContent = `Khách hàng · ${dayMonth(elements.fromDate.value)} → ${dayMonth(elements.toDate.value)}`;
     setCount(elements.navCountCustomers, all.length);
     if (!visible.length) {
       closeCustomer();
       elements.customerList.replaceChildren(emptyState(
-        all.length ? 'Không tìm thấy khách phù hợp' : 'Chưa có khách trong khoảng đang tải',
+        all.length ? 'Không tìm thấy khách phù hợp' : 'Chưa có khách trong khoảng ngày này',
         all.length ? 'Thử tên hoặc số điện thoại khác.' : 'Đổi khoảng ngày ở Lịch hẹn để xem khách của những ngày khác.'
       ));
       return;

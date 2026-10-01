@@ -101,12 +101,11 @@ input:user-invalid + .field-error{display:block}
 .badge.completed{background:#eee8e5;color:#5f4e49}
 .badge.cancelled{background:#fde3ea;color:#a8305a}
 .badge.no_show{background:#fff0cc;color:#80530d}
-.tone-y{--tone:#fff4cf}.tone-p{--tone:#ffe4ee}.tone-b{--tone:#e8f0ff}.tone-m{--tone:#e6f5ec}.tone-l{--tone:#f1eafc}.tone-o{--tone:#ffece0}
+.tone-y{--tone:#fff4cf;--tone-line:#ecd28a}.tone-p{--tone:#ffe4ee;--tone-line:#f3adc1}.tone-b{--tone:#e8f0ff;--tone-line:#b8cbef}.tone-m{--tone:#e6f5ec;--tone-line:#a9d5b8}.tone-l{--tone:#f1eafc;--tone-line:#cfbbee}.tone-o{--tone:#ffece0;--tone-line:#f2bc98}
 .skeleton{display:block;flex:none;height:64px;border-radius:14px;background:linear-gradient(90deg,#f6ece8,#fbf3f0,#f6ece8) 0 0/200% 100%;animation:admin-shimmer 1.3s ease-in-out infinite}
 .skeleton-list{display:flex;flex-direction:column;gap:10px;padding:14px}
 @keyframes admin-shimmer{from{background-position:100% 0}to{background-position:-100% 0}}
 .empty{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1.5px dashed var(--dash);border-radius:18px;background:var(--card)}
-.empty img{flex:none;width:74px;height:74px}
 .empty strong{display:block;font:700 16px var(--display);color:var(--cocoa)}
 .empty p{margin-top:3px;font:600 14px/1.4 var(--body);color:var(--muted)}
 .empty .btn-ghost{margin-top:8px}
@@ -123,14 +122,15 @@ input:user-invalid + .field-error{display:block}
 .seg button + button::before{content:"";position:absolute;left:-5px;top:50%;width:1px;height:20px;background:var(--rule);translate:0 -50%}
 .seg button[aria-pressed="true"],.seg button[aria-selected="true"]{border-image:url("assets/booking/ui_shells/booking_category_active_pink_paper_v1.webp") 90 fill / 16px / 0 stretch;color:#fff;text-shadow:var(--ink-shadow)}
 .seg-count{min-width:20px;height:20px;border-radius:999px;background:#fff;color:var(--pink-deep);font:800 13px/20px var(--body);text-align:center;text-shadow:none;box-shadow:inset 0 0 0 1.5px #f0a3b8}
-.chip{padding:9px 14px;border:1.5px dashed rgba(232,94,124,.5);border-radius:999px;background:none;color:var(--ink);font:700 14px/1 var(--display);white-space:nowrap}
+.chip{padding:9px 14px;border:1.5px dashed rgba(232,94,124,.5);border-radius:999px;background:#fff;color:var(--ink);font:700 14px/1 var(--display);white-space:nowrap}
 .chip[aria-pressed="true"]{border:1.5px solid var(--pink);background:var(--pink-soft);color:var(--pink-text)}
 .chip-row{display:flex;flex-wrap:wrap;gap:10px}
 
 /* Slots: free, chosen, already booked, locked. */
 .slot-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .slot-chip{display:grid;place-items:center;height:47px;padding:0;border:1.5px solid var(--pink-field);border-radius:12px;background:var(--card);color:var(--cocoa);font:700 15px var(--body)}
-.slot-chip.selected{border-color:#d9476d;background:var(--pink);color:#fff;box-shadow:0 6px 12px -6px rgba(217,71,109,.6)}
+/* A chosen time wears the site's booking wash: lavender to pink, a pink rim and pink text. */
+.slot-chip.selected{border-color:#f09bb3;background:linear-gradient(120deg,#f1e8fa,#fde9ee);color:#d9476d}
 .slot-chip.booked{border-color:#efe8e5;background:#efe8e5;color:#8c7b76;text-decoration:line-through;cursor:not-allowed}
 .slot-chip.blocked{border-color:transparent;background:var(--stripes);color:#a8305a;cursor:not-allowed}
 .slot-chip:disabled:not(.booked,.blocked){opacity:.5;cursor:not-allowed}
@@ -248,7 +248,7 @@ input:user-invalid + .field-error{display:block}
 /* The stat tiles are the home page's pinned slot notes: peach paper, an orange pin, each tilted a little, the
    number in the typewriter face and its label in Quicksand. */
 .hello-stickers{display:grid;grid-template-columns:repeat(6,minmax(max-content,1fr));gap:10px;margin-top:auto;padding-top:6px}
-.sticker{position:relative;display:flex;flex-direction:column;justify-content:center;gap:6px;min-height:58px;padding:13px 12px 9px;background:#fde9d9;box-shadow:0 12px 24px -14px rgba(224,136,95,.7);color:#5c3a2d;font:700 13px/1.05 var(--display);rotate:-2.2deg}
+.sticker{position:relative;display:flex;flex-direction:column;justify-content:center;gap:6px;min-height:58px;padding:13px 12px 9px;border:1px solid #ecb294;background:#fde9d9;box-shadow:0 12px 24px -14px rgba(224,136,95,.7);color:#5c3a2d;font:700 13px/1.05 var(--display);rotate:-2.2deg}
 .sticker:nth-child(6n+2){rotate:1.7deg}
 .sticker:nth-child(6n+3){rotate:1.2deg}
 .sticker:nth-child(6n+4){rotate:-1.5deg}
@@ -276,7 +276,7 @@ input:user-invalid + .field-error{display:block}
 .tl-hour{position:absolute;left:0;right:0;top:var(--top);display:flex;align-items:flex-start;gap:10px}
 .tl-hour span{width:46px;color:var(--muted);font:700 13px/1 var(--body);translate:0 -6px}
 .tl-hour::after{content:"";flex:1;border-top:1px dashed rgba(232,94,124,.25)}
-.tl-item{position:absolute;left:62px;right:0;top:var(--top);display:flex;align-items:flex-start;gap:14px;height:var(--h);padding:7px 14px;overflow:hidden;border:1px solid rgba(79,47,46,.06);border-radius:10px 10px 16px 10px;background:var(--tone);box-shadow:0 6px 14px -10px rgba(79,47,46,.45);text-align:left}
+.tl-item{position:absolute;left:62px;right:0;top:var(--top);display:flex;align-items:flex-start;gap:14px;height:var(--h);padding:7px 14px;overflow:hidden;border:1px solid var(--tone-line,rgba(79,47,46,.12));border-radius:10px 10px 16px 10px;background:var(--tone);box-shadow:0 6px 14px -10px rgba(79,47,46,.45);text-align:left}
 .tl-item.is-next{border:2px solid var(--pink)}
 .tl-item.is-off{opacity:.6}
 .tl-item.is-off .tl-name{text-decoration:line-through}
@@ -403,7 +403,7 @@ input:user-invalid + .field-error{display:block}
 .wk-hours span{position:absolute;left:0;top:var(--top);color:var(--muted);font:700 13px/1 var(--body);translate:0 -6px}
 .wk-col{border-radius:0 0 14px 14px;background-image:repeating-linear-gradient(180deg,transparent 0 63px,rgba(232,94,124,.18) 63px 64px)}
 .wk-col.is-today{background-color:#fff7f9}
-.wk-item{position:absolute;left:3px;right:3px;top:var(--top);display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;height:var(--h);padding:5px 8px;overflow:hidden;border:1px solid rgba(79,47,46,.06);border-radius:8px 8px 12px 8px;background:var(--tone);box-shadow:0 5px 12px -9px rgba(79,47,46,.5);text-align:left;font:700 13px/1.2 var(--display)}
+.wk-item{position:absolute;left:3px;right:3px;top:var(--top);display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;height:var(--h);padding:5px 8px;overflow:hidden;border:1px solid var(--tone-line,rgba(79,47,46,.12));border-radius:8px 8px 12px 8px;background:var(--tone);box-shadow:0 5px 12px -9px rgba(79,47,46,.5);text-align:left;font:700 13px/1.2 var(--display)}
 .wk-item b{display:block;color:var(--pink-deep)}
 .wk-item span{display:block;margin-top:1px;overflow:hidden;color:var(--cocoa);text-overflow:ellipsis;white-space:nowrap}
 .wk-item.is-off{opacity:.6}
@@ -483,11 +483,10 @@ input:user-invalid + .field-error{display:block}
 .field-title{margin-top:4px;font:700 15px var(--body);color:var(--cocoa)}
 .block-slots{grid-template-columns:repeat(6,minmax(0,1fr))}
 .block-slots .slot-chip{height:51px}
-.block-slots .slot-chip.selected{box-shadow:none}
 .legend{display:flex;flex-wrap:wrap;gap:18px;color:var(--ink);font:600 14px var(--body)}
 .legend span{display:flex;align-items:center;gap:6px}
 .legend i{width:16px;height:16px;border:1.5px solid var(--pink-field);border-radius:5px;background:var(--card)}
-.legend .is-selected{border:0;background:var(--pink)}
+.legend .is-selected{border-color:#f09bb3;background:linear-gradient(120deg,#f1e8fa,#fde9ee)}
 .legend .is-booked{border:0;background:#efe8e5}
 .legend .is-blocked{border:0;background:repeating-linear-gradient(135deg,#f7eef0 0 4px,#fbd3de 4px 8px)}
 .block-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1.5px dashed var(--rule)}
