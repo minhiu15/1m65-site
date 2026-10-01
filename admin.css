@@ -258,8 +258,14 @@ input:user-invalid + .field-error{display:block}
 .sticker:nth-child(6n+4){rotate:-1.5deg}
 .sticker:nth-child(6n+5){rotate:1.4deg}
 .sticker:nth-child(6n){rotate:-1.8deg}
-/* A glossy ball pin pressed in at a slant, its head on the note's top edge. */
-.sticker::before{content:"";position:absolute;top:-17px;left:50%;width:16px;height:20px;margin-left:-8px;background:url("assets/admin/pin-pink.svg") center / contain no-repeat}
+/* A glossy ball pin pressed in at a slant (design-assets/pins/gen-pins.py), its head on the note's top edge. */
+.sticker::before{content:"";position:absolute;top:-17px;left:50%;width:16px;height:20px;margin-left:-8px;background:url("assets/pins/pin-pink.svg") center / contain no-repeat;transform-origin:44% 34%;rotate:-12deg}
+/* Each pin went in at its own angle; it turns about its head, so only the needle swings. */
+.sticker:nth-child(6n+2)::before{rotate:9deg}
+.sticker:nth-child(6n+3)::before{rotate:-4deg}
+.sticker:nth-child(6n+4)::before{rotate:15deg}
+.sticker:nth-child(6n+5)::before{rotate:-17deg}
+.sticker:nth-child(6n)::before{rotate:5deg}
 .sticker b{font:600 17px/1 ui-monospace,Menlo,Consolas,monospace;color:var(--cocoa)}
 .sticker b{white-space:nowrap}
 .sticker-skeleton{opacity:.55}
@@ -766,7 +772,7 @@ input:user-invalid + .field-error{display:block}
   .sticker{min-height:54px;padding:5px 3px 1px}
   .sticker b{font-size:15px}
   .next-card{position:relative;gap:6px;min-height:0;margin:0;padding:0 2px;border-width:22px;border-image-width:26px}
-  .next-card::before{content:"";position:absolute;top:-34px;left:50%;width:18px;height:22px;margin-left:-9px;background:url("assets/admin/pin-pink.svg") center / contain no-repeat}
+  .next-card::before{content:"";position:absolute;top:-34px;left:50%;width:18px;height:22px;margin-left:-9px;background:url("assets/pins/pin-pink.svg") center / contain no-repeat;transform-origin:44% 34%;rotate:-8deg}
   .next-top{margin:0}
   .next-flag{padding:4px 9px}
   .next-time{font-size:17px}
