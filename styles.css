@@ -4681,6 +4681,29 @@ main,
   pointer-events: none;
 }
 
+/* Each About photo opens in the site's photo lightbox: the whole card is the button, and it lifts on hover. */
+.about-photo__zoom {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.about-photo__zoom:focus-visible {
+  outline: 3px solid var(--pink);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .about-photo { transition: translate .25s ease, scale .25s ease, box-shadow .25s ease; }
+  .about-photo:hover { translate: 0 -6px; scale: 1.025; box-shadow: 0 22px 40px rgba(83, 54, 68, .22); }
+}
+
 .about-info-rail {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
