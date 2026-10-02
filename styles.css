@@ -2368,6 +2368,8 @@ main,
 .shared-service-row__unit,
 .service-price-unit { margin-top: 3px; font-size: 12.5px; font-weight: 700; color: #80685f; white-space: nowrap; }
 .service-per-nail { margin-left: .15em; color: #9a7b70; font-size: .62em; font-weight: 700; letter-spacing: 0; white-space: nowrap; vertical-align: .12em; }
+.booking-service-copy h3 .service-per-nail { font-size: .7em; }
+@media (max-width: 600px) { .booking-service-copy h3 .service-per-nail { font-size: 11px; vertical-align: .05em; } }
 .shared-service-row__pricing strong.is-range { font-size: 15px; letter-spacing: -.02em; white-space: nowrap; }
 @media (max-width: 900px) { .shared-service-row__unit { grid-column: 1 / -1; margin-top: 0; } }
 @media (max-width: 600px) { .shared-service-row__unit { font-size: 11px; } .shared-service-row__pricing strong.is-range { font-size: 13px; } }
@@ -2564,17 +2566,7 @@ main,
   pointer-events: none;
 }
 
-.service-tabs button:first-child::before { left: 5px; }
 .service-tabs button:first-child::after { display: none; }
-
-/* Center inner tab paper between the painted divider strokes, not button edges. */
-@media (min-width: 901px) {
-  .service-tabs button:nth-child(n+2):nth-child(-n+5)::before { left: 7px; right: 3px; }
-}
-@media (max-width: 900px) {
-  .service-tabs button:nth-child(3n+2)::before { left: 7px; right: 3px; }
-}
-.service-tabs button:last-child::before { left: 7px; right: 3px; }
 
 .service-tabs button span { position: relative; z-index: 1; }
 
@@ -3085,7 +3077,7 @@ main,
   .service-tabs {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: repeat(2, 50px);
+    grid-template-rows: repeat(2, 48px);
     gap: 4px 0;
     min-height: 0;
     padding: 6px;
@@ -3097,8 +3089,8 @@ main,
   .service-tabs button.is-active:hover {
     min-width: 0;
     width: 100%;
-    height: 50px;
-    min-height: 50px;
+    height: 48px;
+    min-height: 48px;
     padding: 5px 3px;
     border-radius: 10px;
     font-size: clamp(11.5px, 3.2vw, 13px);
@@ -3114,7 +3106,6 @@ main,
     box-shadow: inset 0 0 0 1px rgba(255, 206, 218, .62);
   }
   .service-tabs button::after { top: 13px; bottom: 13px; }
-  .service-tabs button:nth-child(4)::before { left: 5px; }
   .service-tabs button:nth-child(4)::after { display: none; }
   .service-panel { margin-top: 16px; }
   .signature-layout { --signature-card-height: 196px; display: block; padding: 0; border: 0; background: transparent; }
@@ -3693,7 +3684,6 @@ main,
     line-height: 1.15;
   }
   .service-tabs button::after { top: 14px; bottom: 14px; }
-  .service-tabs button:nth-child(4)::before { left: 5px; }
   .service-tabs button:nth-child(4)::after { display: none; }
 }
 
@@ -7451,17 +7441,12 @@ main,
 }
 
 :is(.gallery-content-panel > .gallery-filters, .gallery-modal-panel > .gallery-modal-filters) button.is-active::before {
-  inset: 0 5px;
   border: 2px solid #ff6f91;
   border-radius: 18px;
   background: url("assets/services/shared/services_web_tab_active_paper_v3.webp") center / 100% 100% no-repeat;
   box-shadow: inset 0 0 0 2px rgba(255, 206, 218, .86);
 }
 
-:is(.gallery-content-panel > .gallery-filters, .gallery-modal-panel > .gallery-modal-filters) button:nth-child(2).is-active::before {
-  left: 7px;
-  right: 3px;
-}
 
 :is(.gallery-content-panel > .gallery-filters, .gallery-modal-panel > .gallery-modal-filters) button::after {
   content: "";
@@ -7480,9 +7465,10 @@ main,
 :is(.gallery-content-panel > .gallery-filters, .gallery-modal-panel > .gallery-modal-filters) button:focus-visible { outline: 2px solid #b75676; outline-offset: -4px; }
 
 @media (min-width: 901px) {
-  /* Half the six Services segments, accounting for Gallery's 38px inset and each bar's 8px shell. */
+  /* Half the six Services segments, accounting for Gallery's 38px inset and each bar's 1px side border
+     (both bars pad only top and bottom). */
   :is(.gallery-content-panel > .gallery-filters, .gallery-modal-panel > .gallery-modal-filters) {
-    width: min(648px, calc(50% + 38px + 8px - clamp(24px, 2.8vw, 42px)));
+    width: min(648px, calc(50% + 38px + 1px - clamp(24px, 2.8vw, 42px)));
     margin-inline: auto;
   }
 }
@@ -8025,18 +8011,11 @@ main,
 :is(.gallery-content-panel > .gallery-filters, .gallery-modal-panel > .gallery-modal-filters) button::before {
   content: "";
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 7px;
-  right: 3px;
   z-index: -1;
   border-radius: 18px;
   background: transparent;
   pointer-events: none;
 }
-:is(.gallery-content-panel > .gallery-filters, .gallery-modal-panel > .gallery-modal-filters) button:first-child::before { left: 5px; right: 5px; }
-:is(.gallery-content-panel > .gallery-filters, .gallery-modal-panel > .gallery-modal-filters) button.is-active::before { top: 0; bottom: 0; left: 7px; right: 3px; }
-:is(.gallery-content-panel > .gallery-filters, .gallery-modal-panel > .gallery-modal-filters) button:first-child.is-active::before { left: 5px; right: 5px; }
 :is(.gallery-content-panel > .gallery-filters, .gallery-modal-panel > .gallery-modal-filters) button:not(.is-active):hover { background: transparent; }
 :is(.gallery-content-panel > .gallery-filters, .gallery-modal-panel > .gallery-modal-filters) button:not(.is-active):hover::before { background: rgba(255, 224, 233, .72); }
 @media (max-width: 600px) {
@@ -8595,6 +8574,31 @@ main,
 @media (prefers-reduced-motion: reduce) {
   .popup-loading img,
   .manager-modal-panel.is-loading::after { animation: none; }
+}
+
+/* Segmented bars (Services tabs, Gallery filters): every hover and active pill keeps one gap, --seg-gap, on all
+   four sides: to the bar's edge, to the 2px divider at a segment's left edge, and on the two-row phone bar to
+   the line between the rows. The bar pads only top and bottom; a row's first pill starts --seg-gap in and the
+   others 2px further for their divider; two rows sit twice --seg-gap apart. Segments carry no border of their
+   own, so these gaps are the whole distance. */
+.service-tabs button { border: 0; }
+.service-tabs,
+:is(.gallery-content-panel > .gallery-filters, .gallery-modal-panel > .gallery-modal-filters) {
+  --seg-gap: 7px;
+  padding: var(--seg-gap) 0;
+}
+.service-tabs button::before,
+:is(.gallery-content-panel > .gallery-filters, .gallery-modal-panel > .gallery-modal-filters) button::before {
+  inset: 0 var(--seg-gap) 0 calc(var(--seg-gap) + 2px);
+}
+.service-tabs button:first-child::before,
+:is(.gallery-content-panel > .gallery-filters, .gallery-modal-panel > .gallery-modal-filters) button:first-child::before { left: var(--seg-gap); }
+@media (max-width: 900px) {
+  .service-tabs { --seg-gap: 6px; row-gap: calc(var(--seg-gap) * 2); }
+  .service-tabs button:nth-child(4)::before { left: var(--seg-gap); }
+}
+@media (max-width: 600px) {
+  :is(.gallery-content-panel > .gallery-filters, .gallery-modal-panel > .gallery-modal-filters) { --seg-gap: 6px; }
 }
 
 /* Touch screens: a button sinks the moment it is pressed, before its action runs, so taps feel instant. The

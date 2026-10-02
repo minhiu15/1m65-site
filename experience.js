@@ -1,4 +1,4 @@
-import "./booking-v2.js?v=20260930-4";
+import "./booking-v2.js?v=20261002-1";
 
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
@@ -430,7 +430,7 @@ function syncTabSlider(bar,animate){
   const shell=getComputedStyle(active,"::before"),box=bar.getBoundingClientRect(),rect=active.getBoundingClientRect(),inset=function(side){return parseFloat(shell[side])||0;};
   const x=rect.left-box.left-bar.clientLeft+inset("left"),y=rect.top-box.top-bar.clientTop+inset("top");
   pill.style.transition=animate?"":"none";
-  Object.assign(pill.style,{width:(rect.width-inset("left")-inset("right"))+"px",height:(rect.height-inset("top")-inset("bottom"))+"px",transform:"translate("+x+"px,"+y+"px)",borderRadius:shell.borderRadius,border:shell.borderTopWidth+" "+shell.borderTopStyle+" "+shell.borderTopColor,backgroundColor:shell.backgroundColor,backgroundImage:shell.backgroundImage,backgroundSize:shell.backgroundSize,backgroundPosition:shell.backgroundPosition,backgroundRepeat:shell.backgroundRepeat,boxShadow:shell.boxShadow});
+  Object.assign(pill.style,{width:(rect.width-inset("left")-inset("right"))+"px",height:(rect.height-inset("top")-inset("bottom"))+"px",transform:"translate("+x+"px,"+y+"px)",borderRadius:shell.borderRadius,border:shell.borderTopWidth+" "+shell.borderTopStyle+" "+shell.borderTopColor,backgroundColor:shell.backgroundColor,backgroundImage:shell.backgroundImage,backgroundSize:shell.backgroundSize,backgroundPosition:shell.backgroundPosition,backgroundRepeat:shell.backgroundRepeat,boxShadow:shell.boxShadow,borderImageSource:shell.borderImageSource,borderImageSlice:shell.borderImageSlice,borderImageWidth:shell.borderImageWidth,borderImageOutset:shell.borderImageOutset,borderImageRepeat:shell.borderImageRepeat});
   if(!animate){pill.getBoundingClientRect();pill.style.transition="";}
 }
 function watchTabSlider(bar){
@@ -442,3 +442,15 @@ function watchTabSlider(bar){
   queue(false);
 }
 document.querySelectorAll("[data-service-tabs], .gallery-content-panel > [data-gallery-filters], [data-gallery-modal-filters]").forEach(watchTabSlider);
+// The booking popup's group tabs are one segmented bar only on phones (on wider screens they are separate pills),
+// and the popup redraws them with each step, so every new bar is picked up as it appears.
+const bookingBody=document.querySelector("[data-booking-body]");
+if(bookingBody){
+  const watchedBars=new WeakSet(),phoneBar=window.matchMedia("(max-width: 600px)");
+  const watchBookingBar=function(){
+    const bar=bookingBody.querySelector(".booking-categories:not(.booking-picker__tabs)");
+    if(bar&&phoneBar.matches&&!watchedBars.has(bar)){watchedBars.add(bar);watchTabSlider(bar);}
+  };
+  new MutationObserver(watchBookingBar).observe(bookingBody,{childList:true});
+  watchBookingBar();
+}

@@ -1,4 +1,4 @@
-import { ESTIMATE_NOTE, hasUnitPricing, unitPrice } from "./price-units.js?v=20260928-1";
+import { ESTIMATE_NOTE, hasUnitPricing, unitPrice } from "./price-units.js?v=20261002-1";
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
 const REMOVED_SERVICE_IDS = new Set(["goi-thao"]);
@@ -62,9 +62,9 @@ function stepOne(){
     const discount=Number(service.discountPercent||0);
     const badgeHtml=discount>0?'<span class="sale-badge">-'+discount+'%</span>':'';
     const shown=unitPrice(service.id,service.price);
-    const priceHtml=(discount>0?'<del>'+money(service.originalPrice)+'</del>':'')+'<strong'+(shown.range?' class="is-range"':'')+'>'+shown.price+'</strong>'+(shown.line?'<small class="booking-service-unit">'+shown.line+'</small>':'');
+    const priceHtml=(discount>0?'<del>'+money(service.originalPrice)+'</del>':'')+'<strong'+(shown.range?' class="is-range"':'')+'>'+shown.price+'</strong>'+(shown.label?'<small class="booking-service-unit">'+shown.label+'</small>':'');
     const saleLabel=discount>0?' aria-label="'+esc(service.name+', giảm '+discount+'%, '+duration(service)+' phút, giá '+money(service.price))+'"':'';
-    return '<button type="button" class="booking-service-option '+(selected?"is-selected ":"")+(discount>0?"has-sale":"")+'" data-booking-service="'+esc(service.id)+'" aria-pressed="'+selected+'"'+saleLabel+'><div class="booking-service-copy"><h3>'+esc(service.name)+'</h3><p><span class="booking-service-duration">'+duration(service)+' phút</span>'+'</p></div><span class="booking-service-side"><span class="booking-service-price"><span class="booking-service-offer-slot" aria-hidden="true">'+badgeHtml+'</span><span class="booking-service-price-card">'+priceHtml+'</span></span><span class="booking-check" aria-hidden="true">'+(selected?"✓":"")+'</span></span></button>';
+    return '<button type="button" class="booking-service-option '+(selected?"is-selected ":"")+(discount>0?"has-sale":"")+'" data-booking-service="'+esc(service.id)+'" aria-pressed="'+selected+'"'+saleLabel+'><div class="booking-service-copy"><h3>'+esc(service.name)+(shown.perNail?' <span class="service-per-nail">('+shown.perNail+')</span>':'')+'</h3><p><span class="booking-service-duration">'+duration(service)+' phút</span>'+'</p></div><span class="booking-service-side"><span class="booking-service-price"><span class="booking-service-offer-slot" aria-hidden="true">'+badgeHtml+'</span><span class="booking-service-price-card">'+priceHtml+'</span></span><span class="booking-check" aria-hidden="true">'+(selected?"✓":"")+'</span></span></button>';
   }).join("");
   const picked=selectedServices().map(function(service){return '<button type="button" data-booking-remove="'+esc(service.id)+'">'+esc(service.name)+' ×</button>';}).join("");
   const total=totals();
@@ -352,7 +352,16 @@ document.addEventListener("click",function(event){
   if(calendarMonth){state.calendarMonth=shiftMonth(state.calendarMonth||state.date.slice(0,7),Number(calendarMonth.dataset.bookingCalendarMonth));render();return;}
   if(calendarDay){state.date=calendarDay.dataset.bookingCalendarDay;state.calendarOpen=false;state.preferred="";render();document.querySelector("[data-booking-calendar-toggle]")?.focus();availability();return;}
   if(state.calendarOpen&&!target.closest(".booking-calendar-field")){state.calendarOpen=false;render();}
-  if(category){state.category=category.dataset.bookingCategory;render();return;}
+  if(category){
+    state.category=category.dataset.bookingCategory;
+    // Only the chosen tab and the service list change: the bar stays, so its pill can glide (experience.js, phones).
+    const grid=document.querySelector("[data-booking-body] .booking-service-grid");
+    if(grid&&!state.picker&&state.step===1){
+      category.parentElement.querySelectorAll("[data-booking-category]").forEach(function(button){button.classList.toggle("is-active",button===category);});
+      const holder=document.createElement("div");holder.innerHTML=stepOne();grid.replaceWith(holder.querySelector(".booking-service-grid"));
+    }else render();
+    return;
+  }
   if(service){toggle(service.dataset.bookingService);return;}
   if(remove){toggle(remove.dataset.bookingRemove);return;}
   if(date){state.date=date.dataset.bookingDate;state.preferred="";render();availability();return;}
