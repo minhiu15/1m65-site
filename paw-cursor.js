@@ -11,6 +11,18 @@
   clickLayer.style.pointerEvents = "none";
   document.body.append(clickLayer);
 
+  // A modal <dialog> sits in the top layer, above any z-index: while one is open the paw's click marks (and the paw
+  // itself, once made) move into it so they stay on top, and come back to the body when it closes. They are fixed
+  // and pass clicks through, so neither their place on screen nor the dialog's own clicks change.
+  const topLayerGuests = [clickLayer];
+  new MutationObserver(function () {
+    let host = document.body;
+    document.querySelectorAll("dialog[open]").forEach(function (dialog) {
+      try { if (dialog.matches(":modal")) host = dialog; } catch (_) {}
+    });
+    topLayerGuests.forEach(function (node) { if (node.parentElement !== host) host.append(node); });
+  }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ["open"] });
+
   function addTouchStamp(x, y) {
     const stamp = document.createElement("span");
     stamp.className = "paw-touch-stamp";
@@ -122,6 +134,7 @@
   cursor.setAttribute("aria-hidden", "true");
   cursor.innerHTML = '<img src="' + pawArtwork + '" alt="" decoding="async">';
   document.body.append(cursor);
+  topLayerGuests.push(cursor);
   document.documentElement.classList.add("paw-cursor-active");
 
   function isPointerInteraction(event) {

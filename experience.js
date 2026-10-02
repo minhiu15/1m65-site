@@ -30,6 +30,9 @@ const fallbackReviews = [
 ["Đi nhiều tiệm rồi mới thấy: ở đây người ta hỏi mình muốn gì trước khi cầm cọ lên. Nhỏ thôi mà quý.","Ngọc Ánh","French tip"]
 ];
 let galleryFilter = "nail";
+// The full Gallery popup keeps its own tab: it opens on the page's tab, then changing it leaves the page alone.
+let galleryModalFilter = "nail";
+let lightboxFilter = "nail";
 let lightboxIndex = 0;
 let reviewItems = fallbackReviews;
 let reviewIndex = 1;
@@ -141,7 +144,15 @@ function toast(message) {
   node.hidden = false;
   toastTimer = setTimeout(function(){node.hidden = true;}, 3200);
 }
-window.__v2Experience = { openModal: openModal, closeModal: closeModal, toast: toast, esc: esc, gallery: gallery, galleryThumb: galleryThumb };
+// The call-or-Zalo popup the "Xem lịch của bạn" page opens on phones: a native <dialog> over a black backdrop. It
+// closes on its backdrop, on Escape (kept from also closing the popup underneath), on "Để sau", or after a choice.
+const contactDialog = document.querySelector("[data-contact-dialog]");
+if (contactDialog) {
+  contactDialog.addEventListener("click", function(event){ if (event.target === contactDialog || event.target.closest("[data-contact-close], .contact-dialog__option")) contactDialog.close(); });
+  contactDialog.addEventListener("keydown", function(event){ if (event.key === "Escape") event.stopPropagation(); });
+}
+function openContact() { if (contactDialog && contactDialog.showModal) contactDialog.showModal(); return Boolean(contactDialog); }
+window.__v2Experience = { openModal: openModal, closeModal: closeModal, toast: toast, esc: esc, gallery: gallery, galleryThumb: galleryThumb, openContact: openContact };
 
 function initialGalleryCount() {
   return matchMedia("(max-width: 600px)").matches ? 6 : 10;
@@ -158,8 +169,8 @@ function tile(item, index) {
 function galleryEmptyState() {
   return '<div class="gallery-empty" role="status"><picture class="gallery-empty__art" aria-hidden="true"><source srcset="assets/gallery/empty/gallery-empty-polaroids.webp" type="image/webp"><img src="assets/gallery/empty/gallery-empty-polaroids.png" alt="" decoding="async"></picture><h3>Chưa có ảnh ở mục này</h3><p>Tụi mình đang chuẩn bị những khoảnh khắc xinh<br>để chia sẻ cùng bạn. Ghé lại sau nhé ♡</p></div>';
 }
-function filteredGallery() {
-  return gallery.filter(function(item){return item[0] === galleryFilter;});
+function filteredGallery(filter) {
+  return gallery.filter(function(item){return item[0] === (filter || galleryFilter);});
 }
 // Each grid keeps the tiles it has built, per tab: switching back, or a resize (phones fire one whenever the address
 // bar slides away while scrolling), reuses the same img elements, so photos never go blank and re-decode.
@@ -179,7 +190,7 @@ function fillGalleryGrid(grid, key, empty, markup) {
 }
 function renderGallery() {
   document.querySelectorAll("[data-gallery-filter],[data-gallery-modal-filter]").forEach(function(button){
-    const active = (button.dataset.galleryFilter || button.dataset.galleryModalFilter) === galleryFilter;
+    const active = button.dataset.galleryFilter ? button.dataset.galleryFilter === galleryFilter : button.dataset.galleryModalFilter === galleryModalFilter;
     button.classList.toggle("is-active",active);
     button.setAttribute("aria-pressed",String(active));
   });
@@ -192,13 +203,14 @@ function renderGallery() {
   const empty = items.length === 0;
   if (main) fillGalleryGrid(main, "main|" + galleryFilter + "|" + count, empty, function(){ return items.slice(0,count).map(tile).join(""); });
   // The popup's grid is filled when the popup is open (opening it renders the gallery again).
-  if (full && !(full.closest(".modal") || {}).hidden) fillGalleryGrid(full, "full|" + galleryFilter, empty, function(){ return items.map(tile).join(""); });
+  const modalItems = filteredGallery(galleryModalFilter);
+  if (full && !(full.closest(".modal") || {}).hidden) fillGalleryGrid(full, "full|" + galleryModalFilter, modalItems.length === 0, function(){ return modalItems.map(tile).join(""); });
   if (more) more.hidden = items.length <= count;
   if (hint) hint.hidden = items.length === 0;
   if (more && more.parentElement) more.parentElement.hidden = empty;
 }
 function updateLightbox(index) {
-  const items = filteredGallery();
+  const items = filteredGallery(lightboxFilter);
   if (!items.length) return;
   lightboxIndex = (index + items.length) % items.length;
   const item = items[lightboxIndex];
@@ -210,6 +222,7 @@ function updateLightbox(index) {
 function openLightbox(index, trigger) {
   const modal = document.querySelector("#gallery-lightbox");
   if (modal) delete modal.dataset.single;
+  lightboxFilter = trigger && trigger.closest("#gallery-modal") ? galleryModalFilter : galleryFilter;
   updateLightbox(index);
   openModal(modal, trigger, { stackCurrent: Boolean(trigger && trigger.closest("#gallery-modal")) });
 }
@@ -349,7 +362,7 @@ async function loadHomeAvailability() {
 // The manager is a page of its own in an iframe; the popup shows a loading paw over it until that page loads.
 function openManager(reference,trigger) {
   const frame = document.querySelector("[data-manager-frame]");
-  if (frame) {const query=new URLSearchParams({embed:"1",view:"v2"});if(reference)query.set("reference",reference);const panel=frame.parentElement;panel.classList.add("is-loading");frame.addEventListener("load",function(){panel.classList.remove("is-loading");},{once:true});frame.src="manage-booking.html?"+query.toString();}
+  if (frame) {const query=new URLSearchParams({embed:"1",view:"v2",v:"20261002-10"});if(reference)query.set("reference",reference);const panel=frame.parentElement;panel.classList.add("is-loading");frame.addEventListener("load",function(){panel.classList.remove("is-loading");},{once:true});frame.src="manage-booking.html?"+query.toString();}
   openModal(document.querySelector("#manager-modal"),trigger);
 }
 window.__v2Experience.openManager = openManager;
@@ -357,8 +370,8 @@ window.__v2Experience.openManager = openManager;
 document.addEventListener("click",function(event){
   const target=event.target;
   const close=target.closest("[data-close-modal]");if(close)return closeModal(close.closest(".modal"));
-  const openGallery=target.closest("[data-open-gallery]");if(openGallery){openModal(document.querySelector("#gallery-modal"),openGallery);renderGallery();return;}
-  const filter=target.closest("[data-gallery-filter],[data-gallery-modal-filter]");if(filter){galleryFilter=filter.dataset.galleryFilter||filter.dataset.galleryModalFilter;renderGallery();return;}
+  const openGallery=target.closest("[data-open-gallery]");if(openGallery){galleryModalFilter=galleryFilter;openModal(document.querySelector("#gallery-modal"),openGallery);renderGallery();return;}
+  const filter=target.closest("[data-gallery-filter],[data-gallery-modal-filter]");if(filter){if(filter.dataset.galleryFilter)galleryFilter=filter.dataset.galleryFilter;else galleryModalFilter=filter.dataset.galleryModalFilter;renderGallery();return;}
   const photoZoom=target.closest("[data-photo-zoom]");if(photoZoom){openPhotoZoom(photoZoom.dataset.photoZoom,photoZoom.dataset.photoZoomCaption,photoZoom);return;}
   const galleryTile=target.closest("[data-gallery-index]");if(galleryTile){openLightbox(Number(galleryTile.dataset.galleryIndex),galleryTile);return;}
   if(target.closest("[data-lightbox-prev]")){updateLightbox(lightboxIndex-1);return;}

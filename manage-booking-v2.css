@@ -40,7 +40,19 @@ body{
 .intro-copy>.eyebrow .inline-heart-icon{width:20px;height:20px}
 .intro-note img{width:116px;height:auto;max-height:78px}
 .support-footer{display:block}
-.support-footer .inline-heart-icon{display:inline-block;width:18px;height:18px;margin-right:5px;vertical-align:-4px}
+.support-footer .inline-heart-icon{display:inline-block;width:18px;height:18px;margin-left:2px;vertical-align:-4px}
+/* "1M65" in the help line: a pink link to the shop's Zalo. On phones it opens a centred little popup over a
+   plain black backdrop (no blur): call the shop, or message it on Zalo. */
+.contact-link{color:var(--pink-strong);font-weight:800;text-decoration:none}
+.contact-link:hover{color:#a33758}
+.contact-link:focus-visible{outline:2px solid rgba(217,71,109,.45);outline-offset:3px;border-radius:6px}
+.contact-dialog{width:min(320px,calc(100vw - 48px));padding:22px 18px 14px;border:0;border-radius:24px;background:#fffdfb;color:var(--ink);box-shadow:0 24px 60px -24px rgba(0,0,0,.45)}
+.contact-dialog::backdrop{background:rgba(0,0,0,.5)}
+.contact-dialog__title{margin:0 0 14px;font:700 18px/1.2 'Quicksand',sans-serif;text-align:center}
+.contact-dialog__option{display:flex;align-items:center;gap:12px;min-height:54px;margin-top:8px;padding:0 16px;border:1px solid rgba(232,94,124,.22);border-radius:16px;background:#fff;color:var(--ink);font:700 16px/1.2 'Quicksand',sans-serif;text-decoration:none}
+.contact-dialog__option:hover,.contact-dialog__option:focus-visible{border-color:#df7c94;background:var(--pink-soft);color:#a33758;outline:none}
+.contact-dialog__option img{width:30px;height:30px;object-fit:contain}
+.contact-dialog__close{display:block;width:100%;min-height:44px;margin-top:8px;border:0;background:none;color:var(--muted);font:700 14px/1 'Quicksand',sans-serif;cursor:pointer}
 .intro-note,.lookup-card,.appointment-list-view,.appointment-view{
   border-color:rgba(151,96,78,.18);
   background:rgba(255,253,250,.9);
@@ -70,13 +82,39 @@ body{
 .slot-button{border-color:rgba(151,96,78,.18);background:#fff}
 .slot-button:hover,.slot-button.selected{border-color:#d9476d;background:#fde8ed;color:#a33758}
 .cancel-card{background:linear-gradient(120deg,#fffdfb,#fff2f4)}
-body.is-embedded{background:#fcf3ee}
-.is-embedded .page-shell{width:min(980px,calc(100% - 48px));padding:38px 0 30px}
-.is-embedded .intro{margin-bottom:22px}
-.is-embedded .intro h1{font-size:clamp(2rem,4.2vw,3.5rem)}
+/* In the popup (the booking popup's size): the same plain cream paper as the site's other popups (#fffdfb), the
+   title up top (the owner found the content centred in the popup odd), the help line right under the card, the gaps
+   growing with the popup's height (vh is the popup's here) so a tall one fills, the cat note clear of the close
+   button, no sparkle over the title. */
+body.is-embedded{background:#fffdfb}
+/* In the popup the close button is the page's own (the site's sat over the frame, so the page's paw cursor slid
+   under it); it wears the site's soft pink tile and asks the site to close the popup. */
+.embedded-close{position:fixed;top:25px;right:28px;z-index:3;display:grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid rgba(224,79,116,.32);border-radius:14px;background:radial-gradient(circle at 27% 24%,rgba(255,255,255,.95) 0 3px,transparent 4px),linear-gradient(145deg,rgba(255,250,251,.98),rgba(250,211,223,.94));box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 9px 20px -14px rgba(188,61,96,.78);color:#dc4f74;font:400 29px/1 sans-serif;cursor:pointer}
+.embedded-close[hidden]{display:none}
+@media(max-width:600px){.embedded-close{top:17px;right:17px;width:42px;height:42px}}
+/* 40px side margins; the title block starts below the popup's close button (25px + 44px from the top), so the
+   eyebrow is not level with it and the cat note keeps clear of it. */
+.is-embedded .page-shell{width:min(980px,calc(100% - 80px));min-height:100dvh;padding:84px 0 16px}
+.is-embedded .intro-copy>p:last-child{font-size:15px}
+.is-embedded .lookup-card{padding:clamp(26px,4.4vh,40px) clamp(28px,3.4vw,40px)}
+/* The help line sits at the popup's foot on a strip of wavy pink paper with a dashed stitch, like the site's footer. */
+.is-embedded .support-footer{margin-top:auto;padding:clamp(40px,7vh,64px) 8px 0}
+.manager-wave{display:none}
+.is-embedded .manager-wave{display:block;position:absolute;left:0;right:0;bottom:0;z-index:0;height:124px;background:url("assets/manager/wave-tile.svg") left top / 160px 120px repeat-x,linear-gradient(#fdeff3 0 0) 0 60px / 100% 100% no-repeat;pointer-events:none}
+/* Soft pastel glows behind the title and the cat note, on the same cream paper. */
+body.is-embedded::before{content:"";position:absolute;inset:0 0 auto;height:420px;z-index:0;background:radial-gradient(28rem 16rem at 8% 0,rgba(243,236,250,.9),transparent 70%),radial-gradient(22rem 15rem at 92% 14%,rgba(253,232,237,.75),transparent 72%);pointer-events:none}
+.is-embedded .lookup-card::after{display:none}
+/* The popup hugs its content, so the doodles keep to the 75px side margins instead of the card's corners. */
+.is-embedded .doodle-star{right:auto;left:30px;top:30px}
+.is-embedded .doodle-peach{left:28px;bottom:26px;opacity:.8}
+.is-embedded .doodle-envelope{width:56px;right:24px;bottom:22px;opacity:.75}
+.is-embedded .intro{margin-bottom:clamp(22px,6vh,56px)}
+.is-embedded .intro h1{font-size:clamp(2.2rem,4.6vw,3.9rem)}
 .is-embedded .intro-note{transform:rotate(1.5deg)}
 @media(max-width:560px){
-  .is-embedded .page-shell{width:min(100% - 24px,480px);padding:24px 0 18px}
+  .is-embedded .page-shell{width:min(100% - 24px,480px);padding:68px 0 15px}
+  .is-embedded .doodle-star,.is-embedded .doodle-peach{display:none}
+  .is-embedded .manager-wave{height:118px}
   .is-embedded .intro{margin-bottom:18px}
   .lookup-card,.appointment-list-view,.appointment-view{border-radius:22px}
 }
@@ -102,6 +140,7 @@ body.is-embedded{background:#fcf3ee}
   width:190px;
   height:54px;
   min-height:54px;
+  font-size:16px;
   background-image:var(--button-shell-lookup);
   background-size:100% 100%;
 }

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="120" viewBox="0 0 160 120">
+  <!-- One seamless 160px tile of the wavy pink paper along the bottom of the "Xem lịch của bạn" popup (repeat-x). -->
+  <path d="M0 30Q40 10 80 30T160 30V120H0Z" fill="#fdeff3"/>
+  <path d="M0 48Q40 28 80 48T160 48" fill="none" stroke="#f2c3d1" stroke-width="1.6" stroke-dasharray="8 8" stroke-linecap="round"/>
+  <path d="M0 30Q40 10 80 30T160 30" fill="none" stroke="#efb6c7" stroke-width="2"/>
+</svg>

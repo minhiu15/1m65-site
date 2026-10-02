@@ -11,14 +11,14 @@
   <meta property="og:image" content="og.png">
   <title>1M65 Nails, Eyelashes, Shampoo</title>
   <link rel="icon" href="favicon.svg">
-  <link rel="stylesheet" href="styles.css?v=20261002-4">
+  <link rel="stylesheet" href="styles.css?v=20261002-16">
   <link rel="stylesheet" href="paw-cursor.css?v=20261001-1">
   <script defer src="turnstile-config.js?v=20260807a"></script>
   <script defer src="turnstile-booking.js?v=20260807a"></script>
   <script defer src="footer-map.js?v=20260925-1"></script>
-  <script defer src="paw-cursor.js?v=20260922-3"></script>
+  <script defer src="paw-cursor.js?v=20261002-1"></script>
   <script type="module" src="app.js?v=20261002-1"></script>
-  <script type="module" src="experience.js?v=20261002-1"></script>
+  <script type="module" src="experience.js?v=20261002-12"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
@@ -441,11 +441,16 @@
       <div class="modal-backdrop" data-close-modal></div>
       <div class="modal-panel manager-modal-panel" role="document">
         <h2 class="sr-only" id="manager-modal-title">Xem lịch của bạn</h2>
-        <button type="button" class="modal-close manager-close" data-close-modal aria-label="Đóng">×</button>
         <iframe title="Xem lịch của bạn" data-manager-frame></iframe>
       </div>
     </section>
 
+    <dialog class="contact-dialog" aria-labelledby="contact-dialog-title" data-contact-dialog>
+      <p class="contact-dialog__title" id="contact-dialog-title">Liên hệ 1M65</p>
+      <a class="contact-dialog__option" href="tel:0946712911"><img src="assets/footer/footer_contact_phone_icon.webp" alt="" aria-hidden="true" decoding="async">Gọi 0946 712 911</a>
+      <a class="contact-dialog__option" href="https://zalo.me/0946712911" target="_blank" rel="noopener noreferrer"><img src="assets/footer/footer_social_zalo.webp" alt="" aria-hidden="true" decoding="async">Nhắn Zalo</a>
+      <button class="contact-dialog__close" type="button" data-contact-close>Để sau</button>
+    </dialog>
     <div class="toast" role="status" aria-live="polite" data-toast hidden></div>
   </main>
 </body>

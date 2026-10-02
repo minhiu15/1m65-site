@@ -10,19 +10,21 @@
   <link rel="icon" href="favicon.svg">
   <link rel="stylesheet" href="manage-booking.css?v=20260929-1">
   <link rel="stylesheet" href="rose-theme.css?v=20260903webp1">
-  <link rel="stylesheet" href="manage-booking-v2.css?v=20261001-2">
+  <link rel="stylesheet" href="manage-booking-v2.css?v=20261002-9">
   <link rel="stylesheet" href="paw-cursor.css?v=20261001-1">
   <script src="turnstile-config.js?v=20260807a"></script>
   <script src="turnstile-booking.js?v=20260807a"></script>
-  <script src="manage-booking.js?v=20260925-1" defer></script>
-  <script src="paw-cursor.js?v=20260922-3" defer></script>
+  <script src="manage-booking.js?v=20261002-4" defer></script>
+  <script src="paw-cursor.js?v=20261002-1" defer></script>
 </head>
 <body>
+  <div class="manager-wave" aria-hidden="true"></div>
   <div class="ambient-doodles" aria-hidden="true">
     <img class="doodle doodle-star" src="doodles/star-lavender.webp" alt="">
     <img class="doodle doodle-peach" src="doodles/star-peach.webp" alt="">
     <img class="doodle doodle-envelope" src="doodles/heart-envelope.webp" alt="">
   </div>
+  <button class="embedded-close" type="button" aria-label="Đóng" hidden>×</button>
   <main class="page-shell">
     <header class="page-header">
       <a class="brand" href="./" aria-label="Về trang chủ 1M65 Nails V2">
@@ -148,7 +150,13 @@
       </div>
     </section>
 
-    <footer class="support-footer"><img class="inline-heart-icon" src="assets/booking/booking_heart_outline_pink.webp" alt="" aria-hidden="true" decoding="async"> Cần tiệm hỗ trợ? Liên hệ trực tiếp với 1M65 Nails để tụi mình xử lý giúp nha.</footer>
+    <footer class="support-footer">Cần tiệm hỗ trợ?<br>Liên hệ trực tiếp <a class="contact-link" href="https://zalo.me/0946712911" target="_blank" rel="noopener noreferrer">1M65</a> để tụi mình xử lý giúp nha. <img class="inline-heart-icon" src="assets/booking/booking_heart_outline_pink.webp" alt="" aria-hidden="true" decoding="async"></footer>
   </main>
+  <dialog class="contact-dialog" aria-labelledby="contact-dialog-title">
+    <p class="contact-dialog__title" id="contact-dialog-title">Liên hệ 1M65</p>
+    <a class="contact-dialog__option" href="tel:0946712911" target="_top"><img src="assets/footer/footer_contact_phone_icon.webp" alt="" aria-hidden="true" decoding="async">Gọi 0946 712 911</a>
+    <a class="contact-dialog__option" href="https://zalo.me/0946712911" target="_blank" rel="noopener noreferrer"><img src="assets/footer/footer_social_zalo.webp" alt="" aria-hidden="true" decoding="async">Nhắn Zalo</a>
+    <button class="contact-dialog__close" type="button" data-contact-close>Để sau</button>
+  </dialog>
 </body>
 </html>

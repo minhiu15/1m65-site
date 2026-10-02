@@ -522,7 +522,35 @@
       elements.dateTrigger.focus();
     }
   });
+  // In the site's popup: the page's own close button (and Escape, when nothing inside is open) closes the popup.
+  const embeddedClose = document.querySelector('.embedded-close');
+  const closePopup = () => {
+    try { window.parent.__v2Experience.closeModal(window.frameElement.closest('.modal')); } catch (_) {}
+  };
+  if (embeddedClose && window.self !== window.top) {
+    embeddedClose.hidden = false;
+    embeddedClose.addEventListener('click', closePopup);
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && elements.calendar.hidden && !document.querySelector('dialog[open]')) closePopup();
+    });
+  }
   elements.loadSlotsButton.addEventListener('click', loadSlots);
   elements.confirmRescheduleButton.addEventListener('click', reschedule);
   elements.cancelButton.addEventListener('click', cancelAppointment);
+  // The help line's "1M65" goes straight to Zalo on a wide screen; on a phone it opens a small popup to call or
+  // message the shop. The popup closes on its backdrop, on Escape (natively), on "Để sau", or once a choice is made.
+  const contactLink = document.querySelector('.contact-link');
+  const contactDialog = document.querySelector('.contact-dialog');
+  if (contactLink && contactDialog && contactDialog.showModal) {
+    contactLink.addEventListener('click', (event) => {
+      if (!window.matchMedia('(max-width: 600px)').matches) return;
+      event.preventDefault();
+      // In the site's popup, the site page shows it, so its backdrop covers the whole screen.
+      try { if (window.top !== window && window.top.__v2Experience && window.top.__v2Experience.openContact()) return; } catch (_) {}
+      contactDialog.showModal();
+    });
+    contactDialog.addEventListener('click', (event) => {
+      if (event.target === contactDialog || event.target.closest('[data-contact-close], .contact-dialog__option')) contactDialog.close();
+    });
+  }
 })();
