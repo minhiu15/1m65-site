@@ -59,6 +59,13 @@ body{
   box-shadow:0 28px 70px -50px rgba(79,56,46,.55);
 }
 .lookup-card,.appointment-list-view,.appointment-view{border-radius:27px}
+/* The cat's note is a pink gingham card, the same check as the admin's "Hôm nay" card. */
+.intro-note{
+  border:1.5px dashed rgba(232,94,124,.42);
+  background-color:#fff5f6;
+  background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.3) 0 22px,transparent 22px 44px),repeating-linear-gradient(90deg,rgba(247,178,196,.3) 0 22px,transparent 22px 44px);
+}
+.intro-note p{color:#5d463d;font-size:13px}
 .lookup-card::after{background:rgba(232,103,134,.1)}
 .step-bubble{background:linear-gradient(135deg,#ef7793,#d9476d);color:#fff}
 .phone-field,input,.date-trigger,.calendar-popover{

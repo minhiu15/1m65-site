@@ -209,14 +209,31 @@ function renderGallery() {
   if (hint) hint.hidden = items.length === 0;
   if (more && more.parentElement) more.parentElement.hidden = empty;
 }
+// The lightbox opens on the picture the page already shows (the gallery tile, the card or About photo), then swaps in
+// the full photo once it has loaded and decoded, so it never sits on a blank white panel while the photo downloads.
+let lightboxLoad = 0;
+function showLightboxImage(src, alt, placeholder) {
+  const image = document.querySelector("[data-lightbox-image]");
+  if (!image || !src) return;
+  const load = ++lightboxLoad;
+  image.alt = alt || "";
+  image.src = placeholder || src;
+  if (!placeholder || placeholder === src) return;
+  const full = new Image();
+  full.src = src;
+  full.decode().catch(function(){}).then(function(){ if (load === lightboxLoad) image.src = src; });
+}
+function shownPicture(element) {
+  return element && element.complete && element.naturalWidth ? element.currentSrc : "";
+}
 function updateLightbox(index) {
   const items = filteredGallery(lightboxFilter);
   if (!items.length) return;
   lightboxIndex = (index + items.length) % items.length;
   const item = items[lightboxIndex];
-  const image = document.querySelector("[data-lightbox-image]");
   const caption = document.querySelector("[data-lightbox-caption]");
-  if (image) { image.src = item[1]; image.alt = item[2]; }
+  const small = galleryThumb(item[1], 480);
+  showLightboxImage(item[1], item[2], shownPicture(document.querySelector('.gallery-tile img[src="' + small + '"]')) || small);
   if (caption) caption.textContent = item[2];
 }
 function openLightbox(index, trigger) {
@@ -233,8 +250,8 @@ function openPhotoZoom(src, caption, trigger) {
   const captionNode = document.querySelector("[data-lightbox-caption]");
   if (!modal || !image || !src) return;
   modal.dataset.single = "true";
-  image.src = src;
-  image.alt = caption || "";
+  const picture = trigger && trigger.closest("figure, .service-photo-wrap");
+  showLightboxImage(src, caption, shownPicture(picture && picture.querySelector("img:not([aria-hidden])")));
   if (captionNode) captionNode.textContent = caption || "";
   openModal(modal, trigger);
 }

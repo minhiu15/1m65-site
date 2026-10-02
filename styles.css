@@ -6190,10 +6190,20 @@ main,
   font: 600 clamp(16px, 1.25vw, 22px) / 1.7 var(--font-signature-body);
 }
 
+/* In the full-library popup the empty note sits in the middle of the space between the tabs and the footer. */
+.gallery-modal-grid.is-empty {
+  grid-template-rows: minmax(min-content, 1fr);
+  align-content: stretch;
+}
+
 .gallery-modal-grid.is-empty .gallery-empty {
-  align-content: start;
-  min-height: 330px;
-  padding: 0 18px 16px;
+  align-content: center;
+  min-height: 0;
+  padding: 0 18px;
+}
+
+.gallery-modal-panel > .modal-footer p {
+  font-size: 15px;
 }
 
 .gallery-modal-grid.is-empty .gallery-empty__art {
@@ -6226,6 +6236,10 @@ main,
 
   .gallery-modal-grid.is-empty .gallery-empty__art {
     width: min(230px, 70vw);
+  }
+
+  .gallery-modal-panel > .modal-footer p {
+    font-size: 13.5px;
   }
 }
 /* Mobile navigation trigger sits before the brand and uses a cleaner Paper control. */

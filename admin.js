@@ -914,7 +914,7 @@
     elements.discountServiceList.replaceChildren(head, ...groups.map((category) => {
       const group = node('section', 'disc-group');
       const title = node('h3', 'disc-group-title', category.label);
-      title.append(node('span', '', ` · ${category.hint}`));
+      title.append(node('span', '', category.hint));
       group.append(title, ...category.services.map((service) => discountRow(service)));
       return group;
     }));
