@@ -1,4 +1,4 @@
-import { unitPrice } from "./price-units.js?v=20260928-1";
+import { unitPrice } from "./price-units.js?v=20261002-1";
 
 const BOOKING_ENDPOINT = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 
@@ -135,11 +135,18 @@ const saleDiscount = (service) => {
   return discount > 0 && Number(service.originalPrice || service.price || 0) > Number(service.price || 0) ? discount : 0;
 };
 
+// The services tab names the per-nail price beside the title, "(7.000₫/ngón)"; the price box keeps the full-hand
+// price and how it counts ("full bàn", "mỗi viên").
+const perNailNote = (service) => {
+  const perNail = unitPrice(service.id, service.price).perNail;
+  return perNail ? ` <span class="service-per-nail">(${perNail})</span>` : "";
+};
+
 function renderPrice(service) {
   const onSale = saleDiscount(service) > 0, shown = unitPrice(service.id, service.price);
   return `<span class="service-price${onSale ? " service-price--sale" : ""}">
     <strong class="service-price-current">${shown.price}</strong>
-    ${shown.line ? `<span class="service-price-unit">${shown.line}</span>` : ""}
+    ${shown.label ? `<span class="service-price-unit">${shown.label}</span>` : ""}
     ${onSale ? `<del class="service-price-original">${money(service.originalPrice)}</del>` : ""}
   </span>`;
 }
@@ -158,7 +165,7 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
   return `<article class="${cardClasses}" data-card-variant="${variant}" data-service-id="${service.id}"${photoTilt ? ` data-photo-tilt="${photoTilt}"` : ""}>
     ${featured ? '<span class="featured-badge"><span>ĐƯỢC CHỌN</span><strong>NHIỀU NHẤT</strong></span>' : ""}
     <div class="service-card-copy">
-      <h3>${service.name}</h3>
+      <h3>${service.name}${perNailNote(service)}</h3>
       <p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p>
       <div class="service-meta">${renderPrice(service)}<span class="service-duration-row"><span class="service-duration">~${service.durationMinutes} phút</span></span></div>
     </div>
@@ -233,7 +240,7 @@ function sharedServiceRow(service) {
   return `<article class="shared-service-row ${hasDiscount ? "has-sale" : ""}" data-card-variant="shared-list">
     <div class="shared-service-row__copy">
       <div class="shared-service-row__copy-main">
-        <h3>${service.name}</h3>
+        <h3>${service.name}${perNailNote(service)}</h3>
         <p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p>
       </div>
     </div>
@@ -244,7 +251,7 @@ function sharedServiceRow(service) {
       <div class="shared-service-row__pricing">
         ${hasDiscount ? `<del>${money(original)}</del>` : ""}
         <strong${shown.range ? ' class="is-range"' : ""}>${shown.price}</strong>
-        ${shown.line ? `<span class="shared-service-row__unit">${shown.line}</span>` : ""}
+        ${shown.label ? `<span class="shared-service-row__unit">${shown.label}</span>` : ""}
       </div>
     </div>
     <button class="service-booking-hitarea" type="button" data-book-service="${service.id}" aria-label="Đặt lịch ${service.name}"></button>

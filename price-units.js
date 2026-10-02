@@ -20,18 +20,21 @@ export function hasUnitPricing(ids) {
 }
 
 // A price with how it is counted. price: "40.000₫", or a charm's range "10.000–20.000₫" (range: true);
-// unit: "full bàn" / "viên" / "charm"; perNail: "7.000₫/ngón"; line: what shows under the price
-// ("full bàn · 7.000₫/ngón", "mỗi viên", "mỗi charm"). Services priced per booking get empty unit and line.
+// unit: "full bàn" / "viên" / "charm"; perNail: "7.000₫/ngón"; label: how the price counts ("full bàn",
+// "mỗi viên", "mỗi charm"); line: the label with the per-nail price ("full bàn · 7.000₫/ngón").
+// Services priced per booking get empty unit, label and line.
 export function unitPrice(id, price, symbol) {
   const mark = symbol || "₫", rule = UNITS[id];
-  if (!rule) return { price: vnd(price, mark), range: false, unit: "", perNail: "", line: "" };
+  if (!rule) return { price: vnd(price, mark), range: false, unit: "", perNail: "", label: "", line: "" };
   const range = Boolean(rule.upTo && rule.upTo > Number(price || 0));
   const perNail = rule.perNail ? vnd(rule.perNail, mark) + "/ngón" : "";
+  const label = rule.perNail ? rule.unit : "mỗi " + rule.unit;
   return {
     price: range ? vnd(price, "") + "–" + vnd(rule.upTo, mark) : vnd(price, mark),
     range: range,
     unit: rule.unit,
     perNail: perNail,
-    line: (rule.perNail ? rule.unit : "mỗi " + rule.unit) + (perNail ? " · " + perNail : "")
+    label: label,
+    line: label + (perNail ? " · " + perNail : "")
   };
 }

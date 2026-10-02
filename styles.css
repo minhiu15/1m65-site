@@ -2363,12 +2363,14 @@ main,
 }
 
 /* A design priced per nail, stone or charm (price-units.js): a line under the price says how it is counted
-   ("full bàn · 7.000₫/ngón", "mỗi viên"); a charm's price range sits a size smaller to stay on one line. */
+   ("full bàn", "mỗi viên"), the per-nail price sits beside the title in brackets, and a charm's price range
+   sits a size smaller to stay on one line. */
 .shared-service-row__unit,
-.service-price-unit { margin-top: 3px; font-size: 10.5px; font-weight: 700; color: #80685f; white-space: nowrap; }
+.service-price-unit { margin-top: 3px; font-size: 12.5px; font-weight: 700; color: #80685f; white-space: nowrap; }
+.service-per-nail { margin-left: .15em; color: #9a7b70; font-size: .62em; font-weight: 700; letter-spacing: 0; white-space: nowrap; vertical-align: .12em; }
 .shared-service-row__pricing strong.is-range { font-size: 15px; letter-spacing: -.02em; white-space: nowrap; }
 @media (max-width: 900px) { .shared-service-row__unit { grid-column: 1 / -1; margin-top: 0; } }
-@media (max-width: 600px) { .shared-service-row__unit { font-size: 9px; } .shared-service-row__pricing strong.is-range { font-size: 13px; } }
+@media (max-width: 600px) { .shared-service-row__unit { font-size: 11px; } .shared-service-row__pricing strong.is-range { font-size: 13px; } }
 
 .shared-service-row__photo {
   width: 148px;
@@ -4699,9 +4701,28 @@ main,
   outline-offset: 4px;
 }
 
+/* The cloud and the cat sticker belong to the salon photo, the paperclip to Nhu Nhi's snapshot: hovering one
+   lifts its group, and a click opens its photo. */
+.about-media__photos [data-photo-zoom] {
+  pointer-events: auto;
+  cursor: zoom-in;
+}
+
+/* Two hover groups: the salon photo with its cloud, and the nail photo with Nhu Nhi's clipped snapshot.
+   A group lifts together; translate only, so the cloud and the clipped snapshot stay where they sit. */
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .about-photo { transition: translate .25s ease, scale .25s ease, box-shadow .25s ease; }
-  .about-photo:hover { translate: 0 -6px; scale: 1.025; box-shadow: 0 22px 40px rgba(83, 54, 68, .22); }
+  .about-photo,
+  .about-photo-bubble { transition: translate .25s ease, box-shadow .25s ease; }
+
+  .about-media__photos:has(.about-photo--main:hover, .about-photo-bubble:hover) :is(.about-photo--main, .about-photo-bubble),
+  .about-media__photos:has(.about-photo--fan:hover, .about-photo--detail:hover) :is(.about-photo--fan, .about-photo--detail) {
+    translate: 0 -8px;
+  }
+
+  .about-media__photos:has(.about-photo--main:hover, .about-photo-bubble:hover) .about-photo--main,
+  .about-media__photos:has(.about-photo--fan:hover, .about-photo--detail:hover) :is(.about-photo--fan, .about-photo--detail) {
+    box-shadow: 0 22px 40px rgba(83, 54, 68, .22);
+  }
 }
 
 .about-info-rail {
@@ -8427,7 +8448,7 @@ main,
 /* The crown and the lettering wobble a little, as if drawn by hand (the SVG filter is in the stub's markup). */
 .booking-ticket__filters { position: absolute; width: 0; height: 0; }
 .booking-ticket__brand strong { position: relative; display: block; }
-.booking-ticket__brand-heart { position: absolute; top: -.8cqw; right: -2.4cqw; width: 2cqw; transform: rotate(14deg); }
+.booking-ticket__brand-heart { position: absolute; top: -4cqw; right: 1.6cqw; width: 2cqw; transform: rotate(14deg); }  /* up by the crown's right side */
 .booking-ticket__brand small { font: 800 max(9px, 1.3cqw)/1 var(--font-signature-body); letter-spacing: .06em; white-space: nowrap; text-shadow: .06em .05em .08em #d4bdb3; }
 /* The barcode fills the lower half, centred in it; the divider sits on the half's top edge. */
 .booking-ticket__scan { position: relative; display: grid; align-self: stretch; align-content: center; justify-items: center; width: 100%; }
@@ -8528,7 +8549,7 @@ main,
   .booking-ticket__ink-line { stroke-width: 3.4; }
   .booking-ticket__wordmark .booking-ticket__ink-wash { stroke-width: 5.4; }
   .booking-ticket__wordmark .booking-ticket__ink-line { stroke-width: 3.1; }
-  .booking-ticket__brand-heart { top: -1.4cqw; right: -4.4cqw; width: 4cqw; }
+  .booking-ticket__brand-heart { top: -6cqw; right: 2.6cqw; width: 4cqw; }
   .booking-ticket__brand small { font-size: max(8px, 2.8cqw); }
   .booking-ticket__scan { align-self: stretch; align-content: center; padding: 0 0 0 4cqw; }
   /* Upright, about as tall as the QR, midway between the brand and the QR: clear of the bottom punch. */
