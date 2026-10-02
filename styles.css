@@ -945,9 +945,10 @@ main,
   transform: translateY(-1px);
 }
 
-/* Pointer-closed overlays return focus without leaving a keyboard-only ring behind. */
+/* Pointer-closed overlays return focus without leaving a keyboard-only ring behind. !important because each
+   control's own :focus-visible ring (the About photos, the service rows) is declared later at the same weight. */
 .is-pointer-focus-return:focus-visible {
-  outline: none;
+  outline: none !important;
 }
 
 /* Compact header action uses the shorter Gallery tab shell. */
@@ -1355,6 +1356,20 @@ main,
 @media (prefers-reduced-motion: reduce) {
   .faq-answer, .faq-answer > p { transition: none; }
 }
+/* The toggle is a soft chevron drawn by two borders: pointing down while closed, flipped up once the answer opens. */
+.faq-list button span {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  margin: 0 5px 5px 0;
+  border: solid currentColor;
+  border-width: 0 2.5px 2.5px 0;
+  border-bottom-right-radius: 2px;
+  font-size: 0;
+  transform: rotate(45deg);
+  transition: transform .25s ease, margin .25s ease;
+}
+.faq-list button[aria-expanded="true"] span { margin: 5px 5px 0 0; transform: rotate(225deg); }
 
 /* Original paw runner restored between HomeView and Services; its marks can be swapped later. */
 .home-service-divider.nhu-paw-runner-shell {
