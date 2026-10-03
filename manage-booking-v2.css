@@ -59,15 +59,32 @@ body{
   box-shadow:0 28px 70px -50px rgba(79,56,46,.55);
 }
 .lookup-card,.appointment-list-view,.appointment-view{border-radius:27px}
-/* The cat's note is a pink gingham card, the same check as the admin's "Hôm nay" card. */
+/* The cat's note is a soft pink gingham card inside the admin greeting's wavy pink pencil line (border-image, the
+   line only). The gingham is a layer cut to the line's rounded corners, so nothing shows outside it. The line sits
+   centred in the space above the cat, who lies on the bottom edge (the picture has 7px of clear space under its
+   ledge at this size). */
 .intro-note{
-  border:1.5px dashed rgba(232,94,124,.42);
-  background-color:#fff5f6;
-  background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.3) 0 22px,transparent 22px 44px),repeating-linear-gradient(90deg,rgba(247,178,196,.3) 0 22px,transparent 22px 44px);
+  isolation:isolate;
+  padding:10px 18px 0;
+  border:2px solid transparent;
+  border-image:url("assets/manager/note-shell-line.svg") 44 / 30px / 3px round;
+  border-radius:27px;
+  background:none;
 }
-.intro-note p{color:#5d463d;font-size:13px}
+.intro-note::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  border-radius:25px;
+  background-color:#fffafa;
+  background-image:repeating-linear-gradient(0deg,rgba(247,178,196,.15) 0 22px,transparent 22px 44px),repeating-linear-gradient(90deg,rgba(247,178,196,.15) 0 22px,transparent 22px 44px);
+}
+.intro-note p{order:-1;margin:auto 0;color:#5d463d;font-size:15px;line-height:1.45}
+.intro-note img{margin-bottom:-8.5px}
 .lookup-card::after{background:rgba(232,103,134,.1)}
-.step-bubble{background:linear-gradient(135deg,#ef7793,#d9476d);color:#fff}
+/* The step number wears the close button's soft pink tile, not a red one. */
+.step-bubble{border:1px solid rgba(224,79,116,.32);background:radial-gradient(circle at 27% 24%,rgba(255,255,255,.95) 0 3px,transparent 4px),linear-gradient(145deg,rgba(255,250,251,.98),rgba(250,211,223,.94));box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 9px 20px -14px rgba(188,61,96,.78);color:#dc4f74}
 .phone-field,input,.date-trigger,.calendar-popover{
   border-color:rgba(151,96,78,.2);
   background:#fffdfb;

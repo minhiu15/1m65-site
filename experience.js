@@ -217,11 +217,25 @@ function showLightboxImage(src, alt, placeholder) {
   if (!image || !src) return;
   const load = ++lightboxLoad;
   image.alt = alt || "";
+  image.style.width = image.style.height = "";
   image.src = placeholder || src;
   if (!placeholder || placeholder === src) return;
+  // The placeholder is smaller than the photo, so on its own it would show small and then jump: it is drawn at the
+  // size the photo takes, the largest that fits the figure (.lightbox-figure img: max-height min(820px, 100% - 34px)).
+  image.decode().catch(function(){}).then(function(){
+    const figure = image.parentElement;
+    if (load !== lightboxLoad || !image.naturalWidth || !figure) return;
+    const scale = Math.min(figure.clientWidth / image.naturalWidth, Math.min(820, figure.clientHeight - 34) / image.naturalHeight);
+    image.style.width = Math.floor(image.naturalWidth * scale) + "px";
+    image.style.height = Math.floor(image.naturalHeight * scale) + "px";
+  });
   const full = new Image();
   full.src = src;
-  full.decode().catch(function(){}).then(function(){ if (load === lightboxLoad) image.src = src; });
+  full.decode().catch(function(){}).then(function(){
+    if (load !== lightboxLoad) return;
+    image.src = src;
+    image.style.width = image.style.height = "";
+  });
 }
 function shownPicture(element) {
   return element && element.complete && element.naturalWidth ? element.currentSrc : "";
@@ -379,7 +393,7 @@ async function loadHomeAvailability() {
 // The manager is a page of its own in an iframe; the popup shows a loading paw over it until that page loads.
 function openManager(reference,trigger) {
   const frame = document.querySelector("[data-manager-frame]");
-  if (frame) {const query=new URLSearchParams({embed:"1",view:"v2",v:"20261002-10"});if(reference)query.set("reference",reference);const panel=frame.parentElement;panel.classList.add("is-loading");frame.addEventListener("load",function(){panel.classList.remove("is-loading");},{once:true});frame.src="manage-booking.html?"+query.toString();}
+  if (frame) {const query=new URLSearchParams({embed:"1",view:"v2",v:"20261003-3"});if(reference)query.set("reference",reference);const panel=frame.parentElement;panel.classList.add("is-loading");frame.addEventListener("load",function(){panel.classList.remove("is-loading");},{once:true});frame.src="manage-booking.html?"+query.toString();}
   openModal(document.querySelector("#manager-modal"),trigger);
 }
 window.__v2Experience.openManager = openManager;
