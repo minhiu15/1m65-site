@@ -22,12 +22,19 @@ const gallery = [
 ["nail","assets/gallery/photos/pink-starlight.jpg","Pink Starlight"],
 ["mi","assets/services/signature-shared/service_photos/noi_mi_classic.jpg","Nối mi Classic"]
 ];
+// The salon's real five-star reviews on Google Maps (sent by the owner on 2026-10-03; spelling and shorthand tidied,
+// meaning and reviewer names kept). google-reviews.json replaces them once the Business Profile sync is approved.
 const fallbackReviews = [
-["Mình sợ nhất là thợ nói nhiều. Ở đây chị ấy chỉ hỏi một câu rồi im lặng làm suốt hai tiếng. Tuyệt vời.","Thu Hà","Nail Hàn trong veo"],
-["Đặt nail mèo cho ngày cưới. Mẹ mình khóc — không rõ vì cảm động hay vì mười ngón tay mười con mèo.","Minh Châu","Nail mèo · vẽ tay"],
-["Ba tuần rồi vẫn chưa bong một góc nào. Và Nhu Nhi ngủ trên chân mình cả buổi, tính thêm phí được không?","Lan Vy","Sơn gel cơ bản"],
-["Gội đầu dưỡng sinh xong mình ngủ quên mất hai mươi phút. Chị Hạnh để yên cho mình ngủ, không đánh thức.","Bảo Trâm","Gội đầu dưỡng sinh"],
-["Đi nhiều tiệm rồi mới thấy: ở đây người ta hỏi mình muốn gì trước khi cầm cọ lên. Nhỏ thôi mà quý.","Ngọc Ánh","French tip"]
+["Lần đầu đi thử tiệm mà phải wow luôn á, đi làm nail mà thấy như đi chơi với bạn thân vậy, chị chủ dễ thương cực. Tư vấn kỹ, làm việc chuyên nghiệp, kết quả thì siêu ưng. Tiệm uy tín số 1 trong lòng mình.","Lê Nguyễn Anh Thư","Làm móng tay"],
+["Tiệm này có chị chủ dễ thương, làm kỹ càng, tỉ mỉ lắm luôn á. Không gian tiệm sạch sẽ, ngăn nắp, bữa mình đi chị còn bật nguyên playlist tủ của mình nữa =)))) mê.","An Khuê","Làm móng tay"],
+["Lần đầu trải nghiệm mà ưng lắm ạ. Nail đẹp, dụng cụ xịn xò, chị chủ dễ thương vô cùng luôn, lần sau sẽ ủng hộ tiếp 🥰","Diễm My","Làm móng tay"],
+["Chị chủ dễ thương, làm tỉ mỉ, làm xong nhìn ưng quá chừng, ăn Tết ngon luôn. Cảm ơn chị chủ, chúc chị có thật nhiều khách nha 😍😍","Lan Thùy","Làm móng tay"],
+["Mọi người ủng hộ chị chủ xinh đẹp nhé! Chị chủ dễ thương lắm, nhiệt tình, nail chị làm đẹp lắm ạ! 100 điểm 💕💕","Thảo Trần","Đánh giá trên Google"],
+["Chị chủ siêu dễ thương, nhiệt tình, chu đáo. Quay lại nhiều lần rồi, rất ưng.","Phương Truc","Làm móng tay"],
+["Chất lượng dịch vụ tốt, gội đầu massage rất thích.","Oanh Hoang","Đánh giá trên Google"],
+["Chị chủ dễ thương, tư vấn nhiệt tình.","Linh Trương","Làm móng tay"],
+["Đẹp, ưng lắm nha 👍😍","Phuong Le","Đánh giá trên Google"],
+["Dễ thương lắm nha.","Thư Kim","Đánh giá trên Google"]
 ];
 let galleryFilter = "nail";
 // The full Gallery popup keeps its own tab: it opens on the page's tab, then changing it leaves the page alone.
