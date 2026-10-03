@@ -8,13 +8,13 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://aomiaszicxqrctcgeoms.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; script-src 'self' https://challenges.cloudflare.com; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'self'">
   <title>Quản lý lịch hẹn · 1M65 Nails</title>
   <link rel="icon" href="favicon.svg">
-  <link rel="stylesheet" href="manage-booking.css?v=20260929-1">
+  <link rel="stylesheet" href="manage-booking.css?v=20261003-1">
   <link rel="stylesheet" href="rose-theme.css?v=20260903webp1">
-  <link rel="stylesheet" href="manage-booking-v2.css?v=20261003-3">
+  <link rel="stylesheet" href="manage-booking-v2.css?v=20261003-4">
   <link rel="stylesheet" href="paw-cursor.css?v=20261001-1">
   <script src="turnstile-config.js?v=20260807a"></script>
   <script src="turnstile-booking.js?v=20260807a"></script>
-  <script src="manage-booking.js?v=20261002-4" defer></script>
+  <script src="manage-booking.js?v=20261003-1" defer></script>
   <script src="paw-cursor.js?v=20261002-1" defer></script>
 </head>
 <body>
@@ -97,14 +97,21 @@
         <span id="appointment-status" class="status-badge"></span>
       </div>
 
-      <dl class="appointment-details">
-        <div><dt>Khách hàng</dt><dd id="appointment-customer"></dd></div>
-        <div><dt>Ngày và giờ</dt><dd id="appointment-time"></dd></div>
-        <div><dt>Dịch vụ</dt><dd id="appointment-services"></dd></div>
+      <dl class="appointment-summary">
+        <div class="summary-when">
+          <span class="summary-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 9h16M5.5 5h13A1.5 1.5 0 0 1 20 6.5v12a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5Z"></path></svg></span>
+          <div><dt>Ngày và giờ</dt><dd id="appointment-time"></dd></div>
+        </div>
         <div><dt>Thời lượng</dt><dd id="appointment-duration"></dd></div>
-        <div><dt>Tổng tạm tính</dt><dd id="appointment-price"></dd></div>
-        <div><dt>Ghi chú</dt><dd id="appointment-note"></dd></div>
+        <div><dt>Khách hàng</dt><dd id="appointment-customer"></dd></div>
       </dl>
+
+      <section class="appointment-receipt" aria-labelledby="receipt-title">
+        <p id="receipt-title" class="receipt-title">Dịch vụ đã đặt</p>
+        <ul id="appointment-services" class="receipt-lines"></ul>
+        <p class="receipt-total"><span>Tổng tạm tính</span><strong id="appointment-price"></strong></p>
+        <p id="appointment-note-row" class="receipt-note"><span>Ghi chú</span><span id="appointment-note"></span></p>
+      </section>
 
       <p id="manage-notice" class="manage-notice"></p>
 

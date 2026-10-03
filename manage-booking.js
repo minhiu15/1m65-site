@@ -45,6 +45,7 @@
     duration: document.querySelector('#appointment-duration'),
     price: document.querySelector('#appointment-price'),
     note: document.querySelector('#appointment-note'),
+    noteRow: document.querySelector('#appointment-note-row'),
     notice: document.querySelector('#manage-notice'),
     actions: document.querySelector('#manage-actions'),
     datePicker: document.querySelector('#reschedule-date-picker'),
@@ -350,13 +351,29 @@
     elements.status.className = `status-badge ${appointment.status || ''}`;
     elements.customer.textContent = `${appointment.customerName || ''} · ${appointment.maskedPhone || ''}`;
     elements.time.textContent = dateTime(appointment.startAt);
-    const names = serviceNames(appointment);
-    elements.services.textContent = names.length
-      ? names.join('\n')
-      : String(appointment.service || '');
+    // One receipt line per service: its name, minutes and booked price (older bookings carry only a name).
+    const lines = Array.isArray(appointment.services) && appointment.services.length
+      ? appointment.services
+      : serviceNames(appointment).map((name) => ({ name }));
+    elements.services.replaceChildren(...lines.map((service) => {
+      const line = document.createElement('li');
+      const name = document.createElement('span');
+      name.className = 'line-name';
+      name.textContent = String(service.name || '').trim() || 'Dịch vụ tại tiệm';
+      const minutes = document.createElement('span');
+      minutes.className = 'line-minutes';
+      minutes.textContent = service.durationMinutes ? `${Number(service.durationMinutes)} phút` : '';
+      const price = document.createElement('span');
+      price.className = 'line-price';
+      price.textContent = service.price == null ? '' : currency(service.price);
+      line.append(name, minutes, price);
+      return line;
+    }));
     elements.duration.textContent = `${Number(appointment.durationMinutes || 0)} phút`;
     elements.price.textContent = currency(appointment.price);
-    elements.note.textContent = String(appointment.customerNote || '').trim() || 'Không có ghi chú';
+    const note = String(appointment.customerNote || '').trim();
+    elements.note.textContent = note;
+    elements.noteRow.hidden = !note;
     elements.view.hidden = false;
 
     const canManage = appointment.canManage === true;

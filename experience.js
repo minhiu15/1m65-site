@@ -374,7 +374,8 @@ async function loadReviews() {
     const average = Number(data.averageRating), total = Number(data.totalReviewCount);
     const averageNode = document.querySelector("[data-review-average]"), totalNode = document.querySelector("[data-review-total]");
     if (averageNode && Number.isFinite(average)) averageNode.innerHTML = esc(average.toLocaleString("vi-VN",{minimumFractionDigits:1,maximumFractionDigits:1}))+"<small>/5</small>";
-    if (totalNode && Number.isFinite(total)) totalNode.textContent = total.toLocaleString("vi-VN")+"+";
+    // The Google review count sits in the rating's label, "Điểm trên Google (N đánh giá)".
+    if (totalNode && Number.isFinite(total)) totalNode.textContent = total.toLocaleString("vi-VN");
   } catch (_) {}
 }
 function isoToday() {
@@ -400,7 +401,7 @@ async function loadHomeAvailability() {
 // The manager is a page of its own in an iframe; the popup shows a loading paw over it until that page loads.
 function openManager(reference,trigger) {
   const frame = document.querySelector("[data-manager-frame]");
-  if (frame) {const query=new URLSearchParams({embed:"1",view:"v2",v:"20261003-3"});if(reference)query.set("reference",reference);const panel=frame.parentElement;panel.classList.add("is-loading");frame.addEventListener("load",function(){panel.classList.remove("is-loading");},{once:true});frame.src="manage-booking.html?"+query.toString();}
+  if (frame) {const query=new URLSearchParams({embed:"1",view:"v2",v:"20261003-4"});if(reference)query.set("reference",reference);const panel=frame.parentElement;panel.classList.add("is-loading");frame.addEventListener("load",function(){panel.classList.remove("is-loading");},{once:true});frame.src="manage-booking.html?"+query.toString();}
   openModal(document.querySelector("#manager-modal"),trigger);
 }
 window.__v2Experience.openManager = openManager;

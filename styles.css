@@ -141,7 +141,7 @@ a{color:inherit;text-decoration:none}
 .about-journey{grid-area:journey;padding:20px 25px;border:1px solid var(--line);border-radius:25px;background:rgba(255,255,255,.52)}.about-journey>h3{margin:0 0 14px;font:700 18px Quicksand}.about-journey>div{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.about-journey article{position:relative;display:grid;grid-template-columns:38px 64px 1fr;grid-template-rows:auto auto;align-items:center;padding:8px 12px;border-right:1px dashed #e3bfc0}.about-journey article:last-child{border:0}.about-journey b{grid-row:1/3;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--pink-soft);color:var(--pink)}.about-journey img{grid-row:1/3;width:54px;height:54px;object-fit:contain}.about-journey h4{margin:0;font:700 13px Quicksand}.about-journey p{margin:3px 0 0;font-size:9.5px;color:var(--muted)}
 .reviews-section{padding:74px 0;background:#fffaf7}
 .centered-heading{text-align:center}.centered-heading h2{margin:0;font:700 clamp(44px,5vw,70px)/1 Quicksand;color:#ee7791;text-shadow:0 2px 0 #fff}.centered-heading p{margin:16px auto 0;line-height:1.6;color:var(--muted)}
-.review-stats{display:grid;grid-template-columns:repeat(4,1fr);margin-top:40px;padding:12px 0;border-block:1px solid var(--line)}.review-stats article{display:grid;grid-template-columns:48px 1fr;align-items:center;padding:13px 28px;border-right:1px dashed #dfbdba}.review-stats article:last-child{border:0}.review-stats img{grid-row:1/3;width:40px;height:40px;object-fit:contain}.review-stats strong{font:700 22px Quicksand}.review-stats strong small{font-size:12px}.review-stats span{font-size:10px;color:var(--muted)}
+.review-stats{display:grid;grid-template-columns:repeat(4,1fr);margin-top:40px;padding:12px 0;border-block:1px solid var(--line)}.review-stats article{display:grid;grid-template-columns:48px 1fr;align-items:center;padding:13px 28px;border-right:1px dashed #dfbdba}.review-stats article:last-child{border:0}.review-stats img{grid-row:1/3;width:40px;height:40px;object-fit:contain}
 .review-list-title{width:max-content;max-width:100%;margin:34px auto 20px;text-align:center;font:800 14px Quicksand;letter-spacing:.085em;color:#5d4138;text-shadow:0 1px 0 rgba(255,255,255,.9)}
 .review-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.review-card{display:flex;flex-direction:column;min-height:230px;padding:24px;border:1px solid var(--line);border-radius:21px;background:#fff;box-shadow:var(--shadow)}.review-card>img{width:37px;height:31px;object-fit:contain}.review-card blockquote{margin:15px 0;color:#5f4c44;line-height:1.65;font-size:13px}.review-card .stars{display:flex;gap:2px;margin-top:auto}.review-card .stars img{width:15px;height:15px}.review-card cite{margin-top:12px;font-size:10px;font-style:normal;color:var(--muted);text-align:right}
 .reviews-wave{position:relative;height:48px;margin-top:25px;background:linear-gradient(transparent 48%,rgba(232,94,124,.32) 49%,rgba(232,94,124,.32) 51%,transparent 52%)}.reviews-wave img{position:absolute;left:50%;top:50%;width:27px;height:27px;object-fit:contain;transform:translate(-50%,-50%);background:#fffaf7}
@@ -158,7 +158,7 @@ a{color:inherit;text-decoration:none}
 .toast{position:fixed;left:50%;bottom:24px;z-index:220;max-width:min(480px,calc(100% - 32px));padding:13px 19px;border-radius:999px;background:#4f382e;color:#fff;text-align:center;font-weight:800;box-shadow:0 18px 50px -20px #4f382e;transform:translateX(-50%)}.toast[hidden]{display:none}
 @keyframes modal-in{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
 @media(max-width:900px){.gallery-shell{padding:30px 22px}.gallery-grid{grid-template-columns:repeat(3,1fr)}.about-grid{grid-template-columns:1fr 1fr;grid-template-areas:"intro main" "story detail" "note note" "info info" "journey journey"}.review-grid{grid-template-columns:repeat(2,1fr)}.review-stats{grid-template-columns:repeat(2,1fr)}.review-stats article:nth-child(2){border-right:0}.review-stats article:nth-child(-n+2){border-bottom:1px dashed #dfbdba}.faq-layout{grid-template-columns:1fr}.faq-heading{text-align:center}.faq-heading img{margin-inline:auto}.gallery-modal-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:600px){.gallery-section,.about-section,.reviews-section,.booking-faq-section{padding-block:50px}.gallery-shell{padding:24px 12px;border-radius:28px}.gallery-filters{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;margin-inline:4px;scrollbar-width:none}.gallery-filters button{flex:none;padding-inline:15px}.gallery-grid{grid-template-columns:repeat(2,1fr);gap:9px}.gallery-more{min-width:210px}.about-grid{display:flex;flex-direction:column}.about-intro{padding:30px 25px}.about-photo--main{min-height:260px}.about-story{padding:26px 23px}.about-info-rail{grid-template-columns:repeat(3,1fr);padding:14px 2px}.about-info-rail article{display:flex;flex-direction:column;padding:6px 7px;text-align:center}.about-info-rail img{width:34px;height:34px}.about-info-rail span{font-size:8px}.about-info-rail strong{font-size:12px}.about-info-rail p{font-size:7.5px}.about-journey{padding:17px 12px}.about-journey>div{grid-template-columns:repeat(2,1fr)}.about-journey article{grid-template-columns:30px 48px 1fr;padding:8px 4px;border-right:0}.about-journey img{width:42px}.about-journey h4{font-size:11px}.review-grid{grid-template-columns:1fr}.review-stats article{padding:11px 12px}.review-stats strong{font-size:16px}.review-stats img{width:32px;height:32px}.booking-main-cta{min-width:100%}.booking-heart{left:2%}.booking-flower{right:0}.faq-list{grid-template-columns:1fr}.manage-fab{right:12px;bottom:12px}.modal{padding:10px}.modal-panel,.gallery-modal-panel,.booking-modal-panel,.manager-modal-panel{max-height:calc(100dvh - 20px);height:calc(100dvh - 20px);border-radius:25px}.modal-header{padding:19px 18px 14px}.modal-header h2{font-size:22px}.modal-close{width:42px;height:42px}.modal-footer{padding:12px 16px}.gallery-modal-filters{margin:12px 16px 3px}.gallery-modal-grid{grid-template-columns:repeat(2,1fr);padding:10px 16px 18px}.booking-modal-body{padding:17px}.booking-footer{display:grid;grid-template-columns:auto 1fr auto}.booking-footer [data-booking-summary]{display:none}.booking-service-grid{grid-template-columns:1fr}.booking-dates{grid-template-columns:repeat(4,1fr)}.booking-slots{grid-template-columns:repeat(3,1fr)}.booking-form{grid-template-columns:1fr}.booking-form label:last-child{grid-column:auto}.booking-confirm-card{flex-direction:column}.manager-close{right:17px;top:17px}}
+@media(max-width:600px){.gallery-section,.about-section,.reviews-section,.booking-faq-section{padding-block:50px}.gallery-shell{padding:24px 12px;border-radius:28px}.gallery-filters{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;margin-inline:4px;scrollbar-width:none}.gallery-filters button{flex:none;padding-inline:15px}.gallery-grid{grid-template-columns:repeat(2,1fr);gap:9px}.gallery-more{min-width:210px}.about-grid{display:flex;flex-direction:column}.about-intro{padding:30px 25px}.about-photo--main{min-height:260px}.about-story{padding:26px 23px}.about-info-rail{grid-template-columns:repeat(3,1fr);padding:14px 2px}.about-info-rail article{display:flex;flex-direction:column;padding:6px 7px;text-align:center}.about-info-rail img{width:34px;height:34px}.about-info-rail span{font-size:8px}.about-info-rail strong{font-size:12px}.about-info-rail p{font-size:7.5px}.about-journey{padding:17px 12px}.about-journey>div{grid-template-columns:repeat(2,1fr)}.about-journey article{grid-template-columns:30px 48px 1fr;padding:8px 4px;border-right:0}.about-journey img{width:42px}.about-journey h4{font-size:11px}.review-grid{grid-template-columns:1fr}.review-stats article{padding:11px 12px}.review-stats img{width:32px;height:32px}.booking-main-cta{min-width:100%}.booking-heart{left:2%}.booking-flower{right:0}.faq-list{grid-template-columns:1fr}.manage-fab{right:12px;bottom:12px}.modal{padding:10px}.modal-panel,.gallery-modal-panel,.booking-modal-panel,.manager-modal-panel{max-height:calc(100dvh - 20px);height:calc(100dvh - 20px);border-radius:25px}.modal-header{padding:19px 18px 14px}.modal-header h2{font-size:22px}.modal-close{width:42px;height:42px}.modal-footer{padding:12px 16px}.gallery-modal-filters{margin:12px 16px 3px}.gallery-modal-grid{grid-template-columns:repeat(2,1fr);padding:10px 16px 18px}.booking-modal-body{padding:17px}.booking-footer{display:grid;grid-template-columns:auto 1fr auto}.booking-footer [data-booking-summary]{display:none}.booking-service-grid{grid-template-columns:1fr}.booking-dates{grid-template-columns:repeat(4,1fr)}.booking-slots{grid-template-columns:repeat(3,1fr)}.booking-form{grid-template-columns:1fr}.booking-form label:last-child{grid-column:auto}.booking-confirm-card{flex-direction:column}.manager-close{right:17px;top:17px}}
 @media(prefers-reduced-motion:reduce){.gallery-tile img,.faq-list button span,.modal-panel{transition:none;animation:none}}
 
 /* Shared candy-pink word highlight with a paper-reference wavy underline. */
@@ -552,9 +552,10 @@ main,
 .reviews-stat{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;padding:18px 38px;border-right:1px dashed rgba(232,94,124,.3)}
 .reviews-stat:last-child{border-right:0}
 .reviews-stat__icon{width:min(64px,100%);height:auto}
-.reviews-stat__value{display:block;font:800 clamp(24px,1.7vw,32px)/1 var(--font-signature-display);white-space:nowrap}
+.reviews-stat__value{display:block;font:800 clamp(22px,1.5vw,26px)/1 var(--font-signature-display);white-space:nowrap}
 .reviews-stat__value small{font-size:.55em}
-.reviews-stat__label{display:block;margin-top:8px;font-size:clamp(16px,1vw,17px);font-weight:600;line-height:1.4;color:#6f5651}
+.reviews-stat__label{display:block;margin-top:8px;font-size:14px;font-weight:600;line-height:1.4;color:#6f5651}
+.reviews-stat__nowrap{white-space:nowrap}
 .reviews-kicker{display:flex;align-items:center;justify-content:center;gap:12px;margin:58px auto 30px;font:800 23px/1.15 var(--font-signature-display)}
 .reviews-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px}
 .review-card{min-height:330px;padding:28px 28px 25px;border:1px solid rgba(129,57,35,.16);border-radius:24px;background:rgba(255,253,251,.5);box-shadow:none}
@@ -8579,12 +8580,26 @@ main,
 .popup-loading img,
 .manager-modal-panel.is-loading::after { animation: popup-loading-paw .7s ease-in-out infinite alternate; }
 .popup-loading img { width: 58px; height: auto; }
-.manager-modal-panel.is-loading::after {
+/* The cream cover stays still (::before); only the paw on it (::after) wobbles. With both on one layer the whole
+   cover tilted ±8° and its slanted edges streaked across the popup while the page loaded. */
+.manager-modal-panel.is-loading::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;               /* over the loading page, under the close button (2) */
-  background: #fffcf9 url("assets/ui/cat_paw_cursor_upright.webp") center / 58px auto no-repeat;
+  background: #fffcf9;
+  pointer-events: none;
+}
+.manager-modal-panel.is-loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  width: 58px;
+  height: 58px;
+  margin: -29px 0 0 -29px;
+  background: url("assets/ui/cat_paw_cursor_upright.webp") center / contain no-repeat;
   pointer-events: none;
 }
 @keyframes popup-loading-paw {

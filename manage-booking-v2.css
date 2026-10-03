@@ -101,7 +101,38 @@ body{
 }
 .appointment-list-item:hover{border-color:#df7c94;background:#fff5f6}
 .status-badge{background:#f3ecfa;color:#805cad}
-.appointment-details div{border-color:rgba(151,96,78,.13);background:#fff9f7}
+/* A found booking reads like the salon's bill: a soft band with when, how long and who, then a receipt with one
+   line per service (name, minutes, price), a dashed tear and the estimate in pink; the note, if any, under it. */
+.appointment-summary{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,.8fr) minmax(0,1fr);gap:0;margin:20px 0 0;padding:16px 6px;border:1px solid rgba(232,94,124,.16);border-radius:20px;background:linear-gradient(120deg,#faf3fd,#fff2f5)}
+.appointment-summary>div{min-width:0;padding:2px 16px}
+.appointment-summary>div+div{border-left:1.5px dashed rgba(232,94,124,.24)}
+.summary-when{display:flex;align-items:center;gap:12px}
+.summary-icon{display:grid;flex:none;place-items:center;width:42px;height:42px;border-radius:14px;background:#fff;box-shadow:0 8px 18px -12px rgba(188,61,96,.6);color:#d9476d}
+.summary-icon svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.appointment-summary dt{margin-bottom:5px;color:#9a7b70;font:800 11px/1 'Quicksand',sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.appointment-summary dd{margin:0;color:#4f382e;font:700 15px/1.4 'Quicksand',sans-serif;overflow-wrap:anywhere}
+.summary-when dd{color:#c2336a;font-size:17px}
+.appointment-receipt{margin-top:14px;padding:18px 22px 16px;border:1.5px dashed rgba(232,94,124,.3);border-radius:20px;background:#fffdfb}
+.receipt-title{margin:0 0 6px;color:#9a7b70;font:800 11px/1 'Quicksand',sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.receipt-lines{display:grid;margin:0;padding:0;list-style:none}
+.receipt-lines li{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(84px,auto);align-items:baseline;gap:14px;padding:10px 0;border-bottom:1px dashed rgba(151,96,78,.16)}
+.line-name{color:#4f382e;font:700 15px/1.35 'Quicksand',sans-serif;overflow-wrap:anywhere}
+.line-minutes{color:#9a7b70;font-size:13px;font-weight:700;white-space:nowrap}
+.line-price{color:#5d463d;font-size:14.5px;font-weight:800;text-align:right;white-space:nowrap}
+.receipt-total{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:12px 0 0;color:#4f382e;font:700 15px/1.2 'Quicksand',sans-serif}
+.receipt-total strong{color:#c2336a;font-size:24px}
+.receipt-note{display:flex;gap:10px;margin:14px 0 0;padding:10px 14px;border-radius:12px;background:#fff6db;color:#5a3d10;font-size:14px;font-weight:700;line-height:1.5}
+.receipt-note[hidden]{display:none}
+.receipt-note>span:first-child{flex:none;color:#8a6a2a;font-weight:800}
+@media(max-width:700px){
+  .appointment-summary{grid-template-columns:1fr;padding:6px 14px}
+  .appointment-summary>div{padding:12px 2px}
+  .appointment-summary>div+div{border-top:1.5px dashed rgba(232,94,124,.24);border-left:0}
+  .appointment-receipt{padding:14px 16px}
+  .receipt-lines li{grid-template-columns:minmax(0,1fr) auto;gap:2px 12px}
+  .line-minutes{grid-row:2;grid-column:1}
+  .line-price{grid-row:1/span 2;grid-column:2;align-self:center}
+}
 .action-title>span{background:#fde8ed;color:#b74061}
 .slot-button{border-color:rgba(151,96,78,.18);background:#fff}
 .slot-button:hover,.slot-button.selected{border-color:#d9476d;background:#fde8ed;color:#a33758}
@@ -110,7 +141,9 @@ body{
    title up top (the owner found the content centred in the popup odd), the help line right under the card, the gaps
    growing with the popup's height (vh is the popup's here) so a tall one fills, the cat note clear of the close
    button, no sparkle over the title. */
-body.is-embedded{background:#fffdfb}
+/* The body holds the wave and the doodles (absolute, bottom 0): without position it was the first screen that held
+   them, so once a found booking made the page longer they stayed half-way down, behind the cards. */
+body.is-embedded{position:relative;background:#fffdfb}
 /* In the popup the close button is the page's own (the site's sat over the frame, so the page's paw cursor slid
    under it); it wears the site's soft pink tile and asks the site to close the popup. */
 .embedded-close{position:fixed;top:25px;right:28px;z-index:3;display:grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid rgba(224,79,116,.32);border-radius:14px;background:radial-gradient(circle at 27% 24%,rgba(255,255,255,.95) 0 3px,transparent 4px),linear-gradient(145deg,rgba(255,250,251,.98),rgba(250,211,223,.94));box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 9px 20px -14px rgba(188,61,96,.78);color:#dc4f74;font:400 29px/1 sans-serif;cursor:pointer}
