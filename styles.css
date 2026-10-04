@@ -8423,8 +8423,8 @@ main,
 .booking-ticket__download:hover { background: #fff; }
 .booking-ticket__download:disabled { opacity: .6; cursor: progress; }
 .booking-ticket__download:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
-/* Leaving before the bill is saved: a blur over the whole page and an upright card asking first. */
-.booking-ticket__leave { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 16px; background: rgba(255, 246, 248, .42); backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); animation: booking-ticket-fade .2s ease-out both; }
+/* Leaving before the bill is saved: a dark blur over the whole page and an upright card asking first. */
+.booking-ticket__leave { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 16px; background: rgba(0, 0, 0, .55); backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); animation: booking-ticket-fade .2s ease-out both; }
 .booking-ticket__leave-card { display: grid; justify-items: center; gap: 10px; width: min(400px, 100%); padding: 26px 26px 16px; border: 1.5px dashed #f0a3b8; border-radius: 24px; background: #fffaf6; box-shadow: 0 1px 1px rgba(79, 47, 46, .18), 0 24px 50px rgba(79, 47, 46, .24); text-align: center; animation: booking-leave-in .28s cubic-bezier(.2, .9, .3, 1.15) both; }
 @keyframes booking-leave-in { from { transform: translateY(10px) scale(.96); } }
 .booking-ticket__leave-heart { width: 46px; height: auto; }
