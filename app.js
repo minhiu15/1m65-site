@@ -307,25 +307,33 @@ function renderTimeSale() {
     return node;
   };
   if (banner) {
-    const art = (className, src) => {
-      const img = make("img", className);
-      img.src = src;
+    // Doodles from assets/home/sale: a bow, nail tips and a polish bottle in the corners, sparkles and hearts.
+    const art = (name, className) => {
+      const img = make("img", `sale-banner__art ${className}`);
+      img.src = `assets/home/sale/${name}.svg`;
       img.alt = "";
       img.setAttribute("aria-hidden", "true");
       img.decoding = "async";
       return img;
     };
-    const running = new Date(sale.startsAt).getTime() <= Date.now();
-    const copy = make("div", "sale-banner__copy");
-    copy.append(
-      make("p", "sale-banner__kicker", `${running ? "Đang diễn ra" : "Sắp diễn ra"} · ${sale.title}`),
-      make("p", "sale-banner__value", `Giảm ${sale.percent}%`),
-      make("p", "sale-banner__when", `Cho lịch hẹn ${timeSaleWhen(sale)}`)
-    );
-    const cta = make("button", "button-primary sale-banner__cta", "Đặt lịch ngay");
+    const ribbon = make("p", "sale-banner__ribbon");
+    ribbon.append(art("bow-mini", "sale-banner__mini"), make("span", "", sale.title), art("bow-mini", "sale-banner__mini"));
+    const when = make("p", "sale-banner__when");
+    when.append(art("heart", "sale-banner__dot"), make("span", "", `Cho lịch hẹn ${timeSaleWhen(sale)}`), art("heart", "sale-banner__dot"));
+    const cta = make("button", "sale-banner__cta");
     cta.type = "button";
     cta.dataset.openBooking = "";
-    banner.append(art("sale-banner__bow", "assets/booking/confirmation/pink-bow.webp"), copy, cta, art("sale-banner__polish", "doodles/polish-bottle.webp"));
+    cta.append(art("calendar", "sale-banner__calendar"), make("span", "", "Đặt lịch ngay"), make("span", "sale-banner__arrow", "→"));
+    const action = make("div", "sale-banner__action");
+    action.append(art("rays", "sale-banner__rays"), cta, art("rays", "sale-banner__rays sale-banner__rays--end"));
+    const cloud = make("div", "sale-banner__cloud");
+    cloud.append(ribbon, make("p", "sale-banner__value", `Giảm ${sale.percent}%`), when, action);
+    banner.append(
+      art("bow", "sale-banner__bow"), art("nails", "sale-banner__nails"), art("polish", "sale-banner__polish"),
+      art("sparkle", "sale-banner__sparkle sale-banner__sparkle--1"), art("sparkle", "sale-banner__sparkle sale-banner__sparkle--2"),
+      art("sparkle", "sale-banner__sparkle sale-banner__sparkle--3"), art("heart", "sale-banner__heart sale-banner__heart--1"),
+      art("heart-line", "sale-banner__heart sale-banner__heart--2"), art("squiggle", "sale-banner__squiggle"), cloud
+    );
   }
   if (sticker) sticker.append(make("strong", "", `−${sale.percent}%`), make("span", "", sale.title));
 }
