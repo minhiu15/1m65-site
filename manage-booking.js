@@ -46,6 +46,9 @@
     price: document.querySelector('#appointment-price'),
     note: document.querySelector('#appointment-note'),
     noteRow: document.querySelector('#appointment-note-row'),
+    saleRow: document.querySelector('#appointment-sale-row'),
+    saleLabel: document.querySelector('#appointment-sale-label'),
+    saleAmount: document.querySelector('#appointment-sale-amount'),
     notice: document.querySelector('#manage-notice'),
     actions: document.querySelector('#manage-actions'),
     datePicker: document.querySelector('#reschedule-date-picker'),
@@ -370,7 +373,14 @@
       return line;
     }));
     elements.duration.textContent = `${Number(appointment.durationMinutes || 0)} phút`;
-    elements.price.textContent = currency(appointment.price);
+    // A time-window sale shows as its own line, and the total is what is left to pay.
+    const sale = appointment.sale && Number(appointment.sale.discount) > 0 ? appointment.sale : null;
+    elements.saleRow.hidden = !sale;
+    if (sale) {
+      elements.saleLabel.textContent = `Giảm ${sale.title} (−${sale.percent}%)`;
+      elements.saleAmount.textContent = `−${currency(sale.discount)}`;
+    }
+    elements.price.textContent = currency(appointment.total ?? appointment.price);
     const note = String(appointment.customerNote || '').trim();
     elements.note.textContent = note;
     elements.noteRow.hidden = !note;

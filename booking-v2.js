@@ -1,4 +1,4 @@
-import { ESTIMATE_NOTE, hasUnitPricing, unitPrice } from "./price-units.js?v=20261002-1";
+import { ESTIMATE_NOTE, hasUnitPricing, unitPrice, timeSaleDiscount, timeSaleFor } from "./price-units.js?v=20261004-1";
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
 const REMOVED_SERVICE_IDS = new Set(["goi-thao"]);
@@ -17,7 +17,7 @@ const vnPhone=(value)=>String(value||"").replace(/\D/g,"").replace(/^(?:840(?=\d
 // drops EXIF, including GPS location).
 const MAX_PHOTOS=3,MAX_PHOTO_SOURCE_BYTES=40*1024*1024,MAX_PHOTO_UPLOAD_BYTES=980*1024;
 const PICKER_LABELS={nail:"Nail",mi:"Mi",khac:"Khác"};
-const state = {step:1,category:"nail",selected:[],date:"",calendarOpen:false,calendarMonth:"",preferred:"",slots:[],blocked:[],day:null,slot:"",loading:false,pending:false,error:"",name:"",phone:"",note:"",status:"",reference:"",photos:[],photoBusy:0,photoError:"",photoWarning:"",picker:false,pickerFilter:"nail"};
+const state = {step:1,category:"nail",selected:[],date:"",calendarOpen:false,calendarMonth:"",preferred:"",slots:[],blocked:[],day:null,slot:"",loading:false,pending:false,error:"",name:"",phone:"",note:"",status:"",reference:"",photos:[],photoBusy:0,photoError:"",photoWarning:"",picker:false,pickerFilter:"nail",sale:null};
 let requestId = 0;
 
 function exp(){return window.__v2Experience;}
@@ -38,6 +38,15 @@ function estimateLabel(){return unitPriced()?'<small class="booking-estimate-lab
 function estimateNote(){return unitPriced()?'<p class="booking-estimate-note">'+ESTIMATE_NOTE+'</p>':"";}
 function selectedServices(){return state.selected.map(byId).filter(Boolean);}
 function totals(){return selectedServices().reduce(function(out,service){out.price+=price(service);out.minutes+=duration(service);return out;},{price:0,minutes:0});}
+// Time-window sales from the site's config (see price-units.js): a slot inside one gets a "−X%" tag and the totals
+// preview the cut. The booking's real sale comes back from the server once it is made (state.sale).
+function timeSales(){return Array.isArray(window.__v2Sales)?window.__v2Sales:[];}
+function slotSale(start){return start?timeSaleFor(timeSales(),start):null;}
+function daySale(iso){let best=null;for(let minute=540;minute<=1020;minute+=30){const sale=slotSale(iso+"T"+String(Math.floor(minute/60)).padStart(2,"0")+":"+String(minute%60).padStart(2,"0")+":00+07:00");if(sale&&(!best||sale.percent>best.percent))best=sale;}return best;}
+function chosenSale(){return state.sale||slotSale(state.slot);}
+function saleCut(){const sale=chosenSale();return sale?(sale.discount!=null?Number(sale.discount):timeSaleDiscount(totals().price,sale.percent)):0;}
+function due(){return totals().price-saleCut();}
+function saleLine(){const sale=chosenSale();return sale?'<p class="booking-sale-line"><span>Giảm '+esc(sale.title)+' (−'+sale.percent+'%)</span><strong>−'+money(saleCut())+'</strong></p>':"";}
 function isoToday(){
   const parts=new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()).reduce(function(out,part){if(part.type!=="literal")out[part.type]=part.value;return out;},{});
   return parts.year+"-"+parts.month+"-"+parts.day;
@@ -50,7 +59,7 @@ function reset(options){
   state.step=1;state.category=next.serviceId?categoryOf(next.serviceId):"nail";
   state.selected=next.serviceId&&byId(next.serviceId)?[next.serviceId]:[];
   state.date=isoToday();state.calendarOpen=false;state.calendarMonth="";state.preferred=next.slot||"";state.slots=[];state.blocked=[];state.day=null;state.slot="";
-  state.loading=false;state.pending=false;state.error="";state.name="";state.phone="";state.note="";state.status="";state.reference="";state.billKey="";
+  state.loading=false;state.pending=false;state.error="";state.name="";state.phone="";state.note="";state.status="";state.reference="";state.billKey="";state.sale=null;
   state.photos=[];state.photoBusy=0;state.photoError="";state.photoWarning="";state.picker=false;
   requestId+=1;
 }
@@ -77,7 +86,7 @@ function schedule(){
   const latestEnd=state.day&&state.day.latestEndAt?new Date(state.day.latestEndAt).getTime():0,minutes=totals().minutes;
   // Why an unavailable slot is unavailable: a real booking keeps "Đã kín"; the rest name the rule that blocks it.
   function reason(label){const start=new Date(state.date+"T"+label+":00+07:00").getTime();if(booked.has(label))return "Đã kín";if(start<=Date.now())return "Đã qua";if(!state.day)return "Đã kín";if(!latestEnd)return "Tiệm nghỉ";if(start+minutes*60000>latestEnd)return "Quá giờ làm";return "Sát lịch khác";}
-  const result=[];for(let minute=540;minute<=1020;minute+=30){const label=String(Math.floor(minute/60)).padStart(2,"0")+":"+String(minute%60).padStart(2,"0");result.push({label:label,start:available.get(label)||"",blocked:blocked.get(label)||"",reason:available.has(label)?"":reason(label)});}return result;
+  const result=[];for(let minute=540;minute<=1020;minute+=30){const label=String(Math.floor(minute/60)).padStart(2,"0")+":"+String(minute%60).padStart(2,"0");result.push({label:label,start:available.get(label)||"",blocked:blocked.get(label)||"",reason:available.has(label)?"":reason(label),sale:slotSale(available.get(label)||"")});}return result;
 }
 function shiftMonth(month,step){const year=Number(month.slice(0,4)),date=new Date(Date.UTC(year,Number(month.slice(5,7))-1+step,1));return date.getUTCFullYear()+"-"+String(date.getUTCMonth()+1).padStart(2,"0");}
 // "Ngày khác" opens this month grid instead of the browser's native date picker (bookable: today + 30 days).
@@ -90,12 +99,13 @@ function calendar(){
   return '<div class="booking-calendar" role="dialog" aria-label="Chọn ngày"><div class="booking-calendar__head"><button type="button" data-booking-calendar-month="-1" aria-label="Tháng trước"'+(month>min.slice(0,7)?"":" disabled")+'>‹</button><strong>Tháng '+(index+1)+', '+year+'</strong><button type="button" data-booking-calendar-month="1" aria-label="Tháng sau"'+(month<max.slice(0,7)?"":" disabled")+'>›</button></div><div class="booking-calendar__dows" aria-hidden="true">'+dows+'</div><div class="booking-calendar__grid">'+days+'</div></div>';
 }
 function stepTwo(){
-  const dates=new Array(7).fill(0).map(function(_,index){const iso=offsetDate(index),parts=iso.split("-"),weekday=dateLabel(iso).split(",")[0];return '<button type="button" class="booking-date '+(state.date===iso?"is-active":"")+'" data-booking-date="'+iso+'"><span>'+(index===0?"Hôm nay":esc(weekday))+'</span><strong>'+parts[2]+'/'+parts[1]+'</strong></button>';}).join("");
+  const hint=daySale(state.date);
+  const dates=new Array(7).fill(0).map(function(_,index){const iso=offsetDate(index),parts=iso.split("-"),weekday=dateLabel(iso).split(",")[0];return '<button type="button" class="booking-date '+(state.date===iso?"is-active":"")+'" data-booking-date="'+iso+'"><span>'+(index===0?"Hôm nay":esc(weekday))+'</span><strong>'+parts[2]+'/'+parts[1]+'</strong>'+(daySale(iso)?'<i class="booking-date__sale" aria-hidden="true"></i>':'')+'</button>';}).join("");
   let slots="";
   if(state.loading)slots='<div class="booking-loading">Đang tải giờ trống thật từ tiệm…</div>';
   else if(state.error)slots='<div class="booking-empty" role="alert"><p>'+esc(state.error)+'</p><button class="button-secondary" type="button" data-booking-retry>Thử tải lại</button></div>';
-  else slots='<div class="booking-slots">'+schedule().map(function(slot){const selected=state.slot===slot.start&&!!slot.start;return '<button type="button" class="booking-slot '+(selected?"is-active ":"")+(slot.blocked?"is-blocked":"")+'" data-booking-slot="'+esc(slot.start)+'" '+(!slot.start?"disabled":"")+' aria-pressed="'+selected+'"><strong>'+slot.label+'</strong><small>'+esc(slot.blocked||(slot.start?"Còn trống":slot.reason))+'</small></button>';}).join("")+'</div>';
-  return '<div class="booking-step" data-booking-step="2"><div class="booking-dates">'+dates+'</div><div class="booking-calendar-field"><span>Ngày khác</span><button type="button" class="booking-calendar-trigger" data-booking-calendar-toggle aria-haspopup="dialog" aria-expanded="'+state.calendarOpen+'">'+esc(dateLabel(state.date))+'</button>'+(state.calendarOpen?calendar():"")+'</div>'+slots+'</div>';
+  else slots='<div class="booking-slots">'+schedule().map(function(slot){const selected=state.slot===slot.start&&!!slot.start;return '<button type="button" class="booking-slot '+(selected?"is-active ":"")+(slot.blocked?"is-blocked":"")+'" data-booking-slot="'+esc(slot.start)+'" '+(!slot.start?"disabled":"")+' aria-pressed="'+selected+'"><strong>'+slot.label+'</strong>'+(slot.sale?'<i class="booking-slot__sale">−'+slot.sale.percent+'%</i>':'')+'<small>'+esc(slot.blocked||(slot.start?"Còn trống":slot.reason))+'</small></button>';}).join("")+'</div>';
+  return '<div class="booking-step" data-booking-step="2"><div class="booking-dates">'+dates+'</div><div class="booking-calendar-field"><span>Ngày khác</span><button type="button" class="booking-calendar-trigger" data-booking-calendar-toggle aria-haspopup="dialog" aria-expanded="'+state.calendarOpen+'">'+esc(dateLabel(state.date))+'</button>'+(state.calendarOpen?calendar():"")+'</div>'+(hint&&!state.loading&&!state.error?'<p class="booking-sale-hint">Giờ có nhãn −'+hint.percent+'% được giảm '+hint.percent+'% trên tổng bill · '+esc(hint.title)+'</p>':'')+slots+'</div>';
 }
 function photoField(){
   const tiles=state.photos.map(function(photo,index){
@@ -125,7 +135,7 @@ function pickerView(){
 function stepThree(){
   const total=totals(),names=selectedServices().map(function(service){return service.name;}).join(" + ");
   const time=state.slot?dateLabel(state.date)+" · "+slotLabel(state.slot):"Chưa chọn giờ";
-  return '<div class="booking-step" data-booking-step="3">'+(state.error?'<div class="booking-empty" role="alert">'+esc(state.error)+'</div>':'')+'<div class="booking-confirm-card"><div><strong>'+esc(names)+'</strong><br><small>'+esc(time)+' · '+durationText(total.minutes)+'</small></div><strong>'+estimateLabel()+money(total.price)+'</strong></div>'+estimateNote()+'<div class="booking-form"><label>Họ và tên<input type="text" autocomplete="name" data-booking-name maxlength="80" required value="'+esc(state.name)+'" placeholder="Tên của bạn"></label><label>Số điện thoại<input type="tel" inputmode="tel" autocomplete="tel" data-booking-phone maxlength="16" required value="'+esc(state.phone)+'" placeholder="0xxxxxxxxx"></label><label>Ghi chú<textarea rows="2" data-booking-note maxlength="500" placeholder="Mẫu mong muốn hoặc điều tiệm cần biết">'+esc(state.note)+'</textarea></label><label class="sr-only">Website<input type="text" tabindex="-1" autocomplete="off" data-booking-website></label></div>'+photoField()+'</div>';
+  return '<div class="booking-step" data-booking-step="3">'+(state.error?'<div class="booking-empty" role="alert">'+esc(state.error)+'</div>':'')+'<div class="booking-confirm-card"><div><strong>'+esc(names)+'</strong><br><small>'+esc(time)+' · '+durationText(total.minutes)+'</small></div><strong>'+estimateLabel()+money(due())+'</strong></div>'+saleLine()+estimateNote()+'<div class="booking-form"><label>Họ và tên<input type="text" autocomplete="name" data-booking-name maxlength="80" required value="'+esc(state.name)+'" placeholder="Tên của bạn"></label><label>Số điện thoại<input type="tel" inputmode="tel" autocomplete="tel" data-booking-phone maxlength="16" required value="'+esc(state.phone)+'" placeholder="0xxxxxxxxx"></label><label>Ghi chú<textarea rows="2" data-booking-note maxlength="500" placeholder="Mẫu mong muốn hoặc điều tiệm cần biết">'+esc(state.note)+'</textarea></label><label class="sr-only">Website<input type="text" tabindex="-1" autocomplete="off" data-booking-website></label></div>'+photoField()+'</div>';
 }
 // After "Xác nhận đặt hẹn" the form steps aside for a short sequence: a spinner while the booking is
 // sent, a tick once it is confirmed, then the booking ticket flies in. Reduced motion skips the waits.
@@ -182,10 +192,10 @@ function barcodeSvg(code){
 // The bill (bill.js: the QR, the "Phiếu đặt lịch" picture, its download) loads while the booking is sent; the
 // stub keeps the drawn barcode and the ticket skips its download button if it cannot load.
 let billLib=null,billLoading=null;
-function loadBill(){return billLoading||(billLoading=import("./bill.js?v=20260930-4").then(function(lib){billLib=lib;return lib;},function(){billLoading=null;return null;}));}
+function loadBill(){return billLoading||(billLoading=import("./bill.js?v=20261004-1").then(function(lib){billLib=lib;return lib;},function(){billLoading=null;return null;}));}
 function ticketBill(){
   const services=selectedServices().map(function(service){return {id:service.id,name:service.name,price:price(service)};});
-  return {reference:state.reference,name:state.name.trim(),phone:billLib.maskPhone(vnPhone(state.phone)),note:state.note.trim(),startAt:state.slot,status:"confirmed",services:services,total:totals().price,url:billLib.billUrl(state.reference,state.billKey)};
+  return {reference:state.reference,name:state.name.trim(),phone:billLib.maskPhone(vnPhone(state.phone)),note:state.note.trim(),startAt:state.slot,status:"confirmed",services:services,subtotal:totals().price,sale:state.sale,total:due(),url:billLib.billUrl(state.reference,state.billKey)};
 }
 function ticketHtml(){
   const art=function(className,file){return '<img class="booking-ticket__deco '+className+'" src="'+TICKET_ART+file+'" alt="" aria-hidden="true" decoding="async">';};
@@ -202,6 +212,7 @@ function ticketHtml(){
     +'<dl class="booking-ticket__info">'
     +row("calendar-icon.webp","Mã lịch hẹn",'<span class="booking-ticket__code">'+esc(state.reference)+'</span>')
     +(when?row("clock-icon.webp","Lịch hẹn",esc(when)):"")
+    +(state.sale?row("ticket-heart-small.webp","Ưu đãi",esc("−"+state.sale.percent+"% · "+state.sale.title)):"")
     +'</dl>'
     +'<div class="booking-ticket__actions"><button class="booking-ticket__cta button-primary" type="button" data-booking-manage>'+TICKET_ICONS.calendar+'Xem lịch của bạn</button>'
     +(billLib?'<button class="booking-ticket__download" type="button" data-booking-download>'+TICKET_ICONS.download+'Tải phiếu</button>':'')+'</div></div>'
@@ -223,7 +234,7 @@ function render(){
   const titles=["Bạn muốn làm gì hôm nay?","Mình ghé tiệm lúc nào?","Cho tiệm biết tên bạn nhé"];
   eyebrow.textContent="Đặt hẹn · bước "+state.step+"/3";title.textContent=titles[state.step-1];body.innerHTML=state.step===1?stepOne():(state.step===2?stepTwo():stepThree());back.textContent=state.step===1?"Để sau":"Quay lại";next.disabled=state.pending||state.loading;
   next.textContent=state.pending?(state.photos.some(function(photo){return photo.kind==="upload";})?"Đang gửi ảnh…":"Đang xác nhận…"):(state.step===1?(state.selected.length?"Chọn ngày & giờ":"Chọn dịch vụ trước"):(state.step===2?"Nhập thông tin":"Xác nhận đặt hẹn"));
-  const total=totals();summary.textContent=state.selected.length+" dịch vụ · "+durationText(total.minutes)+" · "+(unitPriced()?"tạm tính ":"")+money(total.price)+(state.step===3&&state.photos.length?" · "+state.photos.length+" ảnh mẫu":"");
+  const total=totals();summary.textContent=state.selected.length+" dịch vụ · "+durationText(total.minutes)+" · "+(unitPriced()?"tạm tính ":"")+money(due())+(chosenSale()?" (đã giảm "+chosenSale().percent+"%)":"")+(state.step===3&&state.photos.length?" · "+state.photos.length+" ảnh mẫu":"");
 }
 async function request(action,payload){
   const response=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(Object.assign({action:action},payload||{}))});
@@ -280,7 +291,7 @@ async function submit(){
     if(!window.mewTurnstileBooking||typeof window.mewTurnstileBooking.getToken!=="function"){const error=new Error("turnstile_unavailable");error.code="turnstile_unavailable";throw error;}
     const token=await window.mewTurnstileBooking.getToken();
     const body=await request("create",{serviceId:state.selected[0],serviceIds:state.selected.slice(),startAt:state.slot,customerName:name,customerPhone:phone,customerNote:state.note.trim(),turnstileToken:token,website:website,referencePhotos:state.photos.map(function(photo){return photo.kind==="upload"?{kind:"upload",data:photo.data}:{kind:"gallery",src:photo.src,title:photo.title};})});
-    state.status="done";state.reference=String((body.appointment&&body.appointment.reference)||"Đã xác nhận");state.billKey=String(body.billKey||"");
+    state.status="done";state.reference=String((body.appointment&&body.appointment.reference)||"Đã xác nhận");state.billKey=String(body.billKey||"");state.sale=body.appointment&&body.appointment.sale||null;
     const missing=state.photos.length-Number(body.photosSaved||0);
     state.photoWarning=state.photos.length&&missing>0?"Lịch đã xác nhận, nhưng "+missing+" ảnh mẫu chưa gửi được. Bạn nhắn Zalo ảnh đó cho tiệm giúp tụi mình nhé.":"";
     // Let the spinner show for a beat even on a fast network, draw the tick, then fly the ticket in.
@@ -402,7 +413,7 @@ if(typeof location!=="undefined"&&document.body&&/^(localhost|127\.0\.0\.1|\[::1
   replay.style.cssText="position:fixed;left:12px;bottom:12px;z-index:400;padding:10px 16px;border:2px dashed #e45a86;border-radius:999px;background:#fff;color:#c23b66;font:700 14px/1 sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.18)";
   replay.addEventListener("click",function(){
     const modal=bookingModal();if(!modal)return;
-    reset();state.status="done";state.selected=["ve"];state.reference="1M65-260927-CD102D";state.date=offsetDate(1);state.slot=new Date(state.date+"T10:00:00+07:00").toISOString();
+    reset();state.status="done";state.selected=["ve"];state.reference="1M65-260927-CD102D";state.date=offsetDate(1);state.slot=new Date(state.date+"T10:00:00+07:00").toISOString();state.sale=slotSale(state.slot);
     state.name="Nguyễn Thị Mai";state.phone="0987654321";
     // The popup opens in the same task as the ticket, so its empty form never shows behind it.
     preloadTicketArt();loadBill().then(function(){if(modal.hidden)exp().openModal(modal,replay);setStage("");showTicket();});

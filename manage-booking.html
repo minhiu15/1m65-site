@@ -10,11 +10,11 @@
   <link rel="icon" href="favicon.svg">
   <link rel="stylesheet" href="manage-booking.css?v=20261003-1">
   <link rel="stylesheet" href="rose-theme.css?v=20260903webp1">
-  <link rel="stylesheet" href="manage-booking-v2.css?v=20261003-4">
+  <link rel="stylesheet" href="manage-booking-v2.css?v=20261004-1">
   <link rel="stylesheet" href="paw-cursor.css?v=20261001-1">
   <script src="turnstile-config.js?v=20260807a"></script>
   <script src="turnstile-booking.js?v=20260807a"></script>
-  <script src="manage-booking.js?v=20261003-1" defer></script>
+  <script src="manage-booking.js?v=20261004-1" defer></script>
   <script src="paw-cursor.js?v=20261002-1" defer></script>
 </head>
 <body>
@@ -109,6 +109,7 @@
       <section class="appointment-receipt" aria-labelledby="receipt-title">
         <p id="receipt-title" class="receipt-title">Dịch vụ đã đặt</p>
         <ul id="appointment-services" class="receipt-lines"></ul>
+        <p id="appointment-sale-row" class="receipt-sale" hidden><span id="appointment-sale-label"></span><strong id="appointment-sale-amount"></strong></p>
         <p class="receipt-total"><span>Tổng tạm tính</span><strong id="appointment-price"></strong></p>
         <p id="appointment-note-row" class="receipt-note"><span>Ghi chú</span><span id="appointment-note"></span></p>
       </section>

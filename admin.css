@@ -952,3 +952,55 @@ input:user-invalid + .field-error{display:block}
   .skeleton{animation:none}
   .side,.btn-paper,.btn-ghost{transition:none}
 }
+
+/* Sale theo khung giờ: the list above the per-service table, and the form in a dialog like the confirm one. */
+.sale-manager{margin-bottom:16px}
+.sale-manager-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.sale-manager-head h2{font-size:21px}
+.sale-manager-head .hint{max-width:620px;margin-top:4px}
+.sale-list{display:grid;gap:8px}
+.sale-row{display:grid;grid-template-columns:64px minmax(0,1fr) auto auto auto auto;align-items:center;gap:12px;padding:10px 14px;border:1.5px dashed rgba(232,94,124,.3);border-radius:16px;background:#fffafb}
+.sale-row.is-past,.sale-row.is-off{opacity:.62}
+.sale-pct{display:grid;place-items:center;height:40px;border-radius:12px;background:var(--pink);color:#fff;font:800 17px/1 var(--display)}
+.sale-copy{display:grid;gap:2px;min-width:0}
+.sale-copy strong{color:var(--cocoa);font:700 15px/1.3 var(--display);overflow-wrap:anywhere}
+.sale-copy span{color:var(--muted);font:600 13px var(--body)}
+.sale-state{padding:4px 10px;border-radius:999px;background:var(--pink-soft);color:var(--pink-text);font:800 12px/1.2 var(--body);white-space:nowrap}
+.sale-row.is-live .sale-state{background:#e2f3e9;color:#2c6e4b}
+.sale-switch{position:relative;width:46px;height:26px;padding:0;border:0;border-radius:999px;background:#e7dcd8;cursor:pointer}
+.sale-switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(79,47,46,.25);transition:translate .18s}
+.sale-switch[aria-checked="true"]{background:var(--pink)}
+.sale-switch[aria-checked="true"]::after{translate:20px 0}
+.sale-row .btn-ghost{height:34px;padding:0 12px;font-size:13px}
+.sale-dialog{width:520px;max-width:calc(100vw - 32px);padding:26px 26px 22px;border:1.5px dashed rgba(232,94,124,.5);border-radius:26px;background:var(--card);color:var(--cocoa);box-shadow:0 30px 70px -20px rgba(79,47,46,.55)}
+.sale-dialog::backdrop{background:rgba(79,56,46,.22)}
+.sale-dialog form{display:flex;flex-direction:column;gap:12px}
+.sale-dialog .eyebrow{margin:0}
+.sale-dialog h3{font-size:22px}
+.sale-dialog label,.sale-field{display:grid;gap:6px;color:var(--ink);font:700 14px var(--body)}
+.sale-chips{display:flex;gap:6px}
+.sale-chips button{flex:1;height:40px;border:1.5px solid var(--pink-field);border-radius:12px;background:var(--card);color:var(--cocoa);font:700 14px var(--body)}
+.sale-chips button[aria-pressed="true"]{border-color:var(--pink);background:var(--pink-soft);color:var(--pink-text)}
+.sale-dialog .sale-custom{grid-template-columns:auto 112px;align-items:center;justify-content:space-between;color:var(--muted)}
+.sale-dialog .sale-allday{display:flex;flex-direction:row;align-items:center;gap:8px}
+.sale-allday input{width:18px;height:18px;accent-color:var(--pink)}
+.sale-when{display:grid;grid-template-columns:1fr 130px;gap:10px 12px}
+.sale-when input:disabled{opacity:.45}
+.sale-overlap{margin:0}
+@media (max-width:767px){
+  .sale-manager-head{flex-direction:column}
+  .sale-manager-head .btn-paper{align-self:stretch}
+  .sale-row{grid-template-columns:52px minmax(0,1fr) auto auto;grid-template-areas:"pct copy copy switch" "pct state edit delete";row-gap:8px}
+  .sale-pct{grid-area:pct}
+  .sale-copy{grid-area:copy}
+  .sale-switch{grid-area:switch}
+  .sale-state{grid-area:state;justify-self:start}
+  .sale-edit{grid-area:edit}
+  .sale-delete{grid-area:delete}
+  .sale-dialog{padding:22px 18px 18px}
+}
+/* Time-window sales on bookings: a pink "−X%" tag by the price, the cut as its own line, and tags on sale slots. */
+.sale-tag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;background:var(--pink);color:#fff;font:800 11px/1.4 var(--body);vertical-align:1px}
+.dd-sale span,.slip-sale span{color:var(--pink-deep);font-weight:800}
+.slot-chip{position:relative}
+.slot-chip .slot-sale{position:absolute;top:-7px;right:-5px;padding:1px 6px;border-radius:999px;background:var(--pink);color:#fff;font:800 10.5px/1.35 var(--body);font-style:normal}

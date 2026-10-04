@@ -1,4 +1,4 @@
-import { unitPrice } from "./price-units.js?v=20261002-1";
+import { unitPrice, featuredTimeSale, timeSaleWhen } from "./price-units.js?v=20261004-1";
 
 const BOOKING_ENDPOINT = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 
@@ -292,11 +292,53 @@ function renderServices({ animateShared = false } = {}) {
   panel.setAttribute("aria-labelledby", `tab-${state.activeTab}`);
   panel.innerHTML = state.activeTab === "signature" ? renderSignature() : renderSharedGroup(state.activeTab, animateShared);
 }
+// The featured time-window sale (see price-units.js): a banner under the header and a sticker by the booking
+// button above the footer; both stay hidden while no sale runs or starts within a week. Built from nodes, so a
+// sale's title is shown as text.
+function renderTimeSale() {
+  const sale = featuredTimeSale(window.__v2Sales);
+  const banner = document.querySelector("[data-sale-banner]"), sticker = document.querySelector("[data-sale-sticker]");
+  [banner, sticker].forEach((holder) => { if (holder) { holder.hidden = !sale; holder.replaceChildren(); } });
+  if (!sale) return;
+  const make = (tag, className, text) => {
+    const node = document.createElement(tag);
+    node.className = className;
+    if (text) node.textContent = text;
+    return node;
+  };
+  if (banner) {
+    const art = (className, src) => {
+      const img = make("img", className);
+      img.src = src;
+      img.alt = "";
+      img.setAttribute("aria-hidden", "true");
+      img.decoding = "async";
+      return img;
+    };
+    const running = new Date(sale.startsAt).getTime() <= Date.now();
+    const copy = make("div", "sale-banner__copy");
+    copy.append(
+      make("p", "sale-banner__kicker", `${running ? "Đang diễn ra" : "Sắp diễn ra"} · ${sale.title}`),
+      make("p", "sale-banner__value", `Giảm ${sale.percent}%`),
+      make("p", "sale-banner__when", `Cho lịch hẹn ${timeSaleWhen(sale)}`)
+    );
+    const cta = make("button", "button-primary sale-banner__cta", "Đặt lịch ngay");
+    cta.type = "button";
+    cta.dataset.openBooking = "";
+    banner.append(art("sale-banner__bow", "assets/booking/confirmation/pink-bow.webp"), copy, cta, art("sale-banner__polish", "doodles/polish-bottle.webp"));
+  }
+  if (sticker) sticker.append(make("strong", "", `−${sale.percent}%`), make("span", "", sale.title));
+}
+document.addEventListener("1m65:v2:sales", renderTimeSale);
+
 async function loadLiveServices() {
   try {
     const response = await fetch(BOOKING_ENDPOINT, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ action: "config" }) });
     if (!response.ok) return;
     const body = await response.json();
+    // Time-window sales for the booking popup's slot tags and the home banner (see price-units.js).
+    window.__v2Sales = Array.isArray(body?.config?.sales) ? body.config.sales : [];
+    document.dispatchEvent(new CustomEvent("1m65:v2:sales"));
     const live = Array.isArray(body?.config?.services) ? body.config.services : [];
     if (!live.length) return;
     state.services = fallbackServices.map((fallback) => {

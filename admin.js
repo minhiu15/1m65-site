@@ -151,6 +151,23 @@
     discountSearch: document.querySelector('#discount-search'),
     discountApply: document.querySelector('#discount-apply'),
     discountDiscard: document.querySelector('#discount-discard'),
+    saleList: document.querySelector('#sale-list'),
+    saleMessage: document.querySelector('#sale-message'),
+    saleNew: document.querySelector('#sale-new'),
+    saleDialog: document.querySelector('#sale-dialog'),
+    saleForm: document.querySelector('#sale-form'),
+    saleFormTitle: document.querySelector('#sale-form-title'),
+    saleTitle: document.querySelector('#sale-title'),
+    salePercent: document.querySelector('#sale-percent'),
+    salePercentChips: document.querySelector('#sale-percent-chips'),
+    saleAllDay: document.querySelector('#sale-all-day'),
+    saleStartDate: document.querySelector('#sale-start-date'),
+    saleStartTime: document.querySelector('#sale-start-time'),
+    saleEndDate: document.querySelector('#sale-end-date'),
+    saleEndTime: document.querySelector('#sale-end-time'),
+    saleOverlap: document.querySelector('#sale-overlap'),
+    saleFormMessage: document.querySelector('#sale-form-message'),
+    saleCancel: document.querySelector('#sale-cancel'),
     discountFilters: document.querySelector('#discount-filters'),
     discountServiceList: document.querySelector('#discount-service-list'),
     discountMessage: document.querySelector('#discount-message'),
@@ -215,12 +232,19 @@
   let customerKey = '';
   const discountDrafts = new Map();
   const discountSavingIds = new Set();
+  // Time-window sales (booking_sales), all of them including those switched off: the Ưu đãi list and the Tạo lịch tags.
+  const SALE_STEPS = [5, 10, 15, 20, 30];
+  let sales = [];
+  let editingSaleId = '';
+  let saleBusy = false;
   // Units for designs priced per nail, stone or charm (shared with the site); without it prices stay one number.
   let priceUnits = null;
-  import('./price-units.js?v=20260928-1').then((module) => {
+  import('./price-units.js?v=20261004-1').then((module) => {
     priceUnits = module;
     renderAdminServices();
     renderDiscountServices();
+    renderSales();
+    renderAdminSlots();
   }).catch(() => {});
   const rangeChips = [...document.querySelectorAll('[data-range]')];
   const viewButtons = [...document.querySelectorAll('[data-view]')];
@@ -305,6 +329,10 @@
       invalid_original_price: 'Giá gốc phải là số nguyên không âm.',
       invalid_discount_percent: 'Phần trăm giảm giá phải là số nguyên từ 0 đến 100.',
       invalid_duration: 'Thời gian dịch vụ phải từ 5 đến 480 phút.',
+      invalid_sale_title: 'Tên dịp cần từ 2 đến 60 ký tự.',
+      invalid_sale_percent: 'Mức giảm là số nguyên từ 1 đến 90%.',
+      invalid_sale_range: 'Thời gian kết thúc phải sau thời gian bắt đầu.',
+      sale_not_found: 'Đợt sale này không còn nữa. Tải lại trang để xem danh sách mới.',
       service_selection_too_long: 'Tổng thời lượng dịch vụ quá dài.',
       request_failed: 'Không thể kết nối máy chủ. Vui lòng thử lại.'
     };
@@ -476,6 +504,15 @@
   // "mỗi viên", "full bàn": how a unit-priced design is counted; empty for a service priced per booking.
   function unitLabel(serviceId, price) {
     return priceUnits ? priceUnits.unitPrice(serviceId, price, 'đ').line.split(' · ')[0] : '';
+  }
+
+  // What the customer pays: the subtotal less a time-window sale (booking-api adds total and sale to each item).
+  function due(item) {
+    return Number(item?.total ?? item?.price ?? 0);
+  }
+
+  function saleTag(item) {
+    return item?.sale ? node('span', 'sale-tag', `−${item.sale.percent}%`) : null;
   }
 
   function isEstimate(serviceIds) {
@@ -735,11 +772,13 @@
     const duration = services.reduce((sum, service) => sum + Number(service.durationMinutes || 0), 0);
     const price = services.reduce((sum, service) => sum + Number(service.price || 0), 0);
     const estimate = isEstimate(services.map((service) => service.id));
+    const sale = adminSelectedStartAt && priceUnits ? priceUnits.timeSaleFor(sales, adminSelectedStartAt) : null;
+    const cut = sale ? priceUnits.timeSaleDiscount(price, sale.percent) : 0;
     const date = elements.adminBookingDate.value;
     elements.adminServiceCount.textContent = `${services.length}/8 dịch vụ`;
     elements.adminSlotTitle.textContent = `Giờ còn trống${date ? ` · ${shortDate(date)}` : ''}`;
     elements.adminSlotDuration.textContent = services.length ? `cho ${duration} phút` : '';
-    elements.createBarTotal.textContent = services.length ? `${currency(price)}${estimate ? ' tạm tính' : ''}` : 'Chưa chọn dịch vụ';
+    elements.createBarTotal.textContent = services.length ? `${currency(price - cut)}${estimate ? ' tạm tính' : ''}` : 'Chưa chọn dịch vụ';
     elements.createBarMeta.textContent = `${services.length}/8 dịch vụ${services.length ? ` · ${duration} phút` : ''}`;
     if (!services.length) {
       elements.adminServiceSummary.replaceChildren(node('p', 'hint', 'Chưa chọn dịch vụ.'));
@@ -750,7 +789,9 @@
       ? `${shortDate(date)} · ${localTime(adminSelectedStartAt)} – ${minutesToTime(minuteOfDay(adminSelectedStartAt) + duration)}`
       : `${shortDate(date)} · chưa chọn giờ`;
     const total = node('div', 'slip-total');
-    total.append(node('span', '', `${estimate ? 'Tạm tính' : 'Tổng tiền'} · ${duration} phút`), node('b', '', currency(price)));
+    total.append(node('span', '', `${sale ? 'Còn lại' : estimate ? 'Tạm tính' : 'Tổng tiền'} · ${duration} phút`), node('b', '', currency(price - cut)));
+    const saleLine = sale ? node('div', 'slip-line slip-sale') : null;
+    if (saleLine) saleLine.append(node('span', '', `Giảm ${sale.title} (−${sale.percent}%)`), node('span', '', `−${currency(cut)}`));
     elements.adminServiceSummary.replaceChildren(
       node('p', 'slip-when', when),
       ...services.map((service) => {
@@ -763,6 +804,7 @@
         return line;
       }),
       node('div', 'slip-tear'),
+      ...(saleLine ? [saleLine] : []),
       total
     );
     if (estimate) {
@@ -1252,6 +1294,8 @@
     } else {
       grid.replaceChildren(...adminAvailableSlots.map((slot) => {
         const chip = button('slot-chip', slot.label);
+        const slotSale = priceUnits ? priceUnits.timeSaleFor(sales, slot.startAt) : null;
+        if (slotSale) chip.append(node('i', 'slot-sale', `−${slotSale.percent}%`));
         const selected = slot.startAt === adminSelectedStartAt;
         chip.classList.toggle('selected', selected);
         chip.setAttribute('aria-pressed', String(selected));
@@ -1265,7 +1309,171 @@
     renderAdminServiceSummary();
   }
 
+  function saleParts(value) {
+    const map = {};
+    new Intl.DateTimeFormat('en-GB', { timeZone: TIME_ZONE, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+      .formatToParts(new Date(value)).forEach((part) => { map[part.type] = part.value; });
+    return { date: `${map.year}-${map.month}-${map.day}`, time: `${map.hour}:${map.minute}` };
+  }
+
+  function saleState(sale, now = Date.now()) {
+    if (!sale.active) return { key: 'off', label: 'Đang tắt' };
+    if (new Date(sale.endsAt).getTime() <= now) return { key: 'past', label: 'Đã qua' };
+    if (new Date(sale.startsAt).getTime() <= now) return { key: 'live', label: 'Đang diễn ra' };
+    return { key: 'soon', label: 'Sắp tới' };
+  }
+
+  function saleWhenText(sale) {
+    return priceUnits ? priceUnits.timeSaleWhen(sale) : `${shortDate(saleParts(sale.startsAt).date)} → ${shortDate(saleParts(sale.endsAt).date)}`;
+  }
+
+  async function loadSales() {
+    try {
+      const data = await adminRequest({ action: 'admin_list_sales' });
+      sales = Array.isArray(data.sales) ? data.sales : [];
+    } catch (error) {
+      setMessage(elements.saleMessage, errorMessage(error.message));
+    }
+    renderSales();
+    renderAdminSlots();
+  }
+
+  function renderSales() {
+    if (!elements.saleList) return;
+    if (!sales.length) {
+      elements.saleList.replaceChildren(node('p', 'hint', 'Chưa có đợt sale nào. Bấm “Tạo đợt sale” để bắt đầu.'));
+      return;
+    }
+    elements.saleList.replaceChildren(...sales.map((sale) => {
+      const state = saleState(sale);
+      const row = node('article', `sale-row is-${state.key}`);
+      const copy = node('div', 'sale-copy');
+      copy.append(node('strong', '', sale.title), node('span', '', saleWhenText(sale)));
+      const toggle = button('sale-switch');
+      toggle.setAttribute('role', 'switch');
+      toggle.setAttribute('aria-checked', String(sale.active));
+      toggle.setAttribute('aria-label', `${sale.active ? 'Tắt' : 'Bật'} ${sale.title}`);
+      toggle.disabled = saleBusy;
+      toggle.addEventListener('click', () => toggleSale(sale));
+      const edit = button('btn-ghost sale-edit', 'Sửa');
+      edit.disabled = saleBusy;
+      edit.addEventListener('click', () => openSaleForm(sale));
+      const remove = button('btn-ghost sale-delete', 'Xóa');
+      remove.disabled = saleBusy;
+      remove.addEventListener('click', () => deleteSale(sale));
+      row.append(node('span', 'sale-pct', `−${sale.percent}%`), copy, node('span', 'sale-state', state.label), toggle, edit, remove);
+      return row;
+    }));
+  }
+
+  function saleRequestBody(sale) {
+    return { id: sale.id || null, title: sale.title, percent: sale.percent, startsAt: sale.startsAt, endsAt: sale.endsAt, active: sale.active };
+  }
+
+  async function writeSale(action, body, done) {
+    saleBusy = true;
+    renderSales();
+    try {
+      await adminRequest({ action, ...body });
+      setMessage(elements.saleMessage, done, true);
+      await loadSales();
+      return true;
+    } catch (error) {
+      setMessage(elements.saleMessage, errorMessage(error.message));
+      return false;
+    } finally {
+      saleBusy = false;
+      renderSales();
+    }
+  }
+
+  async function toggleSale(sale) {
+    const next = !sale.active;
+    if (!await confirmAction(
+      `${next ? 'Bật' : 'Tắt'} đợt “${sale.title}”?`,
+      next ? `Lịch hẹn mới bắt đầu trong ${saleWhenText(sale)} sẽ được giảm ${sale.percent}%.` : 'Lịch mới sẽ không được giảm nữa. Lịch đã đặt vẫn giữ giá đã giảm.',
+      next ? 'Bật' : 'Tắt'
+    )) return;
+    await writeSale('admin_save_sale', saleRequestBody({ ...sale, active: next }), `Đã ${next ? 'bật' : 'tắt'} đợt ${sale.title}.`);
+  }
+
+  async function deleteSale(sale) {
+    if (!await confirmAction(`Xóa đợt “${sale.title}”?`, 'Lịch đã đặt vẫn giữ giá đã giảm.', 'Xóa')) return;
+    await writeSale('admin_delete_sale', { id: sale.id }, `Đã xóa đợt ${sale.title}.`);
+  }
+
+  // "Cả ngày" runs from the start day's 00:00 to the day after the end day's 00:00.
+  function saleFormRange() {
+    const allDay = elements.saleAllDay.checked;
+    const startDate = elements.saleStartDate.value;
+    const endDate = elements.saleEndDate.value;
+    if (!startDate || !endDate) return null;
+    return {
+      startsAt: `${startDate}T${allDay ? '00:00' : elements.saleStartTime.value || '00:00'}:00+07:00`,
+      endsAt: allDay ? `${addDays(endDate, 1)}T00:00:00+07:00` : `${endDate}T${elements.saleEndTime.value || '00:00'}:00+07:00`
+    };
+  }
+
+  function renderSaleForm() {
+    const percent = Number(elements.salePercent.value);
+    elements.salePercentChips.replaceChildren(...SALE_STEPS.map((value) => {
+      const chip = button('', `${value}%`);
+      chip.setAttribute('aria-pressed', String(value === percent));
+      chip.addEventListener('click', () => {
+        elements.salePercent.value = String(value);
+        renderSaleForm();
+      });
+      return chip;
+    }));
+    elements.saleStartTime.disabled = elements.saleAllDay.checked;
+    elements.saleEndTime.disabled = elements.saleAllDay.checked;
+    const range = saleFormRange();
+    const overlaps = range ? sales.filter((sale) => sale.id !== editingSaleId && sale.active
+      && new Date(sale.startsAt) < new Date(range.endsAt) && new Date(range.startsAt) < new Date(sale.endsAt)) : [];
+    elements.saleOverlap.hidden = !overlaps.length;
+    elements.saleOverlap.textContent = overlaps.length
+      ? `Trùng khung với ${overlaps.map((sale) => `“${sale.title}” (−${sale.percent}%)`).join(', ')}. Lịch trong phần trùng lấy đợt % cao hơn.`
+      : '';
+  }
+
+  function openSaleForm(sale = null) {
+    editingSaleId = sale?.id || '';
+    elements.saleFormTitle.textContent = sale ? 'Sửa đợt sale' : 'Tạo đợt sale';
+    elements.saleTitle.value = sale?.title || '';
+    elements.salePercent.value = String(sale?.percent || 10);
+    const today = dateInTimeZone();
+    const start = sale ? saleParts(sale.startsAt) : { date: today, time: '09:00' };
+    const end = sale ? saleParts(sale.endsAt) : { date: today, time: '18:00' };
+    const allDay = Boolean(sale) && start.time === '00:00' && end.time === '00:00';
+    elements.saleAllDay.checked = allDay;
+    setDateValue(elements.saleStartDate, start.date);
+    setDateValue(elements.saleEndDate, allDay ? addDays(end.date, -1) : end.date);
+    elements.saleStartTime.value = allDay ? '09:00' : start.time;
+    elements.saleEndTime.value = allDay ? '18:00' : end.time;
+    setMessage(elements.saleFormMessage);
+    renderSaleForm();
+    elements.saleDialog.showModal();
+    elements.saleTitle.focus();
+  }
+
+  async function submitSaleForm(event) {
+    event.preventDefault();
+    const title = elements.saleTitle.value.trim();
+    const percent = Number(elements.salePercent.value);
+    const range = saleFormRange();
+    if (title.length < 2) return setMessage(elements.saleFormMessage, 'Tên dịp cần ít nhất 2 ký tự.');
+    if (!Number.isInteger(percent) || percent < 1 || percent > 90) return setMessage(elements.saleFormMessage, 'Mức giảm là số nguyên từ 1 đến 90%.');
+    if (!range || new Date(range.endsAt) <= new Date(range.startsAt)) {
+      return setMessage(elements.saleFormMessage, 'Thời gian kết thúc phải sau thời gian bắt đầu.');
+    }
+    const current = sales.find((item) => item.id === editingSaleId);
+    const sale = { id: editingSaleId || null, title, percent, ...range, active: current ? current.active : true };
+    if (!await confirmAction(`Lưu đợt “${title}”?`, `Lịch hẹn bắt đầu trong ${saleWhenText(sale)} được giảm ${percent}% trên tổng bill.`, 'Lưu')) return;
+    if (await writeSale('admin_save_sale', saleRequestBody(sale), `Đã lưu đợt ${title}.`)) elements.saleDialog.close();
+  }
+
   async function loadAdminBookingConfig() {
+    loadSales();
     adminConfigLoading = true;
     renderAdminServices();
     try {
@@ -1406,7 +1614,7 @@
     const remaining = active.filter((item) => item.status !== 'completed'
       && new Date(item.endAt).getTime() > now).length;
     const duration = active.reduce((total, item) => total + Number(item.durationMinutes || 0), 0);
-    const estimate = active.reduce((total, item) => total + Number(item.price || 0), 0);
+    const estimate = active.reduce((total, item) => total + due(item), 0);
     const dropped = todayAppointments.length - active.length;
     elements.dashboardTitle.textContent = active.length ? `Hôm nay có ${active.length} lịch` : 'Hôm nay chưa có lịch nào';
     // Always the same six tiles, so the grid keeps its shape: number on top, what it counts underneath.
@@ -1509,7 +1717,10 @@
       time.append(node('span', 'd-only', `–${localTime(item.endAt)}`));
       const main = node('span', 'tl-main');
       main.append(node('b', 'tl-name', item.customerName), node('span', 'tl-service', item.service));
-      note.append(time, main, node('span', 'tl-price', currency(item.price)), statusBadge(item));
+      const price = node('span', 'tl-price', currency(due(item)));
+      const tag = saleTag(item);
+      if (tag) price.append(tag);
+      note.append(time, main, price, statusBadge(item));
       note.addEventListener('click', () => openDetail(item));
       return note;
     });
@@ -1724,10 +1935,15 @@
       line.append(label, node('span', '', currency(service.price)));
       return line;
     }));
+    if (item.sale) {
+      const sale = node('div', 'dd-line dd-sale');
+      sale.append(node('span', '', `Giảm ${item.sale.title} (−${item.sale.percent}%)`), node('span', '', `−${currency(item.sale.discount)}`));
+      lines.append(sale);
+    }
     const total = node('div', 'dd-total');
-    const totalLabel = node('span', '', estimate ? 'Tạm tính' : 'Tổng tiền');
+    const totalLabel = node('span', '', item.sale ? 'Còn lại' : estimate ? 'Tạm tính' : 'Tổng tiền');
     totalLabel.append(node('span', 'd-only', ` · ${item.durationMinutes} phút`));
-    total.append(totalLabel, node('b', '', currency(item.price)));
+    total.append(totalLabel, node('b', '', currency(due(item))));
     lines.append(total);
 
     elements.detailDrawer.replaceChildren(top, who, facts, lines);
@@ -1819,6 +2035,8 @@
       }
       slotGrid.replaceChildren(...availableSlots.map((slot) => {
         const chip = button('slot-chip', slot.label);
+        const slotSale = priceUnits ? priceUnits.timeSaleFor(sales, slot.startAt) : null;
+        if (slotSale) chip.append(node('i', 'slot-sale', `−${slotSale.percent}%`));
         const selected = slot.startAt === selectedStartAt;
         chip.classList.toggle('selected', selected);
         chip.setAttribute('aria-pressed', String(selected));
@@ -1937,7 +2155,9 @@
     who.append(node('b', 'ar-name', item.customerName), node('span', 'ar-phone', item.customerPhone));
     const service = node('span', 'ar-service', item.service);
     if (photos) service.append(node('span', 'photo-tag', `${photos} ảnh mẫu`));
-    const price = node('span', 'ar-price', currency(item.price));
+    const price = node('span', 'ar-price', currency(due(item)));
+    const tag = saleTag(item);
+    if (tag) price.append(tag);
     if (photos) price.append(node('span', 'm-only', ` · ${photos} ảnh mẫu`));
     row.append(time, who, service, node('span', 'ar-duration', String(item.durationMinutes)), price, statusBadge(item));
     row.addEventListener('click', () => openDetail(item));
@@ -1986,7 +2206,7 @@
     pop.append(
       top,
       node('b', 'wp-title', `${item.customerName} · ${localTime(item.startAt)}–${localTime(item.endAt)}`),
-      node('span', 'wp-service', `${item.service} · ${currency(item.price)}${estimate ? ' tạm tính' : ''}${photos ? ` · ${photos} ảnh mẫu` : ''}`)
+      node('span', 'wp-service', `${item.service} · ${currency(due(item))}${item.sale ? ` (giảm ${item.sale.percent}%)` : ''}${estimate ? ' tạm tính' : ''}${photos ? ` · ${photos} ảnh mẫu` : ''}`)
     );
     if (item.customerNote) pop.append(node('span', 'wp-note', `Ghi chú: ${item.customerNote}`));
     const actions = node('div', 'wp-actions');
@@ -2222,7 +2442,7 @@
       const latest = group.items[group.items.length - 1];
       return {
         ...group, latest, name: latest.customerName, phone: latest.customerPhone,
-        total: group.items.reduce((sum, item) => sum + Number(item.price || 0), 0)
+        total: group.items.reduce((sum, item) => sum + due(item), 0)
       };
     });
   }
@@ -2682,6 +2902,14 @@
   elements.customerScrim.addEventListener('click', closeCustomer);
   elements.discountSearch?.addEventListener('input', renderDiscountServices);
   elements.discountApply.addEventListener('click', () => savePricing([...discountDrafts.keys()]));
+  elements.saleNew.addEventListener('click', () => openSaleForm());
+  elements.saleForm.addEventListener('submit', submitSaleForm);
+  elements.saleCancel.addEventListener('click', () => elements.saleDialog.close());
+  [elements.salePercent, elements.saleAllDay, elements.saleStartDate, elements.saleStartTime, elements.saleEndDate, elements.saleEndTime]
+    .forEach((input) => {
+      input.addEventListener('input', renderSaleForm);
+      input.addEventListener('change', renderSaleForm);
+    });
   elements.discountDiscard.addEventListener('click', () => {
     discountDrafts.clear();
     renderDiscountServices();

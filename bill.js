@@ -294,6 +294,25 @@ export function billStoreAccent(storeTop, storeHeight) {
   return { x: 876, y: storeTop + storeHeight - 40, size: 28, fill: "#f6c7d5", stroke: "#8f8582" };
 }
 
+// A tilted dashed stamp for a bill that got a time-window sale.
+function saleStamp(ctx, x, y, percent) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(-10 * Math.PI / 180);
+  ctx.beginPath();
+  ctx.roundRect(-92, -30, 184, 60, 16);
+  ctx.fillStyle = "rgba(253, 230, 238, .94)";
+  ctx.fill();
+  ctx.setLineDash([8, 6]);
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = PINK;
+  ctx.stroke();
+  ctx.setLineDash([]);
+  type(ctx, "800 30px " + ROUND, PINK, "center");
+  ctx.fillText("SALE −" + percent + "%", 0, 11);
+  ctx.restore();
+}
+
 export function billStubQrLayout(stubY, bottom) {
   const left = 604, right = 942, qrSize = 168, centerX = (left + right) / 2;
   return { qrX: centerX - qrSize / 2, qrY: stubY + 8, qrSize, centerX, referenceY: bottom - 50 };
@@ -310,6 +329,10 @@ export async function renderBill(bill, scale) {
   const date = new Intl.DateTimeFormat("vi-VN", { timeZone: TZ, day: "2-digit", month: "2-digit", year: "numeric" }).format(start);
   const time = new Intl.DateTimeFormat("vi-VN", { timeZone: TZ, hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(start);
   const services = bill.services && bill.services.length ? bill.services : [{ name: "Dịch vụ", price: bill.total }];
+  // A time-window sale adds two lines above the total (the subtotal and the cut) and a stamp by the services title.
+  const sale = bill.sale && Number(bill.sale.discount) > 0 ? bill.sale : null;
+  const subtotal = sale ? Number(bill.subtotal != null ? bill.subtotal : Number(bill.total) + Number(sale.discount)) : Number(bill.total);
+  const saleHeight = sale ? 96 : 0;
 
   // Lay out first (the note may wrap, the table grows with the services), then add paper bands until the stub
   // fits below the store; one or two services with a one-line note fit the sheet as drawn. The stub keeps to
@@ -325,12 +348,12 @@ export async function renderBill(bill, scale) {
   // Each card keeps the same room round its content: 26px under the label, 26px after the last line (PAD
   // counts that line's descent). The three gaps below the cards share the paper a band leaves spare.
   const PAD = 32, GAP = 16, STUB = 250, s1 = 424, rowsHeight = services.length * 50;
-  const s1Height = 109 + 4 * 42 + (noteLines.length - 1) * 34 + PAD, s2Height = 128 + rowsHeight + 14 + 76 + estimateHeight + 26, s3Height = 109 + 2 * 40 + PAD;
+  const s1Height = 109 + 4 * 42 + (noteLines.length - 1) * 34 + PAD, s2Height = 128 + rowsHeight + 14 + saleHeight + 76 + estimateHeight + 26, s3Height = 109 + 2 * 40 + PAD;
   const cards = s1Height + s2Height + s3Height;
   const bands = Math.max(0, Math.ceil((s1 + cards + 3 * GAP + STUB - (TOP - PAPER_TOP + PAPER_BOTTOM)) / BAND_HEIGHT));
   const bottom = TOP - PAPER_TOP + PAPER_BOTTOM + bands * BAND_HEIGHT, stubY = bottom - STUB, height = bottom + 30;
   const gap = (stubY - s1 - cards) / 3, s2 = s1 + s1Height + gap, s3 = s2 + s2Height + gap;
-  const rowsTop = s2 + 128, totalTop = rowsTop + rowsHeight + 14;
+  const rowsTop = s2 + 128, totalTop = rowsTop + rowsHeight + 14 + saleHeight;
   const headingLayout = billHeadingLayout(s1);
   const ratio = scale || 1.5;
   canvas.width = Math.round(W * ratio);
@@ -416,6 +439,19 @@ export async function renderBill(bill, scale) {
     type(ctx, "600 23px " + BODY, INK, "right");
     ctx.fillText(shown.price, 866 - unitWidth, y);
   });
+  if (sale) {
+    const saleTop = rowsTop + rowsHeight + 14;
+    dashedLine(ctx, 132, saleTop - 6, 892, saleTop - 6);
+    type(ctx, "500 23px " + BODY, MUTED);
+    ctx.fillText(estimate ? "Tạm tính" : "Cộng", 156, saleTop + 32);
+    type(ctx, "600 23px " + BODY, INK, "right");
+    ctx.fillText(money(subtotal), 866, saleTop + 32);
+    type(ctx, "700 23px " + BODY, PINK);
+    ctx.fillText(fit(ctx, "Giảm giá · " + sale.title + " (−" + sale.percent + "%)", 560), 156, saleTop + 76);
+    type(ctx, "700 23px " + BODY, PINK, "right");
+    ctx.fillText("−" + money(sale.discount), 866, saleTop + 76);
+    saleStamp(ctx, 792, s2 + 46, sale.percent);
+  }
   dashedLine(ctx, 132, totalTop - 6, 892, totalTop - 6);
   ctx.beginPath();
   ctx.roundRect(132, totalTop + 6, 760, 70, 18);
@@ -431,7 +467,7 @@ export async function renderBill(bill, scale) {
   type(ctx, "800 27px " + ROUND, PINK, "center");
   ctx.fillText("$", 178, totalTop + 51);
   type(ctx, "700 32px " + HAND, INK);
-  ctx.fillText(estimate ? "Tổng tạm tính" : "Tổng tiền", 220, totalTop + 53);
+  ctx.fillText(sale ? (estimate ? "Thanh toán tạm tính" : "Tổng thanh toán") : (estimate ? "Tổng tạm tính" : "Tổng tiền"), 220, totalTop + 53);
   type(ctx, "800 42px " + HAND, PINK, "right");
   ctx.fillText(money(bill.total), 866, totalTop + 56);
   type(ctx, "500 17px " + BODY, MUTED);
