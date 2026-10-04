@@ -1355,13 +1355,18 @@
       toggle.setAttribute('aria-label', `${sale.active ? 'Tắt' : 'Bật'} ${sale.title}`);
       toggle.disabled = saleBusy;
       toggle.addEventListener('click', () => toggleSale(sale));
+      const feature = button('sale-feature', sale.featured ? 'Đang hiện trang chủ' : 'Hiện trang chủ');
+      feature.setAttribute('role', 'switch');
+      feature.setAttribute('aria-checked', String(Boolean(sale.featured)));
+      feature.disabled = saleBusy || state.key === 'off' || state.key === 'past';
+      feature.addEventListener('click', () => featureSale(sale));
       const edit = button('btn-ghost sale-edit', 'Sửa');
       edit.disabled = saleBusy;
       edit.addEventListener('click', () => openSaleForm(sale));
       const remove = button('btn-ghost sale-delete', 'Xóa');
       remove.disabled = saleBusy;
       remove.addEventListener('click', () => deleteSale(sale));
-      row.append(node('span', 'sale-pct', `−${sale.percent}%`), copy, node('span', 'sale-state', state.label), toggle, edit, remove);
+      row.append(node('span', 'sale-pct', `−${sale.percent}%`), copy, node('span', 'sale-state', state.label), feature, toggle, edit, remove);
       return row;
     }));
   }
@@ -1395,6 +1400,12 @@
       next ? 'Bật' : 'Tắt'
     )) return;
     await writeSale('admin_save_sale', saleRequestBody({ ...sale, active: next }), `Đã ${next ? 'bật' : 'tắt'} đợt ${sale.title}.`);
+  }
+
+  // One sale at a time is featured on the home page; the server unfeatures the others.
+  async function featureSale(sale) {
+    const next = !sale.featured;
+    await writeSale('admin_feature_sale', { id: sale.id, featured: next }, next ? `Trang chủ đang hiện đợt ${sale.title}.` : `Đã ẩn đợt ${sale.title} khỏi trang chủ.`);
   }
 
   async function deleteSale(sale) {

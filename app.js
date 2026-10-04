@@ -1,4 +1,4 @@
-import { unitPrice, featuredTimeSale, timeSaleWhen } from "./price-units.js?v=20261004-1";
+import { unitPrice, featuredTimeSale, timeSaleWhen } from "./price-units.js?v=20261004-2";
 
 const BOOKING_ENDPOINT = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 
@@ -293,7 +293,7 @@ function renderServices({ animateShared = false } = {}) {
   panel.innerHTML = state.activeTab === "signature" ? renderSignature() : renderSharedGroup(state.activeTab, animateShared);
 }
 // The featured time-window sale (see price-units.js): a banner under the header and a sticker by the booking
-// button above the footer; both stay hidden while no sale runs or starts within a week. Built from nodes, so a
+// button above the footer; both stay hidden until the admin picks a sale for the home page. Built from nodes, so a
 // sale's title is shown as text.
 function renderTimeSale() {
   const sale = featuredTimeSale(window.__v2Sales);

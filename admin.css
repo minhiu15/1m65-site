@@ -959,7 +959,7 @@ input:user-invalid + .field-error{display:block}
 .sale-manager-head h2{font-size:21px}
 .sale-manager-head .hint{max-width:620px;margin-top:4px}
 .sale-list{display:grid;gap:8px}
-.sale-row{display:grid;grid-template-columns:64px minmax(0,1fr) auto auto auto auto;align-items:center;gap:12px;padding:10px 14px;border:1.5px dashed rgba(232,94,124,.3);border-radius:16px;background:#fffafb}
+.sale-row{display:grid;grid-template-columns:64px minmax(0,1fr) auto auto auto auto auto;align-items:center;gap:12px;padding:10px 14px;border:1.5px dashed rgba(232,94,124,.3);border-radius:16px;background:#fffafb}
 .sale-row.is-past,.sale-row.is-off{opacity:.62}
 .sale-pct{display:grid;place-items:center;height:40px;border-radius:12px;background:var(--pink);color:#fff;font:800 17px/1 var(--display)}
 .sale-copy{display:grid;gap:2px;min-width:0}
@@ -972,6 +972,11 @@ input:user-invalid + .field-error{display:block}
 .sale-switch[aria-checked="true"]{background:var(--pink)}
 .sale-switch[aria-checked="true"]::after{translate:20px 0}
 .sale-row .btn-ghost{height:34px;padding:0 12px;font-size:13px}
+.sale-feature{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 13px 0 9px;border:1.5px solid var(--pink-edge);border-radius:999px;background:var(--card);color:var(--pink-text);font:800 13px/1 var(--body);white-space:nowrap;cursor:pointer}
+.sale-feature::before{content:"";width:14px;height:14px;border:2px solid var(--pink-edge);border-radius:50%;box-sizing:border-box}
+.sale-feature[aria-checked="true"]{border-color:var(--pink);background:var(--pink-soft);color:var(--pink-deep)}
+.sale-feature[aria-checked="true"]::before{border:4px solid var(--pink);background:#fff}
+.sale-feature:disabled{opacity:.5;cursor:not-allowed}
 .sale-dialog{width:520px;max-width:calc(100vw - 32px);padding:26px 26px 22px;border:1.5px dashed rgba(232,94,124,.5);border-radius:26px;background:var(--card);color:var(--cocoa);box-shadow:0 30px 70px -20px rgba(79,47,46,.55)}
 .sale-dialog::backdrop{background:rgba(79,56,46,.22)}
 .sale-dialog form{display:flex;flex-direction:column;gap:12px}
@@ -990,7 +995,8 @@ input:user-invalid + .field-error{display:block}
 @media (max-width:767px){
   .sale-manager-head{flex-direction:column}
   .sale-manager-head .btn-paper{align-self:stretch}
-  .sale-row{grid-template-columns:52px minmax(0,1fr) auto auto;grid-template-areas:"pct copy copy switch" "pct state edit delete";row-gap:8px}
+  .sale-row{grid-template-columns:52px minmax(0,1fr) auto auto;grid-template-areas:"pct copy copy switch" "pct state edit delete" "pct feature feature feature";row-gap:8px}
+  .sale-feature{grid-area:feature;justify-self:start}
   .sale-pct{grid-area:pct}
   .sale-copy{grid-area:copy}
   .sale-switch{grid-area:switch}

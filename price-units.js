@@ -61,18 +61,12 @@ export function timeSaleDiscount(subtotal, percent) {
   return Math.round(Number(subtotal || 0) * Number(percent || 0) / 100);
 }
 
-// The sale the home page features: the running one with the highest percent, else the next one to start within
-// seven days; null when there is none.
+// The sale the admin picked for the home page ("Hiện trang chủ"), until it ends; null when none is picked.
 export function featuredTimeSale(sales, now) {
-  const at = now == null ? Date.now() : now, week = 7 * 24 * 60 * 60 * 1000;
-  const live = (Array.isArray(sales) ? sales : []).filter(function (sale) {
-    return sale.active !== false && new Date(sale.endsAt).getTime() > at;
-  });
-  const running = live.filter(function (sale) { return new Date(sale.startsAt).getTime() <= at; })
-    .sort(function (first, second) { return second.percent - first.percent; });
-  if (running.length) return running[0];
-  return live.filter(function (sale) { return new Date(sale.startsAt).getTime() - at <= week; })
-    .sort(function (first, second) { return new Date(first.startsAt).getTime() - new Date(second.startsAt).getTime(); })[0] || null;
+  const at = now == null ? Date.now() : now;
+  return (Array.isArray(sales) ? sales : []).find(function (sale) {
+    return sale.featured === true && sale.active !== false && new Date(sale.endsAt).getTime() > at;
+  }) || null;
 }
 
 function timeSaleParts(value) {
