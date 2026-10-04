@@ -8423,6 +8423,16 @@ main,
 .booking-ticket__download:hover { background: #fff; }
 .booking-ticket__download:disabled { opacity: .6; cursor: progress; }
 .booking-ticket__download:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+/* Leaving before the bill is saved: a soft veil over the paper and a small card asking first. */
+.booking-ticket__leave { position: absolute; inset: 5% 3.5%; z-index: 5; display: grid; place-items: center; border-radius: 3cqw; background: rgba(255, 248, 244, .8); backdrop-filter: blur(2px); animation: booking-ticket-fade .2s ease-out both; }
+.booking-ticket__leave-card { display: grid; justify-items: center; gap: 1.2cqw; width: min(54cqw, 100%); padding: 2.6cqw 3.4cqw 2cqw; border: 1.5px dashed #f0a3b8; border-radius: 3cqw; background: #fffaf6; box-shadow: 0 1.2cqw 3cqw rgba(79, 47, 46, .18); text-align: center; }
+.booking-ticket__leave-heart { width: 5cqw; height: auto; }
+.booking-ticket__leave h3 { margin: 0; font: 700 3.2cqw/1.15 var(--font-ticket-hand); color: #6f3b2f; }
+.booking-ticket__leave p { margin: 0; font: 500 max(12px, 1.7cqw)/1.45 var(--font-ticket-hand); color: #4b566a; }
+.booking-ticket__leave-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.2cqw; margin-top: .6cqw; }
+.booking-ticket__leave .booking-ticket__cta { min-width: 0; padding: 0 3cqw; }
+.booking-ticket__leave-back { padding: .4cqw 1cqw; border: 0; background: none; color: #8a6a6e; font: 700 max(11px, 1.5cqw)/1 var(--font-signature-display); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.booking-ticket__leave-back:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; border-radius: 6px; }
 .booking-ticket__stub {
   position: relative;
   z-index: 1;
@@ -8539,6 +8549,13 @@ main,
   .booking-ticket__row dd { grid-column: 2; justify-self: stretch; font-size: max(11px, 4.9cqw); }
   .booking-ticket__code { padding: 1cqw 3.4cqw; }       /* room either side of the code on phones */
   .booking-ticket__sale { margin-top: .4cqw; font-size: max(9.5px, 3.3cqw); }
+  .booking-ticket__leave { inset: 4% 5%; border-radius: 6cqw; }
+  .booking-ticket__leave-card { width: 100%; gap: 2.6cqw; padding: 6cqw 5cqw 4cqw; border-radius: 6cqw; }
+  .booking-ticket__leave-heart { width: 11cqw; }
+  .booking-ticket__leave h3 { font-size: 6.6cqw; }
+  .booking-ticket__leave p { font-size: max(12px, 3.8cqw); }
+  .booking-ticket__leave-actions { flex-direction: column; width: 100%; gap: 2.4cqw; }
+  .booking-ticket__leave-back { font-size: max(12px, 3.6cqw); }
   .booking-ticket__actions { flex-direction: column; flex-wrap: nowrap; width: 100%; gap: 2.4cqw; margin-top: 5cqw; }
   .booking-ticket__cta { --shell-corner: 6.2cqw; width: 100%; min-width: 0; min-height: 15cqw; font-size: max(13px, 4.8cqw); gap: 3cqw; }
   .booking-ticket__download { width: 100%; justify-content: center; min-height: 11cqw; gap: 2cqw; font-size: max(12px, 4.2cqw); }

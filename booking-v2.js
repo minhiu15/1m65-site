@@ -17,7 +17,7 @@ const vnPhone=(value)=>String(value||"").replace(/\D/g,"").replace(/^(?:840(?=\d
 // drops EXIF, including GPS location).
 const MAX_PHOTOS=3,MAX_PHOTO_SOURCE_BYTES=40*1024*1024,MAX_PHOTO_UPLOAD_BYTES=980*1024;
 const PICKER_LABELS={nail:"Nail",mi:"Mi",khac:"Khác"};
-const state = {step:1,category:"nail",selected:[],date:"",calendarOpen:false,calendarMonth:"",preferred:"",slots:[],blocked:[],day:null,slot:"",loading:false,pending:false,error:"",name:"",phone:"",note:"",status:"",reference:"",photos:[],photoBusy:0,photoError:"",photoWarning:"",picker:false,pickerFilter:"nail",sale:null};
+const state = {step:1,category:"nail",selected:[],date:"",calendarOpen:false,calendarMonth:"",preferred:"",slots:[],blocked:[],day:null,slot:"",loading:false,pending:false,error:"",name:"",phone:"",note:"",status:"",reference:"",photos:[],photoBusy:0,photoError:"",photoWarning:"",picker:false,pickerFilter:"nail",sale:null,billDone:false,leaving:"",leaveTrigger:null};
 let requestId = 0;
 
 function exp(){return window.__v2Experience;}
@@ -59,7 +59,7 @@ function reset(options){
   state.step=1;state.category=next.serviceId?categoryOf(next.serviceId):"nail";
   state.selected=next.serviceId&&byId(next.serviceId)?[next.serviceId]:[];
   state.date=isoToday();state.calendarOpen=false;state.calendarMonth="";state.preferred=next.slot||"";state.slots=[];state.blocked=[];state.day=null;state.slot="";
-  state.loading=false;state.pending=false;state.error="";state.name="";state.phone="";state.note="";state.status="";state.reference="";state.billKey="";state.sale=null;
+  state.loading=false;state.pending=false;state.error="";state.name="";state.phone="";state.note="";state.status="";state.reference="";state.billKey="";state.sale=null;state.billDone=false;state.leaving="";state.leaveTrigger=null;
   state.photos=[];state.photoBusy=0;state.photoError="";state.photoWarning="";state.picker=false;
   requestId+=1;
 }
@@ -219,9 +219,44 @@ function ticketHtml(){
     +'<div class="booking-ticket__stub" aria-hidden="true">'+TICKET_HAND_FILTER+'<div class="booking-ticket__brand">'+TICKET_ICONS.crown+'<strong>'+inkSvg("booking-ticket__wordmark","0 3 98 38",TICKET_WORDMARK)+ticketHeart("booking-ticket__brand-heart")+'</strong><small>NAIL - EYE - SHAMPOO</small></div>'
     +'<div class="booking-ticket__scan">'+(billLib?billLib.qrSvg(billLib.billUrl(state.reference,state.billKey),"booking-ticket__qr"):barcodeSvg(state.reference))+'</div></div></div>';
 }
+// Leaving the ticket before its bill is saved (X, the backdrop, Escape, "Xem lịch của bạn") asks first: the
+// bill's link lives only on this ticket. Saving the bill, or answering "… luôn" once, lets the visitor go.
+function saveBill(button){
+  button.disabled=true;
+  return billLib.downloadBill(ticketBill()).then(function(){state.billDone=true;return true;},function(){exp().toast("Chưa tải được phiếu. Bạn thử lại giúp tụi mình nha.");return false;}).then(function(saved){button.disabled=false;return saved;});
+}
+function leaveAsks(){return Boolean(billLib)&&!state.billDone&&bookingModal().classList.contains("is-ticket");}
+function askLeave(action,trigger){
+  const card=document.querySelector(".booking-ticket__card");if(!card)return;
+  const manage=action==="manage";
+  state.leaving=action;state.leaveTrigger=trigger||null;
+  card.querySelectorAll(".booking-ticket__main,.booking-ticket__stub").forEach(function(node){node.inert=true;});
+  card.insertAdjacentHTML("beforeend",'<div class="booking-ticket__leave" role="alertdialog" aria-modal="true" aria-labelledby="booking-leave-title" aria-describedby="booking-leave-text"><div class="booking-ticket__leave-card">'
+    +'<img class="booking-ticket__leave-heart" src="'+TICKET_ART+'ticket-heart-big.webp" alt="" aria-hidden="true" decoding="async">'
+    +'<h3 id="booking-leave-title">Lưu phiếu trước đã nhé?</h3>'
+    +'<p id="booking-leave-text">'+(manage?"Rời":"Đóng")+' vé rồi là không tải lại phiếu được nữa đâu. Phiếu giữ mã lịch hẹn và mã QR để bạn xem lại lịch khi cần.</p>'
+    +'<div class="booking-ticket__leave-actions"><button class="booking-ticket__cta button-primary" type="button" data-booking-leave="save">'+TICKET_ICONS.download+(manage?"Tải phiếu rồi xem lịch":"Tải phiếu rồi đóng")+'</button>'
+    +'<button class="booking-ticket__download" type="button" data-booking-leave="skip">'+(manage?"Xem lịch luôn":"Đóng luôn")+'</button></div>'
+    +'<button class="booking-ticket__leave-back" type="button" data-booking-leave="back">Quay lại vé</button></div></div>');
+  card.querySelector('[data-booking-leave="save"]').focus({preventScroll:true});
+}
+function backToTicket(){
+  const card=document.querySelector(".booking-ticket__card");
+  state.leaving="";state.leaveTrigger=null;if(!card)return;
+  const box=card.querySelector(".booking-ticket__leave");if(box)box.remove();
+  card.querySelectorAll("[inert]").forEach(function(node){node.inert=false;});
+  card.focus({preventScroll:true});
+}
+function holdTicketClose(){if(state.leaving){backToTicket();return true;}if(!leaveAsks())return false;askLeave("close");return true;}
+function leave(action,trigger){
+  const reference=state.reference,modal=bookingModal();
+  backToTicket();
+  if(action==="manage"){exp().closeModal(modal,false);exp().openManager(reference,trigger);}
+  else exp().closeModal(modal);
+}
 function showTicket(){
   const modal=bookingModal(),holder=modal&&modal.querySelector("[data-booking-ticket]");if(!holder)return;
-  holder.innerHTML=ticketHtml();setStage("ticket");
+  holder.innerHTML=ticketHtml();setStage("ticket");modal.holdClose=holdTicketClose;
   holder.querySelector(".booking-ticket__card").focus({preventScroll:true});
   // The ticket art has no room for it, so a photo that failed to upload is flagged in a toast instead.
   if(state.photoWarning)exp().toast(state.photoWarning);
@@ -386,8 +421,13 @@ document.addEventListener("click",function(event){
   if(target.closest("[data-booking-next]")){next();return;}
   if(target.closest("[data-booking-reset]")){reset();setStage("");render();return;}
   const download=target.closest("[data-booking-download]");
-  if(download&&billLib){download.disabled=true;billLib.downloadBill(ticketBill()).catch(function(){exp().toast("Chưa tải được phiếu. Bạn thử lại giúp tụi mình nha.");}).then(function(){download.disabled=false;});return;}
-  const manage=target.closest("[data-booking-manage]");if(manage){const reference=state.reference;exp().closeModal(document.querySelector("#booking-modal-v2"),false);exp().openManager(reference,manage);}
+  if(download&&billLib){saveBill(download);return;}
+  const choiceButton=target.closest("[data-booking-leave]");
+  if(choiceButton){const choice=choiceButton.dataset.bookingLeave,action=state.leaving,trigger=state.leaveTrigger;
+    if(choice==="back"){backToTicket();return;}
+    if(choice==="skip"){state.billDone=true;leave(action,trigger);return;}
+    saveBill(choiceButton).then(function(saved){if(saved)leave(action,trigger);});return;}
+  const manage=target.closest("[data-booking-manage]");if(manage){if(leaveAsks()){askLeave("manage",manage);return;}leave("manage",manage);}
 });
 document.addEventListener("input",function(event){
   const target=event.target;if(target.matches("[data-booking-name]"))state.name=target.value;

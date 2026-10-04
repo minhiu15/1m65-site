@@ -1,4 +1,4 @@
-import "./booking-v2.js?v=20261004-2";
+import "./booking-v2.js?v=20261004-3";
 
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
@@ -113,6 +113,9 @@ function openModal(modal, trigger, options) {
   setOverlayOpen(true);
   requestAnimationFrame(function(){(modal.querySelector(".modal-close") || focusables(modal)[0] || modal).focus({ preventScroll: true });});
 }
+// A modal may hold back a close the visitor asked for (X, backdrop, Escape): the booking ticket first asks
+// whether to save its bill. Closes the page makes itself (opening another modal) are not held.
+function requestClose(modal){if(modal&&typeof modal.holdClose==="function"&&modal.holdClose())return;closeModal(modal);}
 function closeModal(modal, restore) {
   const target = modal || activeModal;
   if (!target) return;
@@ -408,7 +411,7 @@ window.__v2Experience.openManager = openManager;
 
 document.addEventListener("click",function(event){
   const target=event.target;
-  const close=target.closest("[data-close-modal]");if(close)return closeModal(close.closest(".modal"));
+  const close=target.closest("[data-close-modal]");if(close)return requestClose(close.closest(".modal"));
   const openGallery=target.closest("[data-open-gallery]");if(openGallery){galleryModalFilter=galleryFilter;openModal(document.querySelector("#gallery-modal"),openGallery);renderGallery();return;}
   const filter=target.closest("[data-gallery-filter],[data-gallery-modal-filter]");if(filter){if(filter.dataset.galleryFilter)galleryFilter=filter.dataset.galleryFilter;else galleryModalFilter=filter.dataset.galleryModalFilter;renderGallery();return;}
   const photoZoom=target.closest("[data-photo-zoom]");if(photoZoom){openPhotoZoom(photoZoom.dataset.photoZoom,photoZoom.dataset.photoZoomCaption,photoZoom);return;}
@@ -424,7 +427,7 @@ document.addEventListener("click",function(event){
 });
 document.addEventListener("1m65:v2:open-booking",function(event){window.__v2Booking.open(Object.assign({defer:true},event.detail),document.activeElement);});
 document.addEventListener("keydown",function(event){
-  if(event.key==="Escape"&&activeModal){event.preventDefault();closeModal(activeModal);return;}
+  if(event.key==="Escape"&&activeModal){event.preventDefault();requestClose(activeModal);return;}
   const drawer=document.querySelector("#mobile-drawer");
   const root=activeModal||(drawer&&!drawer.hidden?drawer.querySelector(".drawer-panel"):null);
   if(event.key==="Tab"&&root){const items=focusables(root);if(!items.length)return;const first=items[0],last=items[items.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}}
