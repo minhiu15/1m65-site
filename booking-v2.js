@@ -212,7 +212,7 @@ function ticketHtml(){
     +'<dl class="booking-ticket__info">'
     +row("calendar-icon.webp","Mã lịch hẹn",'<span class="booking-ticket__code">'+esc(state.reference)+'</span>')
     +(when?row("clock-icon.webp","Lịch hẹn",esc(when)):"")
-    +(state.sale?row("ticket-heart-small.webp","Ưu đãi",esc("−"+state.sale.percent+"% · "+state.sale.title)):"")
+    +row("total-icon.svg",unitPriced()?"Tạm tính":"Tổng tiền",'<span class="booking-ticket__total">'+money(due())+'</span>'+(state.sale?'<small class="booking-ticket__sale">Đã giảm '+state.sale.percent+'% · '+esc(state.sale.title)+'</small>':""))
     +'</dl>'
     +'<div class="booking-ticket__actions"><button class="booking-ticket__cta button-primary" type="button" data-booking-manage>'+TICKET_ICONS.calendar+'Xem lịch của bạn</button>'
     +(billLib?'<button class="booking-ticket__download" type="button" data-booking-download>'+TICKET_ICONS.download+'Tải phiếu</button>':'')+'</div></div>'
@@ -256,7 +256,7 @@ let ticketArt=null;
 function preloadTicketArt(){
   if(ticketArt)return;
   const shell=matchMedia("(max-width: 899px) and (orientation: portrait)").matches?"ticket-shell-mobile.webp":"ticket-shell-desktop.webp";
-  ticketArt=[shell,"cat-peeking.webp","pink-bow.webp","ticket-star.webp","ticket-heart-big.webp","ticket-heart-small.webp","close-button.webp","calendar-icon.webp","clock-icon.webp"].map(function(file){const image=new Image();image.src=TICKET_ART+file;image.decode().catch(function(){});return image;});
+  ticketArt=[shell,"cat-peeking.webp","pink-bow.webp","ticket-star.webp","ticket-heart-big.webp","ticket-heart-small.webp","close-button.webp","calendar-icon.webp","clock-icon.webp","total-icon.svg"].map(function(file){const image=new Image();image.src=TICKET_ART+file;image.decode().catch(function(){});return image;});
 }
 // A tap opens the popup at once with a loading paw, and the service grid is built on the next frame, so the
 // first frame answers the tap instead of waiting for the grid (options.defer; scripts calling open() get it built).

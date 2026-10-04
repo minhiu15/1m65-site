@@ -994,7 +994,7 @@ input:user-invalid + .field-error{display:block}
 .sale-overlap{margin:0}
 @media (max-width:767px){
   .sale-manager-head{flex-direction:column}
-  .sale-manager-head .btn-paper{align-self:stretch}
+  .sale-manager-head .btn-paper{align-self:flex-start}
   .sale-row{grid-template-columns:52px minmax(0,1fr) auto auto;grid-template-areas:"pct copy copy switch" "pct state edit delete" "pct feature feature feature";row-gap:8px}
   .sale-feature{grid-area:feature;justify-self:start}
   .sale-pct{grid-area:pct}

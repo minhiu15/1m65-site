@@ -505,7 +505,7 @@ main,
 .lightbox-nav--prev{left:22px}.lightbox-nav--next{right:22px}
 .lightbox-figure{min-width:0;min-height:0;width:100%;height:100%;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
 .lightbox-figure img{display:block;width:auto;height:auto;max-width:100%;max-height:min(820px,calc(100% - 34px));border-radius:24px;object-fit:contain}
-.lightbox-figure figcaption{font:700 17px var(--font-signature-display)}
+.lightbox-figure figcaption{font:700 17px var(--font-signature-display);text-align:center}
 
 /* About */
 .about-section{padding:82px 0}
@@ -8351,8 +8351,8 @@ main,
 .booking-ticket__nowrap { white-space: nowrap; }
 .booking-ticket__info {
   display: grid;
-  grid-auto-flow: column;                        /* the code and, when known, the time: equal columns */
-  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;                        /* the code, the time and the total: each column as wide */
+  grid-auto-columns: auto;                       /* as its value, the rest of the room shared out */
   width: 100%;
   margin: 2.8cqw 0 0;
   padding: 2cqw .8cqw;
@@ -8372,12 +8372,14 @@ main,
   text-align: center;
 }
 .booking-ticket__row + .booking-ticket__row { border-left: 1.5px dashed #f0a3b8; }
-.booking-ticket__row-icon { grid-column: 2; width: 4cqw; height: auto; }
+.booking-ticket__row-icon { grid-column: 2; width: 3.3cqw; height: auto; }
 .booking-ticket__row dt { grid-column: 3; font: 700 max(10px, 1.45cqw)/1.2 var(--font-ticket-hand); letter-spacing: .06em; text-transform: uppercase; color: #6b4f52; }
-.booking-ticket__row dd { grid-column: 1 / -1; justify-self: center; margin: 0; font: 700 max(12px, 1.95cqw)/1.3 var(--font-signature-body); color: #4a2a26; }
+.booking-ticket__row dd { grid-column: 1 / -1; justify-self: center; margin: 0; white-space: nowrap; font: 700 max(12px, 1.95cqw)/1.3 var(--font-signature-body); color: #4a2a26; }
+.booking-ticket__total { color: #d94a76; }
+.booking-ticket__sale { display: block; margin-top: .3cqw; white-space: normal; font: 700 max(10px, 1.3cqw)/1.3 var(--font-signature-body); color: #c2336a; }
 .booking-ticket__code {
   display: inline-block;
-  padding: .5cqw 1.8cqw;
+  padding: .5cqw 1.3cqw;
   border-radius: 999px;
   background: #f9c9d8;
   color: #c2336a;
@@ -8529,14 +8531,15 @@ main,
   .booking-ticket__thanks { margin-top: 5cqw; font-size: max(12px, 4.4cqw); }
   .booking-ticket__note { margin-top: .8cqw; font-size: max(10.5px, 3.6cqw); text-wrap: balance; }
   .booking-ticket__note-heart { width: 3.6cqw; height: 3.2cqw; }
-  .booking-ticket__info { grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); margin-top: 8.5cqw; padding: 1.2cqw 3.4cqw; border-radius: 5cqw; }
-  .booking-ticket__row { grid-template-columns: auto minmax(0, 1fr); align-content: center; column-gap: 4cqw; row-gap: 1cqw; padding: 5.4cqw .6cqw; text-align: left; }
+  .booking-ticket__info { grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); margin-top: 5.5cqw; padding: .6cqw 3.4cqw; border-radius: 5cqw; }
+  .booking-ticket__row { grid-template-columns: auto minmax(0, 1fr); align-content: center; column-gap: 4cqw; row-gap: .6cqw; padding: 3.4cqw .6cqw; text-align: left; }
   .booking-ticket__row + .booking-ticket__row { border-top: 1.5px dashed #f0a3b8; border-left: 0; }
-  .booking-ticket__row-icon { grid-row: 1 / 3; grid-column: 1; width: 10.5cqw; }
+  .booking-ticket__row-icon { grid-row: 1 / 4; grid-column: 1; width: 8cqw; }
   .booking-ticket__row dt { grid-column: 2; font-size: max(9px, 3.5cqw); }
   .booking-ticket__row dd { grid-column: 2; justify-self: stretch; font-size: max(11px, 4.9cqw); }
   .booking-ticket__code { padding: 1cqw 3.4cqw; }       /* room either side of the code on phones */
-  .booking-ticket__actions { flex-direction: column; flex-wrap: nowrap; width: 100%; gap: 2.4cqw; margin-top: 7cqw; }
+  .booking-ticket__sale { margin-top: .4cqw; font-size: max(9.5px, 3.3cqw); }
+  .booking-ticket__actions { flex-direction: column; flex-wrap: nowrap; width: 100%; gap: 2.4cqw; margin-top: 5cqw; }
   .booking-ticket__cta { --shell-corner: 6.2cqw; width: 100%; min-width: 0; min-height: 15cqw; font-size: max(13px, 4.8cqw); gap: 3cqw; }
   .booking-ticket__download { width: 100%; justify-content: center; min-height: 11cqw; gap: 2cqw; font-size: max(12px, 4.2cqw); }
   .booking-ticket__download svg { width: 5.4cqw; height: 5.4cqw; }
