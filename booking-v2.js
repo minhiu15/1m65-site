@@ -192,7 +192,7 @@ function barcodeSvg(code){
 // The bill (bill.js: the QR, the "Phiếu đặt lịch" picture, its download) loads while the booking is sent; the
 // stub keeps the drawn barcode and the ticket skips its download button if it cannot load.
 let billLib=null,billLoading=null;
-function loadBill(){return billLoading||(billLoading=import("./bill.js?v=20261004-1").then(function(lib){billLib=lib;return lib;},function(){billLoading=null;return null;}));}
+function loadBill(){return billLoading||(billLoading=import("./bill.js?v=20261006-1").then(function(lib){billLib=lib;return lib;},function(){billLoading=null;return null;}));}
 function ticketBill(){
   const services=selectedServices().map(function(service){return {id:service.id,name:service.name,price:price(service)};});
   return {reference:state.reference,name:state.name.trim(),phone:billLib.maskPhone(vnPhone(state.phone)),note:state.note.trim(),startAt:state.slot,status:"confirmed",services:services,subtotal:totals().price,sale:state.sale,total:due(),url:billLib.billUrl(state.reference,state.billKey)};
@@ -202,7 +202,7 @@ function ticketHtml(){
   const when=state.slot?slotLabel(state.slot)+" · "+state.date.split("-").reverse().join("/"):"";
   const row=function(icon,label,value){return '<div class="booking-ticket__row"><img class="booking-ticket__row-icon" src="'+TICKET_ART+icon+'" alt="" aria-hidden="true" decoding="async"><dt>'+label+'</dt><dd>'+value+'</dd></div>';};
   return '<div class="booking-ticket__card" tabindex="-1" aria-labelledby="booking-ticket-title">'
-    +art("booking-ticket__cat","cat-peeking.webp")+art("booking-ticket__bow","pink-bow.webp")+'<span class="booking-ticket__deco booking-ticket__hearts" aria-hidden="true">'+["star","heart-big","heart-small"].map(function(piece){return '<img class="booking-ticket__heart-piece booking-ticket__heart-piece--'+piece+'" src="'+TICKET_ART+'ticket-'+piece+'.webp" alt="" decoding="async">';}).join("")+'</span>'
+    +art("booking-ticket__cat","cat-peeking-v2.webp")+art("booking-ticket__paw booking-ticket__paw--left","cat-peeking-v2.webp")+art("booking-ticket__paw booking-ticket__paw--right","cat-peeking-v2.webp")+art("booking-ticket__bow","pink-bow.webp")+'<span class="booking-ticket__deco booking-ticket__hearts" aria-hidden="true">'+["star","heart-big","heart-small"].map(function(piece){return '<img class="booking-ticket__heart-piece booking-ticket__heart-piece--'+piece+'" src="'+TICKET_ART+'ticket-'+piece+'.webp" alt="" decoding="async">';}).join("")+'</span>'
     +ticketSparkles("booking-ticket__sparkles booking-ticket__sparkles--title")
     +'<button type="button" class="booking-ticket__close" data-close-modal aria-label="Đóng"><img src="'+TICKET_ART+'close-button.webp" alt="" decoding="async"></button>'
     +'<div class="booking-ticket__main"><div class="booking-ticket__heading"><p class="booking-ticket__eyebrow">Đã đặt hẹn</p>'
@@ -233,7 +233,7 @@ function askLeave(action,trigger){
   state.leaving=action;state.leaveTrigger=trigger||null;
   card.inert=true;
   modal.insertAdjacentHTML("beforeend",'<div class="booking-ticket__leave" role="alertdialog" aria-modal="true" aria-labelledby="booking-leave-title" aria-describedby="booking-leave-text"><div class="booking-ticket__leave-card">'
-    +'<img class="booking-ticket__leave-heart" src="'+TICKET_ART+'ticket-heart-big.webp" alt="" aria-hidden="true" decoding="async">'
+    +'<img class="booking-ticket__leave-icon" src="'+TICKET_ART+'ticket-save-doodle.svg" alt="" aria-hidden="true" decoding="async">'
     +'<h3 id="booking-leave-title">Lưu phiếu trước đã nhé?</h3>'
     +'<p id="booking-leave-text">'+(manage?"Rời":"Đóng")+' vé rồi là không tải lại phiếu được nữa đâu. Phiếu giữ mã lịch hẹn và mã QR để bạn xem lại lịch khi cần.</p>'
     +'<div class="booking-ticket__leave-actions"><button class="booking-ticket__cta button-primary" type="button" data-booking-leave="save">'+TICKET_ICONS.download+(manage?"Tải phiếu rồi xem lịch":"Tải phiếu rồi đóng")+'</button>'
@@ -290,7 +290,7 @@ let ticketArt=null;
 function preloadTicketArt(){
   if(ticketArt)return;
   const shell=matchMedia("(max-width: 899px) and (orientation: portrait)").matches?"ticket-shell-mobile.webp":"ticket-shell-desktop.webp";
-  ticketArt=[shell,"cat-peeking.webp","pink-bow.webp","ticket-star.webp","ticket-heart-big.webp","ticket-heart-small.webp","close-button.webp","calendar-icon.webp","clock-icon.webp","total-icon.svg"].map(function(file){const image=new Image();image.src=TICKET_ART+file;image.decode().catch(function(){});return image;});
+  ticketArt=[shell,"cat-peeking-v2.webp","pink-bow.webp","ticket-star.webp","ticket-heart-big.webp","ticket-heart-small.webp","ticket-save-doodle.svg","close-button.webp","calendar-icon.webp","clock-icon.webp","total-icon.svg"].map(function(file){const image=new Image();image.src=TICKET_ART+file;image.decode().catch(function(){});return image;});
 }
 // A tap opens the popup at once with a loading paw, and the service grid is built on the next frame, so the
 // first frame answers the tap instead of waiting for the grid (options.defer; scripts calling open() get it built).

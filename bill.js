@@ -95,6 +95,31 @@ function place(ctx, img, x, y, width, turn) {
   ctx.restore();
 }
 
+function placePaws(ctx, img, x, y, width) {
+  if (!img) return;
+  // Trace just above the two dark paw outlines in the 1063×814 artwork; square crops expose the cat's
+  // cream-colored cheeks as hard rectangles on the downloaded paper.
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(width / 1063, width / 1063);
+  ctx.beginPath();
+  ctx.moveTo(168, 814);
+  ctx.lineTo(178, 719);
+  ctx.bezierCurveTo(193, 669, 237, 639, 296, 637);
+  ctx.bezierCurveTo(360, 633, 408, 665, 422, 720);
+  ctx.lineTo(438, 814);
+  ctx.closePath();
+  ctx.moveTo(672, 814);
+  ctx.lineTo(687, 719);
+  ctx.bezierCurveTo(703, 664, 750, 636, 806, 635);
+  ctx.bezierCurveTo(866, 632, 916, 663, 930, 718);
+  ctx.lineTo(946, 814);
+  ctx.closePath();
+  ctx.clip();
+  ctx.drawImage(img, 0, 0, 1063, 814);
+  ctx.restore();
+}
+
 function type(ctx, spec, color, align) {
   ctx.font = spec;
   ctx.fillStyle = color;
@@ -322,7 +347,7 @@ export function billStubQrLayout(stubY, bottom) {
 export async function renderBill(bill, scale) {
   await loadFonts();
   const [sheet, cat, bow, star, heartBig, heartSmall, flower, bouquet] = await Promise.all([
-    "bill/bill-paper.webp?v=20260930-2", "confirmation/cat-peeking.webp", "confirmation/pink-bow.webp", "confirmation/ticket-star.webp", "confirmation/ticket-heart-big.webp",
+    "bill/bill-paper.webp?v=20260930-2", "confirmation/cat-peeking-v2.webp", "confirmation/pink-bow.webp", "confirmation/ticket-star.webp", "confirmation/ticket-heart-big.webp",
     "confirmation/ticket-heart-small.webp", "bill/single-flower.webp", "bill/flower-bouquet.webp"
   ].map(image));
   const start = new Date(bill.startAt);
@@ -356,10 +381,15 @@ export async function renderBill(bill, scale) {
   const rowsTop = s2 + 128, totalTop = rowsTop + rowsHeight + 14 + saleHeight;
   const headingLayout = billHeadingLayout(s1);
   const ratio = scale || 1.5;
+  const topClearance = 34;
   canvas.width = Math.round(W * ratio);
-  canvas.height = Math.round(height * ratio);
+  canvas.height = Math.round((height + topClearance) * ratio);
   ctx.scale(ratio, ratio);
+  ctx.translate(0, topClearance);
 
+  // Keep the paws registered to the paper, but lift the cat's face without cropping its ears at the PNG edge.
+  const catX = 220, catY = -27, catWidth = 300, pawY = -40;
+  place(ctx, cat, catX, catY, catWidth);
   paper(ctx, sheet, bands);
 
   // Heading: title and brand, thanks and wishes.
@@ -509,7 +539,7 @@ export async function renderBill(bill, scale) {
 
   // The owner's cat on the top edge, the bow on the corner, the hearts off the cat's ear.
   place(ctx, bow, 34, 96, 190, -14);
-  place(ctx, cat, 220, 8, 300);
+  placePaws(ctx, cat, catX, pawY, catWidth);
   place(ctx, star, 512, 30, 50);
   place(ctx, heartBig, 562, 70, 70);
   place(ctx, heartSmall, 514, 106, 46);

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <defs>
+    <mask id="bubble-holes" x="0" y="0" width="100" height="100" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" style="mask-type:luminance">
+      <rect width="100" height="100" fill="#fff"/>
+      <ellipse cx="24" cy="32.2" rx="3.7" ry="5" fill="#000"/>
+      <ellipse cx="19.6" cy="47.7" rx="4.2" ry="5.6" fill="#000"/>
+      <ellipse cx="80.4" cy="34" rx="3.5" ry="4.9" fill="#000"/>
+      <ellipse cx="83.2" cy="45.1" rx="3.7" ry="5.1" fill="#000"/>
+      <ellipse cx="87.2" cy="59.2" rx="3.1" ry="4.4" fill="#000"/>
+    </mask>
+  </defs>
+  <rect width="100" height="100" fill="#fff" mask="url(#bubble-holes)"/>
+</svg>

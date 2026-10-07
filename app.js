@@ -176,7 +176,14 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
       ${signature ? '<img class="signature-photo-pin" src="assets/services/signature-shared/decor/signature_photo_clip_pink.svg" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
       ${featured ? '<img class="featured-cat-sticker" src="assets/services/signature-shared/cats/featured_photo_cat_sticker.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
     </div>` : ""}
-    ${spaRelaxation ? '<img class="signature-spa-cat" src="assets/services/signature-shared/cats/spa_relaxation_cat_original.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
+    ${spaRelaxation ? `<div class="signature-spa-art" aria-hidden="true">
+      <img class="signature-spa-cat" src="assets/services/signature-shared/cats/spa_relaxation_cat_original.webp" alt="" decoding="async" loading="lazy">
+      <span class="signature-spa-bubble signature-spa-bubble--left-high"></span>
+      <span class="signature-spa-bubble signature-spa-bubble--left-mid"></span>
+      <span class="signature-spa-bubble signature-spa-bubble--right-high"></span>
+      <span class="signature-spa-bubble signature-spa-bubble--right-mid"></span>
+      <span class="signature-spa-bubble signature-spa-bubble--right-low"></span>
+    </div>` : ""}
     <button class="service-booking-hitarea" type="button" data-book-service="${service.id}" aria-label="Đặt lịch ${service.name}"></button>
   </article>`;
 }

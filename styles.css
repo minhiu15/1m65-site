@@ -3504,16 +3504,17 @@ main,
 .service-note--shared .service-note-label {
   min-height: 64px;
   padding: 12px 20px;
-  border: 1px solid rgba(232, 94, 124, .2);
+  border: 2px solid transparent;
+  border-image: url("assets/manager/service-note-line.svg") 24 / 14px / 1px stretch;
   border-radius: 9px 13px 8px 12px;
-  background-color: #ffdfe7;
+  background-color: #fffafa;
   background-image:
-    repeating-linear-gradient(0deg, transparent 0 12px, rgba(255, 255, 255, .38) 12px 18px),
-    repeating-linear-gradient(90deg, transparent 0 12px, rgba(244, 137, 162, .14) 12px 18px);
-  transform: rotate(-1.3deg);
+    repeating-linear-gradient(0deg, rgba(247, 178, 196, .15) 0 22px, transparent 22px 44px),
+    repeating-linear-gradient(90deg, rgba(247, 178, 196, .15) 0 22px, transparent 22px 44px);
+  transform: none;
 }
 
-.service-note--shared .service-note-label strong { font-size: 22px; }
+.service-note--shared .service-note-label strong { color: #5d463d; font-size: 22px; }
 .service-note--shared ul { gap: 8px; }
 .service-note--shared li { font-size: 12px; }
 
@@ -6662,18 +6663,68 @@ main,
   overflow: visible;
 }
 
-.service-card[data-card-variant="signature"] > .signature-spa-cat {
+.service-card[data-card-variant="signature"] > .signature-spa-art {
   position: absolute;
   z-index: 2;
   bottom: -12px;
   left: calc(100% + var(--spa-cat-gap));
   width: var(--spa-cat-size);
+  pointer-events: none;
+  transition: transform .22s cubic-bezier(.22, .8, .25, 1);
+}
+
+.signature-spa-art > .signature-spa-cat {
+  display: block;
+  width: 100%;
   height: auto;
   max-width: none;
   border-radius: 0;
   object-fit: contain;
   filter: drop-shadow(0 8px 12px rgba(160, 78, 105, .12));
+  -webkit-mask-image: url("assets/services/signature-shared/cats/spa_bubbles_base_mask.svg");
+  mask-image: url("assets/services/signature-shared/cats/spa_bubbles_base_mask.svg");
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+.signature-spa-bubble {
+  position: absolute;
+  inset: 0;
+  background: url("assets/services/signature-shared/cats/spa_relaxation_cat_original.webp") center / 100% 100% no-repeat;
   pointer-events: none;
+}
+
+.signature-spa-bubble--left-high { clip-path: ellipse(3.7% 5% at 24% 32.2%); }
+.signature-spa-bubble--left-mid { clip-path: ellipse(4.2% 5.6% at 19.6% 47.7%); }
+.signature-spa-bubble--right-high { clip-path: ellipse(3.5% 4.9% at 80.4% 34%); }
+.signature-spa-bubble--right-mid { clip-path: ellipse(3.7% 5.1% at 83.2% 45.1%); }
+.signature-spa-bubble--right-low { clip-path: ellipse(3.1% 4.4% at 87.2% 59.2%); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .signature-spa-art.is-bubbling > .signature-spa-bubble {
+    animation: signature-spa-bubble-float 3s ease-in-out infinite;
+  }
+  .signature-spa-art.is-bubbling > .signature-spa-bubble--left-high { animation-delay: -.9s; }
+  .signature-spa-art.is-bubbling > .signature-spa-bubble--left-mid { animation-delay: -1.8s; }
+  .signature-spa-art.is-bubbling > .signature-spa-bubble--right-high { animation-delay: -1.4s; }
+  .signature-spa-art.is-bubbling > .signature-spa-bubble--right-mid { animation-delay: -.4s; }
+  .signature-spa-art.is-bubbling > .signature-spa-bubble--right-low { animation-delay: -2.2s; }
+}
+
+@keyframes signature-spa-bubble-float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(2px, -5px); }
+}
+
+/* Counter the card's 3px hover lift so the outside cat stays still. */
+@media (hover: hover) {
+  .service-card[data-card-variant="signature"].service-card--spa:hover > .signature-spa-art {
+    transform: translateY(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card[data-card-variant="signature"] > .signature-spa-art { transition: none; }
 }
 
 .service-card[data-card-variant="signature"][data-service-id="noi-bot"] { background: var(--pastel-lavender); }
@@ -6703,7 +6754,7 @@ main,
     --spa-cat-gap: 8px;
     padding-right: calc(var(--spa-cat-size) + 2 * var(--spa-cat-gap));
   }
-  .service-card[data-card-variant="signature"] > .signature-spa-cat { bottom: -8px; }
+  .service-card[data-card-variant="signature"] > .signature-spa-art { bottom: -8px; }
 }
 
 @media (max-width: 900px) {
@@ -6717,7 +6768,8 @@ main,
   .signature-spa-row {
     padding-right: 0;
   }
-  .service-card[data-card-variant="signature"] > .signature-spa-cat { display: none; }
+  .service-card[data-card-variant="signature"] > .signature-spa-art,
+  .service-card[data-card-variant="signature"] > .signature-spa-art > .signature-spa-cat { display: none; }
   .service-card[data-card-variant="signature"].service-card--spa {
     grid-template-columns: minmax(0, 1fr) minmax(82px, 38%);
     gap: 16px;
@@ -6827,12 +6879,60 @@ main,
 .footer-social__link[href]:hover { transform: translateY(-2px); }
 .footer-social__link img { width: auto; height: 36px; }
 .footer-social__link[aria-label="Zalo"] img { transform: translate(-5px, -1px); }
-.footer-brand__sleeping-cat {
+.footer-brand__sleeping-art {
+  position: relative;
   align-self: flex-start;
   width: clamp(280px, 20vw, 350px);
-  height: auto;
   margin: 4px 0 0 clamp(8px, 1.2vw, 22px);
+  flex: none;
+}
+
+.footer-brand__sleeping-cat {
+  display: block;
+  width: 100%;
+  height: auto;
   filter: drop-shadow(0 10px 14px rgba(121, 62, 78, .12));
+}
+
+.footer-brand__dream-z {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: url("assets/footer/footer_sleeping_cat_decor.webp") center / 100% 100% no-repeat;
+}
+
+.footer-brand__dream-z--small {
+  clip-path: polygon(59% 36.7%, 62.4% 36.7%, 62.4% 42.2%, 59% 42.2%);
+}
+
+.footer-brand__dream-z--medium {
+  clip-path: polygon(61.8% 31.3%, 66% 31.3%, 66% 39.3%, 61.8% 39.3%);
+}
+
+.footer-brand__dream-z--large {
+  clip-path: polygon(65.6% 23.7%, 71.3% 23.7%, 71.3% 33.2%, 65.6% 33.2%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .footer-brand__sleeping-art.is-dreaming .footer-brand__sleeping-cat {
+    /* The Zs are part of the original illustration; clear only their empty-sky region. */
+    clip-path: polygon(0 0, 58% 0, 58% 43%, 67.5% 43%, 67.5% 34%, 72% 34%, 72% 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  .footer-brand__sleeping-art.is-dreaming .footer-brand__dream-z {
+    animation: footer-dream-z 3.2s ease-in-out infinite;
+  }
+
+  .footer-brand__sleeping-art.is-dreaming .footer-brand__dream-z--medium { animation-delay: .35s; }
+  .footer-brand__sleeping-art.is-dreaming .footer-brand__dream-z--large { animation-delay: .7s; }
+}
+
+@keyframes footer-dream-z {
+  0%, 100% { opacity: 0; transform: translateY(4px); }
+  10% { opacity: 1; transform: translateY(0); }
+  76% { opacity: 1; transform: translateY(-5px); }
+  90% { opacity: 0; transform: translateY(-10px); }
 }
 
 .footer-contact {
@@ -7184,7 +7284,7 @@ main,
   .footer-brand__logo { transform: translate(-10px, calc(var(--footer-content-drop) + 50px)); }
   .footer-social__link { width: 60px; height: 56px; }
   .footer-social__link img { height: 32px; }
-  .footer-brand__sleeping-cat {
+  .footer-brand__sleeping-art {
     align-self: center;
     width: clamp(310px, 22vw, 385px);
     margin: 63px 0 0;
@@ -7265,7 +7365,7 @@ main,
     gap: 18px 32px;
     padding-right: 0;
   }
-  .footer-brand__sleeping-cat { display: none; }
+  .footer-brand__sleeping-art { display: none; }
   .footer-contact { grid-area: contact; padding-left: 0; border-left: 0; }
   .footer-map { grid-area: map; }
 }
@@ -7888,7 +7988,8 @@ main,
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] .service-meta { justify-items: end; }
   .signature-layout .service-card[data-card-variant="signature"][data-photo-tilt="right"] :is(.service-price--sale, .service-duration-row) { justify-content: flex-end; }
   .signature-layout .signature-spa-row { padding-right: 0; }
-  .signature-layout .service-card[data-card-variant="signature"] > .signature-spa-cat { display: none; }
+  .signature-layout .service-card[data-card-variant="signature"] > .signature-spa-art,
+  .signature-layout .service-card[data-card-variant="signature"] > .signature-spa-art > .signature-spa-cat { display: none; }
   /* Corner doodles on every card, as on phones: bottom-left beside a right photo, bottom-right beside a
      left photo, lifted off the outline like the phone insets. */
   .signature-layout .service-card[data-card-variant="signature"]:not(.service-card--featured)::after { display: block; inset: auto auto 14px 16px; }
@@ -8293,12 +8394,20 @@ main,
   grid-template-columns: 74.65% 25.35%;
   width: var(--ticket-w);
   aspect-ratio: 1800 / 852;
-  background: url("assets/booking/confirmation/ticket-shell-desktop.webp") center / 100% 100% no-repeat;
+  isolation: isolate;
   filter: drop-shadow(0 1px 1px rgba(79, 47, 46, .22)) drop-shadow(0 22px 30px rgba(79, 47, 46, .26));   /* paper's edge, then its lift */
   color: #4a2a26;
   transform: rotate(var(--ticket-tilt));
   pointer-events: auto;
   outline: none;
+}
+.booking-ticket__card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: url("assets/booking/confirmation/ticket-shell-desktop.webp") center / 100% 100% no-repeat;
+  pointer-events: none;
 }
 /* The ticket lands like a sheet of paper: no zoom, it slides a short way along its own tilt (the translate sits
    after the rotate, so it runs along the card's axes), turned a little more at first. One from-to move whose
@@ -8318,7 +8427,7 @@ main,
 .booking-ticket::-webkit-scrollbar { display: none; }
 .booking-ticket__main {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8427,7 +8536,7 @@ main,
 .booking-ticket__leave { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 16px; background: rgba(0, 0, 0, .55); backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); animation: booking-ticket-fade .2s ease-out both; }
 .booking-ticket__leave-card { display: grid; justify-items: center; gap: 10px; width: min(400px, 100%); padding: 26px 26px 16px; border: 1.5px dashed #f0a3b8; border-radius: 24px; background: #fffaf6; box-shadow: 0 1px 1px rgba(79, 47, 46, .18), 0 24px 50px rgba(79, 47, 46, .24); text-align: center; animation: booking-leave-in .28s cubic-bezier(.2, .9, .3, 1.15) both; }
 @keyframes booking-leave-in { from { transform: translateY(10px) scale(.96); } }
-.booking-ticket__leave-heart { width: 46px; height: auto; }
+.booking-ticket__leave-icon { width: 54px; height: 54px; object-fit: contain; }
 .booking-ticket__leave h3 { margin: 0; font: 700 26px/1.15 "Baloo 2", var(--font-signature-display); color: #6f3b2f; }
 .booking-ticket__leave p { margin: 0; font: 500 14.5px/1.5 "Baloo 2", var(--font-signature-display); color: #4b566a; }
 .booking-ticket__leave-actions { display: grid; gap: 10px; width: 100%; margin-top: 6px; }
@@ -8438,7 +8547,7 @@ main,
 .booking-ticket__leave-back:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; border-radius: 6px; }
 .booking-ticket__stub {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: grid;
   grid-template-rows: 1fr 1fr;                     /* two equal halves: their seam is the stub's middle */
   align-items: center;
@@ -8473,9 +8582,14 @@ main,
 /* The QR opens this booking's bill (bill.html); a stub without it keeps the drawn barcode. */
 .booking-ticket__qr { width: 14cqw; height: 14cqw; }
 .booking-ticket__card > .booking-ticket__deco { position: absolute; z-index: 2; height: auto; pointer-events: none; }
-/* The phone layout's cat corner, scaled to the wide ticket: the cat's paws over the top edge, the bow on the
-   corner, hearts off its ear. */
-.booking-ticket__cat { top: -9.4cqw; left: 6cqw; width: 19cqw; }
+/* The paper covers the cat's lower face, while two cropped copies of the same artwork put only its paws
+   in front of the top edge. Their shared box keeps the paw outlines registered as the ticket scales. */
+.booking-ticket__card > .booking-ticket__cat { z-index: 0; }
+.booking-ticket__cat,
+.booking-ticket__paw { top: -11.7cqw; left: 6cqw; width: 19cqw; }
+.booking-ticket__card > .booking-ticket__paw { z-index: 3; }
+.booking-ticket__paw--left { clip-path: inset(76% 57% 0 12%); }
+.booking-ticket__paw--right { clip-path: inset(76% 8% 0 61%); }
 /* The bow's knot (49%, 33% of the art, before its -16deg turn) sits on the paper's outline where the corner
    diagonal crosses it: 2.2cqw in on this shell's cut corner. Phones tuck it further in, knot about 9cqw in. */
 .booking-ticket__bow { top: -.72cqw; left: -2.35cqw; width: 10cqw; transform: rotate(-16deg); }
@@ -8536,8 +8650,8 @@ main,
     grid-template-rows: 80.6% 19.4%;
     width: var(--ticket-w);
     aspect-ratio: 763 / 1440;
-    background-image: url("assets/booking/confirmation/ticket-shell-mobile.webp");
   }
+  .booking-ticket__card::before { background-image: url("assets/booking/confirmation/ticket-shell-mobile.webp"); }
   .booking-ticket__main { justify-content: center; padding: 9cqw 6.5cqw .5cqw; }
   .booking-ticket__eyebrow { margin-bottom: 1.8cqw; font-size: max(10px, 3.3cqw); }
   .booking-ticket__main h2 { gap: 1.5cqw; font-size: 8.6cqw; }
@@ -8572,7 +8686,8 @@ main,
   .booking-ticket__scan::before { top: 50%; left: 0; width: 0; height: 20cqw; translate: 0 -50%; border-top: 0; border-left: 1.5px dashed #f0a3b8; }
   .booking-ticket__barcode { width: 30cqw; height: 12cqw; }
   .booking-ticket__qr { width: 22cqw; height: 22cqw; }
-  .booking-ticket__cat { top: -21cqw; left: 16%; width: 42cqw; }
+  .booking-ticket__cat,
+  .booking-ticket__paw { top: -25cqw; left: 16%; width: 42cqw; }
   .booking-ticket__bow { top: -2.6cqw; left: -1cqw; width: 22cqw; transform: rotate(-16deg); }   /* tucked into the corner */
   .booking-ticket__hearts { top: -18cqw; left: 58%; width: 15cqw; }
   .booking-ticket__sparkles--title { top: 10.5%; left: 3cqw; width: 8cqw; }
