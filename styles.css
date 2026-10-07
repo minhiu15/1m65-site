@@ -4229,13 +4229,6 @@ main,
 .home-love-note p { position: relative; z-index: 1; margin: 0; color: #624b45; font-size: clamp(10px, .82vw, 14px); font-weight: 700; line-height: 1.45; }
 .home-love-note p span { color: var(--pink); }
 
-@media (min-width: 1281px) {
-  .home-love-note {
-    align-self: end;
-    height: calc(100% + 26px);
-  }
-}
-
 @media (max-width: 1280px) {
   .home-section { padding: 22px 0 38px; }
   .home-grid {
@@ -4262,9 +4255,37 @@ main,
   .home-love-note { min-height: 106px; }
 }
 
+@media (min-width: 700px) and (max-width: 1280px) {
+  .home-copy h1 { font-size: clamp(62px, 7.8vw, 96px); }
+}
+
 @media (min-width: 901px) and (max-width: 1280px) {
   .home-support { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .home-bottom { grid-template-columns: minmax(0, 1fr) clamp(150px, 11.3vw, 180px); }
+}
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .home-grid {
+    grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+    grid-template-areas:
+      "copy copy"
+      "support art"
+      "bottom bottom";
+    grid-template-rows: auto auto auto;
+    column-gap: 24px;
+  }
+
+  .home-support {
+    align-self: stretch;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-support > .home-quote,
+  .home-support > .today-card {
+    height: 100%;
+    min-height: 166px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -4281,6 +4302,10 @@ main,
   .home-bottom { grid-template-columns: minmax(0, 1fr); min-height: 0; }
   .home-bottom .benefit-grid { min-height: 106px; }
   .home-love-note { min-height: 106px; }
+}
+
+@media (min-width: 700px) and (max-width: 900px) {
+  .home-support { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 600px) {
@@ -8974,4 +8999,95 @@ main,
   .sale-banner__sparkle--3, .sale-banner__heart--1, .sale-banner__squiggle { display: none; }
   .sale-banner__heart--2 { right: 30%; top: auto; bottom: 22px; width: 22px; }
   .sale-sticker { position: relative; right: auto; bottom: auto; margin-top: 14px; transform: rotate(-4deg); }
+}
+
+/* Keep the Signature waviness as a fine edge, without its filled paper center. */
+.home-art--photo {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: min(100%, 790px);
+  aspect-ratio: auto;
+  margin-inline: auto;
+  padding: 9px;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  filter: drop-shadow(0 10px 22px rgba(114, 60, 74, .10));
+}
+
+.home-art--photo::before {
+  content: "";
+  display: block;
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border: 1px solid transparent;
+  border-radius: 0;
+  border-image: url("assets/home/hero/hero_photo_outline.svg?v=2") 44 / 30px / 0 round;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+  pointer-events: none;
+}
+
+.home-art--photo .home-art__hero {
+  display: block;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  max-height: none;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 20px;
+  -webkit-mask-image: url("assets/home/hero/hero_photo_soft_mask.svg?v=1");
+  mask-image: url("assets/home/hero/hero_photo_soft_mask.svg?v=1");
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  filter: none;
+  transform: none;
+}
+
+@media (min-width: 1281px) {
+  .home-art--photo { width: 100%; }
+}
+
+@media (min-width: 1281px) and (max-width: 1899px) {
+  .home-grid {
+    min-height: 0;
+    grid-template-rows: auto 232px clamp(88px, 6.3vw, 108px);
+  }
+}
+
+@media (min-width: 1400px) and (max-width: 1899px) {
+  .home-grid {
+    grid-template-rows: auto 194px clamp(88px, 6.3vw, 108px);
+  }
+  .home-art--photo { width: calc(100% + 24px); margin-left: -24px; margin-right: 0; }
+  .home-support .today-card { padding: 10px 11px 8px; }
+  .home-support .today-card .slot-grid { gap: 5px; padding-top: 3px; }
+  .home-support .today-card .slot-grid button { min-height: 48px; padding: 7px 5px 5px; }
+  .home-support .today-card .today-note { margin-top: 11px; padding-top: 6px; font-size: 9px; line-height: 1.25; }
+}
+
+@media (min-width: 1900px) {
+  .home-grid { grid-template-columns: minmax(0, .77fr) minmax(0, 1fr); }
+}
+
+@media (max-width: 1280px) {
+  .home-art--photo { align-self: center; }
+}
+
+@media (max-width: 600px) {
+  .home-art--photo { padding: 8px; }
+  .home-art--photo::before { border-image-width: 24px; }
+  .home-art--photo .home-art__hero { border-radius: 18px; }
 }
