@@ -4,8 +4,12 @@
   const SALON_LOCATION = Object.freeze({ lat: 10.7308045, lng: 106.824314 });
   const LEAFLET_CSS = "leaflet.css?v=1.9.4";
   const LEAFLET_JS = "leaflet.js?v=1.9.4";
-  // Copied from the salon's Google Maps “Nhúng bản đồ” share action, not a generic search result.
-  const GOOGLE_MAP_EMBED = "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3920.047700051491!2d106.824314!3d10.7308045!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752300363cc559%3A0x53972471338c54b6!2s1M65%20Nails%2C%20Eyelashes%2C%20Shampoo!5e0!3m2!1svi!2s!4v1791429372554!5m2!1svi!2s";
+  // Some Vietnamese networks block openstreetmap.org (its name resolves to 127.0.0.1). The German OSM server draws
+  // the same map and stays reachable, so failed tiles switch to it and the map keeps its marker, buttons and tint.
+  const TILE_SOURCES = [
+    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "https://tile.openstreetmap.de/{z}/{x}/{y}.png",
+  ];
   let leafletRequested = false;
 
   // Leaflet (~42 KB gzip plus OSM tiles) loads only when the footer map nears the viewport.
@@ -52,40 +56,11 @@
     // Let mobile finish a drag before requesting the next grid. Continuously downloading and
     // filtering tiles during touch movement is expensive in embedded browsers.
     const status = host.parentElement.querySelector("[data-footer-map-status]");
-    const attribution = host.parentElement.querySelector(".footer-map__attribution");
+    let source = 0;
     let successfulTiles = 0;
     let failedTiles = 0;
     let failureTimer = 0;
-    let fallbackFrame = null;
-    const showGoogleFallback = function () {
-      if (fallbackFrame) return;
-      fallbackFrame = document.createElement("iframe");
-      fallbackFrame.className = "footer-map__embed";
-      fallbackFrame.title = "Bản đồ Google Maps vị trí 1M65 Nails";
-      fallbackFrame.src = GOOGLE_MAP_EMBED;
-      fallbackFrame.loading = "eager";
-      fallbackFrame.referrerPolicy = "strict-origin-when-cross-origin";
-      fallbackFrame.allowFullscreen = true;
-      let fallbackLoaded = false;
-      let fallbackTimeout;
-      fallbackFrame.onload = function () {
-        fallbackLoaded = true;
-        clearTimeout(fallbackTimeout);
-        if (status) status.hidden = true;
-      };
-      fallbackFrame.onerror = function () {
-        clearTimeout(fallbackTimeout);
-        if (status) status.hidden = false;
-      };
-      host.parentElement.appendChild(fallbackFrame);
-      host.hidden = true;
-      if (attribution) attribution.hidden = true;
-      if (status) status.hidden = true;
-      fallbackTimeout = setTimeout(function () {
-        if (!fallbackLoaded && status) status.hidden = false;
-      }, 8000);
-    };
-    global.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    const tiles = global.L.tileLayer(TILE_SOURCES[source], {
       minZoom: 12,
       maxZoom: 19,
       updateWhenIdle: global.L.Browser.mobile,
@@ -93,23 +68,22 @@
       attribution: "&copy; OpenStreetMap contributors",
     })
       .on("loading", function () {
-        if (fallbackFrame) return;
         successfulTiles = 0;
         failedTiles = 0;
         if (status) status.hidden = true;
       })
       .on("tileload", function () {
-        if (fallbackFrame) return;
         successfulTiles += 1;
         if (status && successfulTiles >= failedTiles) status.hidden = true;
       })
       .on("tileerror", function () {
-        if (fallbackFrame) return;
         failedTiles += 1;
         if (failureTimer) return;
         failureTimer = setTimeout(function () {
           failureTimer = 0;
-          if (failedTiles > successfulTiles) showGoogleFallback();
+          if (failedTiles <= successfulTiles) return;
+          if (source + 1 < TILE_SOURCES.length) tiles.setUrl(TILE_SOURCES[++source]);
+          else if (status) status.hidden = false;
         }, 1200);
       })
       .addTo(map);
