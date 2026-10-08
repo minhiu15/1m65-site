@@ -47,17 +47,37 @@
       scrollWheelZoom: true,
     }).setView([SALON_LOCATION.lat, SALON_LOCATION.lng], 15);
 
-    // On mobile Leaflet only loads tiles once a drag ends, so the view shows grey gaps mid-drag:
-    // load while dragging. A fast pinch would request every zoom level it passes through, so tiles
-    // load once the zoom settles, and the default 2-tile ring keeps phone memory in check (a 4-tile
-    // ring held ~140 decoded tiles).
+    // Let mobile finish a drag before requesting the next grid. Continuously downloading and
+    // filtering tiles during touch movement is expensive in embedded browsers.
+    const status = host.parentElement.querySelector("[data-footer-map-status]");
+    let successfulTiles = 0;
+    let failedTiles = 0;
+    let failureTimer = 0;
     global.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       minZoom: 12,
       maxZoom: 19,
-      updateWhenIdle: false,
+      updateWhenIdle: global.L.Browser.mobile,
       updateWhenZooming: false,
       attribution: "&copy; OpenStreetMap contributors",
-    }).addTo(map);
+    })
+      .on("loading", function () {
+        successfulTiles = 0;
+        failedTiles = 0;
+        if (status) status.hidden = true;
+      })
+      .on("tileload", function () {
+        successfulTiles += 1;
+        if (status && successfulTiles >= failedTiles) status.hidden = true;
+      })
+      .on("tileerror", function () {
+        failedTiles += 1;
+        if (!status || failureTimer) return;
+        failureTimer = setTimeout(function () {
+          failureTimer = 0;
+          if (failedTiles > successfulTiles) status.hidden = false;
+        }, 1200);
+      })
+      .addTo(map);
 
     // Leaflet's own +/- buttons, dressed in styles.css like the "Mở trong Google Maps" pill.
     global.L.control.zoom({ position: "topright", zoomInTitle: "Phóng to", zoomOutTitle: "Thu nhỏ" }).addTo(map);
