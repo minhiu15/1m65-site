@@ -96,7 +96,7 @@ function calendar(){
   for(let i=0;i<42;i++){const day=new Date(start+i*86400000),iso=day.toISOString().slice(0,10),active=iso===state.date;
     days+='<button type="button" class="booking-calendar__day'+(day.getUTCMonth()!==index?" is-out":"")+(active?" is-active":"")+(iso===min?" is-today":"")+'" data-booking-calendar-day="'+iso+'" aria-label="'+esc(dateLabel(iso))+'" aria-pressed="'+active+'"'+(iso<min||iso>max?" disabled":"")+'>'+day.getUTCDate()+'</button>';}
   const dows=["T2","T3","T4","T5","T6","T7","CN"].map(function(label){return '<span>'+label+'</span>';}).join("");
-  return '<div class="booking-calendar" role="dialog" aria-label="Chọn ngày"><div class="booking-calendar__head"><button type="button" data-booking-calendar-month="-1" aria-label="Tháng trước"'+(month>min.slice(0,7)?"":" disabled")+'>‹</button><strong>Tháng '+(index+1)+', '+year+'</strong><button type="button" data-booking-calendar-month="1" aria-label="Tháng sau"'+(month<max.slice(0,7)?"":" disabled")+'>›</button></div><div class="booking-calendar__dows" aria-hidden="true">'+dows+'</div><div class="booking-calendar__grid">'+days+'</div></div>';
+  return '<div class="booking-calendar" role="dialog" aria-label="Chọn ngày"><div class="booking-calendar__head"><button type="button" data-booking-calendar-month="-1" aria-label="Tháng trước"'+(month>min.slice(0,7)?"":" disabled")+'><svg class="icon-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><strong>Tháng '+(index+1)+', '+year+'</strong><button type="button" data-booking-calendar-month="1" aria-label="Tháng sau"'+(month<max.slice(0,7)?"":" disabled")+'><svg class="icon-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div><div class="booking-calendar__dows" aria-hidden="true">'+dows+'</div><div class="booking-calendar__grid">'+days+'</div></div>';
 }
 function stepTwo(){
   const hint=daySale(state.date);
@@ -110,7 +110,7 @@ function stepTwo(){
 function photoField(){
   const tiles=state.photos.map(function(photo,index){
     const gallery=photo.kind==="gallery",label=gallery?photo.title:"Ảnh của bạn";
-    return '<figure class="booking-photo"><img src="'+esc(gallery?thumb(photo.src):photo.data)+'" alt="'+esc(label)+'" decoding="async"><figcaption>'+esc(label)+'</figcaption><button type="button" data-booking-photo-remove="'+index+'" aria-label="Bỏ ảnh '+esc(label)+'">×</button></figure>';
+    return '<figure class="booking-photo"><img src="'+esc(gallery?thumb(photo.src):photo.data)+'" alt="'+esc(label)+'" decoding="async"><figcaption>'+esc(label)+'</figcaption><button type="button" data-booking-photo-remove="'+index+'" aria-label="Bỏ ảnh '+esc(label)+'"><svg class="icon-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></figure>';
   }).join("")+new Array(state.photoBusy).fill('<span class="booking-photo is-busy" role="status" aria-label="Đang xử lý ảnh"></span>').join("");
   const room=MAX_PHOTOS-state.photos.length-state.photoBusy;
   const actions=room>0?'<div class="booking-photo-actions"><label class="booking-photo-button"><input type="file" accept="image/*" multiple data-booking-photo-input>Tải ảnh lên</label><button type="button" class="booking-photo-button" data-booking-photo-picker>Chọn từ thư viện</button></div>':'';

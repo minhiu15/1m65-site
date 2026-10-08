@@ -178,6 +178,11 @@ body.is-embedded::before{content:"";position:absolute;inset:0 0 auto;height:420p
   .lookup-card,.appointment-list-view,.appointment-view{border-radius:22px}
 }
 
+/* Close and arrow marks are drawn as SVG so they sit dead centre in every browser's font. */
+.icon-glyph{display:block;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.embedded-close .icon-glyph{width:18px;height:18px}
+.calendar-nav{display:grid;place-items:center;padding:0}
+.calendar-nav .icon-glyph{width:16px;height:16px;stroke-width:2.6}
 /* Primary actions use the generated transparent rounded-rectangle paper shell. */
 :root{
   --button-shell-pill:url("assets/gallery/ui_shells/gallery_tab_enabled_LOCKED.webp");

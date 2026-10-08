@@ -9130,3 +9130,14 @@ main,
 
 /* offscreen-motion.js: decorative loops hold still while off screen. */
 .is-offscreen, .is-offscreen * { animation-play-state: paused !important; }
+
+/* Close and arrow marks are drawn as SVG, not the × ‹ › characters, whose height in the line differs by font and
+   left them sitting low in some browsers (Facebook's in-app one). The buttons centre them exactly. */
+.icon-glyph { display: block; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.modal-close, .lightbox-nav, .booking-calendar__head button { display: grid; place-items: center; padding: 0; }
+.reviews-nav { padding: 0; }
+.modal-close .icon-glyph { width: 18px; height: 18px; }
+.lightbox-nav .icon-glyph { width: 24px; height: 24px; }
+.reviews-nav .icon-glyph { width: 22px; height: 22px; stroke-width: 2.6; }
+.booking-calendar__head .icon-glyph { width: 14px; height: 14px; }
+.booking-photo button .icon-glyph { width: 11px; height: 11px; stroke-width: 2.8; }
