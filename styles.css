@@ -7082,7 +7082,7 @@ main,
   filter: drop-shadow(0 1px 0 rgba(255, 255, 255, .92));
 }
 
-/* Leaflet owns the map surface so its marker stays attached to the salon coordinate. */
+/* MapLibre owns the map surface so its marker stays attached to the salon coordinate. */
 .footer-map__live {
   position: absolute;
   inset: 0;
@@ -7096,8 +7096,8 @@ main,
 }
 
 .footer-map__live:active { cursor: grabbing; }
-/* Tiles still loading show the OSM land colour instead of Leaflet's grey #ddd. */
-.footer-map__live.leaflet-container { background: #f2efe9; }
+/* While the style loads, the map shows its own land colour. */
+.footer-map__live.maplibregl-map { background: #f2efe9; }
 .footer-map__status {
   position: absolute;
   z-index: 2;
@@ -7117,13 +7117,12 @@ main,
   pointer-events: none;
 }
 .footer-map__status[hidden] { display: none; }
-/* Tint the tiles, not the container: a filter on the Leaflet container re-rendered the whole map
-   surface on every frame of a drag or pinch, which stuttered on phones and could drop the layer to
-   a flat grey. Filtered tiles are rasterised once and then just moved. */
-.footer-map__live .leaflet-tile { filter: saturate(.72) hue-rotate(-8deg) brightness(1.03); }
-/* Zoom buttons: Leaflet's control in the "Mở trong Google Maps" pill's paper. Leaflet's stylesheet
-   loads after this one, so these selectors carry an extra class to win. */
-.footer-map__live .leaflet-control-zoom.leaflet-bar {
+/* The site's soft pink tint, on the map's own drawing surface only (not the pin or the buttons). */
+.footer-map__live .maplibregl-canvas { filter: saturate(.72) hue-rotate(-8deg) brightness(1.03); }
+/* Zoom buttons (footer-map.js) in the "Mở trong Google Maps" pill's paper. MapLibre's stylesheet loads after
+   this one, so these selectors carry an extra class to win. */
+.footer-map__live .maplibregl-ctrl.footer-map__zoom {
+  display: grid;
   margin: 8px 10px 0 0;
   overflow: hidden;
   border: 1px solid rgba(211, 158, 183, .28);
@@ -7131,7 +7130,7 @@ main,
   background: rgba(255, 252, 253, .96);
   box-shadow: 0 10px 22px -15px rgba(79, 47, 75, .5);
 }
-.footer-map__live .leaflet-control-zoom.leaflet-bar a {
+.footer-map__live .footer-map__zoom button {
   display: grid;
   place-items: center;
   width: 42px;
@@ -7142,14 +7141,17 @@ main,
   color: #ef7ea7;
   font: 700 22px/1 var(--font-signature-body);
   text-decoration: none;
+  cursor: pointer;
 }
-.footer-map__live .leaflet-control-zoom.leaflet-bar a + a { border-top: 1px solid rgba(211, 158, 183, .28); }
-.footer-map__live .leaflet-control-zoom.leaflet-bar a:hover,
-.footer-map__live .leaflet-control-zoom.leaflet-bar a:focus-visible { background: #fff0f5; }
-.footer-map__live .leaflet-control-zoom.leaflet-bar a.leaflet-disabled { background: transparent; color: #ef7ea7; opacity: .38; }
+.footer-map__live .footer-map__zoom button + button { border-top: 1px solid rgba(211, 158, 183, .28); }
+.footer-map__live .footer-map__zoom button:hover,
+.footer-map__live .footer-map__zoom button:focus-visible { background: #fff0f5; }
+.footer-map__live .footer-map__zoom button:disabled { background: transparent; color: #ef7ea7; opacity: .38; cursor: default; }
+/* "Dùng hai ngón tay…": MapLibre's hint when one finger or a bare wheel meets the map, in the site's ink. */
+.footer-map__live .maplibregl-cooperative-gesture-screen { background: rgba(79, 47, 46, .42); font: 700 15px/1.4 var(--font-signature-body); }
 @media (max-width: 600px) {
-  .footer-map__live .leaflet-control-zoom.leaflet-bar { margin: 7px 9px 0 0; }
-  .footer-map__live .leaflet-control-zoom.leaflet-bar a { width: 38px; height: 38px; font-size: 20px; }
+  .footer-map__live .maplibregl-ctrl.footer-map__zoom { margin: 7px 9px 0 0; }
+  .footer-map__live .footer-map__zoom button { width: 38px; height: 38px; font-size: 20px; }
 }
 .footer-map__geo-marker {
   border: 0 !important;

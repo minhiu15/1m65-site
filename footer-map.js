@@ -1,31 +1,35 @@
 (function (global) {
   "use strict";
 
-  const SALON_LOCATION = Object.freeze({ lat: 10.7308045, lng: 106.824314 });
-  const LEAFLET_CSS = "leaflet.css?v=1.9.4";
-  const LEAFLET_JS = "leaflet.js?v=1.9.4";
-  // Some Vietnamese networks block openstreetmap.org (its name resolves to 127.0.0.1). The German OSM server draws
-  // the same map and stays reachable, so failed tiles switch to it and the map keeps its marker, buttons and tint.
-  const TILE_SOURCES = [
-    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-    "https://tile.openstreetmap.de/{z}/{x}/{y}.png",
-  ];
-  let leafletRequested = false;
+  const SALON = Object.freeze([106.824314, 10.7308045]); // [longitude, latitude]
+  const MAPLIBRE_CSS = "maplibre-gl.css?v=5.24.0";
+  const MAPLIBRE_JS = "maplibre-gl.js?v=5.24.0";
+  // OpenFreeMap: free vector tiles drawn from OpenStreetMap, no key. Vector maps stay crisp on phone screens
+  // (raster tiles were stretched 3x and looked blurry), and its CDN is reachable from Vietnamese networks that
+  // block openstreetmap.org.
+  const STYLE = "https://tiles.openfreemap.org/styles/liberty";
+  const LOCALE = {
+    "CooperativeGesturesHandler.WindowsHelpText": "Giữ Ctrl và lăn chuột để phóng to bản đồ",
+    "CooperativeGesturesHandler.MacHelpText": "Giữ ⌘ và lăn chuột để phóng to bản đồ",
+    "CooperativeGesturesHandler.MobileHelpText": "Dùng hai ngón tay để di chuyển bản đồ",
+  };
+  let libraryRequested = false;
 
-  // Leaflet (~42 KB gzip plus OSM tiles) loads only when the footer map nears the viewport.
-  function loadLeafletNear(host) {
+  // MapLibre (~280 KB gzip) loads only when the footer map nears the viewport.
+  function loadLibraryNear(host) {
     const load = function () {
-      if (leafletRequested) return;
-      leafletRequested = true;
+      if (libraryRequested) return;
+      libraryRequested = true;
       let pending = 2;
       const done = function () { if (--pending === 0) init1m65FooterMap(host); };
       const css = document.createElement("link");
       css.rel = "stylesheet";
-      css.href = LEAFLET_CSS;
+      css.href = MAPLIBRE_CSS;
       css.onload = css.onerror = done;
       const script = document.createElement("script");
-      script.src = LEAFLET_JS;
+      script.src = MAPLIBRE_JS;
       script.onload = done;
+      script.onerror = function () { showStatus(host); };
       document.head.append(css, script);
     };
     if (typeof IntersectionObserver !== "function") return load();
@@ -37,80 +41,107 @@
     observer.observe(host);
   }
 
+  function showStatus(host) {
+    const status = host.parentElement && host.parentElement.querySelector("[data-footer-map-status]");
+    if (status) status.hidden = false;
+  }
+
+  // The style names places in English first; the salon's customers read the Vietnamese names. Its land and water
+  // also take the classic OpenStreetMap colours the footer map has always worn.
+  function salonStyle(previous, next) {
+    next.layers.forEach(function (layer) {
+      const field = layer.layout && layer.layout["text-field"];
+      if (field && JSON.stringify(field).indexOf("name_en") !== -1) {
+        layer.layout["text-field"] = ["coalesce", ["get", "name"], ["get", "name_en"]];
+      }
+      if (layer.type === "background") layer.paint = Object.assign({}, layer.paint, { "background-color": "#f2efe9" });
+      if (layer.id === "water") layer.paint = Object.assign({}, layer.paint, { "fill-color": "#aad3df" });
+      if (/^waterway_/.test(layer.id) && layer.type === "line") layer.paint = Object.assign({}, layer.paint, { "line-color": "#aad3df" });
+    });
+    return next;
+  }
+
+  // +/- in the "Mở trong Google Maps" pill's paper, as a MapLibre control so it sits in the map's corner.
+  function zoomControl() {
+    let bar = null;
+    return {
+      onAdd: function (map) {
+        bar = document.createElement("div");
+        bar.className = "maplibregl-ctrl footer-map__zoom";
+        const buttons = [["+", "Phóng to", function () { map.zoomIn(); }], ["−", "Thu nhỏ", function () { map.zoomOut(); }]]
+          .map(function (spec) {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.textContent = spec[0];
+            button.title = spec[1];
+            button.setAttribute("aria-label", spec[1]);
+            button.addEventListener("click", spec[2]);
+            bar.append(button);
+            return button;
+          });
+        const update = function () {
+          buttons[0].disabled = map.getZoom() >= map.getMaxZoom();
+          buttons[1].disabled = map.getZoom() <= map.getMinZoom();
+        };
+        map.on("zoom", update);
+        update();
+        return bar;
+      },
+      onRemove: function () { if (bar) bar.remove(); },
+    };
+  }
+
   function init1m65FooterMap(host) {
     if (!host) return null;
-    if (!global.L) {
-      loadLeafletNear(host);
+    if (!global.maplibregl) {
+      loadLibraryNear(host);
       return null;
     }
     if (host.__1m65FooterMap) return host.__1m65FooterMap;
 
-    const map = global.L.map(host, {
-      zoomControl: false,
-      attributionControl: false,
-      minZoom: 12,
-      maxZoom: 19,
-      scrollWheelZoom: true,
-    }).setView([SALON_LOCATION.lat, SALON_LOCATION.lng], 15);
+    let map;
+    try {
+      map = new global.maplibregl.Map({
+        container: host,
+        center: SALON,
+        zoom: 15,
+        minZoom: 12,
+        maxZoom: 19,
+        attributionControl: false,
+        // One finger scrolls the page past the map; two fingers (or Ctrl + wheel) move it.
+        cooperativeGestures: true,
+        dragRotate: false,
+        pitchWithRotate: false,
+        touchPitch: false,
+        maxPitch: 0,
+        locale: LOCALE,
+      });
+    } catch (error) {
+      showStatus(host); // no WebGL: the directions link still works
+      return null;
+    }
+    map.setStyle(STYLE, { transformStyle: salonStyle });
+    map.touchZoomRotate.disableRotation();
 
-    // Let mobile finish a drag before requesting the next grid. Continuously downloading and
-    // filtering tiles during touch movement is expensive in embedded browsers.
-    const status = host.parentElement.querySelector("[data-footer-map-status]");
-    let source = 0;
-    let successfulTiles = 0;
-    let failedTiles = 0;
-    let failureTimer = 0;
-    const tiles = global.L.tileLayer(TILE_SOURCES[source], {
-      minZoom: 12,
-      maxZoom: 19,
-      updateWhenIdle: global.L.Browser.mobile,
-      updateWhenZooming: false,
-      attribution: "&copy; OpenStreetMap contributors",
-    })
-      .on("loading", function () {
-        successfulTiles = 0;
-        failedTiles = 0;
-        if (status) status.hidden = true;
-      })
-      .on("tileload", function () {
-        successfulTiles += 1;
-        if (status && successfulTiles >= failedTiles) status.hidden = true;
-      })
-      .on("tileerror", function () {
-        failedTiles += 1;
-        if (failureTimer) return;
-        failureTimer = setTimeout(function () {
-          failureTimer = 0;
-          if (failedTiles <= successfulTiles) return;
-          if (source + 1 < TILE_SOURCES.length) tiles.setUrl(TILE_SOURCES[++source]);
-          else if (status) status.hidden = false;
-        }, 1200);
-      })
-      .addTo(map);
-
-    // Leaflet's own +/- buttons, dressed in styles.css like the "Mở trong Google Maps" pill.
-    global.L.control.zoom({ position: "topright", zoomInTitle: "Phóng to", zoomOutTitle: "Thu nhỏ" }).addTo(map);
-
-    const markerIcon = global.L.divIcon({
-      className: "footer-map__geo-marker",
-      html: '<span class="footer-map__pin" aria-hidden="true"></span>',
-      iconSize: [58, 65],
-      iconAnchor: [29, 65],
+    let loaded = false;
+    map.once("load", function () {
+      loaded = true;
+      const status = host.parentElement && host.parentElement.querySelector("[data-footer-map-status]");
+      if (status) status.hidden = true;
     });
+    map.on("error", function () { if (!loaded) showStatus(host); });
 
-    global.L.marker([SALON_LOCATION.lat, SALON_LOCATION.lng], {
-      icon: markerIcon,
-      interactive: false,
-      keyboard: false,
-    }).addTo(map);
+    map.addControl(zoomControl(), "top-right");
+
+    const pin = document.createElement("div");
+    pin.className = "footer-map__geo-marker";
+    pin.innerHTML = '<span class="footer-map__pin" aria-hidden="true"></span>';
+    new global.maplibregl.Marker({ element: pin, anchor: "bottom" }).setLngLat(SALON).addTo(map);
 
     host.__1m65FooterMap = map;
 
     if (typeof ResizeObserver === "function") {
-      const resizeObserver = new ResizeObserver(function () {
-        map.invalidateSize({ pan: false });
-      });
-      resizeObserver.observe(host);
+      new ResizeObserver(function () { map.resize(); }).observe(host);
     }
 
     return map;

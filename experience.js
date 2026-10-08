@@ -404,10 +404,12 @@ async function loadHomeAvailability() {
 // The manager is a page of its own in an iframe; the popup shows a loading paw over it until that page loads.
 function openManager(reference,trigger) {
   const frame = document.querySelector("[data-manager-frame]");
-  if (frame) {const query=new URLSearchParams({embed:"1",view:"v2",v:"20261004-1"});if(reference)query.set("reference",reference);const panel=frame.parentElement;panel.classList.add("is-loading");frame.addEventListener("load",function(){panel.classList.remove("is-loading");},{once:true});frame.src="manage-booking.html?"+query.toString();}
+  if (frame) {const query=new URLSearchParams({embed:"1",view:"v2",v:"20261008-1"});if(reference)query.set("reference",reference);const panel=frame.parentElement;panel.classList.add("is-loading");frame.addEventListener("load",function(){panel.classList.remove("is-loading");},{once:true});frame.src="manage-booking.html?"+query.toString();}
   openModal(document.querySelector("#manager-modal"),trigger);
 }
 window.__v2Experience.openManager = openManager;
+// manage-booking.js calls this once its page is ready, before its pictures finish loading.
+window.__v2Experience.managerReady = function(){const frame=document.querySelector("[data-manager-frame]");if(frame)frame.parentElement.classList.remove("is-loading");};
 
 document.addEventListener("click",function(event){
   const target=event.target;

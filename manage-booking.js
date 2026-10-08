@@ -580,4 +580,6 @@
       if (event.target === contactDialog || event.target.closest('[data-contact-close], .contact-dialog__option')) contactDialog.close();
     });
   }
+  // In the site's popup, show the page as soon as it is ready; its pictures can arrive after.
+  try { if (window.top !== window && window.top.__v2Experience && window.top.__v2Experience.managerReady) window.top.__v2Experience.managerReady(); } catch (_) {}
 })();
