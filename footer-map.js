@@ -15,7 +15,21 @@
   };
   let libraryRequested = false;
 
-  // MapLibre (~280 KB gzip) loads only when the footer map nears the viewport.
+  // Running MapLibre's ~1 MB script and drawing its first WebGL frames takes a phone a few hundred ms, so that work
+  // waits for a pause in scrolling instead of landing in the middle of a swipe.
+  function whenScrollSettles(run) {
+    let timer = 0;
+    const settled = function () {
+      removeEventListener("scroll", wait);
+      if (global.requestIdleCallback) global.requestIdleCallback(run, { timeout: 1000 });
+      else run();
+    };
+    const wait = function () { clearTimeout(timer); timer = setTimeout(settled, 250); };
+    addEventListener("scroll", wait, { passive: true });
+    wait();
+  }
+
+  // MapLibre (~280 KB gzip) downloads only when the footer map nears the viewport; it runs once scrolling pauses.
   function loadLibraryNear(host) {
     const load = function () {
       if (libraryRequested) return;
@@ -26,11 +40,18 @@
       css.rel = "stylesheet";
       css.href = MAPLIBRE_CSS;
       css.onload = css.onerror = done;
-      const script = document.createElement("script");
-      script.src = MAPLIBRE_JS;
-      script.onload = done;
-      script.onerror = function () { showStatus(host); };
-      document.head.append(css, script);
+      const preload = document.createElement("link");
+      preload.rel = "preload";
+      preload.as = "script";
+      preload.href = MAPLIBRE_JS;
+      document.head.append(css, preload);
+      whenScrollSettles(function () {
+        const script = document.createElement("script");
+        script.src = MAPLIBRE_JS;
+        script.onload = done;
+        script.onerror = function () { showStatus(host); };
+        document.head.append(script);
+      });
     };
     if (typeof IntersectionObserver !== "function") return load();
     const observer = new IntersectionObserver(function (entries) {
@@ -108,6 +129,10 @@
         minZoom: 12,
         maxZoom: 19,
         attributionControl: false,
+        // Drawn at 2x at most: crisp on 3x phones for well under half the pixels, and no label fade-in frames.
+        pixelRatio: Math.min(global.devicePixelRatio || 1, 2),
+        fadeDuration: 0,
+        renderWorldCopies: false,
         // One finger scrolls the page past the map; two fingers (or Ctrl + wheel) move it.
         cooperativeGestures: true,
         dragRotate: false,
