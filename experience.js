@@ -120,6 +120,7 @@ function closeModal(modal, restore) {
   const target = modal || activeModal;
   if (!target) return;
   target.hidden = true;
+  if (target.id === "manager-modal") setTimeout(function(){ loadManager(""); }, 400);
   if (target !== activeModal) return;
   const focusTarget = returnFocus;
   const openedWithPointer = returnFocusWasPointer;
@@ -401,15 +402,29 @@ async function loadHomeAvailability() {
     buttons.forEach(function(button){const status=button.querySelector("small");if(status)status.textContent="Mở lịch";});
   }
 }
-// The manager is a page of its own in an iframe; the popup shows a loading paw over it until that page loads.
+// The manager is a page of its own in an iframe. It loads hidden once the site has settled (Safari ignores
+// <link rel=prefetch>), so "Xem lịch của bạn" opens at once, and reloads hidden after each use, fresh for the next
+// time. A booking reference (from the ticket) loads it straight on that booking. The loading paw shows only while
+// the page is not ready yet.
+const MANAGER_VERSION = "20261008-2";
+let managerFresh = false;
+function loadManager(reference){
+  const frame=document.querySelector("[data-manager-frame]");if(!frame)return;
+  const query=new URLSearchParams({embed:"1",view:"v2",v:MANAGER_VERSION});if(reference)query.set("reference",reference);
+  frame.parentElement.classList.add("is-loading");
+  frame.addEventListener("load",window.__v2Experience.managerReady,{once:true});
+  frame.src="manage-booking.html?"+query.toString();
+  managerFresh=!reference;
+}
 function openManager(reference,trigger) {
-  const frame = document.querySelector("[data-manager-frame]");
-  if (frame) {const query=new URLSearchParams({embed:"1",view:"v2",v:"20261008-1"});if(reference)query.set("reference",reference);const panel=frame.parentElement;panel.classList.add("is-loading");frame.addEventListener("load",function(){panel.classList.remove("is-loading");},{once:true});frame.src="manage-booking.html?"+query.toString();}
+  if (reference || !managerFresh) loadManager(reference);
+  managerFresh=false;
   openModal(document.querySelector("#manager-modal"),trigger);
 }
 window.__v2Experience.openManager = openManager;
 // manage-booking.js calls this once its page is ready, before its pictures finish loading.
 window.__v2Experience.managerReady = function(){const frame=document.querySelector("[data-manager-frame]");if(frame)frame.parentElement.classList.remove("is-loading");};
+addEventListener("load",function(){setTimeout(function(){if(!managerFresh&&document.querySelector("#manager-modal")?.hidden)loadManager("");},2500);},{once:true});
 
 document.addEventListener("click",function(event){
   const target=event.target;
