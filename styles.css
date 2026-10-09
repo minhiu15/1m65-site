@@ -9199,3 +9199,11 @@ main,
   .legal-modal-body::-webkit-scrollbar { width: 6px; }
   .legal-modal-body::-webkit-scrollbar-track { margin: 10px 0 22px; }
 }
+
+/* Review figures on narrow phones (380px and below): side by side, "Nhiều năm" left the right column wider than
+   half the page, spilling past the edge, so the two columns stay equal and each icon sits above its figure. */
+@media (max-width: 380px) {
+  .reviews-stats.review-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .review-stats .reviews-stat { grid-template-columns: 1fr; align-content: start; justify-items: center; gap: 6px; padding: 12px 8px; text-align: center; }
+  .review-stats .reviews-stat__icon { grid-row: auto; }
+}
