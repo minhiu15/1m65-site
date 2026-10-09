@@ -9141,3 +9141,61 @@ main,
 .reviews-nav .icon-glyph { width: 22px; height: 22px; stroke-width: 2.6; }
 .booking-calendar__head .icon-glyph { width: 14px; height: 14px; }
 .booking-photo button .icon-glyph { width: 11px; height: 11px; stroke-width: 2.8; }
+
+/* Terms and privacy: two quiet links right after the copyright line, on the left, clear of the fixed "Xem lịch
+   của bạn" button in the bottom-right corner (they wrap under it on phones); and one line in the booking confirm
+   step saying what "Xác nhận đặt hẹn" agrees to. */
+.site-footer { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: flex-start; gap: 6px 22px; }
+.site-footer__legal { display: flex; gap: 16px; font-size: 12.5px; }
+/* On narrow screens, like the rest of the footer, the copyright and the links (on their own line) are centred, midway
+   down the pink band; the floating "Xem lịch của bạn" button steps aside there (experience.js) so it never covers them. */
+.manage-fab { transition: opacity .2s ease, transform .2s ease, visibility .2s; }
+@media (max-width: 900px) {
+  .site-footer { justify-content: center; margin-bottom: -6px; text-align: center; }
+  .site-footer__legal { flex-basis: 100%; justify-content: center; }
+  .manage-fab.is-tucked { opacity: 0; visibility: hidden; transform: translateY(12px); }
+}
+.site-footer__legal a { color: #7c7791; text-decoration: underline; text-underline-offset: 3px; }
+.site-footer__legal a:hover, .site-footer__legal a:focus-visible { color: var(--pink-strong); }
+.booking-consent { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.booking-consent strong { color: var(--cocoa); }
+.booking-consent a { color: var(--pink-strong); }
+
+/* Terms and privacy popup (experience.js openLegal): the policy sheet over a dark veil, read in place. */
+.legal-modal .modal-backdrop { background: rgba(0, 0, 0, .55); }
+.legal-modal-panel { width: min(760px, 100%); max-height: calc(100dvh - 48px); }
+.legal-modal-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 24px 16px clamp(20px, 5vw, 44px); border-bottom: 1px solid var(--line); }
+.legal-modal-eyebrow { margin: 0 0 4px; color: #c2336a; font: 800 12px/1 var(--font-signature-body); letter-spacing: .14em; text-transform: uppercase; }
+.legal-modal-head h2 { margin: 0; color: #4f382e; font: 700 clamp(24px, 4.4vw, 32px)/1.15 Quicksand, sans-serif; text-wrap: balance; }
+.legal-modal-body { overflow: auto; padding: 18px clamp(20px, 5vw, 44px) 34px; color: #5d463d; font: 500 15.5px/1.7 var(--font-signature-body); outline: none; }
+.legal-modal-body .privacy-updated { margin: 0 0 16px; color: #8b746b; font-size: 14px; }
+.legal-modal-body h2 { margin: 24px 0 6px; color: #4f382e; font: 700 18px/1.3 Quicksand, sans-serif; }
+.legal-modal-body p, .legal-modal-body ul { margin: 0 0 10px; }
+.legal-modal-body ul { padding-left: 20px; }
+.legal-modal-body li + li { margin-top: 4px; }
+.legal-modal-body a { color: #c2336a; }
+.legal-modal-body .privacy-contact { padding-left: 0; list-style: none; }
+.legal-modal-body .privacy-links { margin: 20px 0 0; font: 700 15px Quicksand, sans-serif; }
+.legal-loading { margin: 40px 0; color: #8b746b; text-align: center; }
+@media (max-width: 600px) {
+  .legal-modal-panel { max-height: calc(100dvh - 24px); border-radius: 26px; }
+  .legal-modal-head { padding: 18px 14px 14px 18px; gap: 12px; }
+  .legal-modal-body { padding: 16px 18px 28px; font-size: 15px; }
+}
+
+/* The policy popup's scrollbar: a slim pink thumb on a clear rail, set in from the panel's edge and kept short of
+   the header and the bottom corner, so it sits neatly inside the rounded sheet. */
+.legal-modal-body { margin-right: 10px; }
+@supports selector(::-webkit-scrollbar) {
+  .legal-modal-body::-webkit-scrollbar { width: 8px; }
+  .legal-modal-body::-webkit-scrollbar-track { margin: 12px 0 26px; background: transparent !important; }
+  .legal-modal-body::-webkit-scrollbar-thumb { border: 0; background: var(--brand-scroll-thumb) !important; }
+}
+@supports not selector(::-webkit-scrollbar) {
+  .legal-modal-body { scrollbar-width: thin; }
+}
+@media (max-width: 600px) {
+  .legal-modal-body { margin-right: 6px; }
+  .legal-modal-body::-webkit-scrollbar { width: 6px; }
+  .legal-modal-body::-webkit-scrollbar-track { margin: 10px 0 22px; }
+}

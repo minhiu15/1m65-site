@@ -17,7 +17,7 @@
   <link rel="icon" href="favicon-48.png" sizes="48x48" type="image/png">
   <link rel="icon" href="favicon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=20261009-1">
+  <link rel="stylesheet" href="styles.css?v=20261009-8">
   <link rel="stylesheet" href="paw-cursor.css?v=20261001-1">
   <script defer src="turnstile-config.js?v=20260807a"></script>
   <script defer src="turnstile-booking.js?v=20260807a"></script>
@@ -28,7 +28,7 @@
   <script defer src="paw-cursor.js?v=20261002-1"></script>
   <script defer src="zalo-app.js?v=20261004-1"></script>
   <script type="module" src="app.js?v=20261006-1"></script>
-  <script type="module" src="experience.js?v=20261009-1"></script>
+  <script type="module" src="experience.js?v=20261009-7"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
@@ -391,6 +391,7 @@
       </ul>
       <footer class="site-footer paper-width">
         <p>© 2026 1M65 Nails, Eyelashes, Shampoo.</p>
+        <nav class="site-footer__legal" aria-label="Chính sách"><a href="terms.html">Điều khoản</a><a href="privacy.html">Quyền riêng tư</a></nav>
       </footer>
     </section>
 
@@ -435,6 +436,13 @@
       </div>
     </section>
 
+    <section class="modal legal-modal" id="legal-modal" role="dialog" aria-modal="true" aria-labelledby="legal-modal-title" hidden>
+      <div class="modal-backdrop" data-close-modal></div>
+      <div class="modal-panel legal-modal-panel" role="document">
+        <header class="legal-modal-head"><div><p class="legal-modal-eyebrow" data-legal-eyebrow>Chính sách</p><h2 id="legal-modal-title" data-legal-title>Chính sách của tiệm</h2></div><button type="button" class="modal-close" data-close-modal aria-label="Đóng"><svg class="icon-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></header>
+        <div class="legal-modal-body" data-legal-body tabindex="-1"></div>
+      </div>
+    </section>
     <section class="modal" id="manager-modal" role="dialog" aria-modal="true" aria-labelledby="manager-modal-title" hidden>
       <div class="modal-backdrop" data-close-modal></div>
       <div class="modal-panel manager-modal-panel" role="document">

@@ -19,3 +19,5 @@ li+li{margin-top:4px}
 a{color:var(--pink-deep)}
 .privacy-contact{padding-left:0;list-style:none}
 .privacy-back{display:inline-block;margin-top:22px;font:700 15px Quicksand,sans-serif}
+
+.privacy-links{margin:22px 0 0;font:700 15px Quicksand,sans-serif}

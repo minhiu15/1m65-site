@@ -1,4 +1,4 @@
-import "./booking-v2.js?v=20261009-1";
+import "./booking-v2.js?v=20261009-3";
 
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
@@ -406,7 +406,7 @@ async function loadHomeAvailability() {
 // <link rel=prefetch>), so "Xem lịch của bạn" opens at once, and reloads hidden after each use, fresh for the next
 // time. A booking reference (from the ticket) loads it straight on that booking. The loading paw shows only while
 // the page is not ready yet.
-const MANAGER_VERSION = "20261009-1";
+const MANAGER_VERSION = "20261009-3";
 let managerFresh = false;
 function loadManager(reference){
   const frame=document.querySelector("[data-manager-frame]");if(!frame)return;
@@ -422,6 +422,29 @@ function openManager(reference,trigger) {
   openModal(document.querySelector("#manager-modal"),trigger);
 }
 window.__v2Experience.openManager = openManager;
+
+// Terms and privacy open as a popup over a dark veil; their pages stay for direct links and search engines. The
+// page's sheet is fetched once and shown without its brand and "Về trang chủ" links. From the booking popup it
+// stacks on top, so closing it returns to the form as it was.
+const legalPages = {};
+function openLegal(href,trigger){
+  const modal=document.querySelector("#legal-modal"),body=modal&&modal.querySelector("[data-legal-body]");
+  if(!body){location.href=href;return;}
+  if(modal.hidden)openModal(modal,trigger,{stackCurrent:Boolean(activeModal)});
+  body.innerHTML='<p class="legal-loading">Đang tải…</p>';
+  (legalPages[href]||(legalPages[href]=fetch(href).then(function(response){if(!response.ok)throw new Error("legal_page");return response.text();})))
+    .then(function(html){
+      const main=new DOMParser().parseFromString(html,"text/html").querySelector("main");
+      main.querySelectorAll(".privacy-brand,.privacy-back").forEach(function(node){node.remove();});
+      // The eyebrow and title move into the popup's fixed header, level with its close button.
+      const eyebrow=main.querySelector(".privacy-eyebrow"),title=main.querySelector("h1");
+      modal.querySelector("[data-legal-eyebrow]").textContent=eyebrow?eyebrow.textContent:"";
+      modal.querySelector("[data-legal-title]").textContent=title?title.textContent:"";
+      if(eyebrow)eyebrow.remove();if(title)title.remove();
+      body.innerHTML=main.innerHTML;body.scrollTop=0;body.focus({preventScroll:true});
+    })
+    .catch(function(){delete legalPages[href];location.href=href;});
+}
 // manage-booking.js calls this once its page is ready, before its pictures finish loading.
 window.__v2Experience.managerReady = function(){const frame=document.querySelector("[data-manager-frame]");if(frame)frame.parentElement.classList.remove("is-loading");};
 addEventListener("load",function(){setTimeout(function(){if(!managerFresh&&document.querySelector("#manager-modal")?.hidden)loadManager("");},2500);},{once:true});
@@ -441,6 +464,7 @@ document.addEventListener("click",function(event){
   const lightboxBook=target.closest("[data-lightbox-book]");if(lightboxBook){const origin=rootReturnFocus()||lightboxBook;closeModal(document.querySelector("#gallery-lightbox"),false);window.__v2Booking.open({defer:true},origin);return;}
   const faq=target.closest("[data-faq-list] button");if(faq){const expanded=faq.getAttribute("aria-expanded")==="true";faq.setAttribute("aria-expanded",String(!expanded));return;}
   const manager=target.closest("[data-open-manager]");if(manager)openManager("",manager);
+  const legal=target.closest('a[href="terms.html"],a[href="privacy.html"]');if(legal&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey){event.preventDefault();openLegal(legal.getAttribute("href"),legal);}
 });
 document.addEventListener("1m65:v2:open-booking",function(event){window.__v2Booking.open(Object.assign({defer:true},event.detail),document.activeElement);});
 document.addEventListener("keydown",function(event){
@@ -525,4 +549,10 @@ if(bookingBody){
   };
   new MutationObserver(watchBookingBar).observe(bookingBody,{childList:true});
   watchBookingBar();
+}
+// Once the footer's copyright line is on screen, the floating "Xem lịch của bạn" button tucks away (on narrow screens,
+// styles.css) so it does not sit over the centred footer text; scrolling back up brings it back.
+const manageFab=document.querySelector(".manage-fab"),siteFooter=document.querySelector(".site-footer");
+if(manageFab&&siteFooter&&"IntersectionObserver" in window){
+  new IntersectionObserver(function(entries){manageFab.classList.toggle("is-tucked",entries[0].isIntersecting);}).observe(siteFooter);
 }

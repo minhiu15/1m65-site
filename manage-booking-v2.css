@@ -150,10 +150,13 @@ body.is-embedded{position:relative;background:#fffdfb}
    under it); it wears the site's soft pink tile and asks the site to close the popup. */
 .embedded-close{position:fixed;top:25px;right:28px;z-index:3;display:grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid rgba(224,79,116,.32);border-radius:14px;background:radial-gradient(circle at 27% 24%,rgba(255,255,255,.95) 0 3px,transparent 4px),linear-gradient(145deg,rgba(255,250,251,.98),rgba(250,211,223,.94));box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 9px 20px -14px rgba(188,61,96,.78);color:#dc4f74;font:400 29px/1 sans-serif;cursor:pointer}
 .embedded-close[hidden]{display:none}
-@media(max-width:600px){.embedded-close{top:17px;right:17px;width:42px;height:42px}}
-/* 40px side margins; the title block starts below the popup's close button (25px + 44px from the top), so the
-   eyebrow is not level with it and the cat note keeps clear of it. */
-.is-embedded .page-shell{width:min(980px,calc(100% - 80px));min-height:100dvh;padding:84px 0 16px}
+@media(max-width:560px){.embedded-close{top:17px;right:17px;width:42px;height:42px}}
+/* 40px side margins. Like the site's other popups, a fixed header holds the "Lịch hẹn của bạn" line level with the
+   close button over a hairline, and the page scrolls under it; the header wears the page's own pastel glow. */
+.is-embedded .page-shell{width:min(980px,calc(100% - 80px));min-height:100dvh;padding:117px 0 16px}
+.is-embedded .page-shell::before{content:"";position:fixed;inset:0 0 auto;z-index:25;height:87px;border-bottom:1px solid rgba(133,120,158,.22);background:radial-gradient(28rem 16rem at 8% 0,rgba(243,236,250,.9),transparent 70%) 0 0/100% 420px no-repeat,radial-gradient(22rem 15rem at 92% 14%,rgba(253,232,237,.75),transparent 72%) 0 0/100% 420px no-repeat,#fffdfb;pointer-events:none}
+.is-embedded .intro-copy>.eyebrow{position:fixed;z-index:26;top:37px;left:max(40px,calc(50% - 490px));margin:0}
+.is-embedded .appointment-list-view,.is-embedded .appointment-view{scroll-margin-top:105px}
 .is-embedded .intro-copy>p:last-child{font-size:15px}
 .is-embedded .lookup-card{padding:clamp(26px,4.4vh,40px) clamp(28px,3.4vw,40px)}
 /* The help line sits at the popup's foot on a strip of wavy pink paper with a dashed stitch, like the site's footer. */
@@ -171,7 +174,13 @@ body.is-embedded::before{content:"";position:absolute;inset:0 0 auto;height:420p
 .is-embedded .intro h1{font-size:clamp(2.2rem,4.6vw,3.9rem)}
 .is-embedded .intro-note{transform:rotate(1.5deg)}
 @media(max-width:560px){
-  .is-embedded .page-shell{width:min(100% - 24px,480px);padding:68px 0 15px}
+  .is-embedded .page-shell{width:min(100% - 24px,480px);padding:93px 0 15px}
+  .is-embedded .page-shell::before{height:73px}
+  .is-embedded .intro-copy>.eyebrow{top:28px;left:max(12px,calc(50% - 240px))}
+  .is-embedded .appointment-list-view,.is-embedded .appointment-view{scroll-margin-top:88px}
+  /* "mình cùng xem lại nha." stays on one line on phones. */
+  .is-embedded .intro h1{font-size:min(2.2rem,8.2vw)}
+  .is-embedded .intro h1 span{white-space:nowrap}
   .is-embedded .doodle-star,.is-embedded .doodle-peach{display:none}
   .is-embedded .manager-wave{height:118px}
   .is-embedded .intro{margin-bottom:18px}
