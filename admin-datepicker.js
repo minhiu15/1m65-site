@@ -44,6 +44,17 @@
     return DOW[date.getUTCDay()] + ', ' + parts[2] + '/' + parts[1] + '/' + parts[0];
   }
 
+  // Arrows are SVG, not the ‹ › characters, which sit low in some fonts.
+  function chevron(path) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('aria-hidden', 'true');
+    line.setAttribute('d', path);
+    svg.append(line);
+    return svg;
+  }
+
   function node(tag, className, text) {
     const item = document.createElement(tag);
     if (className) item.className = className;
@@ -111,8 +122,10 @@
 
       const head = node('div', 'dp-head');
       const title = node('span', 'dp-title', monthTitle(month));
-      const prev = node('button', 'dp-nav', '‹');
-      const next = node('button', 'dp-nav', '›');
+      const prev = node('button', 'dp-nav');
+      const next = node('button', 'dp-nav');
+      prev.append(chevron('M15 5l-7 7 7 7'));
+      next.append(chevron('M9 5l7 7-7 7'));
       prev.type = 'button'; next.type = 'button';
       prev.setAttribute('aria-label', 'Tháng trước');
       next.setAttribute('aria-label', 'Tháng sau');

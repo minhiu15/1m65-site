@@ -5,6 +5,9 @@
   const SESSION_KEY = '1m65-admin-session';
   const REMEMBER_MS = 30 * 24 * 60 * 60 * 1000;
   const TIME_ZONE = 'Asia/Ho_Chi_Minh';
+  // Month arrows are SVG, not the ‹ › characters, which sit low in some fonts.
+  const CHEVRON_LEFT = 'M15 5l-7 7 7 7';
+  const CHEVRON_RIGHT = 'M9 5l7 7-7 7';
   const REMOVED_SERVICE_IDS = new Set(['combo-foot', 'goi-thao']);
   const STATUS_LABELS = {
     confirmed: 'Đã xác nhận',
@@ -602,6 +605,16 @@
     if (className) item.className = className;
     if (text !== '') item.textContent = text;
     return item;
+  }
+
+  function chevron(path) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('aria-hidden', 'true');
+    line.setAttribute('d', path);
+    svg.append(line);
+    return svg;
   }
 
   function button(className, text = '') {
@@ -1247,8 +1260,10 @@
 
     const head = node('div', 'mc-head');
     const nav = node('div', 'mc-nav');
-    const previous = button('', '‹');
-    const next = button('', '›');
+    const previous = button('');
+    const next = button('');
+    previous.append(chevron(CHEVRON_LEFT));
+    next.append(chevron(CHEVRON_RIGHT));
     previous.setAttribute('aria-label', 'Tháng trước');
     next.setAttribute('aria-label', 'Tháng sau');
     previous.disabled = month <= min.slice(0, 7);

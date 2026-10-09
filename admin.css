@@ -469,7 +469,9 @@ input:user-invalid + .field-error{display:block}
 .slots-head b,.mc-head b{font:700 16px var(--display);color:var(--cocoa)}
 .mc-head{display:flex;align-items:center;justify-content:space-between;padding:0 4px}
 .mc-nav{display:flex;gap:2px}
-.mc-nav button{width:28px;height:28px;padding:0;border:0;border-radius:8px;background:none;color:var(--pink-deep);font:700 16px/1 var(--display)}
+.mc-nav button{display:grid;place-items:center;width:28px;height:28px;padding:0;border:0;border-radius:8px;background:none;color:var(--pink-deep);font:700 16px/1 var(--display)}
+/* Arrows are drawn as SVG, not the ‹ › characters, whose height in the line differs by font and left them sitting low. */
+.mc-nav svg,.dp-nav svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .mc-nav button:disabled{opacity:.35;cursor:default}
 .mc-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
 .mc-grid > span{color:var(--muted);font:800 12px/24px var(--body)}
@@ -937,7 +939,7 @@ input:user-invalid + .field-error{display:block}
   .customer-search{width:100%;height:46px}
   .customer-table{display:flex;flex-direction:column;gap:10px;padding:0}
   .cust-row{grid-template-columns:40px minmax(0,1fr) auto;grid-template-areas:"avatar name chevron" "avatar sub chevron";gap:0 12px;margin:0;padding:10px 12px;border:1.5px solid rgba(232,94,124,.2);border-radius:16px;background:var(--card)}
-  .cust-row::after{content:"›";grid-area:chevron;color:var(--pink-deep);font:700 18px var(--display)}
+  .cust-row::after{content:"";grid-area:chevron;align-self:center;width:14px;height:14px;background:var(--pink-deep);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 5l7 7-7 7'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 5l7 7-7 7'/%3E%3C/svg%3E") center/contain no-repeat}
   .cust-initial{grid-area:avatar;width:40px;height:40px;font-size:15px}
   .cust-name{grid-area:name;margin:0}
   .cust-sub{grid-area:sub;overflow:hidden;color:var(--muted);font:600 13px var(--body);text-overflow:ellipsis;white-space:nowrap}
