@@ -359,16 +359,17 @@
       ? appointment.services
       : serviceNames(appointment).map((name) => ({ name }));
     elements.services.replaceChildren(...lines.map((service) => {
+      const quantity = Number(service.quantity) || 1;
       const line = document.createElement('li');
       const name = document.createElement('span');
       name.className = 'line-name';
-      name.textContent = String(service.name || '').trim() || 'Dịch vụ tại tiệm';
+      name.textContent = `${String(service.name || '').trim() || 'Dịch vụ tại tiệm'}${quantity > 1 ? ` × ${quantity}` : ''}`;
       const minutes = document.createElement('span');
       minutes.className = 'line-minutes';
-      minutes.textContent = service.durationMinutes ? `${Number(service.durationMinutes)} phút` : '';
+      minutes.textContent = service.durationMinutes ? `${Number(service.durationMinutes) * quantity} phút` : '';
       const price = document.createElement('span');
       price.className = 'line-price';
-      price.textContent = service.price == null ? '' : currency(service.price);
+      price.textContent = service.price == null ? '' : currency(service.price * quantity);
       line.append(name, minutes, price);
       return line;
     }));

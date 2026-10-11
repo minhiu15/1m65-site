@@ -221,6 +221,8 @@
   let blockDayLoading = false;
   let bookingConfig = null;
   let adminSelectedServiceIds = new Set();
+  // How many people take each picked service (1-4); price and duration multiply by it.
+  const adminQuantities = new Map();
   let activeAdminServiceCategory = SERVICE_CATEGORIES[0].id;
   let adminAvailableSlots = [];
   let adminSelectedStartAt = '';
@@ -328,6 +330,7 @@
       invalid_slot_interval: 'Giờ hẹn không đúng khung 30 phút.',
       invalid_service_selection: 'Vui lòng chọn ít nhất một dịch vụ.',
       too_many_services: 'Mỗi lịch được chọn tối đa 8 dịch vụ.',
+      invalid_quantity: 'Mỗi dịch vụ chọn từ 1 đến 4 người.',
       service_not_found: 'Một dịch vụ không còn hoạt động. Vui lòng chọn lại.',
       invalid_original_price: 'Giá gốc phải là số nguyên không âm.',
       invalid_discount_percent: 'Phần trăm giảm giá phải là số nguyên từ 0 đến 100.',
@@ -607,7 +610,8 @@
     return item;
   }
 
-  function chevron(path) {
+  // A stroked SVG mark (arrows, − and +): characters like ‹ › − + sit low in some fonts.
+  function glyph(path) {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     svg.setAttribute('viewBox', '0 0 24 24');
@@ -724,6 +728,10 @@
     target.hidden = !value;
   }
 
+  function adminQuantity(id) {
+    return adminQuantities.get(id) || 1;
+  }
+
   function selectedAdminServices() {
     const services = Array.isArray(bookingConfig?.services) ? bookingConfig.services : [];
     return services.filter((service) => adminSelectedServiceIds.has(service.id));
@@ -772,6 +780,7 @@
     elements.adminCustomerPhone.value = '';
     elements.adminCustomerNote.value = '';
     adminSelectedServiceIds.clear();
+    adminQuantities.clear();
     adminSelectedStartAt = '';
     adminAvailableSlots = [];
     setCreateStep(1);
@@ -782,8 +791,8 @@
   // The slip on the right (and the phone's sticky bar): when, what, how long and how much.
   function renderAdminServiceSummary() {
     const services = selectedAdminServices();
-    const duration = services.reduce((sum, service) => sum + Number(service.durationMinutes || 0), 0);
-    const price = services.reduce((sum, service) => sum + Number(service.price || 0), 0);
+    const duration = services.reduce((sum, service) => sum + Number(service.durationMinutes || 0) * adminQuantity(service.id), 0);
+    const price = services.reduce((sum, service) => sum + Number(service.price || 0) * adminQuantity(service.id), 0);
     const estimate = isEstimate(services.map((service) => service.id));
     const sale = adminSelectedStartAt && priceUnits ? priceUnits.timeSaleFor(sales, adminSelectedStartAt) : null;
     const cut = sale ? priceUnits.timeSaleDiscount(price, sale.percent) : 0;
@@ -809,11 +818,31 @@
       node('p', 'slip-when', when),
       ...services.map((service) => {
         const unit = unitLabel(service.id, service.price);
+        const q = adminQuantity(service.id);
         const line = node('div', 'slip-line');
-        line.append(
-          node('span', '', `${service.name}${unit ? ` · ${unit}` : ''} · ${service.durationMinutes}'`),
-          node('span', '', currency(service.price))
-        );
+        const label = node('span', 'slip-name', `${service.name}${q > 1 ? ` × ${q}` : ''}${unit ? ` · ${unit}` : ''} · ${Number(service.durationMinutes) * q}'`);
+        // − n +: how many people take this service; a booking stays within 8 hours.
+        const stepper = node('span', 'slip-qty');
+        const less = button('slip-qty-btn');
+        const more = button('slip-qty-btn');
+        less.append(glyph('M6 12h12'));
+        more.append(glyph('M12 6v12M6 12h12'));
+        less.setAttribute('aria-label', `Bớt một người · ${service.name}`);
+        more.setAttribute('aria-label', `Thêm một người · ${service.name}`);
+        less.disabled = q <= 1;
+        more.disabled = q >= 4 || duration + Number(service.durationMinutes || 0) > 480;
+        const change = (step) => {
+          adminQuantities.set(service.id, Math.min(4, Math.max(1, q + step)));
+          adminSelectedStartAt = '';
+          renderAdminServiceSummary();
+          renderAdminSlots();
+          loadAdminAvailability();
+        };
+        less.addEventListener('click', () => change(-1));
+        more.addEventListener('click', () => change(1));
+        stepper.append(less, node('b', '', String(q)), more);
+        label.append(stepper);
+        line.append(label, node('span', '', currency(Number(service.price || 0) * q)));
         return line;
       }),
       node('div', 'slip-tear'),
@@ -871,8 +900,10 @@
       );
       option.append(copy, check);
       option.addEventListener('click', () => {
-        if (selected) adminSelectedServiceIds.delete(service.id);
-        else if (adminSelectedServiceIds.size < 8) adminSelectedServiceIds.add(service.id);
+        if (selected) {
+          adminSelectedServiceIds.delete(service.id);
+          adminQuantities.delete(service.id);
+        } else if (adminSelectedServiceIds.size < 8) adminSelectedServiceIds.add(service.id);
         adminSelectedStartAt = '';
         renderAdminServices();
         renderAdminSlots();
@@ -1262,8 +1293,8 @@
     const nav = node('div', 'mc-nav');
     const previous = button('');
     const next = button('');
-    previous.append(chevron(CHEVRON_LEFT));
-    next.append(chevron(CHEVRON_RIGHT));
+    previous.append(glyph(CHEVRON_LEFT));
+    next.append(glyph(CHEVRON_RIGHT));
     previous.setAttribute('aria-label', 'Tháng trước');
     next.setAttribute('aria-label', 'Tháng sau');
     previous.disabled = month <= min.slice(0, 7);
@@ -1536,7 +1567,7 @@
     renderAdminSlots();
     setMessage(elements.adminBookingMessage, '');
     try {
-      const data = await adminRequest({ action: 'availability', date, serviceIds });
+      const data = await adminRequest({ action: 'availability', date, serviceIds, quantities: serviceIds.map(adminQuantity) });
       if (requestId !== adminAvailabilityRequestId) return;
       const seen = new Set();
       adminAvailableSlots = (Array.isArray(data.slots) ? data.slots : []).map((slot) => {
@@ -1569,7 +1600,7 @@
     const time = localTime(adminSelectedStartAt);
     if (!await confirmAction(
       `Tạo lịch ${time} ${shortDate(date)} cho ${customerName}?`,
-      `${services.map((service) => service.name).join(' + ')} · ${customerPhone}`,
+      `${services.map((service) => `${service.name}${adminQuantity(service.id) > 1 ? ` × ${adminQuantity(service.id)}` : ''}`).join(' + ')} · ${customerPhone}`,
       'Tạo lịch'
     )) return;
     adminCreatePending = true;
@@ -1579,6 +1610,7 @@
       const data = await adminRequest({
         action: 'admin_create_appointment',
         serviceIds: services.map((service) => service.id),
+        quantities: services.map((service) => adminQuantity(service.id)),
         startAt: adminSelectedStartAt,
         customerName,
         customerPhone,
@@ -1954,11 +1986,12 @@
 
     const lines = node('div', 'dd-lines');
     lines.append(...services.map((service) => {
+      const quantity = Number(service.quantity) || 1;
       const line = node('div', 'dd-line');
-      const label = node('span', '', service.name);
+      const label = node('span', '', `${service.name}${quantity > 1 ? ` × ${quantity}` : ''}`);
       const unit = service.id ? unitLabel(service.id, service.price) : '';
       if (unit) label.append(node('i', '', ` · ${unit}`));
-      line.append(label, node('span', '', currency(service.price)));
+      line.append(label, node('span', '', currency(Number(service.price || 0) * quantity)));
       return line;
     }));
     if (item.sale) {

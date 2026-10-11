@@ -461,7 +461,7 @@ export async function renderBill(bill, scale) {
       type(ctx, "500 23px " + BODY, INK);
     }
     ctx.textAlign = "center";
-    ctx.fillText("1", 596, y);
+    ctx.fillText(String(Number(service.quantity) || 1), 596, y);
     type(ctx, "500 17px " + BODY, MUTED, "right");
     const unit = shown.unit ? "/" + shown.unit : "";
     ctx.fillText(unit, 866, y);

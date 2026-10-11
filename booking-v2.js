@@ -17,7 +17,11 @@ const vnPhone=(value)=>String(value||"").replace(/\D/g,"").replace(/^(?:840(?=\d
 // drops EXIF, including GPS location).
 const MAX_PHOTOS=3,MAX_PHOTO_SOURCE_BYTES=40*1024*1024,MAX_PHOTO_UPLOAD_BYTES=980*1024;
 const PICKER_LABELS={nail:"Nail",mi:"Mi",khac:"Khác"};
-const state = {step:1,category:"nail",selected:[],date:"",calendarOpen:false,calendarMonth:"",preferred:"",slots:[],blocked:[],day:null,slot:"",loading:false,pending:false,error:"",name:"",phone:"",note:"",status:"",reference:"",photos:[],photoBusy:0,photoError:"",photoWarning:"",picker:false,pickerFilter:"nail",sale:null,billDone:false,leaving:"",leaveTrigger:null};
+// Each picked service says how many people take it (1-4): the salon has one technician working in turn, so price
+// and duration multiply by it. The marks are SVG so they sit centred in every browser.
+const MAX_PEOPLE=4,MAX_BOOKING_MINUTES=480;
+const MINUS='<svg class="icon-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg>',PLUS='<svg class="icon-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg>',REMOVE='<svg class="icon-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+const state = {step:1,category:"nail",selected:[],quantities:{},date:"",calendarOpen:false,calendarMonth:"",preferred:"",slots:[],blocked:[],day:null,slot:"",loading:false,pending:false,error:"",name:"",phone:"",note:"",status:"",reference:"",photos:[],photoBusy:0,photoError:"",photoWarning:"",picker:false,pickerFilter:"nail",sale:null,billDone:false,leaving:"",leaveTrigger:null};
 let requestId = 0;
 
 function exp(){return window.__v2Experience;}
@@ -37,7 +41,10 @@ function unitPriced(){return hasUnitPricing(state.selected);}
 function estimateLabel(){return unitPriced()?'<small class="booking-estimate-label">Tạm tính</small>':"";}
 function estimateNote(){return unitPriced()?'<p class="booking-estimate-note">'+ESTIMATE_NOTE+'</p>':"";}
 function selectedServices(){return state.selected.map(byId).filter(Boolean);}
-function totals(){return selectedServices().reduce(function(out,service){out.price+=price(service);out.minutes+=duration(service);return out;},{price:0,minutes:0});}
+function qty(id){return state.quantities[id]||1;}
+function quantities(){return state.selected.map(qty);}
+function lineName(service){return service.name+(qty(service.id)>1?" × "+qty(service.id):"");}
+function totals(){return selectedServices().reduce(function(out,service){out.price+=price(service)*qty(service.id);out.minutes+=duration(service)*qty(service.id);return out;},{price:0,minutes:0});}
 // Time-window sales from the site's config (see price-units.js): a slot inside one gets a "−X%" tag and the totals
 // preview the cut. The booking's real sale comes back from the server once it is made (state.sale).
 function timeSales(){return Array.isArray(window.__v2Sales)?window.__v2Sales:[];}
@@ -57,7 +64,7 @@ function slotLabel(value){return new Intl.DateTimeFormat("vi-VN",{timeZone:TZ,ho
 function reset(options){
   const next=options||{};
   state.step=1;state.category=next.serviceId?categoryOf(next.serviceId):"nail";
-  state.selected=next.serviceId&&byId(next.serviceId)?[next.serviceId]:[];
+  state.selected=next.serviceId&&byId(next.serviceId)?[next.serviceId]:[];state.quantities={};
   state.date=isoToday();state.calendarOpen=false;state.calendarMonth="";state.preferred=next.slot||"";state.slots=[];state.blocked=[];state.day=null;state.slot="";
   state.loading=false;state.pending=false;state.error="";state.name="";state.phone="";state.note="";state.status="";state.reference="";state.billKey="";state.sale=null;state.billDone=false;state.leaving="";state.leaveTrigger=null;
   state.photos=[];state.photoBusy=0;state.photoError="";state.photoWarning="";state.picker=false;
@@ -75,7 +82,7 @@ function stepOne(){
     const saleLabel=discount>0?' aria-label="'+esc(service.name+', giảm '+discount+'%, '+duration(service)+' phút, giá '+money(service.price))+'"':'';
     return '<button type="button" class="booking-service-option '+(selected?"is-selected ":"")+(discount>0?"has-sale":"")+'" data-booking-service="'+esc(service.id)+'" aria-pressed="'+selected+'"'+saleLabel+'><div class="booking-service-copy"><h3>'+esc(service.name)+(shown.perNail?' <span class="service-per-nail">('+shown.perNail+')</span>':'')+'</h3><p><span class="booking-service-duration">'+duration(service)+' phút</span>'+'</p></div><span class="booking-service-side"><span class="booking-service-price"><span class="booking-service-offer-slot" aria-hidden="true">'+badgeHtml+'</span><span class="booking-service-price-card">'+priceHtml+'</span></span><span class="booking-check" aria-hidden="true">'+(selected?"✓":"")+'</span></span></button>';
   }).join("");
-  const picked=selectedServices().map(function(service){return '<button type="button" data-booking-remove="'+esc(service.id)+'">'+esc(service.name)+' ×</button>';}).join("");
+  const picked=selectedServices().map(function(service){const count=qty(service.id);return '<span class="booking-picked__item"><span class="booking-picked__name">'+esc(service.name)+'</span><span class="booking-qty" role="group" aria-label="'+esc("Số người làm "+service.name)+'"><button type="button" data-booking-qty="'+esc(service.id)+'" data-step="-1" aria-label="Bớt một người"'+(count<=1?' disabled':'')+'>'+MINUS+'</button><output>'+count+'</output><button type="button" data-booking-qty="'+esc(service.id)+'" data-step="1" aria-label="Thêm một người"'+(count>=MAX_PEOPLE?' disabled':'')+'>'+PLUS+'</button></span><button type="button" class="booking-picked__remove" data-booking-remove="'+esc(service.id)+'" aria-label="'+esc("Bỏ "+service.name)+'">'+REMOVE+'</button></span>';}).join("");
   const total=totals();
   return '<div class="booking-step" data-booking-step="1"><div class="booking-categories" role="tablist" aria-label="Nhóm dịch vụ">'+categoryHtml+'</div><div class="booking-service-grid">'+cards+'</div>'+(picked?'<div class="booking-picked" aria-label="Dịch vụ đã chọn">'+picked+'</div>':'')+'<div class="booking-total"><span><strong>'+state.selected.length+'/8 dịch vụ</strong><br><small>Tổng thời lượng '+durationText(total.minutes)+'</small></span><strong>'+estimateLabel()+money(total.price)+'</strong></div>'+estimateNote()+'</div>';
 }
@@ -133,7 +140,7 @@ function pickerView(){
   return '<div class="booking-step booking-picker" data-booking-step="picker"><div class="booking-categories booking-picker__tabs" role="group" aria-label="Lọc thư viện">'+tabs+'</div><p class="booking-picker__hint">Chạm để chọn mẫu bạn thích · còn '+Math.max(0,MAX_PHOTOS-state.photos.length-state.photoBusy)+' chỗ</p><div class="booking-pick-grid">'+grid+'</div></div>';
 }
 function stepThree(){
-  const total=totals(),names=selectedServices().map(function(service){return service.name;}).join(" + ");
+  const total=totals(),names=selectedServices().map(lineName).join(" + ");
   const time=state.slot?dateLabel(state.date)+" · "+slotLabel(state.slot):"Chưa chọn giờ";
   return '<div class="booking-step" data-booking-step="3">'+(state.error?'<div class="booking-empty" role="alert">'+esc(state.error)+'</div>':'')+'<div class="booking-confirm-card"><div><strong>'+esc(names)+'</strong><br><small>'+esc(time)+' · '+durationText(total.minutes)+'</small></div><strong>'+estimateLabel()+money(due())+'</strong></div>'+saleLine()+estimateNote()+'<div class="booking-form"><label>Họ và tên<input type="text" autocomplete="name" data-booking-name maxlength="80" required value="'+esc(state.name)+'" placeholder="Tên của bạn"></label><label>Số điện thoại<input type="tel" inputmode="tel" autocomplete="tel" data-booking-phone maxlength="16" required value="'+esc(state.phone)+'" placeholder="0xxxxxxxxx"></label><label>Ghi chú<textarea rows="2" data-booking-note maxlength="500" placeholder="Mẫu mong muốn hoặc điều tiệm cần biết">'+esc(state.note)+'</textarea></label><label class="sr-only">Website<input type="text" tabindex="-1" autocomplete="off" data-booking-website></label></div>'+photoField()+'<p class="booking-consent">Khi bấm <strong>Xác nhận đặt hẹn</strong>, bạn đồng ý với <a href="terms.html">Điều khoản đặt lịch</a> và <a href="privacy.html">Chính sách quyền riêng tư</a> của tiệm.</p></div>';
 }
@@ -192,9 +199,9 @@ function barcodeSvg(code){
 // The bill (bill.js: the QR, the "Phiếu đặt lịch" picture, its download) loads while the booking is sent; the
 // stub keeps the drawn barcode and the ticket skips its download button if it cannot load.
 let billLib=null,billLoading=null;
-function loadBill(){return billLoading||(billLoading=import("./bill.js?v=20261006-1").then(function(lib){billLib=lib;return lib;},function(){billLoading=null;return null;}));}
+function loadBill(){return billLoading||(billLoading=import("./bill.js?v=20261011-1").then(function(lib){billLib=lib;return lib;},function(){billLoading=null;return null;}));}
 function ticketBill(){
-  const services=selectedServices().map(function(service){return {id:service.id,name:service.name,price:price(service)};});
+  const services=selectedServices().map(function(service){return {id:service.id,name:service.name,price:price(service),quantity:qty(service.id)};});
   return {reference:state.reference,name:state.name.trim(),phone:billLib.maskPhone(vnPhone(state.phone)),note:state.note.trim(),startAt:state.slot,status:"confirmed",services:services,subtotal:totals().price,sale:state.sale,total:due(),url:billLib.billUrl(state.reference,state.billKey)};
 }
 function ticketHtml(){
@@ -277,7 +284,7 @@ async function request(action,payload){
 async function availability(){
   if(!state.selected.length)return;const current=++requestId;state.loading=true;state.error="";state.slot="";render();
   try{
-    const body=await request("availability",{date:state.date,serviceIds:state.selected.slice()});if(current!==requestId)return;
+    const body=await request("availability",{date:state.date,serviceIds:state.selected.slice(),quantities:quantities()});if(current!==requestId)return;
     state.slots=Array.isArray(body.slots)?body.slots:[];state.blocked=Array.isArray(body.blockedSlots)?body.blockedSlots:[];state.day=body.daySchedule||null;
     if(state.preferred){const match=state.slots.find(function(item){return slotLabel(item.start_at||item.startAt)===state.preferred;});if(match)state.slot=String(match.start_at||match.startAt);else exp().toast(state.preferred+" không còn trống — bạn chọn giờ khác nha");state.preferred="";}
   }catch(_){if(current!==requestId)return;state.slots=[];state.blocked=[];state.day=null;state.error="Chưa tải được lịch trống. Bạn thử lại giúp tụi mình nha.";}
@@ -299,7 +306,9 @@ function open(options,trigger){reset(options);setStage("");
   if(options&&options.defer){const body=document.querySelector("[data-booking-body]"),eyebrow=document.querySelector("[data-booking-eyebrow]"),title=document.querySelector("[data-booking-title]");if(body)body.innerHTML=LOADING_PAW;if(eyebrow)eyebrow.textContent="Đặt hẹn · bước 1/3";if(title)title.textContent="Bạn muốn làm gì hôm nay?";requestAnimationFrame(function(){requestAnimationFrame(render);});}
   else render();
   exp().openModal(document.querySelector("#booking-modal-v2"),trigger);if(document.fonts)document.fonts.load('700 1em "Baloo 2"',"Đặt lịch thành công").catch(function(){});preloadTicketArt();}
-function toggle(id){if(state.selected.includes(id))state.selected=state.selected.filter(function(item){return item!==id;});else if(state.selected.length>=8)return exp().toast("Mỗi lịch chọn tối đa 8 dịch vụ nha");else state.selected=state.selected.concat(id);state.error="";render();}
+function toggle(id){if(state.selected.includes(id)){state.selected=state.selected.filter(function(item){return item!==id;});delete state.quantities[id];}else if(state.selected.length>=8)return exp().toast("Mỗi lịch chọn tối đa 8 dịch vụ nha");else state.selected=state.selected.concat(id);state.error="";render();}
+// One more or one fewer person for a picked service; a booking stays within 8 hours.
+function bump(id,step){const next=Math.min(MAX_PEOPLE,Math.max(1,qty(id)+step)),service=byId(id);if(service&&next>qty(id)&&totals().minutes+duration(service)>MAX_BOOKING_MINUTES)return exp().toast("Lịch dài quá 8 tiếng rồi. Nhóm đông bạn nhắn Zalo để tiệm xếp lịch giúp nha");state.quantities[id]=next;state.error="";render();}
 function back(){
   state.calendarOpen=false;
   if(state.picker){state.picker=false;render();return;}
@@ -324,7 +333,7 @@ async function submit(){
   try{
     if(!window.mewTurnstileBooking||typeof window.mewTurnstileBooking.getToken!=="function"){const error=new Error("turnstile_unavailable");error.code="turnstile_unavailable";throw error;}
     const token=await window.mewTurnstileBooking.getToken();
-    const body=await request("create",{serviceId:state.selected[0],serviceIds:state.selected.slice(),startAt:state.slot,customerName:name,customerPhone:phone,customerNote:state.note.trim(),turnstileToken:token,website:website,referencePhotos:state.photos.map(function(photo){return photo.kind==="upload"?{kind:"upload",data:photo.data}:{kind:"gallery",src:photo.src,title:photo.title};})});
+    const body=await request("create",{serviceId:state.selected[0],serviceIds:state.selected.slice(),quantities:quantities(),startAt:state.slot,customerName:name,customerPhone:phone,customerNote:state.note.trim(),turnstileToken:token,website:website,referencePhotos:state.photos.map(function(photo){return photo.kind==="upload"?{kind:"upload",data:photo.data}:{kind:"gallery",src:photo.src,title:photo.title};})});
     state.status="done";state.reference=String((body.appointment&&body.appointment.reference)||"Đã xác nhận");state.billKey=String(body.billKey||"");state.sale=body.appointment&&body.appointment.sale||null;
     const missing=state.photos.length-Number(body.photosSaved||0);
     state.photoWarning=state.photos.length&&missing>0?"Lịch đã xác nhận, nhưng "+missing+" ảnh mẫu chưa gửi được. Bạn nhắn Zalo ảnh đó cho tiệm giúp tụi mình nhé.":"";
@@ -335,7 +344,7 @@ async function submit(){
   }catch(error){
     setStage("");
     if(error.code==="slot_unavailable"){state.step=2;state.pending=false;exp().toast("Khung giờ vừa có khách khác chọn. Tụi mình đang tải lại lịch.");render();await availability();return;}
-    state.error=error.code==="phone_daily_limit"?"Số điện thoại này đã có lịch trong ngày đó rồi. Bạn xem hoặc dời lịch cũ ở “Xem lịch của bạn”, hoặc nhắn Zalo cho tiệm nhé.":error.code==="phone_booking_limit"?"Số điện thoại này đang có nhiều lịch sắp tới nên chưa đặt thêm được. Bạn xem hoặc hủy bớt ở “Xem lịch của bạn”, hoặc nhắn Zalo cho tiệm nhé.":error.code==="ip_booking_limit"?"Thiết bị hoặc mạng này đã đặt nhiều lịch trong 24 giờ qua. Bạn thử lại sau hoặc nhắn Zalo cho tiệm để được hỗ trợ nhé.":error.code==="human_verification_failed"||error.code==="turnstile_unavailable"?"Chưa xác minh được bạn là người thật. Bạn thử lại giúp tụi mình nha.":error.code==="invalid_reference_photos"||error.code==="request_too_large"?"Có ảnh mẫu chưa gửi được. Bạn bỏ ảnh đó rồi thử lại, hoặc nhắn Zalo ảnh cho tiệm nhé.":"Chưa thể xác nhận lịch. Bạn kiểm tra mạng rồi thử lại giúp tụi mình nha.";
+    state.error=error.code==="invalid_quantity"?"Mỗi dịch vụ chọn từ 1 đến 4 người thôi nha.":error.code==="phone_daily_limit"?"Số điện thoại này đã có lịch trong ngày đó rồi. Bạn xem hoặc dời lịch cũ ở “Xem lịch của bạn”, hoặc nhắn Zalo cho tiệm nhé.":error.code==="phone_booking_limit"?"Số điện thoại này đang có nhiều lịch sắp tới nên chưa đặt thêm được. Bạn xem hoặc hủy bớt ở “Xem lịch của bạn”, hoặc nhắn Zalo cho tiệm nhé.":error.code==="ip_booking_limit"?"Thiết bị hoặc mạng này đã đặt nhiều lịch trong 24 giờ qua. Bạn thử lại sau hoặc nhắn Zalo cho tiệm để được hỗ trợ nhé.":error.code==="human_verification_failed"||error.code==="turnstile_unavailable"?"Chưa xác minh được bạn là người thật. Bạn thử lại giúp tụi mình nha.":error.code==="invalid_reference_photos"||error.code==="request_too_large"?"Có ảnh mẫu chưa gửi được. Bạn bỏ ảnh đó rồi thử lại, hoặc nhắn Zalo ảnh cho tiệm nhé.":"Chưa thể xác nhận lịch. Bạn kiểm tra mạng rồi thử lại giúp tụi mình nha.";
   }finally{state.pending=false;render();}
 }
 function decodePhoto(file){
@@ -407,6 +416,7 @@ document.addEventListener("click",function(event){
     }else render();
     return;
   }
+  const quantity=target.closest("[data-booking-qty]");if(quantity){bump(quantity.dataset.bookingQty,Number(quantity.dataset.step));return;}
   if(service){toggle(service.dataset.bookingService);return;}
   if(remove){toggle(remove.dataset.bookingRemove);return;}
   if(date){state.date=date.dataset.bookingDate;state.preferred="";render();availability();return;}

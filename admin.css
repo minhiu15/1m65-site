@@ -487,6 +487,8 @@ input:user-invalid + .field-error{display:block}
 .slip-when{font:700 22px/1.1 var(--hand);color:var(--cocoa)}
 .slip-line{display:flex;justify-content:space-between;gap:12px}
 .slip-line span:last-child{white-space:nowrap}
+/* − n +: how many people take a picked service. */
+.slip-line .slip-name{display:flex;flex-direction:column;align-items:flex-start;gap:6px}.slip-qty{display:inline-flex;align-items:center;gap:6px}.slip-qty b{min-width:12px;text-align:center}.slip-qty-btn{display:grid;place-items:center;width:24px;height:24px;padding:0;border:1.5px solid var(--pink-edge);border-radius:50%;background:var(--card);color:var(--pink-deep);font:700 14px/1 var(--display);cursor:pointer}.slip-qty-btn:disabled{opacity:.35;cursor:default}.slip-qty-btn svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round}
 .slip-tear{position:relative;margin:4px -20px;border-top:2px dashed #eaa0b5}
 .slip-tear::before,.slip-tear::after{content:"";position:absolute;top:-11px;width:20px;height:20px;border-radius:50%;background:var(--paper)}
 .slip-tear::before{left:-11px}
