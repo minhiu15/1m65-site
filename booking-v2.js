@@ -1,11 +1,11 @@
-import { ESTIMATE_NOTE, hasUnitPricing, unitPrice, timeSaleDiscount, timeSaleFor } from "./price-units.js?v=20261004-1";
+import { ESTIMATE_NOTE, hasUnitPricing, unitPrice, timeSaleDiscount, timeSaleFor } from "./price-units.js?v=20261011-2";
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
 const REMOVED_SERVICE_IDS = new Set(["goi-thao"]);
 const categories = [
 {id:"nail",label:"Nail Care",shortLabel:"Nail",ids:["ct-tay","ct-chan","thao-gel","thao-up","thao-bot","noi-up","noi-gel","noi-bot"]},
 {id:"classic",label:"Classic",shortLabel:"Classic",ids:["son-cung","gel-hn","gel-thach"]},
-{id:"design",label:"Design",shortLabel:"Design",ids:["flash","matmeo","guong","ombre","da","charm","sticker","ve","xacu"]},
+{id:"design",label:"Design",shortLabel:"Design",ids:["flash","matmeo","guong","ombre","french-ngon","da","charm","sticker","ve","xacu"]},
 {id:"mi",label:"Eyelashes",shortLabel:"Mi",ids:["uon-mi","uon-mi-den","mi-classic","mi-tho","mi-volume","mi-sole","mi-duoi"]},
 {id:"goi",label:"Shampoo",shortLabel:"Gội",ids:["goi-thuong","goi-phuchoi","goi-duongsinh"]}
 ];
@@ -199,7 +199,7 @@ function barcodeSvg(code){
 // The bill (bill.js: the QR, the "Phiếu đặt lịch" picture, its download) loads while the booking is sent; the
 // stub keeps the drawn barcode and the ticket skips its download button if it cannot load.
 let billLib=null,billLoading=null;
-function loadBill(){return billLoading||(billLoading=import("./bill.js?v=20261011-1").then(function(lib){billLib=lib;return lib;},function(){billLoading=null;return null;}));}
+function loadBill(){return billLoading||(billLoading=import("./bill.js?v=20261011-2").then(function(lib){billLib=lib;return lib;},function(){billLoading=null;return null;}));}
 function ticketBill(){
   const services=selectedServices().map(function(service){return {id:service.id,name:service.name,price:price(service),quantity:qty(service.id)};});
   return {reference:state.reference,name:state.name.trim(),phone:billLib.maskPhone(vnPhone(state.phone)),note:state.note.trim(),startAt:state.slot,status:"confirmed",services:services,subtotal:totals().price,sale:state.sale,total:due(),url:billLib.billUrl(state.reference,state.billKey)};

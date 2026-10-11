@@ -7,11 +7,12 @@ const UNITS = {
   matmeo: { unit: "full bàn", perNail: 10000 },
   guong: { unit: "full bàn", perNail: 10000 },
   ombre: { unit: "full bàn", perNail: 10000 },
+  "french-ngon": { unit: "ngón" },
   da: { unit: "viên" },
   charm: { unit: "charm", upTo: 20000 }
 };
 
-export const ESTIMATE_NOTE = "Giá tạm tính: flash, mắt mèo, tráng gương, ombre theo full bàn (làm lẻ tính theo ngón), đính đá theo số viên, charm 10.000–20.000₫ tuỳ mẫu. Tiệm chốt giá khi làm.";
+export const ESTIMATE_NOTE = "Giá tạm tính: flash, mắt mèo, tráng gương, ombre theo full bàn (làm lẻ tính theo ngón), French đầu móng theo số ngón, đính đá theo số viên, charm 10.000–20.000₫ tuỳ mẫu. Tiệm chốt giá khi làm.";
 
 const vnd = (value, symbol) => Number(value || 0).toLocaleString("vi-VN") + symbol;
 

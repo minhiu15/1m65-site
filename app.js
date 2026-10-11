@@ -1,4 +1,4 @@
-import { unitPrice, featuredTimeSale, timeSaleWhen } from "./price-units.js?v=20261004-2";
+import { unitPrice, featuredTimeSale, timeSaleWhen } from "./price-units.js?v=20261011-2";
 
 const BOOKING_ENDPOINT = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 
@@ -38,6 +38,7 @@ const fallbackServices = [
   ["matmeo", "Mắt mèo", 50000, 20, "Hiệu ứng chiều sâu", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
   ["guong", "Tráng gương", 50000, 20, "Bề mặt ánh kim", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
   ["ombre", "Ombre", 50000, 25, "Chuyển màu mềm mại", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
+  ["french-ngon", "French đầu móng", 10000, 20, "Viền đầu móng thanh lịch", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
   ["da", "Đính đá", 2000, 15, "Tính theo mẫu và số viên", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
   ["charm", "Charm", 10000, 15, "Tuỳ mẫu charm", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
   ["sticker", "Sticker", 5000, 10, "Dán nhanh, nhiều mẫu", "assets/services/signature-shared/service_photos/nail_design_ve_tay.jpg"],
@@ -72,7 +73,7 @@ const groupDefs = {
     title: "DESIGN",
     note: "Thêm một chút lấp lánh, một nét vẽ nhỏ và thật nhiều cá tính.",
     accent: "assets/services/nail-care/doodles/header_flower.webp",
-    ids: ["flash", "matmeo", "guong", "ombre", "da", "charm", "sticker", "ve", "xacu"],
+    ids: ["flash", "matmeo", "guong", "ombre", "french-ngon", "da", "charm", "sticker", "ve", "xacu"],
   },
   mi: {
     title: "EYELASHES",
@@ -99,7 +100,7 @@ const nailCareDescriptions = {
   "noi-bot": "Đắp bột giúp móng cứng chắc, độ bền cao.",
 };
 // The design menu prices some finishes per nail or per piece; the list shows each unit, this says how it adds up.
-const designPriceNote = "Flash, mắt mèo, tráng gương, ombre: giá full bàn, làm lẻ tính theo ngón. Đính đá tính theo viên, charm theo mẫu.";
+const designPriceNote = "Flash, mắt mèo, tráng gương, ombre: giá full bàn, làm lẻ tính theo ngón. French đầu móng tính theo ngón, đính đá theo viên, charm theo mẫu.";
 const nailCareNotes = [
   "Giá trên chưa bao gồm sơn.",
   "Mẫu càng chi tiết, tụi mình báo giá trước khi làm.",

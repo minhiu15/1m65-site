@@ -3,7 +3,7 @@
 // number of services. Table, icons and QR are drawn here; the paper, cat, bow, hearts and flowers are the
 // owner's art.
 import qrcode from "./vendor/qrcode.mjs";
-import { ESTIMATE_NOTE, hasUnitPricing, unitPrice } from "./price-units.js?v=20260928-1";
+import { ESTIMATE_NOTE, hasUnitPricing, unitPrice } from "./price-units.js?v=20261011-2";
 
 export const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const ART = new URL("assets/booking/", import.meta.url).href;

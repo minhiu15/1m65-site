@@ -30,8 +30,8 @@
       serviceIds: ['son-cung', 'gel-hn', 'gel-thach']
     },
     {
-      id: 'design', label: 'Design', hint: 'Cộng thêm vào bộ móng — giá theo full bàn, theo viên đá hoặc theo charm',
-      serviceIds: ['flash', 'matmeo', 'guong', 'ombre', 'da', 'charm', 'sticker', 've', 'xacu']
+      id: 'design', label: 'Design', hint: 'Cộng thêm vào bộ móng — giá theo full bàn, theo ngón, theo viên đá hoặc theo charm',
+      serviceIds: ['flash', 'matmeo', 'guong', 'ombre', 'french-ngon', 'da', 'charm', 'sticker', 've', 'xacu']
     },
     {
       id: 'mi', label: 'Mi', hint: 'Tháo mi miễn phí nếu bộ cũ do 1M65 làm',
@@ -244,7 +244,7 @@
   let saleBusy = false;
   // Units for designs priced per nail, stone or charm (shared with the site); without it prices stay one number.
   let priceUnits = null;
-  import('./price-units.js?v=20261004-1').then((module) => {
+  import('./price-units.js?v=20261011-2').then((module) => {
     priceUnits = module;
     renderAdminServices();
     renderDiscountServices();
@@ -850,7 +850,7 @@
       total
     );
     if (estimate) {
-      elements.adminServiceSummary.append(node('p', 'hint', 'Giá tạm tính: có dịch vụ tính theo bàn, viên đá hoặc charm. Tiệm chốt giá khi làm.'));
+      elements.adminServiceSummary.append(node('p', 'hint', 'Giá tạm tính: có dịch vụ tính theo bàn, ngón, viên đá hoặc charm. Tiệm chốt giá khi làm.'));
     }
     updateAdminCreateButton();
   }
