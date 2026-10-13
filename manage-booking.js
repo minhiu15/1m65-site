@@ -558,6 +558,13 @@
   if (embeddedClose && window.self !== window.top) {
     embeddedClose.hidden = false;
     embeddedClose.addEventListener('click', closePopup);
+    // It dips when pressed, like the site's close buttons (manage-booking-v2.css .is-dipping).
+    embeddedClose.addEventListener('pointerdown', () => {
+      embeddedClose.classList.remove('is-dipping');
+      void embeddedClose.offsetWidth;
+      embeddedClose.classList.add('is-dipping');
+    });
+    embeddedClose.addEventListener('animationend', () => embeddedClose.classList.remove('is-dipping'));
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && elements.calendar.hidden && !document.querySelector('dialog[open]')) closePopup();
     });

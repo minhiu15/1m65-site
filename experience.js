@@ -407,7 +407,7 @@ async function loadHomeAvailability() {
 // <link rel=prefetch>), so "Xem lịch của bạn" opens at once, and reloads hidden after each use, fresh for the next
 // time. A booking reference (from the ticket) loads it straight on that booking. The loading paw shows only while
 // the page is not ready yet.
-const MANAGER_VERSION = "20261011-1";
+const MANAGER_VERSION = "20261013-2";
 let managerFresh = false;
 function loadManager(reference){
   const frame=document.querySelector("[data-manager-frame]");if(!frame)return;
@@ -557,3 +557,15 @@ const manageFab=document.querySelector(".manage-fab"),siteFooter=document.queryS
 if(manageFab&&siteFooter&&"IntersectionObserver" in window){
   new IntersectionObserver(function(entries){manageFab.classList.toggle("is-tucked",entries[0].isIntersecting);}).observe(siteFooter);
 }
+
+// Close buttons, the gallery arrows and "Xem lịch của bạn" dip when pressed (styles.css .is-dipping). It starts on
+// press, so even a quick tap on a phone shows it; a keyboard press (a click with no pointer) dips too.
+const DIP_BUTTONS=".modal-close, .lightbox-nav, .manage-fab";
+function dip(event){
+  const button=event.target.closest&&event.target.closest(DIP_BUTTONS);
+  if(!button||(event.type==="click"&&event.detail!==0))return;
+  button.classList.remove("is-dipping");void button.offsetWidth;button.classList.add("is-dipping");
+}
+document.addEventListener("pointerdown",dip,{passive:true});
+document.addEventListener("click",dip);
+document.addEventListener("animationend",function(event){if(event.animationName==="button-dip")event.target.classList.remove("is-dipping");});

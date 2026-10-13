@@ -9227,3 +9227,10 @@ main,
 /* Gallery lightbox: the photo's name under it is hidden for now (owner's call, 2026-10-13). It stays in the page as the
    dialog's label for screen readers; delete this rule to show it again. */
 .lightbox-figure figcaption { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* A quick dip when a popup's close button, the gallery arrows or "Xem lịch của bạn" is pressed (experience.js adds
+   .is-dipping on press). It animates the separate `scale` property, so each button's own transform (the arrows'
+   centring, the floating button tucking away) is left alone. */
+@keyframes button-dip { 0% { scale: 1; } 35% { scale: .86; } 70% { scale: 1.05; } 100% { scale: 1; } }
+.is-dipping { animation: button-dip .32s cubic-bezier(.3, .7, .4, 1); }
+@media (prefers-reduced-motion: reduce) { .is-dipping { animation: none; } }

@@ -235,3 +235,8 @@ body.is-embedded::before{content:"";position:absolute;inset:0 0 auto;height:420p
   -webkit-text-stroke:0 transparent;
   text-shadow:-1px 0 0 var(--pink-button-text-outline),1px 0 0 var(--pink-button-text-outline),0 -1px 0 var(--pink-button-text-outline),0 1px 0 var(--pink-button-text-outline),-.72px -.72px 0 var(--pink-button-text-outline),.72px -.72px 0 var(--pink-button-text-outline),-.72px .72px 0 var(--pink-button-text-outline),.72px .72px 0 var(--pink-button-text-outline);
 }
+
+/* The popup's close button dips when pressed (manage-booking.js adds .is-dipping), like the site's close buttons. */
+@keyframes button-dip { 0% { scale: 1; } 35% { scale: .86; } 70% { scale: 1.05; } 100% { scale: 1; } }
+.is-dipping { animation: button-dip .32s cubic-bezier(.3, .7, .4, 1); }
+@media (prefers-reduced-motion: reduce) { .is-dipping { animation: none; } }
