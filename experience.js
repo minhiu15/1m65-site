@@ -3,6 +3,7 @@ import "./booking-v2.js?v=20261011-2";
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
 const gallery = [
+["nail","assets/gallery/photos/pastel-french.jpg","Pastel French"],
 ["nail","assets/gallery/photos/pink-galaxy.jpg","Pink Galaxy"],
 ["nail","assets/gallery/photos/hello-kitty-3d-bow.jpg","Hello Kitty 3D"],
 ["nail","assets/gallery/photos/hello-kitty-pastel-stars.jpg","Hello Kitty Pastel"],
