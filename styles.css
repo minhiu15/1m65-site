@@ -9223,3 +9223,7 @@ main,
   .booking-service-unit { margin-top: 3px; font-size: 12px; }
   .booking-service-price-card strong.is-range { font-size: 14px; }
 }
+
+/* Gallery lightbox: the photo's name under it is hidden for now (owner's call, 2026-10-13). It stays in the page as the
+   dialog's label for screen readers; delete this rule to show it again. */
+.lightbox-figure figcaption { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
