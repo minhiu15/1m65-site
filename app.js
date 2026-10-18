@@ -303,6 +303,28 @@ function renderServices({ animateShared = false } = {}) {
 // The featured time-window sale (see price-units.js): a banner under the header and a sticker by the booking
 // button above the footer; both stay hidden until the admin picks a sale for the home page. Built from nodes, so a
 // sale's title is shown as text.
+// The approved sale card (assets/home/sale/card, from approved-v1/use): the painted card already carries its title,
+// "Tất cả dịch vụ" and an empty date capsule; "Giảm" and the percent are glyph images set side by side at one
+// height, and the dates are real text in the capsule. Glyph widths at the 240px height they are cut to.
+const SALE_GLYPH_WIDTHS = { 0: 208, 1: 143, 2: 186, 3: 183, 4: 214, 5: 184, 6: 190, 7: 191, 8: 188, 9: 199, "%": 240 };
+
+// The dates sit after the capsule's calendar icon: they shrink to a floor, then drop their lead-in words. A sale
+// of one whole day reads "Áp dụng ngày 20/10".
+function fitSaleDates(holder, when) {
+  const line = holder.querySelector("[data-sale-when]");
+  const fits = () => line.scrollWidth <= holder.clientWidth;
+  const lead = /^\d{2}\/\d{2}$/.test(when) ? `Áp dụng ngày ${when}` : `Áp dụng ${when}`;
+  const place = () => [lead, when].some((text) => {
+    line.textContent = text;
+    for (let size = 2.6; size >= 1.9; size -= .1) {
+      holder.style.fontSize = `${size.toFixed(1)}cqi`;
+      if (fits()) return true;
+    }
+    return false;
+  });
+  (document.fonts ? document.fonts.load("800 28px Nunito", lead) : Promise.resolve()).catch(() => null).then(place);
+}
+
 function renderTimeSale() {
   const sale = featuredTimeSale(window.__v2Sales);
   const banner = document.querySelector("[data-sale-banner]"), sticker = document.querySelector("[data-sale-sticker]");
@@ -315,33 +337,24 @@ function renderTimeSale() {
     return node;
   };
   if (banner) {
-    // Doodles from assets/home/sale: a bow, nail tips and a polish bottle in the corners, sparkles and hearts.
-    const art = (name, className) => {
-      const img = make("img", `sale-banner__art ${className}`);
-      img.src = `assets/home/sale/${name}.svg`;
+    // The markup is fixed; the sale's own words go in as text (styles.css .sale-banner).
+    banner.innerHTML = '<h2 class="sr-only" data-sale-summary></h2>'
+      + '<img class="sale-banner__art" src="assets/home/sale/card/card-1000.webp" srcset="assets/home/sale/card/card-1000.webp 1000w, assets/home/sale/card/card-1983.webp 1983w" sizes="(max-width: 1144px) calc(100vw - 32px), 1080px" width="1983" height="793" alt="" aria-hidden="true" decoding="async">'
+      + '<p class="sale-banner__value" aria-hidden="true"><img src="assets/home/sale/card/giam.webp?v=20261018-2" width="533" height="240" alt="" decoding="async"><span class="sale-banner__number" data-sale-number></span></p>'
+      + '<p class="sale-banner__dates" aria-hidden="true"><span data-sale-when></span></p>'
+      + '<button type="button" class="sale-banner__hit" data-open-booking aria-label="Đặt lịch ngay"></button>';
+    const when = timeSaleWhen(sale);
+    banner.querySelector("[data-sale-summary]").textContent = `${sale.title}: giảm ${sale.percent}% cho lịch hẹn ${when}`;
+    banner.querySelector("[data-sale-number]").append(...[...`${sale.percent}%`].map((glyph) => {
+      const img = document.createElement("img");
+      img.src = `assets/home/sale/card/${glyph === "%" ? "percent" : `digit-${glyph}`}.webp`;
+      img.width = SALE_GLYPH_WIDTHS[glyph];
+      img.height = 240;
       img.alt = "";
-      img.setAttribute("aria-hidden", "true");
       img.decoding = "async";
       return img;
-    };
-    const ribbon = make("p", "sale-banner__ribbon");
-    ribbon.append(art("bow-mini", "sale-banner__mini"), make("span", "", sale.title), art("bow-mini", "sale-banner__mini"));
-    const when = make("p", "sale-banner__when");
-    when.append(art("heart", "sale-banner__dot"), make("span", "", `Cho lịch hẹn ${timeSaleWhen(sale)}`), art("heart", "sale-banner__dot"));
-    const cta = make("button", "sale-banner__cta");
-    cta.type = "button";
-    cta.dataset.openBooking = "";
-    cta.append(art("calendar", "sale-banner__calendar"), make("span", "", "Đặt lịch ngay"), make("span", "sale-banner__arrow", "→"));
-    const action = make("div", "sale-banner__action");
-    action.append(art("rays", "sale-banner__rays"), cta, art("rays", "sale-banner__rays sale-banner__rays--end"));
-    const cloud = make("div", "sale-banner__cloud");
-    cloud.append(ribbon, make("p", "sale-banner__value", `Giảm ${sale.percent}%`), when, action);
-    banner.append(
-      art("bow", "sale-banner__bow"), art("nails", "sale-banner__nails"), art("polish", "sale-banner__polish"),
-      art("sparkle", "sale-banner__sparkle sale-banner__sparkle--1"), art("sparkle", "sale-banner__sparkle sale-banner__sparkle--2"),
-      art("sparkle", "sale-banner__sparkle sale-banner__sparkle--3"), art("heart", "sale-banner__heart sale-banner__heart--1"),
-      art("heart-line", "sale-banner__heart sale-banner__heart--2"), art("squiggle", "sale-banner__squiggle"), cloud
-    );
+    }));
+    fitSaleDates(banner.querySelector(".sale-banner__dates"), when);
   }
   if (sticker) sticker.append(make("strong", "", `−${sale.percent}%`), make("span", "", sale.title));
 }
@@ -418,4 +431,15 @@ function setupInteractions() {
 renderHomeSchedule();
 renderServices();
 setupInteractions();
-loadLiveServices();
+loadLiveServices().then(previewSaleLocally);
+
+// Local preview only: on localhost, ?sale-preview=10 shows the home sale card with a sample three-day sale at that
+// percent (the live API does not answer localhost). It never runs on the site.
+function previewSaleLocally() {
+  if (typeof location === "undefined" || !/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return;
+  const percent = Number(new URLSearchParams(location.search).get("sale-preview"));
+  if (!(percent >= 1 && percent <= 90)) return;
+  const day = (offset) => new Date(Date.now() + offset * 864e5).toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
+  window.__v2Sales = [{ id: "preview", title: "Ưu đãi đặc biệt", percent: Math.round(percent), startsAt: `${day(0)}T00:00:00+07:00`, endsAt: `${day(3)}T00:00:00+07:00`, featured: true, active: true }];
+  document.dispatchEvent(new CustomEvent("1m65:v2:sales"));
+}
