@@ -325,6 +325,19 @@ function fitSaleDates(holder, when) {
   (document.fonts ? document.fonts.load("800 28px Nunito", lead) : Promise.resolve()).catch(() => null).then(place);
 }
 
+// The percent as glyph images, e.g. "10%" -> digit-1, digit-0, percent.
+function saleGlyphs(percent) {
+  return [...`${percent}%`].map((glyph) => {
+    const img = document.createElement("img");
+    img.src = `assets/home/sale/card/${glyph === "%" ? "percent" : `digit-${glyph}`}.webp`;
+    img.width = SALE_GLYPH_WIDTHS[glyph];
+    img.height = 240;
+    img.alt = "";
+    img.decoding = "async";
+    return img;
+  });
+}
+
 function renderTimeSale() {
   const sale = featuredTimeSale(window.__v2Sales);
   const banner = document.querySelector("[data-sale-banner]"), sticker = document.querySelector("[data-sale-sticker]");
@@ -345,18 +358,15 @@ function renderTimeSale() {
       + '<button type="button" class="sale-banner__hit" data-open-booking aria-label="Đặt lịch ngay"></button>';
     const when = timeSaleWhen(sale);
     banner.querySelector("[data-sale-summary]").textContent = `${sale.title}: giảm ${sale.percent}% cho lịch hẹn ${when}`;
-    banner.querySelector("[data-sale-number]").append(...[...`${sale.percent}%`].map((glyph) => {
-      const img = document.createElement("img");
-      img.src = `assets/home/sale/card/${glyph === "%" ? "percent" : `digit-${glyph}`}.webp`;
-      img.width = SALE_GLYPH_WIDTHS[glyph];
-      img.height = 240;
-      img.alt = "";
-      img.decoding = "async";
-      return img;
-    }));
+    banner.querySelector("[data-sale-number]").append(...saleGlyphs(sale.percent));
     fitSaleDates(banner.querySelector(".sale-banner__dates"), when);
   }
-  if (sticker) sticker.append(make("strong", "", `−${sale.percent}%`), make("span", "", sale.title));
+  if (sticker) {
+    // The percent in the card's own glyphs, then the sale's title.
+    const value = make("strong", "sale-sticker__value");
+    value.append(...saleGlyphs(sale.percent));
+    sticker.append(make("span", "sr-only", `Giảm ${sale.percent}%`), value, make("span", "", sale.title));
+  }
 }
 document.addEventListener("1m65:v2:sales", renderTimeSale);
 

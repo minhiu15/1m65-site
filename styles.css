@@ -8895,10 +8895,20 @@ main,
 .sale-banner__hit:focus-visible { outline: 3px solid var(--pink-strong); outline-offset: 2px; }
 @media (hover: hover) { .sale-banner { transition: translate .2s ease; } .sale-banner:hover { translate: 0 -2px; } }
 @media (prefers-reduced-motion: reduce) { .sale-banner { transition: none; } .sale-banner:hover { translate: none; } }
+/* The booking button and its sale sticker, which hangs on the button's top left corner. */
+.booking-cta__action { position: relative; width: min(440px, calc(100% - 32px)); margin-top: 30px; }
+.booking-cta__action > .booking-main-cta { width: 100%; margin-top: 0; }
+.booking-cta__action:has(> .sale-sticker:not([hidden])) { margin-top: 72px; }
+@media (max-width: 600px) {
+  .booking-cta__action { width: min(360px, 100%); margin-top: 26px; }
+  .booking-cta__action:has(> .sale-sticker:not([hidden])) { margin-top: 60px; }
+}
 .sale-sticker {
   position: absolute;
-  right: 0;
-  bottom: 20px;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  translate: -38% -60%;
   display: grid;
   justify-items: center;
   gap: 2px;
@@ -8908,17 +8918,27 @@ main,
   background: url("assets/about/decor/about_cloud_label.svg") center / 100% 100% no-repeat;
   color: #51342f;
   text-align: center;
-  transform: rotate(-8deg);
+  transform: rotate(-14deg);
   pointer-events: none;
 }
 .sale-sticker[hidden] { display: none; }
-.sale-sticker strong { color: #e0527f; font: 800 26px/1 var(--font-signature-display); }
+/* The cloud leans 14deg; its words lean only about half as much. */
+.sale-sticker__value, .sale-sticker span { rotate: 6deg; }
+.sale-sticker__value { display: flex; align-items: flex-end; height: 30px; }
+.sale-sticker__value img { display: block; width: auto; height: 100%; }
 .sale-sticker span { font: 700 12px/1.2 var(--font-signature-body); }
-.sale-sticker::before, .sale-sticker::after { content: ""; position: absolute; background: url("doodles/star-pink.webp") center / contain no-repeat; }
-.sale-sticker::before { top: -6px; left: 4px; width: 22px; height: 22px; }
-.sale-sticker::after { right: 2px; bottom: 2px; width: 14px; height: 14px; }
+/* One small pink star, the site's doodle, on the top left corner. */
+.sale-sticker::before { content: ""; position: absolute; top: -4px; left: 8px; width: 15px; height: 15px; background: url("doodles/star-pink.webp") center / contain no-repeat; }
 @media (max-width: 600px) {
-  .sale-sticker { position: relative; right: auto; bottom: auto; margin-top: 14px; transform: rotate(-4deg); }
+  .sale-sticker { width: 124px; padding: 21px 12px 18px; translate: -19% -62%; }
+  .sale-sticker__value { height: 25px; }
+  .sale-sticker span { font-size: 11px; }
+}
+/* For now the home page's sale card and sticker show on phones and tablets only, even while a sale runs; the web keeps
+   its plain layout (the booking popup still tags the sale's slots and bills). */
+@media (min-width: 1181px) {
+  .sale-banner, .sale-sticker { display: none; }
+  .booking-cta__action:has(> .sale-sticker:not([hidden])) { margin-top: 30px; }
 }
 
 /* Keep the Signature waviness as a fine edge, without its filled paper center. */

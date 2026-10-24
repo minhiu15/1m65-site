@@ -21,7 +21,7 @@
   <link rel="icon" href="favicon-48.png" sizes="48x48" type="image/png">
   <link rel="icon" href="favicon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=20261018-4">
+  <link rel="stylesheet" href="styles.css?v=20261024-25">
   <link rel="stylesheet" href="paw-cursor.css?v=20261001-1">
   <script defer src="turnstile-config.js?v=20260807a"></script>
   <script defer src="turnstile-booking.js?v=20260807a"></script>
@@ -31,7 +31,7 @@
   <script defer src="offscreen-motion.js?v=20261008-1"></script>
   <script defer src="paw-cursor.js?v=20261002-1"></script>
   <script defer src="zalo-app.js?v=20261004-1"></script>
-  <script type="module" src="app.js?v=20261018-5"></script>
+  <script type="module" src="app.js?v=20261024-5"></script>
   <script type="module" src="experience.js?v=20261013-2"></script>
 </head>
 <body>
@@ -321,8 +321,10 @@
           <span class="booking-eyebrow">Đặt lịch cùng 1M65</span>
           <h2 id="booking-cta-heading">Một chút <em class="pink-highlight">xinh</em><br>đang chờ bạn</h2>
           <p>Chọn thời gian phù hợp, tụi mình sẽ chăm chút phần còn lại.</p>
-          <button class="button-primary booking-main-cta" type="button" data-open-booking>Đặt hẹn ngay</button>
-          <p class="sale-sticker" data-sale-sticker hidden></p>
+          <div class="booking-cta__action">
+            <button class="button-primary booking-main-cta" type="button" data-open-booking>Đặt hẹn ngay</button>
+            <p class="sale-sticker" data-sale-sticker hidden></p>
+          </div>
         </div>
       </div>
     </section>
