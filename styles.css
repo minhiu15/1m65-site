@@ -6148,6 +6148,21 @@ main,
     line-height: 1.5;
   }
 
+  /* A tapped review shows all of it: the card keeps its height, the text takes the quote mark's and stars' room. */
+  .reviews-track .review-card.is-open .review-card__quote,
+  .reviews-track .review-card.is-open .review-card__rating {
+    display: none;
+  }
+
+  .reviews-track .review-card.is-open .review-card__text {
+    display: block;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+
   .reviews-track .review-card__rating {
     padding-top: 10px;
   }

@@ -1,4 +1,4 @@
-import "./booking-v2.js?v=20261011-2";
+import "./booking-v2.js?v=20261030-1";
 
 const API = "https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-api";
 const TZ = "Asia/Ho_Chi_Minh";
@@ -48,6 +48,8 @@ let reviewTimer = 0;
 let reviewWrapTimer = 0;
 let reviewResizeTimer = 0;
 let reviewPaused = false;
+// A tap on a review or an arrow hands the carousel to the visitor: it no longer moves by itself on this visit.
+let reviewStopped = false;
 let reviewInView = true;
 let reviewObserver = null;
 let activeModal = null;
@@ -329,7 +331,7 @@ function advanceReview() {
 }
 function scheduleReviewAutoplay() {
   clearTimeout(reviewTimer);
-  if (reviewMotion.matches || reviewPaused || !reviewInView || document.hidden || reviewItems.length <= reviewVisibleCount()) return;
+  if (reviewMotion.matches || reviewStopped || reviewPaused || !reviewInView || document.hidden || reviewItems.length <= reviewVisibleCount()) return;
   reviewTimer = setTimeout(function(){
     advanceReview();
     scheduleReviewAutoplay();
@@ -342,6 +344,8 @@ function setupReviewCarousel(grid) {
     grid.addEventListener("mouseleave",function(){reviewPaused=false;scheduleReviewAutoplay();});
     grid.addEventListener("focusin",function(){reviewPaused=true;scheduleReviewAutoplay();});
     grid.addEventListener("focusout",function(event){if(!grid.contains(event.relatedTarget)){reviewPaused=false;scheduleReviewAutoplay();}});
+    // On phones a long review is cut to three lines (styles.css): the tap also opens it to read in full.
+    grid.addEventListener("click",function(event){const card=event.target.closest("[data-review-card]");if(!card)return;reviewStopped=true;scheduleReviewAutoplay();card.classList.toggle("is-open");});
   }
   if (!reviewObserver && "IntersectionObserver" in window) {
     reviewObserver = new IntersectionObserver(function(entries){
@@ -398,7 +402,11 @@ async function loadHomeAvailability() {
     if (!response.ok) throw new Error("request_failed");
     const body = await response.json();
     const free = new Set((Array.isArray(body.slots)?body.slots:[]).map(function(slot){return slotLabel(slot.start_at||slot.startAt);}));
-    buttons.forEach(function(button){const available=free.has(button.dataset.prefillSlot);button.disabled=!available;button.setAttribute("aria-disabled",String(!available));const status=button.querySelector("small");if(status)status.textContent=available?"Còn trống":"Đã kín";});
+    const day=body.daySchedule||null,booked=new Set((day&&Array.isArray(day.bookedStarts)?day.bookedStarts:[]).map(slotLabel));
+    // The same reasons the booking popup gives: a passed hour must not read as a fully booked salon.
+    const reason=function(time){if(booked.has(time))return "Đã kín";if(new Date(isoToday()+"T"+time+":00+07:00").getTime()<=Date.now())return "Đã qua";return day&&!day.latestEndAt?"Tiệm nghỉ":"Đã kín";};
+    buttons.forEach(function(button){const time=button.dataset.prefillSlot,available=free.has(time);button.disabled=!available;button.setAttribute("aria-disabled",String(!available));const status=button.querySelector("small");if(status)status.textContent=available?"Còn trống":reason(time);});
+    const note=document.querySelector(".today-note");if(note&&!buttons.some(function(button){return free.has(button.dataset.prefillSlot);}))note.textContent="Hôm nay hết chỗ rồi, Nhu Nhi hẹn bạn ngày khác nha.";
   } catch (_) {
     buttons.forEach(function(button){const status=button.querySelector("small");if(status)status.textContent="Mở lịch";});
   }
@@ -459,8 +467,8 @@ document.addEventListener("click",function(event){
   const galleryTile=target.closest("[data-gallery-index]");if(galleryTile){openLightbox(Number(galleryTile.dataset.galleryIndex),galleryTile);return;}
   if(target.closest("[data-lightbox-prev]")){updateLightbox(lightboxIndex-1);return;}
   if(target.closest("[data-lightbox-next]")){updateLightbox(lightboxIndex+1);return;}
-  if(target.closest("[data-review-prev]")){moveReview(-1);scheduleReviewAutoplay();return;}
-  if(target.closest("[data-review-next]")){moveReview(1);scheduleReviewAutoplay();return;}
+  if(target.closest("[data-review-prev]")){reviewStopped=true;moveReview(-1);scheduleReviewAutoplay();return;}
+  if(target.closest("[data-review-next]")){reviewStopped=true;moveReview(1);scheduleReviewAutoplay();return;}
   const galleryBook=target.closest("[data-gallery-book]");if(galleryBook){const origin=rootReturnFocus()||galleryBook;closeModal(document.querySelector("#gallery-modal"),false);window.__v2Booking.open({defer:true},origin);return;}
   const lightboxBook=target.closest("[data-lightbox-book]");if(lightboxBook){const origin=rootReturnFocus()||lightboxBook;closeModal(document.querySelector("#gallery-lightbox"),false);window.__v2Booking.open({defer:true},origin);return;}
   const faq=target.closest("[data-faq-list] button");if(faq){const expanded=faq.getAttribute("aria-expanded")==="true";faq.setAttribute("aria-expanded",String(!expanded));return;}

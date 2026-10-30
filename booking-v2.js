@@ -72,7 +72,7 @@ function reset(options){
 }
 function stepOne(){
   const category=categories.find(function(item){return item.id===state.category;})||categories[0];
-  const categoryHtml=categories.map(function(item){return '<button type="button" class="'+(item.id===state.category?"is-active":"")+'" data-booking-category="'+item.id+'" aria-label="'+esc(item.label)+'"><span class="booking-category-label">'+esc(item.label)+'</span><span class="booking-category-short" aria-hidden="true">'+esc(item.shortLabel)+'</span></button>';}).join("");
+  const categoryHtml=categories.map(function(item){return '<button type="button" class="'+(item.id===state.category?"is-active":"")+'" data-booking-category="'+item.id+'" aria-pressed="'+(item.id===state.category)+'" aria-label="'+esc(item.label)+'"><span class="booking-category-label">'+esc(item.label)+'</span><span class="booking-category-short" aria-hidden="true">'+esc(item.shortLabel)+'</span></button>';}).join("");
   const cards=category.ids.map(byId).filter(Boolean).map(function(service){
     const selected=state.selected.includes(service.id);
     const discount=Number(service.discountPercent||0);
@@ -84,7 +84,7 @@ function stepOne(){
   }).join("");
   const picked=selectedServices().map(function(service){const count=qty(service.id);return '<span class="booking-picked__item"><span class="booking-picked__name">'+esc(service.name)+'</span><span class="booking-qty" role="group" aria-label="'+esc("Số người làm "+service.name)+'"><button type="button" data-booking-qty="'+esc(service.id)+'" data-step="-1" aria-label="Bớt một người"'+(count<=1?' disabled':'')+'>'+MINUS+'</button><output>'+count+'</output><button type="button" data-booking-qty="'+esc(service.id)+'" data-step="1" aria-label="Thêm một người"'+(count>=MAX_PEOPLE?' disabled':'')+'>'+PLUS+'</button></span><button type="button" class="booking-picked__remove" data-booking-remove="'+esc(service.id)+'" aria-label="'+esc("Bỏ "+service.name)+'">'+REMOVE+'</button></span>';}).join("");
   const total=totals();
-  return '<div class="booking-step" data-booking-step="1"><div class="booking-categories" role="tablist" aria-label="Nhóm dịch vụ">'+categoryHtml+'</div><div class="booking-service-grid">'+cards+'</div>'+(picked?'<div class="booking-picked" aria-label="Dịch vụ đã chọn">'+picked+'</div>':'')+'<div class="booking-total"><span><strong>'+state.selected.length+'/8 dịch vụ</strong><br><small>Tổng thời lượng '+durationText(total.minutes)+'</small></span><strong>'+estimateLabel()+money(total.price)+'</strong></div>'+estimateNote()+'</div>';
+  return '<div class="booking-step" data-booking-step="1"><div class="booking-categories" role="group" aria-label="Nhóm dịch vụ">'+categoryHtml+'</div><div class="booking-service-grid">'+cards+'</div>'+(picked?'<div class="booking-picked" aria-label="Dịch vụ đã chọn">'+picked+'</div>':'')+'<div class="booking-total"><span><strong>'+state.selected.length+'/8 dịch vụ</strong><br><small>Tổng thời lượng '+durationText(total.minutes)+'</small></span><strong>'+estimateLabel()+money(total.price)+'</strong></div>'+estimateNote()+'</div>';
 }
 function schedule(){
   const available=new Map(state.slots.map(function(item){const start=item.start_at||item.startAt;return [slotLabel(start),start];}));
@@ -107,12 +107,12 @@ function calendar(){
 }
 function stepTwo(){
   const hint=daySale(state.date);
-  const dates=new Array(7).fill(0).map(function(_,index){const iso=offsetDate(index),parts=iso.split("-"),weekday=dateLabel(iso).split(",")[0];return '<button type="button" class="booking-date '+(state.date===iso?"is-active":"")+'" data-booking-date="'+iso+'"><span>'+(index===0?"Hôm nay":esc(weekday))+'</span><strong>'+parts[2]+'/'+parts[1]+'</strong>'+(daySale(iso)?'<i class="booking-date__sale" aria-hidden="true"></i>':'')+'</button>';}).join("");
+  const dates=new Array(7).fill(0).map(function(_,index){const iso=offsetDate(index),parts=iso.split("-"),weekday=dateLabel(iso).split(",")[0];return '<button type="button" class="booking-date '+(state.date===iso?"is-active":"")+'" data-booking-date="'+iso+'" aria-pressed="'+(state.date===iso)+'"><span>'+(index===0?"Hôm nay":esc(weekday))+'</span><strong>'+parts[2]+'/'+parts[1]+'</strong>'+(daySale(iso)?'<i class="booking-date__sale" aria-hidden="true"></i>':'')+'</button>';}).join("");
   let slots="";
   if(state.loading)slots='<div class="booking-loading">Đang tải giờ trống thật từ tiệm…</div>';
   else if(state.error)slots='<div class="booking-empty" role="alert"><p>'+esc(state.error)+'</p><button class="button-secondary" type="button" data-booking-retry>Thử tải lại</button></div>';
   else slots='<div class="booking-slots">'+schedule().map(function(slot){const selected=state.slot===slot.start&&!!slot.start;return '<button type="button" class="booking-slot '+(selected?"is-active ":"")+(slot.blocked?"is-blocked":"")+'" data-booking-slot="'+esc(slot.start)+'" '+(!slot.start?"disabled":"")+' aria-pressed="'+selected+'"><strong>'+slot.label+'</strong>'+(slot.sale?'<i class="booking-slot__sale">−'+slot.sale.percent+'%</i>':'')+'<small>'+esc(slot.blocked||(slot.start?"Còn trống":slot.reason))+'</small></button>';}).join("")+'</div>';
-  return '<div class="booking-step" data-booking-step="2"><div class="booking-dates">'+dates+'</div><div class="booking-calendar-field"><span>Ngày khác</span><button type="button" class="booking-calendar-trigger" data-booking-calendar-toggle aria-haspopup="dialog" aria-expanded="'+state.calendarOpen+'">'+esc(dateLabel(state.date))+'</button>'+(state.calendarOpen?calendar():"")+'</div>'+(hint&&!state.loading&&!state.error?'<p class="booking-sale-hint">Giờ có nhãn −'+hint.percent+'% được giảm '+hint.percent+'% trên tổng bill · '+esc(hint.title)+'</p>':'')+slots+'</div>';
+  return '<div class="booking-step" data-booking-step="2"><div class="booking-dates">'+dates+'</div><div class="booking-calendar-field"><span>Ngày khác</span><button type="button" class="booking-calendar-trigger" data-booking-calendar-toggle aria-haspopup="dialog" aria-expanded="'+state.calendarOpen+'">'+esc(dateLabel(state.date))+'</button>'+(state.calendarOpen?calendar():"")+'</div>'+(hint&&!state.loading&&!state.error?'<p class="booking-sale-hint">Giờ có nhãn −'+hint.percent+'% được giảm '+hint.percent+'% trên tổng bill · '+esc(hint.title)+'</p>':'')+(!state.loading&&!state.error&&!state.slots.length?'<p class="booking-sale-hint" role="status">Ngày này không còn giờ trống, bạn chọn ngày khác nha.</p>':'')+slots+'</div>';
 }
 function photoField(){
   const tiles=state.photos.map(function(photo,index){
@@ -124,7 +124,7 @@ function photoField(){
   return '<div class="booking-photos" data-booking-photos><span class="booking-photos__label">Ảnh mẫu <small>tối đa '+MAX_PHOTOS+' ảnh · không bắt buộc</small></span>'+(tiles?'<div class="booking-photo-row">'+tiles+'</div>':'')+actions+(state.photoError?'<p class="booking-photo-error" role="alert">'+esc(state.photoError)+'</p>':'')+'</div>';
 }
 // After an async photo step only the photo block is redrawn, so a customer typing her name keeps her caret.
-function refreshPhotos(){const block=document.querySelector("[data-booking-photos]");if(block&&!state.picker)block.outerHTML=photoField();else render();}
+function refreshPhotos(){const block=document.querySelector("[data-booking-photos]");if(block&&!state.picker)keepFocus(function(){block.outerHTML=photoField();});else render();}
 // Gallery picks show the grid's small thumbnail; the booking still sends the original photo's path.
 function thumb(src){return exp().galleryThumb?exp().galleryThumb(src,480):src;}
 function pickerView(){
@@ -142,7 +142,7 @@ function pickerView(){
 function stepThree(){
   const total=totals(),names=selectedServices().map(lineName).join(" + ");
   const time=state.slot?dateLabel(state.date)+" · "+slotLabel(state.slot):"Chưa chọn giờ";
-  return '<div class="booking-step" data-booking-step="3">'+(state.error?'<div class="booking-empty" role="alert">'+esc(state.error)+'</div>':'')+'<div class="booking-confirm-card"><div><strong>'+esc(names)+'</strong><br><small>'+esc(time)+' · '+durationText(total.minutes)+'</small></div><strong>'+estimateLabel()+money(due())+'</strong></div>'+saleLine()+estimateNote()+'<div class="booking-form"><label>Họ và tên<input type="text" autocomplete="name" data-booking-name maxlength="80" required value="'+esc(state.name)+'" placeholder="Tên của bạn"></label><label>Số điện thoại<input type="tel" inputmode="tel" autocomplete="tel" data-booking-phone maxlength="16" required value="'+esc(state.phone)+'" placeholder="0xxxxxxxxx"></label><label>Ghi chú<textarea rows="2" data-booking-note maxlength="500" placeholder="Mẫu mong muốn hoặc điều tiệm cần biết">'+esc(state.note)+'</textarea></label><label class="sr-only">Website<input type="text" tabindex="-1" autocomplete="off" data-booking-website></label></div>'+photoField()+'<p class="booking-consent">Khi bấm <strong>Xác nhận đặt hẹn</strong>, bạn đồng ý với <a href="terms.html">Điều khoản đặt lịch</a> và <a href="privacy.html">Chính sách quyền riêng tư</a> của tiệm.</p></div>';
+  return '<div class="booking-step" data-booking-step="3">'+(state.error?'<div class="booking-empty" role="alert">'+esc(state.error)+'</div>':'')+'<div class="booking-confirm-card"><div><strong>'+esc(names)+'</strong><br><small>'+esc(time)+' · '+durationText(total.minutes)+'</small></div><strong>'+estimateLabel()+money(due())+'</strong></div>'+saleLine()+estimateNote()+'<div class="booking-form"><label>Họ và tên<input type="text" autocomplete="name" data-booking-name maxlength="80" required value="'+esc(state.name)+'" placeholder="Tên của bạn"></label><label>Số điện thoại<input type="tel" inputmode="tel" autocomplete="tel" data-booking-phone maxlength="16" required value="'+esc(state.phone)+'" placeholder="0xxxxxxxxx"></label><label>Ghi chú<textarea rows="2" data-booking-note maxlength="500" placeholder="Mẫu mong muốn hoặc điều tiệm cần biết">'+esc(state.note)+'</textarea></label><label class="sr-only" aria-hidden="true">Website<input type="text" tabindex="-1" autocomplete="off" data-booking-website></label></div>'+photoField()+'<p class="booking-consent">Khi bấm <strong>Xác nhận đặt hẹn</strong>, bạn đồng ý với <a href="terms.html">Điều khoản đặt lịch</a> và <a href="privacy.html">Chính sách quyền riêng tư</a> của tiệm.</p></div>';
 }
 // After "Xác nhận đặt hẹn" the form steps aside for a short sequence: a spinner while the booking is
 // sent, a tick once it is confirmed, then the booking ticket flies in. Reduced motion skips the waits.
@@ -267,7 +267,20 @@ function showTicket(){
   // The ticket art has no room for it, so a photo that failed to upload is flagged in a toast instead.
   if(state.photoWarning)exp().toast(state.photoWarning);
 }
-function render(){
+// A redraw replaces the control in focus, which would drop focus to the page behind the popup and let Tab wander
+// there. Focus goes to the same control redrawn, or to the first one still there.
+function keepFocus(redraw){
+  const modal=bookingModal(),active=document.activeElement,inside=Boolean(modal&&!modal.hidden&&active&&active!==modal&&modal.contains(active));
+  const twin=inside?Array.from(active.attributes).filter(function(attribute){return attribute.name.startsWith("data-booking-")||attribute.name==="data-step";}).map(function(attribute){return "["+attribute.name+'="'+CSS.escape(attribute.value)+'"]';}).join(""):"";
+  redraw();
+  if(!inside)return;
+  const current=document.activeElement;
+  if(current&&modal.contains(current)&&!current.disabled)return;
+  const target=(twin&&modal.querySelector(twin+":not(:disabled)"))||modal.querySelector("[data-booking-body] button:not(:disabled)")||modal.querySelector(".modal-close");
+  if(target)target.focus({preventScroll:true});
+}
+function render(){keepFocus(draw);}
+function draw(){
   const body=document.querySelector("[data-booking-body]"),eyebrow=document.querySelector("[data-booking-eyebrow]"),title=document.querySelector("[data-booking-title]"),back=document.querySelector("[data-booking-back]"),next=document.querySelector("[data-booking-next]"),summary=document.querySelector("[data-booking-summary]");
   if(!body||!eyebrow||!title||!back||!next||!summary)return;
   if(state.status==="done")return; // the ticket has taken over; the hidden form is left as it was
@@ -281,11 +294,14 @@ async function request(action,payload){
   const response=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(Object.assign({action:action},payload||{}))});
   const body=await response.json().catch(function(){return {};});if(!response.ok){const error=new Error(body.error||"request_failed");error.code=body.error||"request_failed";throw error;}return body;
 }
-async function availability(){
+// scan: entering the date step from the first step. A day with nothing left (an evening, a full day) moves on to the
+// next open day on the date strip; a date the visitor picks stays, with a line saying it has no free hours.
+async function availability(scan){
   if(!state.selected.length)return;const current=++requestId;state.loading=true;state.error="";state.slot="";render();
   try{
     const body=await request("availability",{date:state.date,serviceIds:state.selected.slice(),quantities:quantities()});if(current!==requestId)return;
     state.slots=Array.isArray(body.slots)?body.slots:[];state.blocked=Array.isArray(body.blockedSlots)?body.blockedSlots:[];state.day=body.daySchedule||null;
+    if(Number.isInteger(scan)&&scan<6&&!state.slots.length&&!state.preferred){if(scan===0)exp().toast("Hôm nay hết chỗ rồi, tụi mình chuyển sang ngày gần nhất còn trống nha");state.date=offsetDate(scan+1);return await availability(scan+1);}
     if(state.preferred){const match=state.slots.find(function(item){return slotLabel(item.start_at||item.startAt)===state.preferred;});if(match)state.slot=String(match.start_at||match.startAt);else exp().toast(state.preferred+" không còn trống — bạn chọn giờ khác nha");state.preferred="";}
   }catch(_){if(current!==requestId)return;state.slots=[];state.blocked=[];state.day=null;state.error="Chưa tải được lịch trống. Bạn thử lại giúp tụi mình nha.";}
   finally{if(current===requestId){state.loading=false;render();}}
@@ -319,7 +335,7 @@ async function next(){
   state.calendarOpen=false;
   if(state.picker){state.picker=false;render();return;}
   if(state.status==="done"){reset();setStage("");render();return;}
-  if(state.step===1){if(!state.selected.length)return exp().toast("Bạn chọn ít nhất một dịch vụ trước nha");state.step=2;render();await availability();return;}
+  if(state.step===1){if(!state.selected.length)return exp().toast("Bạn chọn ít nhất một dịch vụ trước nha");state.step=2;render();await availability(0);return;}
   if(state.step===2){if(!state.slot)return exp().toast("Bạn chọn một giờ còn trống trước nha");state.step=3;state.error="";render();requestAnimationFrame(function(){document.querySelector("[data-booking-name]")?.focus();});return;}
   await submit();
 }
@@ -345,7 +361,7 @@ async function submit(){
     setStage("");
     if(error.code==="slot_unavailable"){state.step=2;state.pending=false;exp().toast("Khung giờ vừa có khách khác chọn. Tụi mình đang tải lại lịch.");render();await availability();return;}
     state.error=error.code==="invalid_quantity"?"Mỗi dịch vụ chọn từ 1 đến 4 người thôi nha.":error.code==="phone_daily_limit"?"Số điện thoại này đã có lịch trong ngày đó rồi. Bạn xem hoặc dời lịch cũ ở “Xem lịch của bạn”, hoặc nhắn Zalo cho tiệm nhé.":error.code==="phone_booking_limit"?"Số điện thoại này đang có nhiều lịch sắp tới nên chưa đặt thêm được. Bạn xem hoặc hủy bớt ở “Xem lịch của bạn”, hoặc nhắn Zalo cho tiệm nhé.":error.code==="ip_booking_limit"?"Thiết bị hoặc mạng này đã đặt nhiều lịch trong 24 giờ qua. Bạn thử lại sau hoặc nhắn Zalo cho tiệm để được hỗ trợ nhé.":error.code==="human_verification_failed"||error.code==="turnstile_unavailable"?"Chưa xác minh được bạn là người thật. Bạn thử lại giúp tụi mình nha.":error.code==="invalid_reference_photos"||error.code==="request_too_large"?"Có ảnh mẫu chưa gửi được. Bạn bỏ ảnh đó rồi thử lại, hoặc nhắn Zalo ảnh cho tiệm nhé.":"Chưa thể xác nhận lịch. Bạn kiểm tra mạng rồi thử lại giúp tụi mình nha.";
-  }finally{state.pending=false;render();}
+  }finally{state.pending=false;render();if(state.status!=="done"&&document.activeElement===document.body)document.querySelector("[data-booking-next]")?.focus({preventScroll:true});}
 }
 function decodePhoto(file){
   if(window.createImageBitmap)return createImageBitmap(file);
@@ -411,7 +427,7 @@ document.addEventListener("click",function(event){
     // Only the chosen tab and the service list change: the bar stays, so its pill can glide (experience.js, phones).
     const grid=document.querySelector("[data-booking-body] .booking-service-grid");
     if(grid&&!state.picker&&state.step===1){
-      category.parentElement.querySelectorAll("[data-booking-category]").forEach(function(button){button.classList.toggle("is-active",button===category);});
+      category.parentElement.querySelectorAll("[data-booking-category]").forEach(function(button){button.classList.toggle("is-active",button===category);button.setAttribute("aria-pressed",String(button===category));});
       const holder=document.createElement("div");holder.innerHTML=stepOne();grid.replaceWith(holder.querySelector(".booking-service-grid"));
     }else render();
     return;
