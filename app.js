@@ -128,6 +128,8 @@ function normalizeServicePricing(service) {
 const state = { activeTab: "signature", services: fallbackServices.map(normalizeServicePricing) };
 window.__v2Services = { get services() { return state.services; } };
 const money = (value) => `${Number(value || 0).toLocaleString("vi-VN")}₫`;
+// Service names and ids come from the booking API: they go into the card markup as text.
+const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[character]);
 const signaturePhotoSrc = (id, variant) => (SIGNATURE_PHOTOS[id] ? `assets/services/signature-shared/service_photos/${SIGNATURE_PHOTOS[id]}${variant === "card" ? "_card" : ""}.webp` : "");
 const serviceById = (id) => state.services.find((item) => item.id === id);
 
@@ -163,17 +165,17 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
   const photoTilt = signature && showPhoto ? (sequenceIndex % 2 === 0 ? "left" : "right") : "";
   const cardClasses = ["service-card", className, spaRelaxation ? "service-card--spa" : "", showPhoto ? "" : "service-card--text-only"].filter(Boolean).join(" ");
   const photoAlt = spaRelaxation ? "Khách được gội và chăm sóc da đầu tại tiệm" : (signaturePhoto ? `Ảnh dịch vụ ${service.name}` : `Ảnh mẫu tạm cho ${service.name}`);
-  return `<article class="${cardClasses}" data-card-variant="${variant}" data-service-id="${service.id}"${photoTilt ? ` data-photo-tilt="${photoTilt}"` : ""}>
+  return `<article class="${cardClasses}" data-card-variant="${variant}" data-service-id="${esc(service.id)}"${photoTilt ? ` data-photo-tilt="${photoTilt}"` : ""}>
     ${featured ? '<span class="featured-badge"><span>ĐƯỢC CHỌN</span><strong>NHIỀU NHẤT</strong></span>' : ""}
     <div class="service-card-copy">
-      <h3>${service.name}${perNailNote(service)}</h3>
-      <p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p>
+      <h3>${esc(service.name)}${perNailNote(service)}</h3>
+      <p>${esc(service.description || "Dịch vụ được chăm chút riêng cho bạn.")}</p>
       <div class="service-meta">${renderPrice(service)}<span class="service-duration-row"><span class="service-duration">~${service.durationMinutes} phút</span></span></div>
     </div>
     ${saleDiscount(service) ? `<span class="signature-sale">-${saleDiscount(service)}%</span>` : ""}
     ${showPhoto ? `<div class="service-photo-wrap${spaRelaxation ? " service-photo-wrap--spa" : ""}">
-      <img src="${image}" alt="${photoAlt}" loading="lazy" decoding="async">
-      ${signature ? `<button class="service-photo-zoom" type="button" data-photo-zoom="${signaturePhoto ? signaturePhotoSrc(service.id, "full") : image}" data-photo-zoom-caption="${service.name}" aria-label="Xem ảnh ${service.name}"></button>` : ""}
+      <img src="${image}" alt="${esc(photoAlt)}" loading="lazy" decoding="async">
+      ${signature ? `<button class="service-photo-zoom" type="button" data-photo-zoom="${signaturePhoto ? signaturePhotoSrc(service.id, "full") : image}" data-photo-zoom-caption="${esc(service.name)}" aria-label="Xem ảnh ${esc(service.name)}"></button>` : ""}
       ${signature ? '<img class="signature-photo-pin" src="assets/services/signature-shared/decor/signature_photo_clip_pink.svg" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
       ${featured ? '<img class="featured-cat-sticker" src="assets/services/signature-shared/cats/featured_photo_cat_sticker.webp" alt="" aria-hidden="true" decoding="async" loading="lazy">' : ""}
     </div>` : ""}
@@ -185,7 +187,7 @@ function serviceCard(service, className = "", variant = "standard", sequenceInde
       <span class="signature-spa-bubble signature-spa-bubble--right-mid"></span>
       <span class="signature-spa-bubble signature-spa-bubble--right-low"></span>
     </div>` : ""}
-    <button class="service-booking-hitarea" type="button" data-book-service="${service.id}" aria-label="Đặt lịch ${service.name}"></button>
+    <button class="service-booking-hitarea" type="button" data-book-service="${esc(service.id)}" aria-label="Đặt lịch ${esc(service.name)}"></button>
   </article>`;
 }
 
@@ -248,8 +250,8 @@ function sharedServiceRow(service) {
   return `<article class="shared-service-row ${hasDiscount ? "has-sale" : ""}" data-card-variant="shared-list">
     <div class="shared-service-row__copy">
       <div class="shared-service-row__copy-main">
-        <h3>${service.name}${perNailNote(service)}</h3>
-        <p>${service.description || "Dịch vụ được chăm chút riêng cho bạn."}</p>
+        <h3>${esc(service.name)}${perNailNote(service)}</h3>
+        <p>${esc(service.description || "Dịch vụ được chăm chút riêng cho bạn.")}</p>
       </div>
     </div>
     <div class="shared-service-row__actions">
@@ -262,7 +264,7 @@ function sharedServiceRow(service) {
         ${shown.label ? `<span class="shared-service-row__unit">${shown.label}</span>` : ""}
       </div>
     </div>
-    <button class="service-booking-hitarea" type="button" data-book-service="${service.id}" aria-label="Đặt lịch ${service.name}"></button>
+    <button class="service-booking-hitarea" type="button" data-book-service="${esc(service.id)}" aria-label="Đặt lịch ${esc(service.name)}"></button>
   </article>`;
 }
 
@@ -395,7 +397,9 @@ function renderHomeSchedule() {
   if (today) today.textContent = new Intl.DateTimeFormat("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).format(now);
   const grid = document.querySelector("[data-home-slots]");
   if (!grid) return;
-  grid.innerHTML = ["09:00", "10:30", "12:00", "13:30", "15:00", "16:30"].map((time, index) => `<button type="button" data-open-booking data-prefill-slot="${time}" style="--slot-tilt:${[-2.2, 1.7, 1.2, -1.5, 1.4, -1.8][index]}deg"><strong>${time}</strong><small>${index % 3 === 1 ? "Còn chỗ" : "Chọn giờ"}</small></button>`).join("");
+  grid.innerHTML = ["09:00", "10:30", "12:00", "13:30", "15:00", "16:30"].map((time, index) => `<button type="button" data-open-booking data-prefill-slot="${time}"><strong>${time}</strong><small>${index % 3 === 1 ? "Còn chỗ" : "Chọn giờ"}</small></button>`).join("");
+  // Set through CSSOM: the page's CSP has no 'unsafe-inline' for style attributes.
+  grid.querySelectorAll("button").forEach((button, index) => button.style.setProperty("--slot-tilt", `${[-2.2, 1.7, 1.2, -1.5, 1.4, -1.8][index]}deg`));
 }
 
 function openDrawer() {

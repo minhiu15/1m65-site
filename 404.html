@@ -9,6 +9,8 @@
     // GitHub Pages serves this page for every missing path, at any depth. The site's root is the first
     // path segment on github.io (a project site) and "/" on the shop's own domain.
     function notFoundTarget(host, path) {
+      // "//host" would make location.replace leave the site: collapse repeated slashes first.
+      path = path.replace(/\/{2,}/g, "/");
       var root = /\.github\.io$/.test(host) ? "/" + (path.split("/")[1] || "") + "/" : "/";
       var target = path;
       // V2 used to live under /v2/ before it became the site: old links (bill QR codes too) drop the "v2/".

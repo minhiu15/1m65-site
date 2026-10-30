@@ -407,7 +407,7 @@ async function loadHomeAvailability() {
 // <link rel=prefetch>), so "Xem lịch của bạn" opens at once, and reloads hidden after each use, fresh for the next
 // time. A booking reference (from the ticket) loads it straight on that booking. The loading paw shows only while
 // the page is not ready yet.
-const MANAGER_VERSION = "20261013-2";
+const MANAGER_VERSION = "20261030-1";
 let managerFresh = false;
 function loadManager(reference){
   const frame=document.querySelector("[data-manager-frame]");if(!frame)return;

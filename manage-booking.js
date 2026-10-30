@@ -1,6 +1,13 @@
 (() => {
   'use strict';
 
+  // Only the site itself may frame this page: another site could lay it under its own buttons (clickjacking).
+  let foreignFrame;
+  try { foreignFrame = window.top.location.origin !== window.location.origin; } catch { foreignFrame = true; }
+  if (foreignFrame) {
+    document.documentElement.style.display = 'none';
+    return;
+  }
   if (window.self !== window.top) document.body.classList.add('is-embedded');
 
   const API_URL = 'https://aomiaszicxqrctcgeoms.supabase.co/functions/v1/booking-manage';
