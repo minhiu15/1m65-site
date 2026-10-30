@@ -148,7 +148,7 @@ const perNailNote = (service) => {
 function renderPrice(service) {
   const onSale = saleDiscount(service) > 0, shown = unitPrice(service.id, service.price);
   return `<span class="service-price${onSale ? " service-price--sale" : ""}">
-    <strong class="service-price-current">${shown.price}</strong>
+    <strong class="service-price-current">${service.priceFrom ? "từ " : ""}${shown.price}</strong>
     ${shown.label ? `<span class="service-price-unit">${shown.label}</span>` : ""}
     ${onSale ? `<del class="service-price-original">${money(service.originalPrice)}</del>` : ""}
   </span>`;
@@ -212,6 +212,8 @@ function renderSignature() {
     ...featuredSource,
     name: "Nail design vẽ tay",
     description: "Mắt mèo, tráng gương, ombre, flash – vẽ tay từng ngón theo mood của bạn.",
+    // The finishes it names cost more than the Vẽ tay price it shows.
+    priceFrom: true,
   } : null;
   const topServices = rest.slice(0, 2);
   const lowerServices = rest.slice(2, 4);
