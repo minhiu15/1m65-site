@@ -832,8 +832,9 @@
         const more = button('slip-qty-btn');
         less.append(glyph('M6 12h12'));
         more.append(glyph('M12 6v12M6 12h12'));
-        less.setAttribute('aria-label', `Bớt một người · ${service.name}`);
-        more.setAttribute('aria-label', `Thêm một người · ${service.name}`);
+        const counted = service.id === 'french-ngon' ? 'ngón' : 'người';
+        less.setAttribute('aria-label', `Bớt một ${counted} · ${service.name}`);
+        more.setAttribute('aria-label', `Thêm một ${counted} · ${service.name}`);
         less.disabled = q <= 1;
         more.disabled = q >= adminMaxQuantity(service.id) || duration + Number(service.durationMinutes || 0) > 480;
         const change = (step) => {
