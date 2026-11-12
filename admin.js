@@ -732,6 +732,11 @@
     return adminQuantities.get(id) || 1;
   }
 
+  // French đầu móng counts nails (up to 10); everything else counts people (up to 4).
+  function adminMaxQuantity(id) {
+    return id === 'french-ngon' ? 10 : 4;
+  }
+
   function selectedAdminServices() {
     const services = Array.isArray(bookingConfig?.services) ? bookingConfig.services : [];
     return services.filter((service) => adminSelectedServiceIds.has(service.id));
@@ -830,9 +835,9 @@
         less.setAttribute('aria-label', `Bớt một người · ${service.name}`);
         more.setAttribute('aria-label', `Thêm một người · ${service.name}`);
         less.disabled = q <= 1;
-        more.disabled = q >= 4 || duration + Number(service.durationMinutes || 0) > 480;
+        more.disabled = q >= adminMaxQuantity(service.id) || duration + Number(service.durationMinutes || 0) > 480;
         const change = (step) => {
-          adminQuantities.set(service.id, Math.min(4, Math.max(1, q + step)));
+          adminQuantities.set(service.id, Math.min(adminMaxQuantity(service.id), Math.max(1, q + step)));
           adminSelectedStartAt = '';
           renderAdminServiceSummary();
           renderAdminSlots();
